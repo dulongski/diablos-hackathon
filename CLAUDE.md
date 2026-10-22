@@ -41,7 +41,13 @@ método con literatura → validación con baseline al azar → ejemplo completo
 
 **Audiencia: alguien que no sabe nada de béisbol.** Todo término se explica la primera vez que aparece.
 
-## Estado (2026-10-22, después de la sesión en la nube)
+## Estado (2026-10-22, sesión local)
+
+Pipeline completo corrido en local con el modelo limpio (01 a 10). Documento, reporte y dashboard
+actualizados con las cifras nuevas. El venv rápido está en `~/.venvs/diablos` (el `.venv` dentro de iCloud
+se cuelga al importar).
+
+## Estado anterior (después de la sesión en la nube)
 
 Rama de trabajo: **`claude/confident-ptolemy-sz210m`** (todo lo nuevo está ahí, no en `main`).
 Dashboard publicado: https://claude.ai/artifact/1HXhuyBtkDd6szvLv9M7xo (se actualiza republicando
@@ -104,7 +110,7 @@ Dashboard publicado: https://claude.ai/artifact/1HXhuyBtkDd6szvLv9M7xo (se actua
   "llega a los mismos lanzadores que Stuff+". El mensaje correcto: las carreras confirman el promedio y
   muestran por qué hace falta la física para separar lanzadores.
 - **Documento técnico** reescrito con LaTeX (KaTeX en Node, `docs/katex.mjs`), metodología completa,
-  hipótesis y Causal Forest. **Reporte** de 23 láminas que empieza por lo básico, con logos.
+  hipótesis y Causal Forest. **Reporte** de 24 láminas que empieza por lo básico, con logos.
 - **Corrección importante:** Stuff+ predice directo el valor esperado en carreras (pérdida L2). Los ocho
   modelos de componente sólo explican. El reto sugiere combinar objetivos; la justificación está en
   Metodología y en el documento 3.5.
@@ -117,17 +123,27 @@ sin asteriscos, sin frases de relleno** ("es importante", "cabe destacar", "no s
 directas. `docs/estilo.py` revisa el texto renderizado (código, fórmulas y el signo menos de los números
 no cuentan). En la app los tooltips `<Info>` no salen en el texto visible: revisarlos en el código.
 
-## Las cifras que cuentan la historia
+## Las cifras que cuentan la historia (modelo limpio, sin ángulos, 2026-10-22)
 
-- **Calibración fuera de muestra**, carreras por cada 100 lanzamientos. Stuff+ < 80 → +9.7 · 80 a 90 → +6.3 ·
-  90 a 100 → +1.4 · 100 a 110 → −2.2 · 110 a 120 → −4.2 · 120 o más → −5.5. Monótona. Entre 80 y 110 lo
-  predicho queda a menos de media carrera; en los extremos el modelo es más optimista.
-- **Holdouts** (R², nulo por conteo ≈ 0.00003). Lanzador 0.020 (Pitching+ 0.043) · temporada 0.021 ·
-  parque 0.014.
-- **Lanzadores.** 561 comparados, 58 aguantan (pierden menos de 1.2), 246 pierden más de 2.5. Más afectado
-  Lanzador 529 (104.8 → 97.2). Perfil de fichaje Lanzador 1099 (cutter, slider, curva; 104.5 → 104.1, ± 1.6).
-- **Por tipo.** Todos pierden; recta −3.3, cutter −0.9; aguantan cutter, splitter y slider (el sinker NO,
-  −2.3). Mejores rectas −8.4, peores +1.3.
+- **Stuff+ sin fuga de ubicación.** Los cuatro ángulos de salida y llegada se quitaron de Stuff+ porque
+  codificaban puntería (corr con distancia al centro −0.70 → −0.03; R² desde la ubicación 58 % → ~0).
+  Stuff+ va mucho más regularizado (`models.CAPA_PARAMS`). 16 / 23 / 33 variables.
+- **1 punto de Stuff+ = 0.135 carreras por 100 lanzamientos** (`app/src/lexico.ts`, `CPP` en el reporte).
+  Cortes en carreras: aguanta > −3.7 puntos (media carrera), pierde mucho < −7.4 (una carrera).
+- **Validación.** Stuff+ entre mitades del mismo lanzador 0.988 (sus carreras 0.293, 602 lanzadores).
+  Stuff+ 2024–25 contra carreras 2026 0.218 (carreras pasadas 0.196, n = 114, no concluyente).
+  Calibración monótona, de +1.9 (< 80) a −2.5 (120 o más) carreras por 100. Holdouts R² / corr: lanzador
+  0.0010 / 0.036 (Pitching+ 0.043 / 0.208), temporada 0.0009 / 0.035, parque −0.0005 / +0.022 (falla en
+  nivel, no en orden; ese desfase es el efecto de la altitud).
+- **Por tipo.** Todos pierden. Recta −11.7, sinker −8.8, cambio −7.4, curva −6.3, slider −5.3, splitter
+  −4.4, cutter −3.0. Liga 103.1 → 97.1 (media) → 94.8 (extrema). Mejores rectas −19.4, peores −3.8.
+- **Lanzadores.** 561, **21 aguantan**, 354 pierden más de una carrera. Más afectado Lanzador 174 (recta ·
+  cambio, 111.3 → 92.8). Fichaje Lanzador 1099 (cutter · slider · curva, 110.2 → 109.8, ± 2.6).
+- **Hipótesis.** H1 Nathan 18 → 14.9 (Coors) / 13.8 (HH), rho −0.83 · H2 cambio +4.10 (3.48 a 4.69), cuarto
+  de seis · H3 p = 0.08 una cola · H4 movimiento 30 %, giro 8 % (variable 3 de 16), +0.15 por 100 rpm contra
+  +2.35 por pulgada; las rectas A y B ya NO se invierten (B gana por 16.3 a nivel del mar y por 6.8 en casa).
+- **Causal Forest.** ATE +1.52 (IC 90 % 1.27 a 1.78). La pérdida de Stuff+ de la liga equivale a 1.12, unas
+  tres cuartas partes. GATES plano (pendiente −1.95, IC −4.0 a +0.2). Acuerdo con Stuff+ 0.17 (p = 0.002).
 - **Riesgo.** Elevado +31 pies; jonrón por elevado 12.4 % → 16.3 %; rodados 40.5 % → 44.8 %.
 - **Física.** Índice del aire 1.000 / 0.898 / 0.853; exponente de Reynolds 0.7184; Magnus ∝ ρ^1.39 contra
   arrastre ∝ ρ^0.96; la transferencia baja el error de forma ~70 %.

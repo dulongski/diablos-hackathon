@@ -61,9 +61,10 @@ const VARIABLES: { grupo: string; filas: [string, string, string][] }[] = [
     ['velocity', 'RelSpeed, EffectiveVelo, ZoneSpeed, SpeedDrop', 'Stuff+'],
     ['spin_rate, spin_axis', 'SpinRate, SpinAxis', 'Stuff+'],
     ['ivb, hb', 'InducedVertBreak, HorzBreak, VertBreak, movement_total', 'Stuff+'],
-    ['extension, release_height, release_side', 'Extension, RelHeight, RelSide, VertRelAngle, HorzRelAngle', 'Stuff+'],
+    ['extension, release_height, release_side', 'Extension, RelHeight, RelSide', 'Stuff+'],
     ['(H4) eficiencia de giro', 'spin_efficiency, la parte del giro que produce movimiento', 'Stuff+'],
-    ['(propia) ángulos de llegada', 'VertApprAngle, HorzApprAngle, ZoneTime', 'Stuff+'],
+    ['(propia) tiempo de vuelo', 'ZoneTime', 'Stuff+'],
+    ['(descartada) ángulos de salida y de llegada', 'VertRelAngle, HorzRelAngle, VertApprAngle, HorzApprAngle. Dicen a dónde apunta el lanzador, así que meterían puntería en una calificación de física', 'Ninguna'],
   ]},
   { grupo: 'Arsenal, relacionales', filas: [
     ['velo_diff_vs_fb, ivb_diff_vs_fb, hb_diff_vs_fb', 'Iguales, contra la recta principal del lanzador en esa temporada, más movement_diff_vs_fb', 'Pitching+'],
@@ -188,9 +189,9 @@ export function Metodologia({ physics, models, extras, irA }: {
               anteriores. Captura interacciones entre velocidad, movimiento y arsenal sin suponer una forma. Lo que cambia entre capas
               es lo que cada una puede ver.</p>
             <div className="capas">
-              <div><b>Stuff+</b><span>20 variables de física pura. Es la única que se transfiere entre aires.</span></div>
-              <div><b>Location+</b><span>27 variables. Suma dónde llegó la pelota, el conteo y el lado del bateador.</span></div>
-              <div><b>Pitching+</b><span>37 variables. Suma el arsenal y la secuencia, todas las relacionales del reto.</span></div>
+              <div><b>Stuff+</b><span>16 variables de física pura. Es la única que se transfiere entre aires.</span></div>
+              <div><b>Location+</b><span>23 variables. Suma dónde llegó la pelota, el conteo y el lado del bateador.</span></div>
+              <div><b>Pitching+</b><span>33 variables. Suma el arsenal y la secuencia, todas las relacionales del reto.</span></div>
             </div>
             <div className="tabla-scroll">
               <table className="tabla-datos compacta variables">

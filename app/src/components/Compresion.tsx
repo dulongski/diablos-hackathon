@@ -9,7 +9,7 @@ import { L, nf, sg } from '../settings';
 export interface Quintil { n: number; plus_mar: number; plus_alt: number; delta: number }
 
 const W = 700, H = 540, PAD_L = 56, PAD_R = 24, PAD_T = 24, PAD_B = 52;
-const LO = 78, HI = 118;
+const LO = 78, HI = 122;
 
 export function Compresion({ quintiles }: { quintiles: Record<string, Quintil> }) {
   const filas = Object.entries(quintiles);
@@ -17,7 +17,7 @@ export function Compresion({ quintiles }: { quintiles: Record<string, Quintil> }
 
   const x = (i: number) => PAD_L + ((i + 0.5) / filas.length) * (W - PAD_L - PAD_R);
   const y = (v: number) => H - PAD_B - ((v - LO) / (HI - LO)) * (H - PAD_T - PAD_B);
-  const ticks = [80, 90, 100, 110];
+  const ticks = [80, 90, 100, 110, 120];
   const nombre = (i: number) => i === 0 ? L('Peor 20 %', 'Worst 20%')
     : i === filas.length - 1 ? L('Mejor 20 %', 'Best 20%') : L(`Grupo ${i + 1}`, `Group ${i + 1}`);
 

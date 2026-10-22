@@ -42,6 +42,13 @@ export interface Jurado {
     componentes: Record<string, Componente>;
     ablacion_whiff: Record<string, Componente>;
   };
+  /** Validación de un Stuff+ de física pura: rasgo estable del lanzador y poder predictivo hacia 2026. */
+  estabilidad?: {
+    mitades: Record<'stuff' | 'location' | 'pitching' | 'rv', number>;
+    lanzadores_mitades: number;
+    futuro: Record<'stuff' | 'location' | 'pitching' | 'carreras_pasadas', number>;
+    lanzadores_futuro: number;
+  };
   pitchers_n: number;
   pitchers_con_ambos: number;
   corr_modelo_vs_observado: number | null;

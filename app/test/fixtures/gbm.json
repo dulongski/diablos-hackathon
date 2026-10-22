@@ -12,10 +12,6 @@
         "RelHeight": 6.26833,
         "RelSide": 2.49812,
         "Extension": 5.73501,
-        "VertRelAngle": -0.938369,
-        "HorzRelAngle": -3.356807,
-        "VertApprAngle": -10.631962,
-        "HorzApprAngle": -4.182601,
         "SpeedDrop": 3.97371,
         "ZoneTime": 0.485267,
         "ZoneSpeed": 73.80307,
@@ -23,8 +19,8 @@
         "movement_total": 9.56713835849571,
         "is_rhp": 1.0
       },
-      "raw": 0.025512555843958014,
-      "plus": 94.26463619074053
+      "raw": 0.02064842293766251,
+      "plus": 85.31800221367683
     },
     {
       "features": {
@@ -38,10 +34,6 @@
         "RelHeight": 5.9772,
         "RelSide": -0.67933,
         "Extension": 5.97949,
-        "VertRelAngle": -3.055282,
-        "HorzRelAngle": 3.061818,
-        "VertApprAngle": -6.066799,
-        "HorzApprAngle": 1.45271,
         "SpeedDrop": 7.13394,
         "ZoneTime": 0.413303,
         "ZoneSpeed": 84.54439,
@@ -49,8 +41,8 @@
         "movement_total": 19.242006171792482,
         "is_rhp": 0.0
       },
-      "raw": 0.026198477895192095,
-      "plus": 94.1051841896987
+      "raw": 0.0002463319991438616,
+      "plus": 100.40117138796285
     },
     {
       "features": {
@@ -64,10 +56,6 @@
         "RelHeight": 5.60096,
         "RelSide": 2.70275,
         "Extension": 6.28979,
-        "VertRelAngle": -0.147523,
-        "HorzRelAngle": -1.780718,
-        "VertApprAngle": -6.555927,
-        "HorzApprAngle": -2.278111,
         "SpeedDrop": 5.94008,
         "ZoneTime": 0.433178,
         "ZoneSpeed": 80.53329,
@@ -75,8 +63,8 @@
         "movement_total": 3.154384732400282,
         "is_rhp": 1.0
       },
-      "raw": 0.0745040770162618,
-      "plus": 82.87588426047076
+      "raw": 0.0033935770068107855,
+      "plus": 98.07442806412321
     },
     {
       "features": {
@@ -90,10 +78,6 @@
         "RelHeight": 5.96062,
         "RelSide": 1.63043,
         "Extension": 5.98353,
-        "VertRelAngle": 4.128299,
-        "HorzRelAngle": 0.212262,
-        "VertApprAngle": -6.719497,
-        "HorzApprAngle": -1.344499,
         "SpeedDrop": 5.72333,
         "ZoneTime": 0.48523,
         "ZoneSpeed": 72.13771,
@@ -101,8 +85,8 @@
         "movement_total": 16.323027861827597,
         "is_rhp": 1.0
       },
-      "raw": 0.12109501760793849,
-      "plus": 72.04518025496802
+      "raw": 0.006292634000492206,
+      "plus": 95.93116896321222
     },
     {
       "features": {
@@ -116,10 +100,6 @@
         "RelHeight": 6.20051,
         "RelSide": -1.5593,
         "Extension": 5.17442,
-        "VertRelAngle": -0.389472,
-        "HorzRelAngle": 1.611884,
-        "VertApprAngle": -6.208688,
-        "HorzApprAngle": 2.356042,
         "SpeedDrop": 5.6564,
         "ZoneTime": 0.43086,
         "ZoneSpeed": 82.86277,
@@ -127,8 +107,8 @@
         "movement_total": 5.581125210036054,
         "is_rhp": 0.0
       },
-      "raw": -0.03538428495158533,
-      "plus": 108.42094317125643
+      "raw": -0.02035413110284369,
+      "plus": 115.63099616289719
     },
     {
       "features": {
@@ -142,10 +122,6 @@
         "RelHeight": 6.2052,
         "RelSide": 1.61783,
         "Extension": 5.98972,
-        "VertRelAngle": -2.65406,
-        "HorzRelAngle": -4.582189,
-        "VertApprAngle": -5.619701,
-        "HorzApprAngle": -1.647003,
         "SpeedDrop": 7.71269,
         "ZoneTime": 0.407174,
         "ZoneSpeed": 85.59277,
@@ -153,8 +129,8 @@
         "movement_total": 23.168752977491042,
         "is_rhp": 1.0
       },
-      "raw": 0.03931620141323271,
-      "plus": 91.05578920334162
+      "raw": -0.018170052823436103,
+      "plus": 114.01631743817919
     },
     {
       "features": {
@@ -168,10 +144,6 @@
         "RelHeight": 6.1216,
         "RelSide": 1.05435,
         "Extension": 5.82501,
-        "VertRelAngle": 2.356949,
-        "HorzRelAngle": 0.790577,
-        "VertApprAngle": -7.297487,
-        "HorzApprAngle": -0.208464,
         "SpeedDrop": 5.81364,
         "ZoneTime": 0.488322,
         "ZoneSpeed": 71.84718,
@@ -179,8 +151,8 @@
         "movement_total": 8.723326457309733,
         "is_rhp": 1.0
       },
-      "raw": 0.07488155246388714,
-      "plus": 82.78813490854407
+      "raw": 0.023264477594815442,
+      "plus": 83.38396539941482
     },
     {
       "features": {
@@ -194,10 +166,6 @@
         "RelHeight": 5.48167,
         "RelSide": -1.03594,
         "Extension": 5.19681,
-        "VertRelAngle": -1.15391,
-        "HorzRelAngle": 0.252186,
-        "VertApprAngle": -8.287338,
-        "HorzApprAngle": 1.941007,
         "SpeedDrop": 6.47657,
         "ZoneTime": 0.470022,
         "ZoneSpeed": 75.46864,
@@ -205,8 +173,8 @@
         "movement_total": 10.087571172294153,
         "is_rhp": 0.0
       },
-      "raw": -0.03863368129998381,
-      "plus": 109.17630997860421
+      "raw": -0.020450377399430016,
+      "plus": 115.70215059398882
     },
     {
       "features": {
@@ -220,10 +188,6 @@
         "RelHeight": 6.13353,
         "RelSide": -1.0848,
         "Extension": 4.75516,
-        "VertRelAngle": 1.669187,
-        "HorzRelAngle": 0.199861,
-        "VertApprAngle": -8.002949,
-        "HorzApprAngle": 0.575638,
         "SpeedDrop": 6.26183,
         "ZoneTime": 0.497945,
         "ZoneSpeed": 71.71425,
@@ -231,8 +195,8 @@
         "movement_total": 6.323712623720342,
         "is_rhp": 0.0
       },
-      "raw": -0.024444382552109397,
-      "plus": 105.87781261340328
+      "raw": 0.0015832306262855082,
+      "plus": 99.41280856658271
     },
     {
       "features": {
@@ -246,10 +210,6 @@
         "RelHeight": 5.50727,
         "RelSide": 1.37386,
         "Extension": 6.06733,
-        "VertRelAngle": -0.216619,
-        "HorzRelAngle": -0.462947,
-        "VertApprAngle": -4.620903,
-        "HorzApprAngle": 1.398494,
         "SpeedDrop": 6.24592,
         "ZoneTime": 0.404522,
         "ZoneSpeed": 86.48465,
@@ -257,8 +217,8 @@
         "movement_total": 12.966868502348591,
         "is_rhp": 1.0
       },
-      "raw": 0.08505449155267625,
-      "plus": 80.42329550548709
+      "raw": 0.004627568388221287,
+      "plus": 97.1621440819807
     },
     {
       "features": {
@@ -272,10 +232,6 @@
         "RelHeight": 5.67829,
         "RelSide": 2.30291,
         "Extension": 5.24389,
-        "VertRelAngle": -0.781069,
-        "HorzRelAngle": -3.368234,
-        "VertApprAngle": -8.237704,
-        "HorzApprAngle": -5.220042,
         "SpeedDrop": 5.60457,
         "ZoneTime": 0.481009,
         "ZoneSpeed": 74.21764,
@@ -283,8 +239,8 @@
         "movement_total": 11.004473502049064,
         "is_rhp": 1.0
       },
-      "raw": 0.00917225092425304,
-      "plus": 98.06316448180922
+      "raw": -0.010147397685060934,
+      "plus": 108.08520650235793
     },
     {
       "features": {
@@ -298,10 +254,6 @@
         "RelHeight": 6.28531,
         "RelSide": 2.02119,
         "Extension": 5.96371,
-        "VertRelAngle": -0.996066,
-        "HorzRelAngle": -1.317581,
-        "VertApprAngle": -5.50949,
-        "HorzApprAngle": -1.46353,
         "SpeedDrop": 5.65703,
         "ZoneTime": 0.428833,
         "ZoneSpeed": 81.94659,
@@ -309,8 +261,8 @@
         "movement_total": 11.138430790133771,
         "is_rhp": 1.0
       },
-      "raw": -0.021259544704083803,
-      "plus": 105.13745331609282
+      "raw": 0.003624680960119534,
+      "plus": 97.90357400631578
     }
   ]
 }

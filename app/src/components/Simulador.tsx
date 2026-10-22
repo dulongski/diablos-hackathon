@@ -11,7 +11,7 @@ import { useDeferredValue, useMemo, useState } from 'react';
 import type { Model } from '../lib/gbm';
 import { solveRelease, type PitchInput } from '../lib/physics';
 import { scorePitch, type Escala, type Helpers } from '../lib/scoring';
-import { plusEnPalabras } from '../lexico';
+import { plusEnPalabras, CORTE_AGUANTA, CORTE_MUCHO } from '../lexico';
 import { COLOR_TIPO_ES } from '../jurado';
 import { nf, sg } from '../settings';
 import { ControlAltitud } from './ControlAltitud';
@@ -127,7 +127,7 @@ export function Simulador({ metros, onMetros, arrastre, model, helpers, escala }
   const dPlus = r.alt.plus - r.mar.plus;
   const lugar = Math.abs(metros - 2240) < 40 ? 'el Harp Helú' : Math.abs(metros - 1609) < 40 ? 'Coors Field' : metros < 40 ? 'el nivel del mar' : `un estadio a ${nf(metros)} m`;
   const enAltura = metros >= 40;
-  const veredicto = dPlus > -1.2 ? 'd-aguanta' : dPlus > -2.5 ? 'd-pierde' : 'd-mucho';
+  const veredicto = dPlus > CORTE_AGUANTA ? 'd-aguanta' : dPlus > CORTE_MUCHO ? 'd-pierde' : 'd-mucho';
   const palabras = plusEnPalabras(r.mar.plus) !== plusEnPalabras(r.alt.plus)
     ? `, y pasa de ${plusEnPalabras(r.mar.plus)} a ${plusEnPalabras(r.alt.plus)}` : '';
   const lectura = enAltura

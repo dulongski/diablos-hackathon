@@ -7,6 +7,7 @@
  *  B. Entorno. ¿Cuánto cuesta la altura en carreras reales, y le cuesta distinto a cada lanzador? Sale de
  *     scripts/09_causal_forest.py (data/causal.json).
  */
+import { CORTE_AGUANTA, CORTE_MUCHO } from '../lexico';
 import { useMemo, useState } from 'react';
 import type { Causal, Contraste, Extras } from '../jurado';
 import { nf, sg } from '../settings';
@@ -188,7 +189,7 @@ function Entorno({ c }: { c: Causal }) {
                   <td className="arsenal-celda">{p.arsenal}</td>
                   <td className="num n destacado">{sg(p.tau, 2)}</td>
                   <td className="num n tenue">{nf(p.tau_lo, 2)} a {nf(p.tau_hi, 2)}</td>
-                  <td className={`num n ${p.delta_hh > -1.2 ? 'd-aguanta' : p.delta_hh > -2.5 ? 'd-pierde' : 'd-mucho'}`}>{sg(p.delta_hh)}</td>
+                  <td className={`num n ${p.delta_hh > CORTE_AGUANTA ? 'd-aguanta' : p.delta_hh > CORTE_MUCHO ? 'd-pierde' : 'd-mucho'}`}>{sg(p.delta_hh)}</td>
                   <td className="num n">{sg(p.carreras_delta, 1)}</td>
                   <td className="num n tenue">{nf(p.n_hh + p.n_mar)}</td>
                 </tr>

@@ -51,6 +51,22 @@ RARE_PARAMS = {
 RARE_TARGETS = {"y_barrel"}
 
 
+# Stuff+ va mucho mas regularizado que las otras capas. Sin ubicacion, lo unico que le queda para
+# separar lanzamientos es la fisica, y el punto de salida (RelSide, RelHeight, Extension) es casi una
+# firma de cada lanzador: con hojas chicas el modelo memoriza lanzadores y, con lanzadores nuevos,
+# queda peor que el promedio (R² −0.004 fuera de muestra). Con hojas grandes y L2 alto le gana al
+# modelo nulo y su calificacion por lanzador es estable (0.99 entre mitades de sus lanzamientos).
+CAPA_PARAMS: dict[str, tuple[dict, int]] = {
+    "stuff": ({"num_leaves": 31, "min_data_in_leaf": 4000, "lambda_l2": 50.0, "learning_rate": 0.03}, 400),
+}
+
+
+def capa(nombre: str) -> tuple[dict, int]:
+    """Parametros y numero de arboles de una capa (stuff, location, pitching)."""
+    extra, n = CAPA_PARAMS.get(nombre, ({}, N_ROUNDS))
+    return extra, n
+
+
 def params_for(target: str) -> dict:
     """Parametros segun el objetivo: los raros piden arboles chicos."""
     return dict(RARE_PARAMS) if target in RARE_TARGETS else {"objective": "binary"}

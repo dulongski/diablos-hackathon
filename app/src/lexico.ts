@@ -28,9 +28,24 @@ export function plusEnPalabras(v: number) {
   return L('malo', 'poor');
 }
 
+/**
+ * Cortes de "aguanta / pierde / pierde mucho", definidos en carreras y no en puntos.
+ *
+ * Un punto de Stuff+ vale una décima de la desviación estándar del modelo (scale.json), que hoy es
+ * 0.01353 carreras por lanzamiento, o sea 0.135 carreras por cada 100 lanzamientos. Los cortes son media
+ * carrera y una carrera por cada 100 lanzamientos. Si el modelo se reentrena y cambia su escala, se
+ * recalculan aquí y nada más.
+ */
+export const CARRERAS_POR_PUNTO = 0.1353;
+export const CORTE_AGUANTA = -0.5 / CARRERAS_POR_PUNTO;   // ≈ −3.7 puntos
+export const CORTE_MUCHO = -1.0 / CARRERAS_POR_PUNTO;     // ≈ −7.4 puntos
+
+/** Puntos de Stuff+ convertidos a carreras por cada 100 lanzamientos. */
+export const aCarreras = (puntos: number) => puntos * CARRERAS_POR_PUNTO;
+
 /** Qué tanto pierde un lanzamiento en altitud, en una palabra. */
 export function veredicto(delta: number): { txt: string; k: 'aguanta' | 'pierde' | 'mucho' } {
-  if (delta > -1.2) return { txt: L('Aguanta', 'Holds up'), k: 'aguanta' };
-  if (delta > -2.5) return { txt: L('Pierde', 'Loses'), k: 'pierde' };
+  if (delta > CORTE_AGUANTA) return { txt: L('Aguanta', 'Holds up'), k: 'aguanta' };
+  if (delta > CORTE_MUCHO) return { txt: L('Pierde', 'Loses'), k: 'pierde' };
   return { txt: L('Pierde mucho', 'Loses a lot'), k: 'mucho' };
 }

@@ -16,14 +16,16 @@ altitud no es una variable del modelo sino una transformación física**. Volvem
 lanzamiento con el aire de otro estadio y lo calificamos de nuevo. Encontramos cuatro cosas que
 cambian tus decisiones.
 
-1. **Todo lanzamiento pierde en altura, pero no lo mismo.** La recta pierde 3.4 puntos de Stuff+ y
-   el cutter 0.9. La mejor recta de la liga pierde 8.4.
-2. **De 561 lanzadores, 58 aguantan la altura.** Se apoyan en cutter, slider y splitter, y provocan
-   rodados.
+1. **Todo lanzamiento pierde en altura, pero no lo mismo.** La recta pierde 11.7 puntos de Stuff+
+   (1.6 carreras más por cada 100 lanzamientos) y el cutter 3.0. Las mejores rectas pierden 19.
+2. **De 561 lanzadores, sólo 21 aguantan la altura**, es decir, pierden menos de media carrera por cada
+   100 lanzamientos. Todos tiran slider, más de la mitad tira cutter (contra 18 % de la liga) y
+   provocan más rodados.
 3. **Probamos las cuatro hipótesis del reto.** H1 y H4 se confirman. H2 y H3 se confirman en parte.
-4. **Un Causal Forest sobre carreras reales confirma el costo de la altura**, 1.46 carreras más por cada
-   100 lanzamientos, sin usar Stuff+. También muestra por qué necesitas la física para separar a un
-   lanzador de otro, porque las carreras solas no alcanzan.
+4. **Un Causal Forest sobre carreras reales confirma el costo de la altura**, 1.52 carreras más por cada
+   100 lanzamientos, sin usar Stuff+. La pérdida de Stuff+ explica unas tres cuartas partes. También
+   muestra por qué necesitas la física para separar a un lanzador de otro, porque las carreras solas no
+   alcanzan.
 
 ## 1. Planteamiento
 
@@ -69,7 +71,7 @@ y altitud extrema su giro cambia 0.5 %, su eficiencia de giro 0.3 % y su velocid
 **S2.** Todo lo que cambia en el vuelo de la pelota entre estadios viene del aire.
 **S3.** Medimos el valor de un lanzamiento en carreras esperadas según el conteo. El resultado que tuvo
 depende del bateador y del azar.
-**S4.** La escala toma como referencia a la liga a nivel del mar, donde 100 es el promedio.
+**S4.** La escala toma como referencia a la liga tal como lanzó, en sus tres tipos de estadio. 100 es ese promedio, así que a nivel del mar el lanzamiento típico queda arriba de 100 y en altura abajo.
 
 ## 3. Metodología
 
@@ -151,14 +153,31 @@ $$\text{RV} = V(c_{\text{después}}) - V(c_{\text{antes}})$$
 ### 3.5 Stuff+, Location+ y Pitching+
 
 Las tres capas predicen el mismo objetivo, el valor esperado en carreras $\widehat{\text{RV}}$, con
-gradient boosting en LightGBM (500 árboles, tasa de aprendizaje 0.05, 96 hojas, al menos 400
-lanzamientos por hoja y regularización $L_2 = 5$). Sólo cambia lo que ve cada una.
+gradient boosting en LightGBM. Sólo cambia lo que ve cada una.
 
 | Capa | Variables | Qué ve |
 |---|---|---|
-| Stuff+ | 20 | Sólo física. Velocidad, quiebres, giro, eje, punto y ángulos de salida, extensión, ángulos de llegada y eficiencia de giro |
-| Location+ | 27 | Además, dónde llegó la pelota, el conteo y el lado del bateador |
-| Pitching+ | 37 | Además, el arsenal del lanzador y la secuencia con el lanzamiento anterior |
+| Stuff+ | 16 | Sólo física. Velocidad, quiebres, giro, eje, punto de salida, extensión, tiempo de vuelo y eficiencia de giro |
+| Location+ | 23 | Además, dónde llegó la pelota, el conteo y el lado del bateador |
+| Pitching+ | 33 | Además, el arsenal del lanzador y la secuencia con el lanzamiento anterior |
+
+**Los ángulos de salida y de llegada no entran en ninguna capa**, aunque Trackman los mida en el release. El
+ángulo con que sale la pelota también dice a dónde va, así que con ellos el modelo aprende puntería en lugar
+de física. Lo medimos. Con los cuatro ángulos, Stuff+ correlacionaba $-0.70$ con la distancia al centro de la
+zona, más que el propio Location+ ($-0.53$), y la ubicación en el plato predecía el 58 % de su varianza. Sin
+ellos, $-0.03$ y prácticamente nada. El reto define Stuff+ como física pura, y la ubicación entra en Location+.
+
+Location+ y Pitching+ usan 500 árboles, tasa de aprendizaje 0.05, 96 hojas, al menos 400 lanzamientos por hoja
+y regularización $L_2 = 5$. **Stuff+ va mucho más regularizado** (400 árboles, tasa 0.03, 31 hojas, al menos
+4,000 lanzamientos por hoja, $L_2 = 50$). Sin ubicación, lo único que le queda para separar lanzamientos es la
+física, y el punto de salida es casi una firma de cada lanzador. Con hojas chicas el modelo memoriza lanzadores
+y, con lanzadores nuevos, queda peor que el promedio.
+
+**De dónde sale cada calificación.** Medimos con SHAP cuánto aporta cada grupo de variables a la predicción.
+Stuff+ es 100 % física, y sus variables más pesadas son cuánta velocidad pierde la pelota en el vuelo, el
+quiebre vertical, la elevación y el giro. En Location+ la ubicación y el conteo explican el 62 % y la física
+el 38 %. En Pitching+ la ubicación y el conteo explican el 55 %, la física el 26 % y el arsenal con la
+secuencia el 19 %.
 
 La función de pérdida es el error cuadrático (L2) sobre el valor en carreras. Pitching+ incluye las
 variables relacionales de arsenal que pide el reto, todas contra la recta principal del lanzador en esa
@@ -268,34 +287,51 @@ cerca de un tercio.
 
 ### 4.2 Calidad y robustez
 
-| Prueba | Capa | Variables | RMSE | $R^2$ |
-|---|---|---|---|---|
-| Modelo nulo, promedio por conteo | | | 0.26810 | 0.00003 |
-| Holdout de lanzador | Stuff+ | 20 | 0.26541 | 0.01996 |
-| Holdout de lanzador | Location+ | 27 | 0.26235 | 0.04245 |
-| Holdout de lanzador | Pitching+ | 37 | 0.26230 | 0.04282 |
-| Holdout de temporada | Stuff+ | 20 | 0.26359 | 0.02083 |
-| Holdout de parque | Stuff+ | 20 | 0.27504 | 0.01414 |
+| Prueba | Capa | Variables | RMSE | $R^2$ | Correlación |
+|---|---|---|---|---|---|
+| Modelo nulo, promedio por conteo | | | 0.26810 | 0.0000 | 0.005 |
+| Holdout de lanzador | Stuff+ | 16 | 0.26797 | 0.0010 | 0.036 |
+| Holdout de lanzador | Location+ | 23 | 0.26235 | 0.0425 | 0.207 |
+| Holdout de lanzador | Pitching+ | 33 | 0.26225 | 0.0432 | 0.208 |
+| Holdout de temporada | Stuff+ | 16 | 0.26626 | 0.0009 | 0.035 |
+| Holdout de parque | Stuff+ | 16 | 0.27707 | $-0.0005$ | 0.022 |
 
-El $R^2$ de un lanzamiento suelto es bajo por construcción, porque su desenlace lo domina el azar. La
-rúbrica pide vencer al modelo nulo, y las tres capas lo vencen en las tres pruebas. El holdout de parque
-rinde menos que el de lanzador. Un modelo entrenado sin altura no se traslada limpio a la altura, y ese
-es justo el fenómeno que medimos.
+Las tres capas vencen al modelo nulo con lanzadores que nunca vieron. El $R^2$ de un lanzamiento suelto
+es bajo por construcción, porque su desenlace lo dominan el azar y la ubicación. Stuff+ no ve la
+ubicación, así que su $R^2$ es el más bajo de los tres, y así debe ser. Location+ y Pitching+ suben
+porque suman dónde llegó la pelota y el conteo.
+
+**El holdout de parque no falla en el orden, falla en el nivel.** Un modelo entrenado sin altura
+ordena bien los lanzamientos en altura (correlación positiva), pero espera las carreras de nivel del
+mar. En altura todo cuesta más, y por eso su $R^2$ queda apenas bajo cero. Esa diferencia de nivel es
+justo el efecto que medimos, y por eso transferimos la forma en lugar de confiar en un modelo entrenado
+en otro aire.
+
+**Stuff+ es un rasgo del lanzador, no suerte.** Partimos los lanzamientos de cada lanzador en dos
+mitades al azar (602 lanzadores con al menos 150 por mitad). Su Stuff+ en una mitad correlaciona 0.988
+con el de la otra. Sus carreras, sólo 0.293. Las carreras de unos cientos de lanzamientos son casi
+ruido, y la forma no.
+
+**Anticipa el futuro sin necesitar historial.** Con 114 lanzadores que tiraron al menos 300 veces en
+2024 y 2025 y otras 300 en 2026, el Stuff+ del pasado correlaciona 0.218 con las carreras de 2026. Las
+carreras del pasado, 0.196. La diferencia no es concluyente con esa muestra, pero Stuff+ lo logra con
+la sola física, y a un prospecto lo puedes calificar desde su primera sesión de Trackman.
 
 **Calibración.** La escala ordena carreras cuando agregas lanzamientos, que es donde importa.
 
 | Stuff+ fuera de muestra | Lanzamientos | Carreras por 100, observadas | Carreras por 100, predichas |
 |---|---|---|---|
-| < 80 | 27,774 | +9.7 | +11.0 |
-| 80 a 90 | 76,646 | +6.3 | +6.2 |
-| 90 a 100 | 177,931 | +1.4 | +1.9 |
-| 100 a 110 | 266,476 | $-2.2$ | $-2.0$ |
-| 110 a 120 | 82,730 | $-4.2$ | $-5.6$ |
-| 120 o más | 3,445 | $-5.5$ | $-9.4$ |
+| < 80 | 16,663 | +1.9 | +3.3 |
+| 80 a 90 | 98,683 | +1.3 | +2.0 |
+| 90 a 100 | 212,677 | +0.5 | +0.7 |
+| 100 a 110 | 203,208 | $-0.3$ | $-0.5$ |
+| 110 a 120 | 87,256 | $-1.3$ | $-1.8$ |
+| 120 o más | 16,515 | $-2.5$ | $-3.1$ |
 
-La relación baja en los seis tramos, sin excepción. De un extremo al otro hay unas 14 carreras por cada
-100 lanzamientos. Entre 80 y 110 está el 82 % de los lanzamientos, y ahí lo predicho queda a menos de
-media carrera de lo observado. En los extremos el modelo es más optimista que la realidad.
+La relación baja en los seis tramos, sin excepción. De un extremo al otro hay unas 4.3 carreras por
+cada 100 lanzamientos, sólo por la forma. Entre 80 y 120 está el 95 % de los lanzamientos, y ahí lo
+predicho queda a menos de 0.7 carreras de lo observado. En los extremos el modelo exagera un poco, en
+la dirección correcta.
 
 ## 5. Hipótesis
 
@@ -318,33 +354,35 @@ en el Harp Helú. Su quiebre total baja 2.5 y 3.4 pulgadas.
 
 | Tipo | Lanzadores | $\bar\Delta$ Stuff+ | IC 95 % | Cambio de elevación medido (in) |
 |---|---|---|---|---|
-| Cutter | 164 | $-0.89$ | $-1.10$ a $-0.69$ | $-2.50$ |
-| Slider | 644 | $-1.66$ | $-1.73$ a $-1.58$ | $-0.74$ |
-| Splitter | 43 | $-1.86$ | $-2.26$ a $-1.33$ | $-0.91$ |
-| Cambio | 427 | $-2.25$ | $-2.45$ a $-2.04$ | $-2.25$ |
-| Sinker | 489 | $-2.31$ | $-2.50$ a $-2.11$ | $-2.10$ |
-| Curva | 333 | $-2.32$ | $-2.53$ a $-2.10$ | $+1.82$ |
-| Recta | 708 | $-3.36$ | $-3.50$ a $-3.22$ | $-3.73$ |
+| Cutter | 164 | $-2.97$ | $-3.46$ a $-2.53$ | $-2.50$ |
+| Splitter | 43 | $-4.43$ | $-5.26$ a $-3.44$ | $-0.91$ |
+| Slider | 644 | $-5.32$ | $-5.50$ a $-5.15$ | $-0.74$ |
+| Curva | 333 | $-6.33$ | $-6.72$ a $-5.97$ | $+1.82$ |
+| Cambio | 427 | $-7.42$ | $-7.78$ a $-7.07$ | $-2.25$ |
+| Sinker | 489 | $-8.82$ | $-9.25$ a $-8.39$ | $-2.10$ |
+| Recta | 708 | $-11.69$ | $-12.06$ a $-11.30$ | $-3.73$ |
 
-La recta pierde casi cuatro veces lo que pierde el cutter. La curva gana elevación, o sea que cae menos,
-y por eso pierde. Su valor es caer.
+La recta pierde casi cuatro veces lo que pierde el cutter. En carreras, su pérdida equivale a 1.6
+carreras más por cada 100 rectas. La curva gana elevación, o sea que cae menos, y por eso pierde. Su
+valor es caer. Entre los seis tipos con mediciones suficientes, el que más movimiento pierde en la
+cancha es el que más Stuff+ pierde (correlación de rangos $-0.83$, $p = 0.04$).
 
 ### 5.2 H2 · El cambio gana valor relativo. Se confirma en parte
 
 | Contra la recta del mismo lanzador | Lanzadores | Ventaja $\bar D$ | IC 95 % | Lanzadores donde gana |
 |---|---|---|---|---|
-| Splitter | 40 | +1.88 | +1.47 a +2.40 | 93 % |
-| Cutter | 155 | +1.71 | +1.39 a +2.06 | 85 % |
-| Slider | 555 | +1.45 | +1.28 a +1.63 | 79 % |
-| **Cambio** | **372** | **+1.27** | **+1.05 a +1.49** | **77 %** |
-| Sinker | 386 | +1.03 | +0.85 a +1.21 | 74 % |
-| Curva | 289 | +0.84 | +0.54 a +1.14 | 68 % |
+| Splitter | 40 | +7.75 | +6.16 a +9.58 | 98 % |
+| Cutter | 155 | +5.80 | +4.93 a +6.83 | 94 % |
+| Slider | 555 | +5.50 | +5.02 a +5.97 | 86 % |
+| **Cambio** | **372** | **+4.10** | **+3.48 a +4.69** | **80 %** |
+| Curva | 289 | +4.06 | +3.32 a +4.83 | 80 % |
+| Sinker | 386 | +1.92 | +1.59 a +2.26 | 68 % |
 
-El cambio sí gana valor contra la recta, y no es casualidad. Pero queda cuarto de seis, detrás del
-splitter, el cutter y el slider. La razón está en su forma. Un cambio de derecho se mueve unas 12
-pulgadas hacia el lado del brazo, y ese movimiento también lo paga. En altura no gana el que engaña por
-velocidad. Gana **el que nunca dependió del movimiento**. Por eso el splitter, que engaña por velocidad y
-además casi no gira, gana más que todos.
+El cambio sí gana valor contra la recta, 4.1 puntos, y no es casualidad. Pero queda cuarto de seis,
+empatado con la curva y detrás del splitter, el cutter y el slider. La razón está en su forma. Un cambio
+de derecho se mueve unas 12 pulgadas hacia el lado del brazo, y ese movimiento también lo paga. En
+altura no gana el que engaña por velocidad. Gana **el que nunca dependió del movimiento**. Por eso el
+splitter, que engaña por velocidad y además casi no gira, gana más que todos.
 
 ### 5.3 H3 · Los lanzadores de rodados valen más en altura. Se confirma en parte
 
@@ -355,8 +393,7 @@ además casi no gira, gana más que todos.
 | Diferencia | $-0.22$ | $-0.52$ a $+0.08$ |
 
 En altura los rodados previenen carreras con claridad. A nivel del mar el efecto no se distingue de
-cero. La diferencia va en la dirección de la hipótesis con 90 % de confianza ($p = 0.07$, una cola), pero
-no llega al 95 %. Por tercios, los lanzadores con pocos rodados (34 %) permiten 1.76 carreras más por
+cero. La diferencia va en la dirección de la hipótesis ($p = 0.08$, una cola), pero no llega al 95 %. Por tercios, los lanzadores con pocos rodados (34 %) permiten 1.76 carreras más por
 cada 100 lanzamientos en altura, y los de muchos rodados (50 %) sólo 1.37. En los batazos de la liga, el
 rodado sube de 40.5 % a 44.8 % en altitud extrema y el jonrón por elevado sube de 12.4 % a 16.3 %.
 
@@ -364,29 +401,42 @@ rodado sube de 40.5 % a 44.8 % en altitud extrema y el jonrón por elevado sube 
 
 | Grupo de variables en Stuff+ | Peso |
 |---|---|
-| Punto y ángulos de salida, extensión | 43 % |
-| Ángulos de llegada al plato | 17 % |
-| Movimiento, los quiebres | 15 % |
-| Velocidad | 14 % |
-| **Giro en rpm** | **4 %** |
-| Eficiencia de giro | 4 % |
-| Eje de giro | 3 % |
+| Movimiento, los quiebres | 30 % |
+| Velocidad | 25 % |
+| Punto de salida y extensión | 24 % |
+| **Giro en rpm** | **8 %** |
+| Eficiencia de giro | 7 % |
+| Eje de giro | 6 % |
 
-El giro es la variable 9 de 20. En el experimento controlado, 100 revoluciones más **con el mismo
-movimiento** cambian Stuff+ en $-0.1$ puntos. Una pulgada más de elevación **con el mismo giro** suma 1.9.
-Y el giro que se vuelve movimiento te expone en altura. Una recta B con 2,150 rpm y 18.0 pulgadas de
-elevación vale 113.0 a nivel del mar. Una recta A con más giro pero eje de bala (2,650 rpm y 13.5
-pulgadas) vale 107.7. En el Harp Helú se invierten, A vale 101.7 y B vale 100.8.
+El modelo sí usa el giro. Es la tercera de 16 variables, pero sobre todo para distinguir un tipo de
+lanzamiento de otro. En el experimento controlado, 100 revoluciones más **con el mismo movimiento**
+cambian Stuff+ en 0.15 puntos. Una pulgada más de elevación **con el mismo giro** suma 2.35, quince
+veces más. Y la ventaja del movimiento es la que el aire se lleva. Una recta B con 2,150 rpm y 18.0
+pulgadas de elevación vale 107.0 a nivel del mar, 16.3 puntos más que una recta A con más giro pero eje
+de bala (2,650 rpm y 13.5 pulgadas, 90.7). En el Harp Helú B vale 83.1 y A 76.3. La ventaja se reduce a
+menos de la mitad.
 
 ## 6. Lo que significa para el club
 
 ### 6.1 La altitud borra la ventaja del bueno
 
 Partimos las rectas en quintiles por su Stuff+ a nivel del mar. El castigo no es parejo. El quintil más
-bajo **gana** 1.26 puntos (de 82.7 a 84.0). El más alto pierde 8.44 (de 113.6 a 105.2) y queda apenas
-arriba del promedio. Lo que separa a una recta de élite de una mediocre es el movimiento, y el movimiento
-es lo que el aire se lleva. Entre el 1 % mejor calificado, el slider pasa de 7.7 % a 32.6 % y la recta
-cae de 55.3 % a 22.0 %.
+bajo pierde 3.8 puntos (de 89.6 a 85.8). El más alto pierde 19.4 (de 116.4 a 97.1) y queda bajo el
+promedio. Lo que separa a una recta de élite de una mediocre es el movimiento, y el movimiento es lo que
+el aire se lleva. Entre el 1 % mejor calificado, el slider pasa de 24 % a 52 % y la recta cae de 41 % a
+1 %.
+
+**Tres estadios, no dos.** El mismo lanzamiento, volado con el aire de cada categoría.
+
+| | Nivel del mar | Altitud media | Altitud extrema |
+|---|---|---|---|
+| Índice de aire | 1.000 | 0.898 | 0.853 |
+| Stuff+ de la liga | 103.1 | 97.1 | 94.8 |
+| Recta | 102.5 | 93.9 | 90.9 |
+| Cutter | 102.1 | 100.6 | 99.2 |
+
+La altitud media ya cobra el 73 % del castigo. Un lanzador que viene de un parque de altura media llega
+al Harp Helú con la mayor parte del ajuste hecho.
 
 ### 6.2 El perfil físico ideal
 
@@ -395,44 +445,56 @@ Una rejilla libre produciría combinaciones que ningún brazo hace.
 
 | Variable | Élite a nivel del mar | Élite en altura | Mediana de la liga |
 |---|---|---|---|
-| Velocidad (mph) | 90.6 | 87.3 | 88.9 |
-| Elevación (in) | 11.3 | 4.2 | 9.2 |
-| Movimiento lateral (in) | 8.4 | 1.9 | 7.3 |
-| Movimiento total (in) | 18.9 | 12.8 | 14.7 |
-| Eficiencia de giro | 1.02 | 0.69 | 0.81 |
-| Giro (rpm) | 2,334 | 2,352 | 2,328 |
+| Velocidad (mph) | 88.3 | 85.1 | 88.9 |
+| Elevación (in) | 4.4 | $-3.3$ | 9.2 |
+| Movimiento lateral (in) | 0.7 | $-4.4$ | 7.3 |
+| Movimiento total (in) | 17.3 | 11.3 | 14.7 |
+| Eficiencia de giro | 0.84 | 0.55 | 0.81 |
+| Giro (rpm) | 2,554 | 2,504 | 2,328 |
 
-La élite de altura gira lo mismo que la otra, pero convierte menos de ese giro en movimiento. No apuesta
-al Magnus.
+La élite de altura es de rompientes que caen y cortan hacia el guante, no de rectas que suben. Gira casi
+lo mismo que la otra, pero convierte mucho menos de ese giro en movimiento. No apuesta al Magnus.
 
 ### 6.3 Por lanzador
 
-Analizamos 561 lanzadores con al menos 300 lanzamientos. **58 aguantan**, es decir, pierden menos de 1.2
-puntos, y 246 pierden más de 2.5. Los que más pierden son buenos a nivel del mar porque se mueven mucho.
-Lanzador 529 (cambio y recta) baja de 104.8 a 97.2. Tu perfil de fichaje es Lanzador 1099 (cutter,
-slider y curva). Vale 104.5 a nivel del mar y 104.1 en el Harp Helú, el mejor Stuff+ de la liga en
-altura, y es de los más constantes entre juegos ($\pm 1.6$).
+Analizamos 561 lanzadores con al menos 300 lanzamientos. **21 aguantan**, es decir, pierden menos de
+3.7 puntos (media carrera por cada 100 lanzamientos), y 354 pierden más de 7.4 (una carrera). Los que más
+pierden son buenos a nivel del mar porque se mueven mucho. Lanzador 174 (recta y cambio) baja de 111.3 a
+92.8. Tu perfil de fichaje es Lanzador 1099 (cutter, slider y curva). Vale 110.2 a nivel del mar y 109.8
+en el Harp Helú, pierde 0.4 puntos, el segundo mejor Stuff+ de la liga en altura, y es de los más
+constantes entre juegos ($\pm 2.6$ contra $\pm 4.5$ de la mediana).
 
 ### 6.4 Lo que dice el Causal Forest
 
-**El costo promedio es firme.** Lanzar en altura cuesta **1.46 carreras más por cada 100 lanzamientos** (IC 90 %
-de 1.23 a 1.69), medido en el marcador y sin usar Stuff+. Es la misma dirección que predice la física.
+**El costo promedio es firme.** Lanzar en altura cuesta **1.52 carreras más por cada 100 lanzamientos** (IC 90 %
+de 1.27 a 1.78), medido en el marcador y sin usar Stuff+. Es la misma dirección que predice la física, y
+casi el mismo tamaño. La liga pierde 8.3 puntos de Stuff+ al pasar de nivel del mar a altitud extrema, y
+cada punto vale 0.135 carreras por cada 100 lanzamientos. Son 1.12 carreras, unas tres cuartas partes del
+costo observado. El resto lo pone el bateador, porque en altura el batazo también viaja más.
 
-**Las diferencias entre lanzadores no se sostienen.** El bosque estima efectos entre 1.23 y 1.64, y para 331
+**Las diferencias entre lanzadores no se sostienen.** El bosque estima efectos entre 1.27 y 1.76, y para 331
 de 333 lanzadores el intervalo incluye el promedio. En la prueba fuera de muestra, el castigo observado no
-sube con el efecto predicho (pendiente de $-2.1$, IC 95 % de $-4.3$ a $+0.1$). El bosque sí aprende la misma
-dirección que Stuff+ (correlación de 0.21 fuera de muestra, $p < 0.001$), pero las carreras de unos cientos
+sube con el efecto predicho (pendiente de $-1.95$, IC 95 % de $-4.0$ a $+0.2$). El bosque sí aprende la misma
+dirección que Stuff+ (correlación de 0.17 fuera de muestra, $p = 0.002$), pero las carreras de unos cientos
 de lanzamientos tienen demasiado azar para confirmarlo lanzador por lanzador.
 
 Ese resultado justifica el diseño del trabajo. Para separar a un lanzador de otro necesitas algo estable, y
-eso es su forma, medida con física. Las carreras confirman el tamaño del castigo promedio. El análisis
-táctico por conteo usa los 635,002 lanzamientos en lugar de 333 lanzadores, y está en la pestaña Causal
-Forest del dashboard.
+eso es su forma, medida con física. Las carreras confirman el tamaño del castigo promedio.
+
+**La pregunta táctica, en casa sí cambia la respuesta.** Comparamos cuatro pares de lanzamientos con
+150,000 lanzamientos cada uno y medimos el efecto en 48 celdas (12 conteos, dos lados del bateador y dos
+entornos). Slider en vez de cambio ahorra 0.31 carreras por cada 100 lanzamientos a nivel del mar y 1.01 en
+altura. De las 10 celdas donde el intervalo de 90 % no cruza el cero, 9 están en altura y todas favorecen
+al slider, sobre todo contra el bateador del lado contrario y con el conteo en contra (2 bolas o más). Es
+lo que predice H1, porque el cambio pierde más movimiento que el slider. A nivel del mar, con 3 bolas y
+bateador del mismo lado, la recta le gana al cambio por 3 a 5 carreras por cada 100. Con 48 celdas por par
+esperarías unas 5 falsas por azar, así que lee las celdas sueltas como pistas y el patrón como el
+resultado. Las tablas completas están en la pestaña Causal Forest del dashboard.
 
 ## 7. Recomendaciones
 
 **Fichajes.** No pagues de más por movimiento. Una recta del quintil más alto llega a 2,240 metros
-valiendo 105.2 en lugar de 113.6. El mercado cobra esa prima a nivel del mar, y tú la pagarías por algo
+valiendo 97.1 en lugar de 116.4. El mercado cobra esa prima a nivel del mar, y tú la pagarías por algo
 que en tu estadio no existe.
 
 **Perfil.** Busca arsenales de cutter, slider y splitter, y lanzadores que provoquen rodados. En altura un
@@ -441,13 +503,16 @@ elevado viaja 31 pies más (de 292 a 323) y sale del parque 16.3 % de las veces 
 **Rotación.** Abre en casa con los lanzadores que aguantan (pestaña Lanzadores del dashboard). Los que
 pierden mucho rinden más de visitante.
 
+**En el juego.** En casa, cuando el pitcher va atrás en el conteo contra un bateador del lado contrario,
+pide slider antes que cambio. El Causal Forest táctico encuentra 10 celdas firmes en ese par, y 9 están en altura y favorecen al slider.
+
 **Prospectos.** Hazte cinco preguntas, en este orden.
 1. ¿Cuánto de su valor es movimiento? Si su Stuff+ está en el quintil más alto por su quiebre, esa
    ventaja no viaja a la Ciudad de México.
 2. ¿Cuánto de su giro se vuelve movimiento? La eficiencia alta ayuda a nivel del mar y te expone en
-   altura (élite de altura 0.69 contra 1.02).
-3. ¿Su arsenal se apoya en cutter, slider o splitter, o en recta y curva? El primero llega casi intacto
-   y el segundo llega devaluado.
+   altura (élite de altura 0.55 contra 0.84).
+3. ¿Su arsenal se apoya en cutter, slider o splitter, o en recta y curva? El primero pierde poco y el
+   segundo llega devaluado.
 4. ¿Provoca rodados? Es el único batazo que el aire no ayuda.
 5. Pasa sus números de Trackman por el simulador. Te da su Stuff+ en los dos estadios.
 
@@ -499,16 +564,16 @@ sobre la tasa base, con holdout de lanzador.
 | Objetivo | Lanzamientos | Brier | Habilidad |
 |---|---|---|---|
 | Strike cantado | 336,973 | 0.0562 | +72.7 % |
-| Swing | 635,002 | 0.1485 | +40.4 % |
+| Swing | 635,002 | 0.1486 | +40.4 % |
 | Persecución | 411,912 | 0.1457 | +35.3 % |
-| Swing fallido | 298,029 | 0.1474 | +19.5 % |
-| Contacto débil | 115,948 | 0.1958 | +10.0 % |
-| Rodado | 115,948 | 0.2290 | +6.2 % |
-| Contacto duro | 115,948 | 0.1667 | +5.2 % |
+| Swing fallido | 298,029 | 0.1475 | +19.4 % |
+| Contacto débil | 115,948 | 0.1956 | +10.1 % |
+| Rodado | 115,948 | 0.2288 | +6.3 % |
+| Contacto duro | 115,948 | 0.1668 | +5.2 % |
 | Barril | 115,948 | 0.0244 | +0.8 % |
 
-El arsenal se nota donde actúa su mecanismo, en el swing fallido. Ahí la habilidad sube de 15.9 % con
-sólo la física a 18.9 % con ubicación y a 19.5 % con arsenal y secuencia.
+El arsenal se nota donde actúa su mecanismo, en el swing fallido. Ahí la habilidad sube de 4.5 % con
+sólo la física a 18.9 % con ubicación y a 19.4 % con arsenal y secuencia.
 
 ## Anexo B · Glosario
 

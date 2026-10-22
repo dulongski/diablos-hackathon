@@ -17,11 +17,16 @@ import pandas as pd
 
 from .constants import FASTBALL_TYPES
 
+# Los angulos de salida y de llegada (VertRelAngle, HorzRelAngle, VertApprAngle, HorzApprAngle)
+# NO van en Stuff+, aunque se midan en el release. El angulo con que sale la pelota tambien dice a
+# donde va, asi que con ellos el modelo aprende puntería: un Stuff+ que los usaba correlacionaba
+# −0.70 con la distancia al centro de la zona (mas que Location+, −0.53), y el 58 % de su varianza
+# se predecia solo con la ubicacion en el plato. Sin ellos: −0.03 y ~0 %. El reto define Stuff+
+# como fisica pura; la ubicacion entra en Location+.
 SHAPE = [
     "RelSpeed", "EffectiveVelo", "SpinRate", "SpinAxis",
     "InducedVertBreak", "HorzBreak", "VertBreak",
     "RelHeight", "RelSide", "Extension",
-    "VertRelAngle", "HorzRelAngle", "VertApprAngle", "HorzApprAngle",
     "SpeedDrop", "ZoneTime", "ZoneSpeed",
     "spin_efficiency", "movement_total", "is_rhp",
 ]

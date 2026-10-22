@@ -44,7 +44,8 @@ function Bosque({ filas, min, max, cero = 0, fmt = (v: number) => sg(v), unidad 
 }) {
   const W = 520, F = 34, PL = 92, PR = 64, H = filas.length * F + 34;
   const sx = (v: number) => PL + ((v - min) / (max - min)) * (W - PL - PR);
-  const ticks: number[] = []; for (let t = Math.ceil(min); t <= Math.floor(max); t += 1) ticks.push(t);
+  const paso = max - min > 8 ? 2 : 1;
+  const ticks: number[] = []; for (let t = Math.ceil(min / paso) * paso; t <= Math.floor(max); t += paso) ticks.push(t);
   return (
     <svg viewBox={`0 0 ${W} ${H}`} className="bosque" role="img" aria-label={unidad}>
       {ticks.map(t => <g key={t}>
@@ -113,7 +114,7 @@ export function Hipotesis({ h, c, irCausal }: { h: H; c: Causal; irCausal: () =>
             resumen={<>Nuestro modelo físico, calibrado sólo con datos de la LMB, reproduce a Nathan. 18 pulgadas se vuelven <b>{nf(nat.recta.coors, 1)} en Coors</b> y <b>{nf(nat.recta.hh, 1)} en el Harp Helú</b>. Una regla simple (escalar por la densidad del aire) daría {nf(nat.recta.solo_densidad_coors, 1)} y se queda corta. Los siete tipos de lanzamiento pierden Stuff+, y en todos el intervalo queda bajo cero.</>}
             prueba={<>Volamos la misma pelota en dos aires con el simulador, y medimos cuánto cambia el Stuff+ de cada tipo con {nf(h1.por_tipo.reduce((a, t) => a + t.pitchers, 0))} combinaciones lanzador por tipo, remuestreando lanzadores 2,000 veces.</>}>
             <p className="fig-titulo">Stuff+ que pierde cada tipo en el Harp Helú (95 %)</p>
-            <Bosque unidad="Cambio de Stuff+ por tipo" min={-4} max={0} cero={0}
+            <Bosque unidad="Cambio de Stuff+ por tipo" min={Math.floor(Math.min(...h1.por_tipo.map(t => t.ic[0])) - 0.5)} max={0} cero={0}
               filas={h1.por_tipo.map(t => ({ et: t.tipo, v: t.delta, ic: t.ic, color: COLOR_TIPO_ES[t.tipo] }))} />
           </Tarjeta>
 
@@ -122,7 +123,7 @@ export function Hipotesis({ h, c, irCausal }: { h: H; c: Causal; irCausal: () =>
             resumen={<>Sí gana contra la recta, con <b>{sg(cam.ventaja_vs_recta, 2)} puntos</b> de ventaja ({sg(cam.ic[0], 2)} a {sg(cam.ic[1], 2)}), y en el {nf(cam.pct_pitchers_gana * 100, 0)} % de los {nf(cam.pitchers)} lanzadores que tiran los dos. Pero queda en el lugar {rankCam} de 6, detrás del splitter, el cutter y el slider. El cambio sí tiene mucho movimiento lateral, y ese movimiento también lo paga.</>}
             prueba={<>Comparamos dentro del mismo lanzador su cambio contra su propia recta. Así se cancela todo lo que es del brazo (velocidad, mecánica, calidad) y queda sólo el efecto del aire sobre cada forma.</>}>
             <p className="fig-titulo">Ventaja contra la recta del mismo lanzador (95 %)</p>
-            <Bosque unidad="Ventaja contra la recta" min={0} max={3} cero={0}
+            <Bosque unidad="Ventaja contra la recta" min={0} max={Math.ceil(Math.max(...h2.pares.map(p => p.ic[1])) + 0.5)} cero={0}
               filas={h2.pares.map(p => ({ et: p.tipo, v: p.ventaja_vs_recta, ic: p.ic, color: COLOR_TIPO_ES[p.tipo], fuerte: p.tipo === 'Cambio' }))} />
           </Tarjeta>
 
@@ -138,7 +139,7 @@ export function Hipotesis({ h, c, irCausal }: { h: H; c: Causal; irCausal: () =>
 
           <Tarjeta n="H4" titulo="Importa cuánto se mueve, no cuánto gira" veredicto="si"
             propone={<>Un giro alto no sirve si no se convierte en movimiento. En altura, el mismo giro produce menos movimiento, así que mirar sólo las revoluciones engaña.</>}
-            resumen={<>En el modelo, el giro pesa <b>{nf(giro.peso * 100, 0)} %</b> y el movimiento <b>{nf(movi.peso * 100, 0)} %</b> (el giro es la variable {h4.rango_spinrate} de {h4.n_features}). En el experimento, 100 revoluciones más con el mismo movimiento cambian <b>{sg(h4.experimento.stuff_por_100rpm, 1)}</b> puntos. Una pulgada más de movimiento con el mismo giro, <b>{sg(h4.experimento.stuff_por_pulgada, 1)}</b>. Y la recta que más depende del aire (B) es la mejor a nivel del mar, pero la peor en casa.</>}
+            resumen={<>En el modelo, el giro pesa <b>{nf(giro.peso * 100, 0)} %</b> y el movimiento <b>{nf(movi.peso * 100, 0)} %</b> (el giro es la variable {h4.rango_spinrate} de {h4.n_features}). En el experimento, 100 revoluciones más con el mismo movimiento cambian <b>{sg(h4.experimento.stuff_por_100rpm, 2)}</b> puntos. Una pulgada más de movimiento con el mismo giro, <b>{sg(h4.experimento.stuff_por_pulgada, 2)}</b>. Y la recta que vive del movimiento (B) le saca <b>{nf(B.mar - A.mar, 1)} puntos</b> a la que vive del giro (A) a nivel del mar, pero sólo {nf(B.hh - A.hh, 1)} en casa. El aire se lleva justo esa ventaja.</>}
             prueba={<>Medimos el peso de cada variable dentro del modelo de árboles. Después corrimos un experimento con el simulador, moviendo una sola perilla y dejando todo lo demás fijo, algo que los datos de la cancha no permiten.</>}>
             <p className="fig-titulo">Peso de cada grupo de variables en Stuff+</p>
             <Barras color="var(--nivel-mar)" max={Math.max(...h4.importancia.map(i => i.peso))} fmt={v => `${nf(v * 100, 0)} %`}

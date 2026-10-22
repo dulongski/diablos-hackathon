@@ -129,10 +129,12 @@ grupos = {
     "Giro que se vuelve movimiento (eficiencia)": ["spin_efficiency"],
     "Eje de giro": ["SpinAxis"],
     "Velocidad": ["RelSpeed", "EffectiveVelo", "ZoneSpeed", "SpeedDrop", "ZoneTime"],
-    "Ángulos de llegada": ["VertApprAngle", "HorzApprAngle"],
-    "Punto de salida": ["RelHeight", "RelSide", "Extension", "VertRelAngle", "HorzRelAngle"],
+    "Punto de salida": ["RelHeight", "RelSide", "Extension"],
     "Mano": ["is_rhp"],
 }
+# Sólo las variables que el modelo tiene: los ángulos de salida y llegada ya no entran (codifican puntería).
+grupos = {k: [f for f in v if f in gain.index] for k, v in grupos.items()}
+grupos = {k: v for k, v in grupos.items() if v}
 imp = sorted(({"grupo": k, "peso": round(float(gain[v].sum()), 4)} for k, v in grupos.items()), key=lambda r: -r["peso"])
 rank = {f: i + 1 for i, f in enumerate(gain.sort_values(ascending=False).index)}
 out["h4"] = {"importancia": imp, "rango_spinrate": rank["SpinRate"], "n_features": len(rank),

@@ -78,7 +78,8 @@ def cf_tactico(df: pd.DataFrame) -> dict:
         d = d.join(calidad, on="pitcher_anon_id")
         d[f"uso_{a}"] = d.pitcher_anon_id.map(uso.get(a, pd.Series(dtype=float))).fillna(0)
         d[f"uso_{b}"] = d.pitcher_anon_id.map(uso.get(b, pd.Series(dtype=float))).fillna(0)
-        d = d.dropna(subset=["rv", "balls", "strikes", "is_rhb", "platoon_same"])
+        # Sin lanzador no hay grupo para el bosque (0.2 % de los lanzamientos), y econml no acepta NaN en groups.
+        d = d.dropna(subset=["rv", "balls", "strikes", "is_rhb", "platoon_same", "pitcher_anon_id"])
         if len(d) > MAX_FILAS:
             d = d.sample(MAX_FILAS, random_state=7)
         T = (d.pt == a).astype(int).to_numpy()
@@ -188,11 +189,18 @@ def tres_entornos(df: pd.DataFrame) -> dict:
 
 
 def main() -> None:
+    """Sin argumentos corre las tres partes. Con nombres corre sólo esas y conserva las demás:
+    python scripts/10_local_extras.py cf_tactico"""
     t0 = time.time()
+    partes = (("tres_entornos", tres_entornos), ("shap", shap), ("cf_tactico", cf_tactico))
+    pedidas = set(sys.argv[1:]) or {n for n, _ in partes}
+    previo = ART / "extras.json"
+    salida: dict = json.loads(previo.read_text()) if previo.exists() and set(sys.argv[1:]) else {}
     df = pd.read_pickle(ART / "scored.pkl")
     print(f"scored.pkl: {len(df):,} lanzamientos", flush=True)
-    salida: dict = {}
-    for nombre, f in (("tres_entornos", tres_entornos), ("shap", shap), ("cf_tactico", cf_tactico)):
+    for nombre, f in partes:
+        if nombre not in pedidas:
+            continue
         print(f"{nombre}…", flush=True)
         try:
             salida[nombre] = f(df)

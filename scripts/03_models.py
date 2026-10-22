@@ -45,7 +45,8 @@ def main() -> None:
     oof_store = {}
     for name, feats in sets.items():
         t0 = time.time()
-        oof, sc = models.cross_val(df, feats, target="rv", n_splits=4)
+        p_c, n_c = models.capa(name)
+        oof, sc = models.cross_val(df, feats, target="rv", n_splits=4, params=p_c, n_rounds=n_c)
         oof_store[name] = oof
         sc["n_features"] = len(feats)
         sc["segundos"] = round(time.time() - t0, 1)
@@ -58,7 +59,8 @@ def main() -> None:
     out["holdout_temporada"] = {}
     tr = df[df.year < 2026]
     te = df[df.year == 2026]
-    fit = models.train(tr, sets["stuff"])
+    p_s, n_s = models.capa("stuff")
+    fit = models.train(tr, sets["stuff"], params=p_s, n_rounds=n_s)
     out["holdout_temporada"]["stuff"] = models.score(te["rv"].to_numpy(), fit.raw(te))
     print("  temporada (entrena 24-25, prueba 26): rmse %.5f r2 %.5f"
           % (out["holdout_temporada"]["stuff"]["rmse"], out["holdout_temporada"]["stuff"]["r2"]))
@@ -66,7 +68,7 @@ def main() -> None:
     out["holdout_parque"] = {}
     tr = df[df.altitude_category != "Extreme Altitude"]
     te = df[df.altitude_category == "Extreme Altitude"]
-    fit_park = models.train(tr, sets["stuff"])
+    fit_park = models.train(tr, sets["stuff"], params=p_s, n_rounds=n_s)
     out["holdout_parque"]["stuff"] = models.score(te["rv"].to_numpy(), fit_park.raw(te))
     print("  parque (entrena sin altitud, prueba en altitud): rmse %.5f r2 %.5f"
           % (out["holdout_parque"]["stuff"]["rmse"], out["holdout_parque"]["stuff"]["r2"]))
@@ -102,7 +104,8 @@ def main() -> None:
         print(f"  ablacion whiff {name:9s} brier {b['brier']:.5f}  skill {b['skill']:+.4f}")
 
     # --- modelos finales sobre todos los datos + escala plus ---
-    final = {name: models.train(df, feats) for name, feats in sets.items()}
+    final = {name: models.train(df, feats, params=models.capa(name)[0], n_rounds=models.capa(name)[1])
+             for name, feats in sets.items()}
     for name, fit in final.items():
         df[f"{name}_plus"] = fit.plus(df)
         fit.booster.save_model(str(ART / f"model_{name}.txt"))

@@ -75,6 +75,31 @@ def main() -> None:
         "ablacion_whiff": modelos.get("ablacion_whiff", {}),
     }
 
+    # ------------------------------------------------------------------ C1 + C2: rasgo estable y futuro
+    # Un Stuff+ de física pura casi no predice un lanzamiento suelto: eso lo deciden la ubicación y el
+    # azar. Se valida como se valida públicamente un Stuff+: (1) es un rasgo estable del lanzador y
+    # (2) predice sus carreras futuras mejor que sus propias carreras pasadas. Todo con la predicción
+    # fuera de muestra (el lanzador nunca estuvo en entrenamiento), así que no hay fuga.
+    print("C1 estabilidad y futuro…", flush=True)
+    capas = {"stuff": oof[0], "location": oof[1], "pitching": oof[2]}
+    base = pd.DataFrame({"p": df.pitcher_anon_id.astype(str), "year": df.year, "rv": df.rv,
+                         **{k: -v for k, v in capas.items()}})        # signo: más alto = mejor
+    base = base[df.pitcher_anon_id.notna().to_numpy() & base.rv.notna().to_numpy()]
+    base["mitad"] = base.groupby("p").cumcount() % 2
+    h = base.groupby(["p", "mitad"]).agg(n=("rv", "size"), rv=("rv", "mean"), **{k: (k, "mean") for k in capas}).unstack()
+    h = h[(h["n"] >= 150).all(axis=1)]
+    estab = {k: float(np.corrcoef(h[k][0], h[k][1])[0, 1]) for k in [*capas, "rv"]}
+    pas = base[base.year < 2026].groupby("p").agg(n=("rv", "size"), rv=("rv", "mean"), **{k: (k, "mean") for k in capas})
+    fut = base[base.year == 2026].groupby("p").agg(n=("rv", "size"), rv=("rv", "mean"))
+    pf = pas.join(fut, lsuffix="_pas", rsuffix="_fut", how="inner").query("n_pas >= 300 and n_fut >= 300")
+    # correlación con las carreras futuras: el signo se invierte en rv pasado para que "más alto = mejor" en todos
+    futuro = {k: float(np.corrcoef(pf[k], -pf.rv_fut)[0, 1]) for k in capas}
+    futuro["carreras_pasadas"] = float(np.corrcoef(-pf.rv_pas, -pf.rv_fut)[0, 1])
+    out["estabilidad"] = {"mitades": estab, "lanzadores_mitades": int(len(h)),
+                          "futuro": futuro, "lanzadores_futuro": int(len(pf))}
+    print(f"  estabilidad entre mitades {', '.join(f'{k} {v:.3f}' for k, v in estab.items())} ({len(h)} lanzadores)")
+    print(f"  predice carreras 2026 {', '.join(f'{k} {v:+.3f}' for k, v in futuro.items())} ({len(pf)} lanzadores)")
+
     # ------------------------------------------------------------------ E1 pitchers
     print("E1 pitchers…", flush=True)
     gp = df.groupby("pitcher_anon_id")

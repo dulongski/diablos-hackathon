@@ -8,7 +8,7 @@
  */
 import { useMemo, useState } from 'react';
 import type { Causal, Jurado, Pitcher, PitcherCF } from '../jurado';
-import { plusEnPalabras, veredicto } from '../lexico';
+import { CORTE_AGUANTA, plusEnPalabras, veredicto } from '../lexico';
 import { nf, sg } from '../settings';
 
 type Orden = 'mejores' | 'pierden' | 'aguantan' | 'constantes';
@@ -42,7 +42,7 @@ function MapaFichajes({ p, sel, onSel }: { p: Pitcher[]; sel: Pitcher | null; on
   const sy = (v: number) => PT + ((y1 - v) / (y1 - y0)) * (H - PT - PB);
   const tx = []; for (let v = Math.ceil(x0 / 5) * 5; v <= x1; v += 5) tx.push(v);
   const ty = []; for (let v = Math.ceil(y0 / 2) * 2; v <= y1; v += 2) ty.push(v);
-  const corte = -1.2;   // "aguanta" según lexico.veredicto
+  const corte = CORTE_AGUANTA;   // "aguanta" según lexico.veredicto
 
   return (
     <figure className="mapa-fichajes">
@@ -74,9 +74,9 @@ function MapaFichajes({ p, sel, onSel }: { p: Pitcher[]; sel: Pitcher | null; on
         {sel && <text x={sx(sel.stuff_mar) + 10} y={sy(sel.delta_hh) - 9} className="pt-etiqueta">{sel.nombre}</text>}
       </svg>
       <figcaption className="leyenda">
-        <span className="clave"><i className="pt-aguanta" /> Aguanta (pierde menos de 1.2)</span>
-        <span className="clave"><i className="pt-pierde" /> Pierde (1.2 a 2.5)</span>
-        <span className="clave"><i className="pt-mucho" /> Pierde mucho (más de 2.5)</span>
+        <span className="clave"><i className="pt-aguanta" /> Aguanta (pierde menos de media carrera cada 100)</span>
+        <span className="clave"><i className="pt-pierde" /> Pierde (de media a una carrera)</span>
+        <span className="clave"><i className="pt-mucho" /> Pierde mucho (más de una carrera)</span>
         <span className="nota-leyenda">Toca un punto para ver la ficha.</span>
       </figcaption>
     </figure>
@@ -158,7 +158,7 @@ export function Lanzadores({ j, c }: { j: Jurado; c: Causal }) {
   }, [lista, buscar]);
 
   const masPierde = [...j.pitchers].sort((a, b) => a.delta_hh - b.delta_hh)[0];
-  const aguantan = j.pitchers.filter(x => x.delta_hh > -1.2).length;
+  const aguantan = j.pitchers.filter(x => x.delta_hh > CORTE_AGUANTA).length;
   const constante = ordenar(j.pitchers, 'constantes')[0];
   const nota = ORDENES.find(o => o.k === orden)!.nota;
 
@@ -177,7 +177,7 @@ export function Lanzadores({ j, c }: { j: Jurado; c: Causal }) {
           </p>
           <div className="cifras-fila cuatro">
             <div><b className="num">{nf(j.pitchers_n)}</b><span>lanzadores comparados</span></div>
-            <div><b className="num">{nf(aguantan)}</b><span>aguantan la altura (pierden menos de 1.2 puntos)</span></div>
+            <div><b className="num">{nf(aguantan)}</b><span>aguantan la altura (pierden menos de media carrera cada 100 lanzamientos)</span></div>
             <div><b className="num">{sg(masPierde.delta_hh)}</b><span>pierde {masPierde.nombre}, el más afectado</span></div>
             <div><b className="num">± {nf(constante.sd_juego, 1)}</b><span>varía {constante.nombre}, el más constante entre los buenos en casa</span></div>
           </div>

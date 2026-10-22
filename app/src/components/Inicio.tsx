@@ -9,27 +9,31 @@
 import type { ReactNode } from 'react';
 import type { Causal, Jurado } from '../jurado';
 import { nf, sg } from '../settings';
+import { CORTE_AGUANTA } from '../lexico';
 import { Logos } from './Logos';
 import type { Vista } from './Pestanas';
 
 export function Inicio({ j, c, irA, porQue }: { j: Jurado; c: Causal; irA: (v: Vista) => void; porQue: ReactNode }) {
   const p = j.pitchers;
   const masPierde = [...p].sort((a, b) => a.delta_hh - b.delta_hh)[0];
-  const fichaje = [...p].filter(x => x.delta_hh > -1 && x.sd_juego < 2.5).sort((a, b) => b.stuff_hh - a.stuff_hh)[0];
+  // Perfil de fichaje: aguanta la altura y está en la mitad más constante; de esos, el mejor en casa.
+  const sdMed = [...p].map(x => x.sd_juego).sort((a, b) => a - b)[Math.floor(p.length / 2)];
+  const fichaje = [...p].filter(x => x.delta_hh > CORTE_AGUANTA && x.sd_juego <= sdMed).sort((a, b) => b.stuff_hh - a.stuff_hh)[0]
+    ?? [...p].sort((a, b) => b.stuff_hh - a.stuff_hh)[0];
   const cal = j.calibracion;
   const alto = cal.find(c => c.tramo === '110-120');
   const bajo = cal.find(c => c.tramo === '< 80');
   const mar = j.riesgo.find(r => r.altitude_category === 'No Altitude');
   const hh = j.riesgo.find(r => r.altitude_category === 'Extreme Altitude');
   const mejorArs = j.arsenales[0];
-  const aguantan = p.filter(x => x.delta_hh > -1.2).length;
+  const aguantan = p.filter(x => x.delta_hh > CORTE_AGUANTA).length;
   const promedioLiga = j.tipos.reduce((a, t) => a + t.delta * t.n, 0) / j.tipos.reduce((a, t) => a + t.n, 0);
   const tiposOrd = [...j.tipos].sort((a, b) => b.delta - a.delta);
 
   const PREGUNTAS: { q: string; a: ReactNode; ent: string; v: Vista }[] = [
     {
       q: '¿Qué lanzadores sufren más la altitud y cuáles aguantan?',
-      a: <>{nf(j.pitchers_n)} lanzadores con Stuff+, Location+ y Pitching+ en los dos aires. El que más pierde baja <b>{sg(masPierde.delta_hh)}</b> puntos.</>,
+      a: <>{nf(j.pitchers_n)} lanzadores con Stuff+, Location+ y Pitching+ en los dos aires. El que más pierde baja <b>{nf(Math.abs(masPierde.delta_hh), 1)}</b> puntos.</>,
       ent: 'La pregunta del club · Entregable 1', v: 'lanzadores',
     },
     {
@@ -73,11 +77,11 @@ export function Inicio({ j, c, irA, porQue }: { j: Jurado; c: Causal; irA: (v: V
           </p>
           <div className="respuesta-corta">
             <p className="rc-frase"><span className="etiqueta">La respuesta corta</span>
-              La altitud no daña al lanzamiento malo, <b>borra la ventaja del bueno</b>. En casa conviene el lanzador que
+              La altitud apenas toca al lanzamiento malo y <b>borra la ventaja del bueno</b>. En casa conviene el lanzador que
               engaña sin depender del movimiento, con cutter, slider y splitter, y que provoca rodados.</p>
             <div className="rc-cifras">
               <div><b className="num d-mucho">{sg(promedioLiga, 1)}</b><span>puntos de Stuff+ pierde el lanzamiento promedio en el Harp Helú</span></div>
-              <div><b className="num d-aguanta">{nf(aguantan)} de {nf(j.pitchers_n)}</b><span>lanzadores aguantan la altura, pierden menos de 1.2 puntos</span></div>
+              <div><b className="num d-aguanta">{nf(aguantan)} de {nf(j.pitchers_n)}</b><span>lanzadores aguantan la altura, pierden menos de media carrera cada 100 lanzamientos</span></div>
               <div><b className="num d-mucho">{sg(c.ate, 2)}</b><span>carreras más por cada 100 lanzamientos, medido en el marcador</span></div>
             </div>
           </div>

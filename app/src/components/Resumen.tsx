@@ -3,7 +3,7 @@
  * Las explicaciones viven en los íconos "i"; lo que se ve primero son las cifras.
  */
 import { useState } from 'react';
-import { COLOR_TIPO, nombreTipo } from '../lexico';
+import { COLOR_TIPO, nombreTipo, veredicto } from '../lexico';
 import { L, nf, sg } from '../settings';
 import { Compresion, type Quintil } from './Compresion';
 import { Info } from './Info';
@@ -30,8 +30,9 @@ export function Resumen({ d, j, extras, irA }: { d: DatosResumen; j: Jurado; ext
   const total = d.tipos.reduce((a, t) => a + t.n, 0);
   const promedio = d.tipos.reduce((a, t) => a + t.delta_plus * t.n, 0) / total;
   const rq = d.quintiles['Four-Seam'];
-  const qMejor = rq?.q5?.delta ?? -8.4, qPeor = rq?.q1?.delta ?? 1.3;
-  const cutter = por.Cutter?.delta_plus ?? -0.9, recta = por['Four-Seam']?.delta_plus ?? -3.3;
+  const qMejor = rq?.q5?.delta ?? 0, qPeor = rq?.q1?.delta ?? 0;
+  const cutter = por.Cutter?.delta_plus ?? 0, recta = por['Four-Seam']?.delta_plus ?? 0;
+  const medios = ['Curveball', 'Sinker', 'Changeup'].map(t => por[t]?.delta_plus).filter((x): x is number => x != null);
   const riesgo = {
     mar: j.riesgo.find(r => r.altitude_category === 'No Altitude'),
     hh: j.riesgo.find(r => r.altitude_category === 'Extreme Altitude'),
@@ -57,7 +58,7 @@ export function Resumen({ d, j, extras, irA }: { d: DatosResumen; j: Jurado; ext
               <h3>La recta ({sg(recta)})</h3>
               <p>Su valor <b>es</b> el movimiento. Parece que sube porque su giro la sostiene contra el aire. Con 20 % menos aire,
                  el giro empuja menos y la pelota hace menos de lo que el bateador espera. Curva, sinker y cambio quedan
-                 en medio, alrededor de −2.2.</p>
+                 en medio{medios.length > 0 && <>, entre {sg(Math.max(...medios))} y {sg(Math.min(...medios))}</>}.</p>
             </article>
             <article className="tarjeta porque">
               <span className="etiqueta d-aguanta">Aguantan</span>
@@ -69,7 +70,7 @@ export function Resumen({ d, j, extras, irA }: { d: DatosResumen; j: Jurado; ext
             <article className="tarjeta porque">
               <span className="etiqueta d-pierde">Lo bueno pierde más</span>
               <h3>Las mejores rectas pierden {sg(qMejor)}</h3>
-              <p>Las peores hasta ganan un poco ({sg(qPeor)}). La altitud borra justo lo que hace especial a una recta de
+              <p>{qPeor > 0 ? <>Las peores hasta ganan un poco ({sg(qPeor)}).</> : <>Las peores pierden sólo {sg(qPeor)}.</>} La altitud borra justo lo que hace especial a una recta de
                  élite. No pagues de más por un lanzador cuyo valor sea una recta que se mueve mucho.</p>
             </article>
           </div>
@@ -83,7 +84,7 @@ export function Resumen({ d, j, extras, irA }: { d: DatosResumen; j: Jurado; ext
                   <tbody>
                     {tres.por_tipo.map(t => (
                       <tr key={t.tipo}><th scope="row">{t.tipo}</th><td className="num n">{nf(t.mar, 1)}</td><td className="num n">{nf(t.media, 1)}</td>
-                        <td className="num n destacado">{nf(t.extrema, 1)}</td><td className={`num n ${t.extrema - t.mar > -2 ? 'd-aguanta' : t.extrema - t.mar > -3 ? 'd-pierde' : 'd-mucho'}`}>{sg(t.extrema - t.mar)}</td></tr>
+                        <td className="num n destacado">{nf(t.extrema, 1)}</td><td className={`num n d-${veredicto(t.extrema - t.mar).k}`}>{sg(t.extrema - t.mar)}</td></tr>
                     ))}
                     <tr className="total"><th scope="row">Liga</th><td className="num n">{nf(tres.liga.mar, 1)}</td><td className="num n">{nf(tres.liga.media, 1)}</td><td className="num n destacado">{nf(tres.liga.extrema, 1)}</td><td className="num n">{sg(tres.liga.extrema - tres.liga.mar)}</td></tr>
                   </tbody>
@@ -125,8 +126,8 @@ export function Resumen({ d, j, extras, irA }: { d: DatosResumen; j: Jurado; ext
             <LimiteError nombre={L('La gráfica de compresión', 'The compression chart')}>
               <Compresion quintiles={d.quintiles[tipoQ] ?? {}} />
             </LimiteError>
-            <p className="remate">{L('La altitud no daña al lanzamiento malo. Borra la ventaja del bueno.',
-                                     'Altitude does not hurt the bad pitch. It erases the edge of the good one.')}</p>
+            <p className="remate">{L('La altitud apenas toca al lanzamiento malo. Borra la ventaja del bueno.',
+                                     'Altitude barely touches the bad pitch. It erases the edge of the good one.')}</p>
           </div>
         </div>
       </section>
@@ -149,7 +150,7 @@ export function Resumen({ d, j, extras, irA }: { d: DatosResumen; j: Jurado; ext
                       <td className="num n tenue">{a.pitchers}</td>
                       <td className="num n">{nf(a.stuff_mar, 1)}</td>
                       <td className="num n destacado">{nf(a.stuff_hh, 1)}</td>
-                      <td className={`num n ${a.delta > -2 ? 'd-aguanta' : a.delta > -2.8 ? 'd-pierde' : 'd-mucho'}`}>{sg(a.delta)}</td>
+                      <td className={`num n d-${veredicto(a.delta).k}`}>{sg(a.delta)}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -188,8 +189,8 @@ export function Resumen({ d, j, extras, irA }: { d: DatosResumen; j: Jurado; ext
           <div className="tarjeta">
             <h3 className="titulo-tarjeta">{L('Qué lanzamientos forman la élite', 'Which pitches make up the elite')}
               <Info ancho>{L(
-                'De todos los lanzamientos, tomamos el 1 % con mejor Stuff+ en cada aire y vemos de qué tipo son. A nivel del mar la élite es casi toda recta, y en el Harp Helú el slider ocupa su lugar.',
-                'Out of every pitch, we take the top 1% by Stuff+ in each kind of air and look at their type. At sea level the elite is mostly four-seamers; at Harp Helú, the slider takes their place.')}</Info>
+                'De todos los lanzamientos, tomamos el 1 % con mejor Stuff+ en cada aire y vemos de qué tipo son. A nivel del mar domina la recta, y en el Harp Helú el slider ocupa su lugar.',
+                'Out of every pitch, we take the top 1% by Stuff+ in each kind of air and look at their type. At sea level four-seamers dominate; at Harp Helú, the slider takes their place.')}</Info>
             </h3>
             <MezclaElite mezcla={d.mezcla} />
           </div>
@@ -280,7 +281,7 @@ const PERFIL: { k: string; es: string; en: string; u: string; d: number }[] = [
 ];
 
 function PerfilIdeal({ perfil }: { perfil: DatosResumen['perfil'] }) {
-  const fmt = (k: string, v: number, d: number) => (k === 'spin_efficiency' ? nf(v * 100, 0) : nf(v, d));
+  const fmt = (k: string, v: number, d: number) => (k === 'spin_efficiency' ? nf(v * 100, 0) : nf(v, d).replace('-', '−'));
   return (
     <table className="perfil">
       <thead>

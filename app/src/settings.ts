@@ -41,7 +41,7 @@ export const L = (es: string, en: string) => (IDIOMA === 'en' ? en : es);
 /** Formato de números del idioma. */
 export const LOCALE = IDIOMA === 'en' ? 'en-US' : 'es-MX';
 export const nf = (v: number, d = 0) =>
-  v.toLocaleString(LOCALE, { minimumFractionDigits: d, maximumFractionDigits: d });
+  v.toLocaleString(LOCALE, { minimumFractionDigits: d, maximumFractionDigits: d }).replace('-', '−');
 /** Con signo y menos tipográfico: +1.3 / −8.4 */
 export const sg = (v: number, d = 1) => `${v > 0 ? '+' : v < 0 ? '−' : ''}${nf(Math.abs(v), d)}`;
 

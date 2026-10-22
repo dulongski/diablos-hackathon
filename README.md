@@ -9,9 +9,9 @@ mide cuánto vale cada uno en el Harp Helú y le dice al club qué lanzadores le
 
 ## La respuesta corta
 
-La altitud no daña al lanzamiento malo, **borra la ventaja del bueno**. La mejor recta de la liga pierde
-8.4 puntos de Stuff+ en el Harp Helú y la peor gana 1.3. En promedio la liga pierde 2.4. De 561
-lanzadores, 58 aguantan la altura. El perfil que conviene engaña sin depender del movimiento, con cutter,
+La altitud apenas toca al lanzamiento malo y **borra la ventaja del bueno**. Las mejores rectas de la liga
+pierden 19.4 puntos de Stuff+ en el Harp Helú y las peores 3.8. En promedio la liga pierde 8.3, unas 1.1
+carreras más por cada 100 lanzamientos. De 561 lanzadores, sólo 21 aguantan la altura. El perfil que conviene engaña sin depender del movimiento, con cutter,
 slider y splitter, y provoca rodados, porque en altura un elevado viaja 31 pies más.
 
 ## Cómo funciona

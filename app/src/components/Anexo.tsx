@@ -4,6 +4,7 @@
  */
 import type { Jurado } from '../jurado';
 import { COLOR_TIPO_ES } from '../jurado';
+import { veredicto } from '../lexico';
 import { nf, sg } from '../settings';
 
 const TERMINOS: { t: string; d: string }[] = [
@@ -85,7 +86,7 @@ export function Anexo({ j }: { j: Jurado }) {
                   <h4><i style={{ background: COLOR_TIPO_ES[t.t] }} />{t.t}</h4>
                   <p>{t.d}</p>
                   {f && d && <p className="tipo-datos num">{nf(f.v, 1)} mph · vertical {sg(f.ivb, 1)} in · lateral {sg(f.hb, 1)} in · {nf(d.n)} lanz. en la liga</p>}
-                  <p className="tipo-alt"><b>En altura.</b> {t.para} <span className={d && d.delta > -2 ? 'd-aguanta' : d && d.delta > -3 ? 'd-pierde' : 'd-mucho'}>{d ? `${sg(d.delta)} Stuff+` : ''}</span></p>
+                  <p className="tipo-alt"><b>En altura.</b> {t.para} <span className={d ? `d-${veredicto(d.delta).k}` : ''}>{d ? `${sg(d.delta)} Stuff+` : ''}</span></p>
                 </div>
               </article>
             );
