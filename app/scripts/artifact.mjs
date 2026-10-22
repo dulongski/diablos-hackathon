@@ -15,7 +15,7 @@ if (!js || !css) throw new Error('No se encontraron los bundles en dist/index.ht
 
 writeFileSync('dist/artifact.html', `<title>Stuff+ a 2,240 m</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Martian+Mono:wght@300..700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;700;900&family=Inter:wght@400;500;600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=JetBrains+Mono:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="${css}">
 <div id="root"></div>
 <script type="module" src="${js}"></script>
