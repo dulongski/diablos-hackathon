@@ -19,7 +19,7 @@ export const LETRAS: { k: Letra; label: string; css: string }[] = [
   { k: 'dmsans', label: 'DM Sans', css: "'DM Sans', system-ui, sans-serif" },
 ];
 
-const BASE: Ajustes = { paleta: 'noche', letra: 'inter', idioma: 'es' };
+const BASE: Ajustes = { paleta: 'crema', letra: 'inter', idioma: 'es' };
 const LLAVE = 'diablos.ajustes';
 
 function leer(): Ajustes {
@@ -28,7 +28,7 @@ function leer(): Ajustes {
     const a = raw ? { ...BASE, ...JSON.parse(raw) } : { ...BASE };
     if (!PALETAS.some(p => p.k === a.paleta)) a.paleta = BASE.paleta;
     if (!LETRAS.some(f => f.k === a.letra)) a.letra = BASE.letra;
-    if (a.idioma !== 'en') a.idioma = 'es';
+    a.idioma = 'es';   // lo nuevo está sólo en español: el inglés queda fuera hasta traducirlo
     return a;
   } catch { return { ...BASE }; }
 }

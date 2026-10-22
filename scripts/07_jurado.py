@@ -169,7 +169,8 @@ def main() -> None:
     # Una muestra de lanzamientos reales de diestros (el quiebre horizontal de un zurdo es el
     # espejo), con su Stuff+ en el Harp Helú: el 10% mejor y el 10% peor de cada tipo.
     print("E4 mapa…", flush=True)
-    rhp = df[(df.PitcherThrows == "Right") & df.tipo.notna() & df.plus_alt.notna()]
+    rhp = df[(df.PitcherThrows == "Right") & df.tipo.notna() & df.plus_alt.notna()
+             & df.HorzBreak.notna() & df.InducedVertBreak.notna()]   # NaN no es JSON válido
     puntos = []
     rng = np.random.default_rng(7)
     for t, gt in rhp.groupby("tipo"):
@@ -182,8 +183,8 @@ def main() -> None:
                                "v": round(float(rr.RelSpeed), 1), "s": round(float(rr.plus_alt), 1)})
     out["mapa"] = puntos
 
-    (OUT / "jurado.json").write_text(json.dumps(out, ensure_ascii=False, separators=(",", ":")))
-    (ART / "jurado.json").write_text(json.dumps(out, ensure_ascii=False, indent=1))
+    (OUT / "jurado.json").write_text(json.dumps(out, ensure_ascii=False, separators=(",", ":"), allow_nan=False))
+    (ART / "jurado.json").write_text(json.dumps(out, ensure_ascii=False, indent=1, allow_nan=False))
     tabla.to_csv(ART / "pitchers_jurado.csv")
 
     # --- resumen para leer en consola ---

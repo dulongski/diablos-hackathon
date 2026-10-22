@@ -1,6 +1,6 @@
 /* Menú de ajustes (engrane): paleta, letra e idioma. Cada cambio se guarda y recarga la página. */
 import { useEffect, useRef, useState } from 'react';
-import { AJUSTES, L, LETRAS, PALETAS, guardarAjustes, type Idioma } from '../settings';
+import { AJUSTES, L, LETRAS, PALETAS, guardarAjustes } from '../settings';
 
 /** Engrane simétrico: 8 dientes trapezoidales alrededor de un anillo, con hueco central. */
 const ENGRANE = (() => {
@@ -47,7 +47,7 @@ export function Ajustes() {
                 <span className="cfg-muestra" style={{ background: p.sw[0] }}>
                   {p.sw.slice(1).map(c => <i key={c} style={{ background: c }} />)}
                 </span>
-                <span>{L(p.es, p.en)}{p.k === 'noche' && <small> · {L('por defecto', 'default')}</small>}</span>
+                <span>{L(p.es, p.en)}{p.k === 'crema' && <small> · {L('por defecto', 'default')}</small>}</span>
               </button>
             ))}
           </div>
@@ -62,13 +62,7 @@ export function Ajustes() {
             ))}
           </div>
 
-          <div className="cfg-sec">{L('Idioma', 'Language')}</div>
-          <div className="segmentado cfg-idioma" role="group">
-            {([['es', 'Español'], ['en', 'English']] as [Idioma, string][]).map(([k, l]) => (
-              <button key={k} type="button" className={A.idioma === k ? 'activo' : ''} aria-pressed={A.idioma === k}
-                      onClick={() => A.idioma !== k && guardarAjustes({ idioma: k })}>{l}</button>
-            ))}
-          </div>
+          {/* Idioma oculto: las vistas nuevas están sólo en español. */}
         </div>
       )}
     </div>
