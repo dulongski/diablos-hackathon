@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { AirField } from './components/AirField';
 import { Anexo } from './components/Anexo';
 import { Barra } from './components/Barra';
@@ -13,14 +13,14 @@ import { LimiteError } from './components/LimiteError';
 import { MapaEfectivos } from './components/MapaEfectivos';
 import { Metodologia } from './components/Metodologia';
 import { Pestanas, type Vista } from './components/Pestanas';
-import { PitchFantasma } from './components/PitchFantasma';
+import { Diamante3D } from './components/Diamante3D';
 import { Resumen, type DatosResumen } from './components/Resumen';
 import { Simulador } from './components/Simulador';
 import type { TipoMigracion } from './components/MapaMigracion';
 import type { Causal, Extras, Hipotesis as DatosHipotesis, Jurado } from './jurado';
 import { Logos } from './components/Logos';
 import type { Model } from './lib/gbm';
-import { densityAtAltitude, dragIndexAtAltitude, type PitchInput } from './lib/physics';
+import { densityAtAltitude, dragIndexAtAltitude, releaseAt, solveRelease, type PitchInput } from './lib/physics';
 import type { Escala, Helpers } from './lib/scoring';
 
 const HARP_HELU = 2240;
@@ -74,6 +74,11 @@ export function App() {
     document.documentElement.style.setProperty('--densidad', densidad.toFixed(3));
   }, [densidad]);
 
+  const fantasma = useMemo(() => {
+    const rel = solveRelease(PITCH_INICIAL);
+    return { mar: releaseAt(rel, 1.0, PITCH_INICIAL.spinRate), alt: releaseAt(rel, arrastre, PITCH_INICIAL.spinRate) };
+  }, [arrastre]);
+
   const irA = (v: Vista) => { setVista(v); window.scrollTo({ top: 0 }); };
 
   /* El pitch fantasma ya no es el titular: es la explicación de por qué la altitud importa. */
@@ -84,16 +89,18 @@ export function App() {
           <p className="eyebrow">Por qué importa la altitud</p>
           <h2 className="porque-titulo">El mismo lanzamiento, dos estadios</h2>
           <p className="entrada">
-            Las dos pelotas salen de la misma mano, en el mismo instante, con la misma velocidad y el mismo
-            giro. La azul vuela en un estadio a nivel del mar y la roja en el Harp Helú. Con menos aire, el
-            giro la empuja menos. Llega más baja de lo que el bateador espera, y la diferencia se mide en
-            pulgadas.
+            Una recta típica de la LMB, con la misma mano, la misma velocidad y el mismo giro. La pelota vuela por
+            la línea roja, la del Harp Helú. La línea azul punteada es por dónde habría pasado a nivel del mar. Con
+            menos aire el giro la empuja menos, y llega más baja de lo que el bateador espera. Mueve la altitud y
+            mira cómo se separan.
           </p>
           <ControlAltitud metros={metros} onChange={setMetros} />
         </div>
         <div className="hero-escena">
           <LimiteError nombre="La escena 3D">
-            <PitchFantasma pitch={PITCH_INICIAL} arrastre={arrastre} />
+            <div className="escenario claro">
+              <Diamante3D principal={fantasma.alt} fantasma={fantasma.mar} rpm={PITCH_INICIAL.spinRate} camara="catcher" />
+            </div>
           </LimiteError>
         </div>
       </div>
@@ -140,18 +147,16 @@ export function App() {
               <header className="cabeza-pregunta">
                 <p className="eyebrow">Entregable 4 · Dashboard simulador</p>
                 <h2>¿Cuánto valdría este lanzamiento aquí y a nivel del mar?
-                  <Info ancho>Define un lanzamiento con sus números físicos (velocidad, giro, movimiento, punto de salida) y cuánto varía de tiro a tiro. El modelo lanza miles de copias en los dos aires y muestra dónde caen y cuánto vale cada una. Todo corre en esta página, sin servidor detrás.</Info>
+                  <Info ancho>Elige un tipo de lanzamiento o mueve sus números. La pelota vuela con la física del estadio que elijas, y el modelo la califica en ese aire y a nivel del mar. Todo corre en esta página, sin servidor detrás.</Info>
                 </h2>
                 <p className="entrada ancha">
-                  Escribe los números de un lanzamiento (Trackman los da después de cada bullpen) y compara su
-                  Stuff+ en el Harp Helú contra un estadio a nivel del mar, lado a lado.
+                  Elige un lanzamiento o escribe sus números de Trackman, y mira cómo vuela y cuánto vale en el Harp
+                  Helú contra un estadio a nivel del mar. Todo se recalcula al mover cualquier control.
                 </p>
-                <div className="altitud-compacta">
-                  <ControlAltitud metros={metros} onChange={setMetros} />
-                </div>
+
               </header>
               <LimiteError nombre="El simulador">
-                <Simulador metros={metros} arrastre={arrastre}
+                <Simulador metros={metros} onMetros={setMetros} arrastre={arrastre}
                            model={datos.model} helpers={datos.helpers} escala={datos.escala} />
               </LimiteError>
 

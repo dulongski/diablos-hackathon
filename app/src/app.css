@@ -870,3 +870,53 @@ svg .eje-cero { stroke: color-mix(in srgb, var(--ceniza) 70%, transparent); stro
   .formula { white-space: normal; overflow-wrap: anywhere; font-size: 0.85rem; }
   .pasos-metodo a { font-size: 0.82rem; }
 }
+
+/* ===========================================================================
+   Simulador nuevo: una pelota, campo de día, controles a la vista
+   ======================================================================== */
+
+.escenario.claro { background: #F4F0E6; border: var(--borde-tenue); }
+.sin-3d { display: grid; place-items: center; height: 100%; min-height: 240px; color: var(--ceniza); }
+
+.sim { display: grid; gap: 16px; }
+.sim-tipos { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; }
+.sim-tipos .etiqueta-grupo { font-size: 0.85rem; font-weight: 600; color: var(--enrarecido); }
+.sim-rejilla { display: grid; grid-template-columns: minmax(280px, 340px) minmax(0, 1fr); gap: 20px; align-items: start; }
+.sim-controles { display: grid; gap: 18px; padding: 16px 18px; }
+.sim-grupo h4 { margin: 0 0 8px; font-family: var(--display); text-transform: uppercase; font-size: 1.05rem; color: var(--tinta); letter-spacing: 0.02em; }
+.sim-grupo .control-altitud { margin-top: 0; padding: 0; border: none; background: none; }
+.sim-grupo .campo { margin-bottom: 10px; }
+.sim-escena { display: grid; gap: 14px; min-width: 0; }
+.sim-lienzo { position: relative; aspect-ratio: 16 / 10; border-radius: var(--radio); overflow: hidden; border: var(--borde-tenue); background: #F4F0E6; }
+.sim-camaras { position: absolute; top: 10px; left: 10px; display: flex; gap: 4px; background: rgba(255,255,255,0.86); border-radius: 999px; padding: 3px; }
+.sim-camaras button { border: none; background: none; font: inherit; font-size: 0.78rem; font-weight: 600; padding: 5px 11px; border-radius: 999px; cursor: pointer; color: #24302A; }
+.sim-camaras button.activo { background: #10201A; color: #F6F3EA; }
+.sim-leyenda { position: absolute; bottom: 10px; left: 10px; display: flex; flex-wrap: wrap; gap: 6px 14px; background: rgba(255,255,255,0.86); border-radius: 10px; padding: 6px 12px; font-size: 0.8rem; color: #24302A; }
+.sim-leyenda i { display: inline-block; width: 18px; height: 0; vertical-align: middle; margin-right: 4px; }
+.sim-leyenda i.l-alt { border-top: 3px solid #D7362B; }
+.sim-leyenda i.l-mar { border-top: 3px dashed #2E6FA6; }
+.sim-resultados { display: grid; gap: 12px; }
+.res-plus { display: grid; grid-template-columns: 1fr auto 1fr auto; gap: 14px; align-items: end; background: var(--basalto-alto); border: var(--borde-tenue); border-radius: var(--radio); padding: 14px 18px; }
+.res-plus > div { display: grid; gap: 2px; }
+.res-plus b { font-size: 2.4rem; line-height: 1; color: var(--tinta); }
+.res-flecha { font-size: 1.6rem; color: var(--ceniza); padding-bottom: 20px; }
+.res-delta { padding-left: 16px; border-left: var(--borde-tenue); }
+.res-fisica { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.res-fisica > div { background: var(--basalto-alto); border: var(--borde-tenue); border-radius: 10px; padding: 10px 12px; display: grid; gap: 4px; }
+.res-fisica span { font-size: 0.8rem; color: var(--ceniza); }
+.res-fisica b { font-size: 1.05rem; color: var(--tinta); }
+.res-lectura { font-size: 1.05rem; margin: 0; max-width: none; border-left: 3px solid var(--diablo); padding-left: 12px; color: var(--enrarecido); }
+
+@media (max-width: 1040px) {
+  .sim-rejilla { grid-template-columns: 1fr; }
+  .sim-escena { order: -1; }
+  .res-fisica { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 700px) {
+  .sim-lienzo { aspect-ratio: 1 / 1; }
+  .res-plus { grid-template-columns: 1fr auto 1fr; }
+  .res-delta { grid-column: 1 / -1; border-left: none; padding-left: 0; display: flex !important; justify-content: space-between; align-items: baseline; }
+  .res-plus b { font-size: 1.9rem; }
+  .sim-camaras button { padding: 4px 8px; font-size: 0.72rem; }
+}
+.res-delta b.d-aguanta { color: var(--gana); } .res-delta b.d-pierde { color: var(--aviso); } .res-delta b.d-mucho { color: var(--diablo); }
