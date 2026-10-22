@@ -52,19 +52,18 @@ método con literatura → validación con baseline al azar → ejemplo completo
   reconvertido) · **Simulador** (+ `MapaEfectivos.tsx`) · **¿Funciona?** (`Confianza.tsx` + `Metodo.tsx`).
   Compila (`npx tsc --noEmit` limpio).
 
-### Falta — en este orden
-1. **CSS de los componentes nuevos.** Casi ninguna clase nueva tiene estilo todavía (`inicio-*`,
-   `glosario`, `pregunta*`, `respuesta*`, `vista-sec`, `cabeza-pregunta`, `cifras-fila`, `lanz-rejilla`,
-   `mapa-fichajes`, `cuad-*`, `pt-*`, `ficha*`, `sello*`, `tabla-datos`, `calibracion`, `barra-mala/buena`,
-   `prueba*`, `habilidades`, `porque*`, `riesgo`, `checklist`, `mapa-efectivos*`, `ef-*`, `d-aguanta/
-   pierde/mucho`, `t-mar/t-alt`…). Van en `app/src/app.css`, con los tokens de `styles.css`.
-2. Paleta por omisión **crema** (`BASE` en `app/src/settings.ts`) y ocultar el selector de idioma en
-   `Ajustes.tsx`: lo nuevo está sólo en español.
-3. Revisar visualmente cada pestaña en escritorio y móvil.
-4. **Reporte PDF** (≈16 láminas) con el patrón de Coach DNA. HTML → PDF con Chrome headless:
-   `"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless --print-to-pdf=…`
-5. **Documento técnico PDF** (6–10 pp) a partir de `docs/documento_tecnico.md`.
-6. Carpeta `entrega/` + borrador del correo.
+### Hecho el 2026-10-22 (sesión en la nube)
+- **Bug crítico arreglado:** `jurado.json` traía 10 puntos con `NaN` y la app entera no cargaba.
+  `07_jurado.py` ahora los filtra y escribe con `allow_nan=False`.
+- CSS de todas las vistas nuevas; paleta crema por omisión; idioma oculto (sólo español).
+- Revisión visual en escritorio y móvil; textos alineados con los datos (el sinker NO aguanta:
+  −2.3; aguantan cutter, splitter y slider).
+- `entrega/documento_tecnico.pdf` (10 pp., `docs/tecnico.py`) y `entrega/reporte.pdf`
+  (17 láminas, `docs/reporte.py`); borrador en `entrega/correo.md`.
+
+### Falta
+1. Completar `entrega/correo.md` (integrantes, link) y enviarlo **hoy**.
+2. Decidir si se publica el dashboard (ver nota de datos abajo sobre `jurado.json`).
 
 ## Las cifras que cuentan la historia (de `app/public/data/jurado.json`)
 
