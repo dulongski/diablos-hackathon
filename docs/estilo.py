@@ -49,7 +49,7 @@ def revisar(texto: str, nombre: str) -> int:
                 n += 1
         bajo = l.lower()
         for f in RELLENO:
-            if f in bajo:
+            if re.search(r"(?<![a-záéíóúñ])" + re.escape(f), bajo):
                 print(f"{nombre}:{i} [relleno: {f}] {l[:120]}")
                 n += 1
     return n

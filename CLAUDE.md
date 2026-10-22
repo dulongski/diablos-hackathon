@@ -61,9 +61,22 @@ método con literatura → validación con baseline al azar → ejemplo completo
 - `entrega/documento_tecnico.pdf` (10 pp., `docs/tecnico.py`) y `entrega/reporte.pdf`
   (17 láminas, `docs/reporte.py`); borrador en `entrega/correo.md`.
 
+### Hecho después (misma sesión en la nube)
+- **Hipótesis H1 a H4 y Causal Forest** probadas en `scripts/08_hipotesis.py` (bootstrap por lanzador,
+  diseño pareado, econml CausalForestDML) y `app/scripts/experimentos.ts` (experimentos con el simulador).
+  Salida en `app/public/data/hipotesis.json`. H1 y H4 se confirman, H2 y H3 en parte.
+- Dashboard renombrado a **Diablos Stuff+**, favicon de pelota, logos de ISAC y Diablos
+  (`app/public/logos/`), pestañas nuevas **Hipótesis** y **Anexo** (el glosario salió de Inicio).
+- Documento técnico reescrito con metodología completa y fórmulas en LaTeX (KaTeX en Node, sin red).
+- Reporte de 23 láminas que empieza por lo básico.
+- **Guía de estilo del autor** (aplica a todo texto que vea el lector). Voz activa, directa, de tú, sin
+  guiones de ningún tipo entre palabras, sin dos puntos, sin punto y coma, sin asteriscos ni frases de
+  relleno, con frases cortas y largas mezcladas. `docs/estilo.py` revisa el texto renderizado.
+- Corrección. Stuff+ predice el valor en carreras directamente; los ocho modelos de componente sólo
+  explican de dónde sale el valor.
+
 ### Falta
-1. Completar `entrega/correo.md` (integrantes, link) y enviarlo **hoy**.
-2. Decidir si se publica el dashboard (ver nota de datos abajo sobre `jurado.json`).
+1. Completar `entrega/correo.txt` (integrantes y links) y enviarlo **hoy**.
 
 ## Las cifras que cuentan la historia (de `app/public/data/jurado.json`)
 

@@ -48,7 +48,7 @@ export function PitchFantasma({ pitch, arrastre }: { pitch: PitchInput; arrastre
       </div>
 
       <p className="solo-lectores">
-        {L(`El mismo lanzamiento en dos aires. A nivel del mar cruza el plato a ${par.mar.shape.plateZ.toFixed(2)} pies de altura; en el Harp Helú, a ${par.alt.shape.plateZ.toFixed(2)} pies. Separación final: ${sepFinal.toFixed(1)} pulgadas.`,
+        {L(`El mismo lanzamiento en dos aires. A nivel del mar cruza el plato a ${par.mar.shape.plateZ.toFixed(2)} pies de altura y en el Harp Helú a ${par.alt.shape.plateZ.toFixed(2)} pies. Terminan separadas ${sepFinal.toFixed(1)} pulgadas.`,
            `The same pitch in two kinds of air. At sea level it crosses the plate at ${par.mar.shape.plateZ.toFixed(2)} ft; at Harp Helú, at ${par.alt.shape.plateZ.toFixed(2)} ft. Final gap: ${sepFinal.toFixed(1)} inches.`)}
       </p>
     </div>

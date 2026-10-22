@@ -20,7 +20,7 @@ export function ControlAltitud({ metros, onChange }: { metros: number; onChange:
         <label className="etiqueta" htmlFor="altitud">
           {L('Altitud del estadio', 'Ballpark altitude')}
           <Info>{L(
-            'Mueve la altitud y todo se recalcula: las dos pelotas, el fondo y el simulador. Coors Field (Denver) es el estadio más alto de Grandes Ligas.',
+            'Mueve la altitud y todo se recalcula, las dos pelotas, el fondo y el simulador. Coors Field (Denver) es el estadio más alto de Grandes Ligas.',
             'Move the altitude and everything recalculates: both balls, the background and the simulator. Coors Field (Denver) is the highest park in MLB.')}</Info>
         </label>
         <output className="num lectura-altitud" htmlFor="altitud">

@@ -80,10 +80,10 @@ export function Metodo({ physics, models }: { physics: Record<string, any>; mode
             <p>{L(
               'Un modelo mira sólo la física de cada lanzamiento (velocidad, movimiento, giro, desde dónde sale) y estima cuántas carreras le quita al rival en promedio. No mira el resultado (un buen lanzamiento puede terminar en jonrón por suerte), ni la ubicación, ni el bateador, ni el estadio.',
               'A model looks only at the physics of each pitch (velocity, movement, spin, release point) and estimates how many runs it saves on average. It does not look at the outcome (a good pitch can end in a homer by luck), the location, the hitter or the ballpark.')}</p>
-            <p>{L('Después ese valor se pasa a una escala fácil de leer:', 'That value is then put on an easy-to-read scale:')}</p>
+            <p>{L('Después pasamos ese valor a una escala fácil de leer.', 'That value is then put on an easy-to-read scale:')}</p>
             <pre className="formula">Stuff+ = 100 + 10 × z(−{L('carreras esperadas', 'expected runs')})</pre>
             <p className="nota">{L(
-              '100 es el promedio de la liga. Cada 10 puntos es una desviación estándar: la distancia típica entre un lanzamiento y el promedio. El signo se invierte porque menos carreras es mejor para el lanzador.',
+              '100 es el promedio de la liga. Cada 10 puntos son una desviación estándar, la distancia típica entre un lanzamiento y el promedio. El signo se invierte porque menos carreras es mejor para el lanzador.',
               '100 is league average. Every 10 points is one standard deviation: the typical distance between a pitch and the average. The sign is flipped because fewer runs is better for the pitcher.')}</p>
           </Parte>
 
@@ -99,7 +99,7 @@ export function Metodo({ physics, models }: { physics: Record<string, any>; mode
             </table>
                  </>}>
             <p>{L(
-              'Los datos no dicen en qué estadio se lanzó cada pelota, sólo si fue a nivel del mar, en altitud media o en altitud extrema. Pero la pelota sí lo dice: con menos aire frena menos. Trackman mide la desaceleración de cada lanzamiento, y de ahí sale un índice del aire para cada juego.',
+              'Los datos no dicen en qué estadio se lanzó cada pelota, sólo si fue a nivel del mar, en altitud media o en altitud extrema. Pero la pelota sí lo dice. Con menos aire frena menos. Trackman mide cuánto frena cada lanzamiento, y de ahí sacamos un índice del aire para cada juego.',
               'The data does not say which ballpark each pitch was thrown in, only whether it was at sea level, medium or extreme altitude. But the ball tells us: with less air it slows down less. Trackman measures each pitch\'s deceleration, and that gives an air index for every game.')}</p>
             <p className="nota">{L(
               'El movimiento cae más que el frenado. Dentro del mismo lanzador, el frenado varía como ρ^0.96 y el empuje del giro (efecto Magnus) como ρ^1.39, donde ρ es la densidad del aire. Un modelo que escale todo igual subestima el castigo en cerca de un tercio.',
@@ -126,10 +126,10 @@ export function Metodo({ physics, models }: { physics: Record<string, any>; mode
               <div className="paso"><b>Stuff+</b><span>{L('el mismo modelo lo califica', 'the same model grades it')}</span></div>
             </div>
             <p>{L(
-              'La altitud no entra al modelo como un dato más. Entra por física: se toma el lanzamiento, se simula su vuelo con el aire del otro estadio y se vuelve a calificar. Así se puede responder la pregunta de un fichaje: cuánto valdría en el Harp Helú un lanzamiento que nunca se ha tirado ahí.',
+              'La altitud no entra al modelo como un dato más. Entra por física. Tomamos el lanzamiento, simulamos su vuelo con el aire del otro estadio y lo volvemos a calificar. Así respondes la pregunta de un fichaje. ¿Cuánto valdría en el Harp Helú un lanzamiento que nunca se ha tirado ahí?',
               'Altitude does not enter the model as another input. It enters through physics: take the pitch, simulate its flight with the other park\'s air and grade it again. That answers the signing question: what a pitch that has never been thrown there would be worth at Harp Helú.')}</p>
             <p className="nota">{L(
-              `Validación: 444 lanzadores tiraron en los dos aires. Con la mitad se calibró la física; con la otra mitad, que nunca se usó, se comparó lo predicho contra lo que de verdad lanzaron en altitud.`,
+              `Así lo validamos. 444 lanzadores tiraron en los dos aires. Con la mitad calibramos la física, y con la otra mitad, que nunca usamos, comparamos lo predicho contra lo que de verdad lanzaron en altitud.`,
               `Check: 444 pitchers threw in both kinds of air. Half calibrated the physics; with the other half, never used, the prediction was compared against what they actually threw at altitude.`)}</p>
           </Parte>
 
@@ -145,13 +145,13 @@ export function Metodo({ physics, models }: { physics: Record<string, any>; mode
               </tbody>
             </table>
             <div className="mini-cifras">
-              <div><span>{L('Temporada nueva', 'New season')}<Info>{L('Entrena con 2024-2025 y se prueba en 2026.', 'Trained on 2024-2025, tested on 2026.')}</Info></span><b className="num">{nf(models.holdout_temporada?.stuff?.rmse ?? 0.2636, 4)}</b></div>
-              <div><span>{L('Estadio nuevo', 'New ballpark')}<Info>{L('Entrena sin los estadios de altitud extrema y se prueba en ellos. Sale peor, y eso es justo lo que este trabajo mide: un modelo de nivel del mar no sirve igual en altura.', 'Trained without extreme-altitude parks and tested on them. It does worse, which is exactly what this work measures: a sea-level model does not carry over to altitude.')}</Info></span><b className="num">{nf(models.holdout_parque?.stuff?.rmse ?? 0.275, 4)}</b></div>
+              <div><span>{L('Temporada nueva', 'New season')}<Info>{L('Entrena con 2024 y 2025 y se prueba en 2026.', 'Trained on 2024-2025, tested on 2026.')}</Info></span><b className="num">{nf(models.holdout_temporada?.stuff?.rmse ?? 0.2636, 4)}</b></div>
+              <div><span>{L('Estadio nuevo', 'New ballpark')}<Info>{L('Entrena sin los estadios de altitud extrema y se prueba en ellos. Sale peor, y eso es justo lo que medimos. Un modelo de nivel del mar no sirve igual en altura.', 'Trained without extreme-altitude parks and tested on them. It does worse, which is exactly what this work measures: a sea-level model does not carry over to altitude.')}</Info></span><b className="num">{nf(models.holdout_parque?.stuff?.rmse ?? 0.275, 4)}</b></div>
               <div><span>{L('Strike cantado', 'Called strike')}<Info>{L('Qué tanto mejor que adivinar con la tasa promedio predice el modelo si un lanzamiento será strike cantado (1 = perfecto, 0 = igual que adivinar).', 'How much better than guessing with the average rate the model predicts a called strike (1 = perfect, 0 = same as guessing).')}</Info></span><b className="num">+{nf(models.componentes?.y_called_strike?.skill ?? 0.726, 2)}</b></div>
             </div>
                  </>}>
             <p>{L(
-              'El modelo es un gradient boosting (LightGBM): cientos de árboles de decisión pequeños, cada uno corrigiendo el error de los anteriores. Se probó con lanzadores que nunca vio al entrenar, y se comparó contra el punto de partida que pide la rúbrica: el valor promedio de cada conteo.',
+              'El modelo es un gradient boosting (LightGBM), cientos de árboles de decisión pequeños donde cada uno corrige el error de los anteriores. Lo probamos con lanzadores que nunca vio al entrenar y lo comparamos con el punto de partida que pide la rúbrica, el valor promedio de cada conteo.',
               'The model is gradient boosting (LightGBM): hundreds of small decision trees, each correcting the error of the previous ones. It was tested on pitchers it never saw in training and compared against the baseline the rubric asks for: the average value of each count.')}
               <Info ancho>{L(
                 'El error (RMSE) se mide en carreras por lanzamiento. Un lanzamiento suelto lo domina el azar, así que las mejoras son chicas en número pero estables al juntar cientos de lanzamientos de un mismo lanzador.',
@@ -160,10 +160,10 @@ export function Metodo({ physics, models }: { physics: Record<string, any>; mode
 
           <Parte n={5} color="var(--ceniza)" titulo={L('Lo que el modelo no hace', 'What the model does not do')}>
             <ul className="limites">
-              <li>{L('No identifica estadios: "altitud extrema" agrupa varios parques; el Harp Helú es el caso más alto.', 'It does not identify ballparks: "extreme altitude" groups several parks; Harp Helú is the highest.')}</li>
-              <li>{L('No separa altitud de clima: el índice del aire junta densidad, temperatura y humedad.', 'It does not separate altitude from weather: the air index combines density, temperature and humidity.')}</li>
-              <li>{L('No modela al bateador: la calidad del contacto depende mucho más de él que del lanzamiento.', 'It does not model the hitter: contact quality depends much more on the hitter than on the pitch.')}</li>
-              <li>{L('No es causal: califica lanzamientos; no dice qué habría pasado con otro lanzamiento en ese conteo.', 'It is not causal: it grades pitches; it does not say what would have happened with a different pitch in that count.')}</li>
+              <li>{L('No identifica estadios. La altitud extrema agrupa varios parques, y el Harp Helú es el más alto.', 'It does not identify ballparks: "extreme altitude" groups several parks; Harp Helú is the highest.')}</li>
+              <li>{L('No separa altitud de clima. El índice del aire junta densidad, temperatura y humedad.', 'It does not separate altitude from weather: the air index combines density, temperature and humidity.')}</li>
+              <li>{L('No modela al bateador. La calidad del contacto depende mucho más de él que del lanzamiento.', 'It does not model the hitter: contact quality depends much more on the hitter than on the pitch.')}</li>
+              <li>{L('Stuff+ no es causal. Califica lanzamientos, pero no dice qué habría pasado con otro lanzamiento en ese conteo. Para eso está el Causal Forest de la pestaña Hipótesis.', 'It is not causal: it grades pitches; it does not say what would have happened with a different pitch in that count.')}</li>
             </ul>
           </Parte>
         </div>

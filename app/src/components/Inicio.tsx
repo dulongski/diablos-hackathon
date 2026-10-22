@@ -32,27 +32,27 @@ export function Inicio({ j, irA, porQue }: { j: Jurado; irA: (v: Vista) => void;
     },
     {
       q: '¿Qué arsenal y qué perfil físico rinden más en el Harp Helú?',
-      a: <>Mejor arsenal en casa: <b>{mejorArs.arsenal}</b>. Lo que menos pierde: {tiposOrd[0].tipo.toLowerCase()} y {tiposOrd[1].tipo.toLowerCase()}.</>,
+      a: <>El mejor arsenal en casa es <b>{mejorArs.arsenal}</b>. Los que menos pierden son el {tiposOrd[0].tipo.toLowerCase()} y el {tiposOrd[1].tipo.toLowerCase()}.</>,
       ent: 'Entregables 1, 2 y 3', v: 'arsenal',
     },
     {
       q: '¿Cuánto riesgo extra de jonrón hay en casa?',
-      a: mar && hh ? <>Un elevado viaja <b>{nf(hh.dist_fb - mar.dist_fb, 0)} pies más</b>; sale del parque {nf(hh.hr_fb * 100, 1)} % de las veces contra {nf(mar.hr_fb * 100, 1)} %.</> : null,
+      a: mar && hh ? <>Un elevado viaja <b>{nf(hh.dist_fb - mar.dist_fb, 0)} pies más</b> y sale del parque {nf(hh.hr_fb * 100, 1)} % de las veces, contra {nf(mar.hr_fb * 100, 1)} %.</> : null,
       ent: 'Entregable 3', v: 'arsenal',
     },
     {
       q: '¿Cuánto valdría un lanzamiento nuevo aquí y a nivel del mar?',
-      a: <>El coach define velocidad, giro y movimiento; el modelo responde con los dos Stuff+ lado a lado.</>,
+      a: <>Tú defines velocidad, giro y movimiento, y el modelo te da los dos Stuff+ lado a lado.</>,
       ent: 'Entregable 4', v: 'simulador',
     },
     {
       q: '¿Se cumplen las hipótesis que plantea el reto?',
-      a: <>H1 y H4 se confirman; H2 y H3, en parte. Un Causal Forest independiente señala a los mismos lanzadores.</>,
+      a: <>H1 y H4 se confirman, H2 y H3 en parte. Un Causal Forest independiente señala a los mismos lanzadores.</>,
       ent: 'Hipótesis H1 a H4 · Modelo secundario', v: 'hipotesis',
     },
     {
       q: '¿Se puede confiar en la calificación?',
-      a: alto && bajo ? <>Con pitchers que el modelo nunca vio: Stuff+ de 110-120 permite <b>{sg(alto.carreras_100)}</b> carreras por cada 100 lanzamientos; menos de 80, <b>{sg(bajo.carreras_100)}</b>.</> : null,
+      a: alto && bajo ? <>Con lanzadores que el modelo nunca vio, un Stuff+ de 110 a 120 permite <b>{sg(alto.carreras_100)}</b> carreras por cada 100 lanzamientos y uno menor a 80 permite <b>{sg(bajo.carreras_100)}</b>.</> : null,
       ent: 'Criterios 1 y 2', v: 'confianza',
     },
   ];
@@ -77,11 +77,11 @@ export function Inicio({ j, irA, porQue }: { j: Jurado; irA: (v: Vista) => void;
             </div>
             <div>
               <span className="etiqueta">Para el director deportivo</span>
-              <p>A quién firmar: qué lanzadores mantienen su calidad en la altura y cuáles la pierden.</p>
+              <p>A quién firmar. Qué lanzadores mantienen su calidad en la altura y cuáles la pierden.</p>
             </div>
             <div>
               <span className="etiqueta">Con qué datos</span>
-              <p>635,002 lanzamientos de la LMB, 2024-2026, medidos con Trackman. Nombres anonimizados por la liga.</p>
+              <p>635,002 lanzamientos de la LMB, de 2024 a 2026, medidos con Trackman. La liga anonimizó los nombres.</p>
             </div>
           </div>
         </div>
@@ -117,7 +117,7 @@ export function Inicio({ j, irA, porQue }: { j: Jurado; irA: (v: Vista) => void;
               <article className="respuesta">
                 <span className="respuesta-n">El perfil a buscar</span>
                 <h3>Cutter, slider y splitter aguantan</h3>
-                <p>Engañan por parecerse a la recta al salir de la mano, no por moverse mucho, así que el aire delgado les quita poco. Ejemplo: <b>{fichaje.nombre}</b> ({fichaje.arsenal.toLowerCase()}) vale {nf(fichaje.stuff_mar, 1)} a nivel del mar y {nf(fichaje.stuff_hh, 1)} en casa.</p>
+                <p>Engañan por parecerse a la recta al salir de la mano, no por moverse mucho, así que el aire delgado les quita poco. Mira a <b>{fichaje.nombre}</b> ({fichaje.arsenal.toLowerCase()}) vale {nf(fichaje.stuff_mar, 1)} a nivel del mar y {nf(fichaje.stuff_hh, 1)} en casa.</p>
               </article>
               <article className="respuesta">
                 <span className="respuesta-n">En casa</span>

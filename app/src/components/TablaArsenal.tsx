@@ -86,9 +86,9 @@ export function TablaArsenal({ tipos, activo, onActivo }: {
         </tbody>
       </table>
       <p className="pie-tabla">
-        {L('Stuff+: 100 es el promedio de la liga.', 'Stuff+: 100 is league average.')}
+        {L('En Stuff+, 100 es el promedio de la liga.', 'Stuff+: 100 is league average.')}
         <Info>{L(
-          'Movimiento vertical y lateral: cuántas pulgadas de movimiento gana o pierde el lanzamiento en el Harp Helú, medido dentro del mismo lanzador. El lateral se cuenta hacia afuera, sin importar la mano.',
+          'Movimiento vertical y lateral. Cuántas pulgadas de movimiento gana o pierde el lanzamiento en el Harp Helú, medido dentro del mismo lanzador. El lateral se cuenta hacia afuera, sin importar la mano.',
           'Vertical and horizontal movement: how many inches the pitch gains or loses at Harp Helú, measured within the same pitcher. Horizontal is counted outward, regardless of handedness.')}</Info>
       </p>
     </div>

@@ -96,7 +96,7 @@ export function Hipotesis({ h }: { h: H }) {
           <h2>Lo que el reto propone, puesto a prueba</h2>
           <p className="entrada ancha">
             El reto plantea cuatro hipótesis. Cada una se prueba aquí con los datos de la LMB y con un intervalo
-            de confianza del 95 %: el rango donde está el valor real con alta probabilidad. Si el intervalo no
+            de confianza del 95 %, el rango donde está el valor real con alta probabilidad. Si el intervalo no
             cruza el cero, el efecto no es casualidad.
           </p>
           <div className="cifras-fila cuatro">
@@ -110,7 +110,7 @@ export function Hipotesis({ h }: { h: H }) {
         <div className="hips">
           <Tarjeta n="H1" titulo="El aire delgado le quita movimiento al lanzamiento" veredicto="si"
             propone={<>Alan Nathan estima que en Coors Field (1,609 m) un lanzamiento con 18 pulgadas de quiebre se mueve sólo 14 a 15. En el Harp Helú (2,240 m) el efecto debería ser mayor.</>}
-            resumen={<>Nuestro modelo físico, calibrado sólo con datos de la LMB, reproduce a Nathan: 18 pulgadas se vuelven <b>{nf(nat.recta.coors, 1)} en Coors</b> y <b>{nf(nat.recta.hh, 1)} en el Harp Helú</b>. Una regla simple (escalar por la densidad del aire) daría {nf(nat.recta.solo_densidad_coors, 1)}: se queda corta. Los siete tipos de lanzamiento pierden Stuff+, y en todos el intervalo queda bajo cero.</>}
+            resumen={<>Nuestro modelo físico, calibrado sólo con datos de la LMB, reproduce a Nathan. 18 pulgadas se vuelven <b>{nf(nat.recta.coors, 1)} en Coors</b> y <b>{nf(nat.recta.hh, 1)} en el Harp Helú</b>. Una regla simple (escalar por la densidad del aire) daría {nf(nat.recta.solo_densidad_coors, 1)} y se queda corta. Los siete tipos de lanzamiento pierden Stuff+, y en todos el intervalo queda bajo cero.</>}
             prueba={<>Volamos la misma pelota en dos aires con el simulador, y medimos cuánto cambia el Stuff+ de cada tipo con {nf(h1.por_tipo.reduce((a, t) => a + t.pitchers, 0))} combinaciones lanzador por tipo, remuestreando lanzadores 2,000 veces.</>}>
             <p className="fig-titulo">Stuff+ que pierde cada tipo en el Harp Helú (95 %)</p>
             <Bosque unidad="Cambio de Stuff+ por tipo" min={-4} max={0} cero={0}
@@ -119,8 +119,8 @@ export function Hipotesis({ h }: { h: H }) {
 
           <Tarjeta n="H2" titulo="El cambio de velocidad gana valor relativo" veredicto="parcial"
             propone={<>El cambio engaña por ser más lento que la recta, no por moverse. Si depende menos del aire, debería perder menos que la recta del mismo lanzador.</>}
-            resumen={<>Sí gana contra la recta: <b>{sg(cam.ventaja_vs_recta, 2)} puntos</b> de ventaja ({sg(cam.ic[0], 2)} a {sg(cam.ic[1], 2)}), y en el {nf(cam.pct_pitchers_gana * 100, 0)} % de los {nf(cam.pitchers)} lanzadores que tiran los dos. Pero queda en el lugar {rankCam} de 6: el splitter, el cutter y el slider ganan más. El cambio sí tiene mucho movimiento lateral, y ese movimiento también lo paga.</>}
-            prueba={<>Comparación dentro del mismo lanzador: su cambio contra su propia recta. Así se cancela todo lo que es del brazo (velocidad, mecánica, calidad) y queda sólo el efecto del aire sobre cada forma.</>}>
+            resumen={<>Sí gana contra la recta, con <b>{sg(cam.ventaja_vs_recta, 2)} puntos</b> de ventaja ({sg(cam.ic[0], 2)} a {sg(cam.ic[1], 2)}), y en el {nf(cam.pct_pitchers_gana * 100, 0)} % de los {nf(cam.pitchers)} lanzadores que tiran los dos. Pero queda en el lugar {rankCam} de 6, detrás del splitter, el cutter y el slider. El cambio sí tiene mucho movimiento lateral, y ese movimiento también lo paga.</>}
+            prueba={<>Comparamos dentro del mismo lanzador su cambio contra su propia recta. Así se cancela todo lo que es del brazo (velocidad, mecánica, calidad) y queda sólo el efecto del aire sobre cada forma.</>}>
             <p className="fig-titulo">Ventaja contra la recta del mismo lanzador (95 %)</p>
             <Bosque unidad="Ventaja contra la recta" min={0} max={3} cero={0}
               filas={h2.pares.map(p => ({ et: p.tipo, v: p.ventaja_vs_recta, ic: p.ic, color: COLOR_TIPO_ES[p.tipo], fuerte: p.tipo === 'Cambio' }))} />
@@ -133,13 +133,13 @@ export function Hipotesis({ h }: { h: H }) {
             <p className="fig-titulo">Carreras extra por cada 100 lanzamientos al pasar a la altura</p>
             <Barras color="var(--diablo)" max={Math.max(...t3.map(t => t.castigo)) * 1.05} fmt={v => `+${nf(v, 2)}`}
               filas={t3.map(t => ({ et: `${t.grupo} (${nf(t.gb * 100, 0)} %)`, v: t.castigo }))} />
-            <p className="nota-pie tenue">Cuantos más rodados, menor el castigo de la altura: {sg(t3[0].castigo, 2)} contra {sg(t3[2].castigo, 2)}.</p>
+            <p className="nota-pie tenue">Cuantos más rodados, menor el castigo de la altura, {sg(t3[0].castigo, 2)} contra {sg(t3[2].castigo, 2)}.</p>
           </Tarjeta>
 
           <Tarjeta n="H4" titulo="Importa cuánto se mueve, no cuánto gira" veredicto="si"
             propone={<>Un giro alto no sirve si no se convierte en movimiento. En altura, el mismo giro produce menos movimiento, así que mirar sólo las revoluciones engaña.</>}
-            resumen={<>En el modelo, el giro pesa <b>{nf(giro.peso * 100, 0)} %</b> y el movimiento <b>{nf(movi.peso * 100, 0)} %</b> (el giro es la variable {h4.rango_spinrate} de {h4.n_features}). En el experimento, 100 revoluciones más con el mismo movimiento cambian <b>{sg(h4.experimento.stuff_por_100rpm, 1)}</b> puntos; una pulgada más de movimiento con el mismo giro, <b>{sg(h4.experimento.stuff_por_pulgada, 1)}</b>. Y la recta que más depende del aire (B) es la mejor a nivel del mar, pero la peor en casa.</>}
-            prueba={<>Peso de cada variable dentro del modelo de árboles, y un experimento controlado con el simulador: mover una sola perilla y dejar todo lo demás fijo, algo que los datos de la cancha no permiten.</>}>
+            resumen={<>En el modelo, el giro pesa <b>{nf(giro.peso * 100, 0)} %</b> y el movimiento <b>{nf(movi.peso * 100, 0)} %</b> (el giro es la variable {h4.rango_spinrate} de {h4.n_features}). En el experimento, 100 revoluciones más con el mismo movimiento cambian <b>{sg(h4.experimento.stuff_por_100rpm, 1)}</b> puntos. Una pulgada más de movimiento con el mismo giro, <b>{sg(h4.experimento.stuff_por_pulgada, 1)}</b>. Y la recta que más depende del aire (B) es la mejor a nivel del mar, pero la peor en casa.</>}
+            prueba={<>Medimos el peso de cada variable dentro del modelo de árboles. Después corrimos un experimento con el simulador, moviendo una sola perilla y dejando todo lo demás fijo, algo que los datos de la cancha no permiten.</>}>
             <p className="fig-titulo">Peso de cada grupo de variables en Stuff+</p>
             <Barras color="var(--nivel-mar)" max={Math.max(...h4.importancia.map(i => i.peso))} fmt={v => `${nf(v * 100, 0)} %`}
               filas={h4.importancia.filter(i => i.peso > 0.01).map(i => ({ et: i.grupo, v: i.peso, fuerte: i.grupo.startsWith('Giro (rpm)') || i.grupo.startsWith('Movimiento') }))} />
@@ -157,16 +157,16 @@ export function Hipotesis({ h }: { h: H }) {
           <header className="hip-cabeza">
             <span className="hip-n">CF</span>
             <div>
-              <h3>Modelo secundario: Causal Forest</h3>
+              <h3>Modelo secundario, un Causal Forest</h3>
               <p className="hip-propone">¿A qué tipo de lanzador le cuesta más la altura, medido en carreras reales y no en Stuff+? Un Causal Forest estima el efecto de lanzar en altura para cada perfil de lanzador.</p>
             </div>
             <span className="sello sello-v-si">Coincide con Stuff+</span>
           </header>
           <div className="cifras-fila cuatro">
-            <div><b className="num d-mucho">{sg(cf.ate, 2)}</b><span>carreras por cada 100 lanzamientos cuesta la altura, en promedio (90 %: {nf(cf.ate_ic90[0], 2)} a {nf(cf.ate_ic90[1], 2)})</span></div>
+            <div><b className="num d-mucho">{sg(cf.ate, 2)}</b><span>carreras por cada 100 lanzamientos cuesta la altura, en promedio (IC 90 % de {nf(cf.ate_ic90[0], 2)} a {nf(cf.ate_ic90[1], 2)})</span></div>
             <div><b className="num">{nf(cf.pitchers)}</b><span>lanzadores que tiraron en los dos entornos</span></div>
             <div><b className="num d-aguanta">{nf(cf.corr_con_delta_stuff.r, 2)}</b><span>correlación con la pérdida de Stuff+ del modelo principal, que el bosque nunca vio</span></div>
-            <div><b className="num">{cf.menos_afectados.slice(0, 3).map(x => x.nombre.replace('Lanzador ', '')).join(' · ')}</b><span>los menos afectados: los mismos que Stuff+ recomienda fichar</span></div>
+            <div><b className="num">{cf.menos_afectados.slice(0, 3).map(x => x.nombre.replace('Lanzador ', '')).join(' · ')}</b><span>los menos afectados, los mismos que Stuff+ recomienda fichar</span></div>
           </div>
           <div className="hip-cuerpo">
             <div className="hip-figura">
@@ -175,8 +175,8 @@ export function Hipotesis({ h }: { h: H }) {
                 filas={cf.importancia.slice(0, 6).map(i => ({ et: i.variable, v: i.peso }))} />
             </div>
             <div className="hip-texto">
-              <p className="hip-resumen">Dos métodos que no comparten nada (uno es física y árboles sobre la forma; el otro, carreras observadas) señalan a los mismos lanzadores. Los menos afectados son <b>{cf.menos_afectados.slice(0, 3).map(x => `${x.nombre} (${x.arsenal.toLowerCase()})`).join(', ')}</b>.</p>
-              <p className="hip-prueba"><span className="etiqueta">Cómo lo probamos</span>Cada lanzador aparece dos veces, una por entorno: se compara consigo mismo. El bosque (2,000 árboles honestos, con validación cruzada agrupada por lanzador) busca qué rasgos del lanzador hacen ese efecto más grande o más chico. Es exploratorio: con {nf(cf.pitchers)} lanzadores, las diferencias entre perfiles son pequeñas.</p>
+              <p className="hip-resumen">Dos métodos que no comparten nada (uno es física y árboles sobre la forma, el otro son carreras observadas) señalan a los mismos lanzadores. Los menos afectados son <b>{cf.menos_afectados.slice(0, 3).map(x => `${x.nombre} (${x.arsenal.toLowerCase()})`).join(', ')}</b>.</p>
+              <p className="hip-prueba"><span className="etiqueta">Cómo lo probamos</span>Cada lanzador aparece dos veces, una por entorno, y se compara consigo mismo. El bosque (2,000 árboles honestos, con validación cruzada agrupada por lanzador) busca qué rasgos del lanzador hacen ese efecto más grande o más chico. Es exploratorio. Con {nf(cf.pitchers)} lanzadores las diferencias entre perfiles son pequeñas.</p>
             </div>
           </div>
         </article>

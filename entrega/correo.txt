@@ -1,0 +1,27 @@
+Para    itamsportsanalytics@gmail.com
+Copia   [correos de todos los integrantes del equipo]
+Asunto  Entrega Hackathon Diablos Rojos · Diablos Stuff+ · [nombre del equipo]
+
+Hola, equipo de ISAC.
+
+Les mandamos nuestra entrega para el reto Diablos Rojos, Stuff Plus Model y calidad de pitcheo ajustada por entorno.
+
+Integrantes
+[nombre y correo de cada integrante]
+
+Adjuntos
+1. documento_tecnico.pdf. El documento técnico tiene 9 páginas de cuerpo, más portada y un anexo de una página. Trae la metodología completa, la validación fuera de muestra (lanzador, temporada y parque), la prueba de las hipótesis H1 a H4, el Causal Forest como modelo secundario y nuestras recomendaciones.
+2. reporte.pdf. Es el reporte ejecutivo de 23 láminas para el cuerpo técnico y la dirección deportiva.
+
+Dashboard y código
+[link al dashboard]
+[link al repositorio]
+El simulador corre completo en el navegador, sin servidor. Le das un lanzamiento y te devuelve su Stuff+ en el Harp Helú y a nivel del mar, con el mapa de movimiento de los lanzamientos más y menos efectivos.
+
+En una frase
+La altitud no daña al lanzamiento malo, borra la ventaja del bueno. De 561 lanzadores, 58 aguantan el Harp Helú, y el perfil a buscar es cutter, slider y splitter con lanzadores que provoquen rodados.
+
+Usamos los datos de la LMB sólo para esta competencia y no los incluimos en la entrega.
+
+Saludos,
+[nombre]

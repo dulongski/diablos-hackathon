@@ -172,7 +172,7 @@ export function Simulador({ metros, arrastre, model, helpers, escala }: Simulado
     const cal = Math.abs(dPlus) < 0.5 ? L('su calificación casi no cambia', 'its grade barely changes')
       : L(`su Stuff+ ${dPlus < 0 ? 'baja' : 'sube'} ${nf(Math.abs(dPlus), 1)} puntos`, `its Stuff+ ${dPlus < 0 ? 'drops' : 'rises'} ${nf(Math.abs(dPlus), 1)} points`);
     const pal = plusEnPalabras(mar.plusMedio) !== plusEnPalabras(alt.plusMedio)
-      ? L(`: pasa de ${plusEnPalabras(mar.plusMedio)} a ${plusEnPalabras(alt.plusMedio)}`, `: from ${plusEnPalabras(mar.plusMedio)} to ${plusEnPalabras(alt.plusMedio)}`) : '';
+      ? L(` y pasa de ${plusEnPalabras(mar.plusMedio)} a ${plusEnPalabras(alt.plusMedio)}`, `: from ${plusEnPalabras(mar.plusMedio)} to ${plusEnPalabras(alt.plusMedio)}`) : '';
     return L(
       `En el ${lugar} estos lanzamientos llegan ${nf(Math.abs(dCentro), 1)} pulgadas más ${baja ? 'abajo' : 'arriba'}, ${zona} y ${cal}${pal}.`,
       `At ${lugar} these pitches arrive ${nf(Math.abs(dCentro), 1)} inches ${baja ? 'lower' : 'higher'}, ${zona} and ${cal}${pal}.`);
@@ -220,7 +220,7 @@ export function Simulador({ metros, arrastre, model, helpers, escala }: Simulado
           </details>
 
           <h3>{L('Variación tiro a tiro', 'Pitch-to-pitch variation')}
-            <Info>{L('Ningún lanzador repite exacto. Con control perfecto la nube sería un punto; con control real es una mancha. Estos valores son una desviación estándar.',
+            <Info>{L('Ningún lanzador repite exacto. Con control perfecto la nube sería un punto. Con control real es una mancha. Estos valores son una desviación estándar.',
                      'No pitcher repeats exactly. With perfect command the cloud would be a dot; with real command it is a smudge. These values are one standard deviation.')}</Info></h3>
           {VARIACION.map(c => (
             <Deslizador key={c.k} id={`v-${c.k}`} etiqueta={L(c.es, c.en)} info={c.info && L(...c.info)}
@@ -249,7 +249,7 @@ export function Simulador({ metros, arrastre, model, helpers, escala }: Simulado
 
         <div className="panel-resultados tarjeta">
           <h3>{L('Resultado', 'Result')}
-            <Info>{L('Stuff+ califica el lanzamiento sólo por su física: 100 es el promedio de la liga, 110 es muy bueno y 90 es malo.',
+            <Info>{L('Stuff+ califica el lanzamiento sólo por su física. 100 es el promedio de la liga, 110 es muy bueno y 90 es malo.',
                      'Stuff+ grades the pitch on its physics alone: 100 is league average, 110 is very good and 90 is poor.')}</Info></h3>
           <div className="dos-plus">
             <div className="plus mar">
@@ -291,7 +291,7 @@ export function Simulador({ metros, arrastre, model, helpers, escala }: Simulado
 
         <div className="panel-trayectorias tarjeta">
           <h3>{L(`${pares.length} de esos lanzamientos, en vuelo`, `${pares.length} of those pitches, in flight`)}
-            <Info>{L('Arrastra para girar la cámara. Rojo es el Harp Helú; azul, nivel del mar.', 'Drag to rotate the camera. Red is Harp Helú; blue, sea level.')}</Info></h3>
+            <Info>{L('Arrastra para girar la cámara. Rojo es el Harp Helú y azul el nivel del mar.', 'Drag to rotate the camera. Red is Harp Helú; blue, sea level.')}</Info></h3>
           <div className="escenario ancho">
             <Escena3D pares={pares} vista="campo" />
           </div>

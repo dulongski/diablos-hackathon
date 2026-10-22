@@ -158,13 +158,13 @@ export function Lanzadores({ j }: { j: Jurado }) {
           <h2>¿Qué lanzadores sufren la altitud y cuáles aguantan?</h2>
           <p className="entrada ancha">
             Para cada uno de los {nf(j.pitchers_n)} lanzadores con suficientes datos, tomamos <b>todos sus
-            lanzamientos reales</b> y los recalculamos en los dos aires: a nivel del mar y en el Harp Helú.
+            lanzamientos reales</b> y los recalculamos en los dos aires, a nivel del mar y en el Harp Helú.
             La diferencia dice cuánto de su calidad se queda en el camino al subir a la Ciudad de México.
           </p>
           <div className="cifras-fila">
             <div><b className="num">{nf(j.pitchers_n)}</b><span>lanzadores comparados</span></div>
             <div><b className="num">{nf(aguantan)}</b><span>aguantan la altura (pierden menos de 1.2 puntos)</span></div>
-            <div><b className="num">{sg(masPierde.delta_hh)}</b><span>el que más pierde: {masPierde.nombre}</span></div>
+            <div><b className="num">{sg(masPierde.delta_hh)}</b><span>pierde {masPierde.nombre}, el más afectado</span></div>
           </div>
         </header>
 
@@ -231,13 +231,12 @@ export function Lanzadores({ j }: { j: Jurado }) {
           <h3 className="titulo-tarjeta">¿Se confirma en la cancha?</h3>
           <p>
             De los {nf(j.pitchers_n)}, <b>{nf(j.pitchers_con_ambos)}</b> lanzaron al menos 120 veces en cada
-            entorno. Para ellos comparamos lo que <b>predice</b> el modelo con lo que <b>pasó</b>: las carreras que
+            entorno. Para ellos comparamos lo que <b>predice</b> el modelo con lo que <b>pasó</b>, las carreras que
             permitieron en altura contra a nivel del mar. Van en la misma dirección
-            {j.corr_modelo_vs_observado != null && <> (correlación de <b className="num">{nf(j.corr_modelo_vs_observado, 2)}</b>)</>}:
-            los que el modelo marca como más afectados, efectivamente permitieron más carreras en altura.
-            La relación es moderada porque 120 lanzamientos son pocos para medir carreras, que dependen mucho
-            de la suerte; por eso la decisión se toma con el Stuff+, que es estable, y lo observado sirve de
-            comprobación.
+            {j.corr_modelo_vs_observado != null && <> (correlación de <b className="num">{nf(j.corr_modelo_vs_observado, 2)}</b>)</>}.
+            Los que el modelo marca como más afectados sí permitieron más carreras en altura. La relación es
+            moderada porque 120 lanzamientos son pocos para medir carreras, que dependen mucho de la suerte.
+            Por eso decides con el Stuff+, que es estable, y lo observado te sirve de comprobación.
           </p>
         </div>
       </div>

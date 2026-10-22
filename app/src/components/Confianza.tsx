@@ -48,8 +48,8 @@ function Calibracion({ c }: { c: Tramo[] }) {
         <text x={14} y={(PT + H - PB) / 2} textAnchor="middle" className="eje-titulo" transform={`rotate(-90 14 ${(PT + H - PB) / 2})`}>carreras por 100 lanzamientos</text>
       </svg>
       <figcaption className="leyenda">
-        <span className="clave"><i className="barra-mala" /> Lo que pasó: más carreras (malo para el pitcher)</span>
-        <span className="clave"><i className="barra-buena" /> Lo que pasó: menos carreras (bueno)</span>
+        <span className="clave"><i className="barra-mala" /> Lo que pasó, más carreras (malo para el pitcher)</span>
+        <span className="clave"><i className="barra-buena" /> Lo que pasó, menos carreras (bueno)</span>
         <span className="clave"><i className="pred" /> Lo que el modelo predijo</span>
       </figcaption>
     </figure>
@@ -94,19 +94,19 @@ export function Confianza({ j }: { j: Jurado }) {
           <h2>¿Se puede confiar en la calificación?</h2>
           <p className="entrada ancha">
             Si Stuff+ sirve, los lanzamientos con calificación alta deben permitir menos carreras que los de
-            calificación baja. Y tiene que pasar con lanzadores que el modelo <b>nunca vio</b>: si sólo
+            calificación baja. Y tiene que pasar con lanzadores que el modelo <b>nunca vio</b>. Si sólo
             funcionara con los conocidos, estaría memorizando en vez de entender.
           </p>
         </header>
 
         <div className="tarjeta">
-          <h3 className="titulo-tarjeta">Más calificación, menos carreras: escalón por escalón</h3>
+          <h3 className="titulo-tarjeta">Más calificación, menos carreras, escalón por escalón</h3>
           <p className="nota-tarjeta">
-            Cada lanzamiento se calificó con un modelo entrenado <b>sin su lanzador</b> (los {nf(c.reduce((a, t) => a + t.n, 0))} lanzamientos,
+            Calificamos cada lanzamiento con un modelo entrenado <b>sin su lanzador</b> ({nf(c.reduce((a, t) => a + t.n, 0))} lanzamientos
             en cinco grupos de lanzadores). Los de menos de 80 permitieron <b>{sg(bajo.carreras_100, 1)}</b> carreras por cada 100
-            lanzamientos; los de 110 a 120, <b>{sg(alto.carreras_100, 1)}</b>. La diferencia entre un extremo y el otro son
-            unas <b>{nf(bajo.carreras_100 - alto.carreras_100, 0)} carreras cada 100 lanzamientos</b>, y lo predicho (puntos)
-            sigue a lo observado (barras) escalón por escalón; sólo se separa en los extremos, donde hay menos lanzamientos.
+            lanzamientos y los de 110 a 120, <b>{sg(alto.carreras_100, 1)}</b>. De un extremo al otro hay
+            unas <b>{nf(bajo.carreras_100 - alto.carreras_100, 0)} carreras cada 100 lanzamientos</b>. Lo predicho (puntos)
+            sigue a lo observado (barras) escalón por escalón y sólo se separa en los extremos, donde hay menos lanzamientos.
           </p>
           <Calibracion c={c} />
         </div>
@@ -115,23 +115,22 @@ export function Confianza({ j }: { j: Jurado }) {
         <div className="rejilla-3">
           <Prueba titulo="Lanzadores nuevos · pitcher holdout"
                   que="Se entrena sin un grupo de lanzadores y se prueba sólo con ellos."
-                  cifra={mejora(hp.stuff.r2)} unidad={`de lo que pasa, explicado · el nulo: ${nf(nul.r2 * 100, 2)} %`}
-                  nota={`Pitching+, con todo el contexto: ${mejora(hp.pitching.r2)}. El modelo nulo (promedio por conteo) explica ${nf(nul.r2 * 100, 2)} %.`} />
+                  cifra={mejora(hp.stuff.r2)} unidad={`de lo que pasa, explicado (el nulo explica ${nf(nul.r2 * 100, 2)} %)`}
+                  nota={`Pitching+, con todo el contexto, llega a ${mejora(hp.pitching.r2)}. El modelo nulo (promedio por conteo) explica ${nf(nul.r2 * 100, 2)} %.`} />
           <Prueba titulo="Temporada nueva · season holdout"
                   que="Se entrena con 2024 y 2025 y se prueba con 2026."
-                  cifra={mejora(j.holdout.temporada.stuff.r2)} unidad={`de lo que pasa, explicado · el nulo: ${nf(nul.r2 * 100, 2)} %`}
-                  nota="Igual o mejor que con lanzadores nuevos: lo aprendido no se gasta con el tiempo." />
+                  cifra={mejora(j.holdout.temporada.stuff.r2)} unidad={`de lo que pasa, explicado (el nulo explica ${nf(nul.r2 * 100, 2)} %)`}
+                  nota="Igual o mejor que con lanzadores nuevos. Lo aprendido no se gasta con el tiempo." />
           <Prueba titulo="Estadio nuevo · park holdout"
                   que="Se entrena sin ningún estadio de altura y se prueba sólo en altura."
-                  cifra={mejora(j.holdout.parque.stuff.r2)} unidad={`de lo que pasa, explicado · el nulo: ${nf(nul.r2 * 100, 2)} %`}
-                  nota="Sigue funcionando en un aire que nunca vio, aunque rinde menos: justo el efecto que este trabajo mide." />
+                  cifra={mejora(j.holdout.parque.stuff.r2)} unidad={`de lo que pasa, explicado (el nulo explica ${nf(nul.r2 * 100, 2)} %)`}
+                  nota="Sigue funcionando en un aire que nunca vio, aunque rinde menos. Ese es justo el efecto que medimos." />
         </div>
         <p className="aclaracion">
-          <b>Por qué los porcentajes se ven chicos.</b> El resultado de un lanzamiento suelto es casi todo azar:
-          el mismo lanzamiento perfecto a veces termina en jonrón. Ningún modelo puede explicar mucho de un
-          lanzamiento aislado; lo que importa es que, sumados, los mejor calificados permiten muchas menos
-          carreras (la gráfica de arriba). Lo que sí se compara es contra el modelo nulo que pide el reto, y
-          el nuestro le gana en las tres pruebas.
+          <b>Por qué los porcentajes se ven chicos.</b> El resultado de un lanzamiento suelto es casi puro azar.
+          El mismo lanzamiento perfecto a veces termina en jonrón. Ningún modelo explica mucho de un lanzamiento
+          aislado. Lo que importa es que, sumados, los mejor calificados permiten muchas menos carreras (la gráfica
+          de arriba). El reto pide vencer al modelo nulo, y el nuestro le gana en las tres pruebas.
         </p>
 
         <div className="tarjeta">
@@ -151,8 +150,8 @@ export function Confianza({ j }: { j: Jurado }) {
             ))}
           </div>
           <p className="tenue nota-pie">
-            El barril queda casi en cero, y es honesto decirlo: qué tan perfecto le pega el bateador depende más
-            del bateador que del lanzamiento.
+            El barril queda casi en cero. Qué tan perfecto le pega el bateador depende más del bateador que del
+            lanzamiento.
           </p>
         </div>
       </div>

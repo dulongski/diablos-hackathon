@@ -80,8 +80,8 @@ export function App() {
           <h2 className="porque-titulo">El mismo lanzamiento, dos estadios</h2>
           <p className="entrada">
             Las dos pelotas salen de la misma mano, en el mismo instante, con la misma velocidad y el mismo
-            giro. La azul vuela en un estadio a nivel del mar; la roja, en el Harp Helú. Con menos aire, el
-            giro la empuja menos: llega más baja de lo que el bateador espera, y la diferencia se mide en
+            giro. La azul vuela en un estadio a nivel del mar y la roja en el Harp Helú. Con menos aire, el
+            giro la empuja menos. Llega más baja de lo que el bateador espera, y la diferencia se mide en
             pulgadas.
           </p>
           <ControlAltitud metros={metros} onChange={setMetros} />
@@ -135,11 +135,11 @@ export function App() {
               <header className="cabeza-pregunta">
                 <p className="eyebrow">Entregable 4 · Dashboard simulador</p>
                 <h2>¿Cuánto valdría este lanzamiento aquí y a nivel del mar?
-                  <Info ancho>Define un lanzamiento con sus números físicos (velocidad, giro, movimiento, punto de salida) y cuánto varía de tiro a tiro. El modelo lanza miles de copias en los dos aires y muestra dónde caen y cuánto vale cada una. Todo corre en esta página: no hay servidor detrás.</Info>
+                  <Info ancho>Define un lanzamiento con sus números físicos (velocidad, giro, movimiento, punto de salida) y cuánto varía de tiro a tiro. El modelo lanza miles de copias en los dos aires y muestra dónde caen y cuánto vale cada una. Todo corre en esta página, sin servidor detrás.</Info>
                 </h2>
                 <p className="entrada ancha">
-                  Para el pitching coach: escribe los números de un lanzamiento (los da Trackman después de cada
-                  bullpen) y compara su Stuff+ en el Harp Helú contra un estadio a nivel del mar, lado a lado.
+                  Escribe los números de un lanzamiento (Trackman los da después de cada bullpen) y compara su
+                  Stuff+ en el Harp Helú contra un estadio a nivel del mar, lado a lado.
                 </p>
                 <div className="altitud-compacta">
                   <ControlAltitud metros={metros} onChange={setMetros} />
@@ -151,8 +151,8 @@ export function App() {
               </LimiteError>
 
               <div className="tarjeta bloque-separado">
-                <h3 className="titulo-tarjeta">Mapa de movimiento: los lanzamientos más y menos efectivos en el Harp Helú
-                  <Info ancho>Cada punto es un lanzamiento real de un derecho, colocado según cuánto se movió hacia los lados y hacia arriba o abajo. Los de color son el 10 % con mejor Stuff+ en el aire del Harp Helú; los grises, el 10 % peor. La distancia entre las dos nubes es la forma que conviene pedir en casa.</Info>
+                <h3 className="titulo-tarjeta">Mapa de movimiento de los lanzamientos más y menos efectivos en el Harp Helú
+                  <Info ancho>Cada punto es un lanzamiento real de un derecho, colocado según cuánto se movió hacia los lados y hacia arriba o abajo. Los de color son el 10 % con mejor Stuff+ en el aire del Harp Helú y los grises el 10 % peor. La distancia entre las dos nubes es la forma que conviene pedir en casa.</Info>
                 </h3>
                 <LimiteError nombre="El mapa de movimiento">
                   <MapaEfectivos puntos={datos.jurado.mapa} />
@@ -180,7 +180,7 @@ export function App() {
         <div className="envoltura">
           <div className="pie-fila">
             <Logos />
-            <p className="pie">Proyecto para el Hackathon ISAC 2026, reto de los Diablos Rojos del México. Trabajo independiente de los participantes, no es un producto oficial de ISAC ni del club. Datos de la LMB usados sólo para esta competencia: se muestran resultados, nunca los datos.</p>
+            <p className="pie">Proyecto para el Hackathon ISAC 2026, reto de los Diablos Rojos del México. Trabajo independiente de los participantes, no es un producto oficial de ISAC ni del club. Usamos los datos de la LMB sólo para esta competencia. Aquí ves resultados, nunca los datos.</p>
           </div>
         </div>
       </footer>

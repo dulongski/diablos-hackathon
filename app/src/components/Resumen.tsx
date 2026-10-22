@@ -44,17 +44,17 @@ export function Resumen({ d, j, irA }: { d: DatosResumen; j: Jurado; irA: (v: 's
             <p className="eyebrow">Entregables 1, 2 y 3 · Arsenal, perfil ideal y recomendaciones</p>
             <h2>¿Qué lanzamientos y qué perfil rinden en el Harp Helú?</h2>
             <p className="entrada ancha">
-              Cada lanzamiento de la liga se calificó dos veces con el mismo modelo: con el aire del nivel del
-              mar y con el del Harp Helú. Como el modelo sólo ve cómo sale la pelota de la mano, la diferencia es
-              el efecto del aire y de nada más. <b>Ningún lanzamiento mejora en altura</b> (promedio {sg(promedio)}),
-              pero no todos pierden lo mismo.
+              Calificamos cada lanzamiento de la liga dos veces con el mismo modelo, una con el aire del nivel del
+              mar y otra con el del Harp Helú. Como el modelo sólo ve cómo sale la pelota de la mano, la diferencia
+              es el efecto del aire y nada más. <b>En promedio, todos los tipos pierden en altura</b> (la liga baja
+              {' '}{sg(promedio)}), pero no todos pierden lo mismo.
             </p>
           </header>
           <div className="porque-tipos">
             <article className="tarjeta porque">
               <span className="etiqueta d-mucho">Pierde más</span>
               <h3>La recta ({sg(recta)})</h3>
-              <p>Su valor <b>es</b> el movimiento: "sube" porque su giro la sostiene contra el aire. Con 20 % menos aire,
+              <p>Su valor <b>es</b> el movimiento. Parece que sube porque su giro la sostiene contra el aire. Con 20 % menos aire,
                  el giro empuja menos y la pelota hace menos de lo que el bateador espera. Curva, sinker y cambio quedan
                  en medio, alrededor de −2.2.</p>
             </article>
@@ -62,14 +62,14 @@ export function Resumen({ d, j, irA }: { d: DatosResumen; j: Jurado; irA: (v: 's
               <span className="etiqueta d-aguanta">Aguantan</span>
               <h3>Cutter ({sg(cutter)}), slider y splitter</h3>
               <p>Engañan porque salen de la mano igual que la recta y rompen tarde y poco. El cutter y el slider giran más
-                 como "bala" (sobre su eje de avance), y el splitter casi no gira: ninguno depende mucho de que el aire
+                 como "bala" (sobre su eje de avance), y el splitter casi no gira. Ninguno depende mucho de que el aire
                  empuje el giro, así que el aire delgado les quita poco.</p>
             </article>
             <article className="tarjeta porque">
               <span className="etiqueta d-pierde">Lo bueno pierde más</span>
-              <h3>Las mejores rectas: {sg(qMejor)}</h3>
+              <h3>Las mejores rectas pierden {sg(qMejor)}</h3>
               <p>Las peores no pierden nada ({sg(qPeor)}). La altitud borra justo lo que hace especial a una recta de
-                 élite. Para el club: no conviene pagar de más por un lanzador cuyo valor sea la recta que se mueve mucho.</p>
+                 élite. No pagues de más por un lanzador cuyo valor sea una recta que se mueve mucho.</p>
             </article>
           </div>
         </div>
@@ -81,7 +81,7 @@ export function Resumen({ d, j, irA }: { d: DatosResumen; j: Jurado; irA: (v: 's
           <div className="tarjeta">
             <h3 className="titulo-tarjeta">{L('Cómo se mueve cada lanzamiento', 'How each pitch moves')}
               <Info ancho>{L(
-                'Cada lanzamiento aparece dos veces: el círculo azul es su movimiento promedio a nivel del mar y el punto rojo, el mismo lanzamiento en el Harp Helú. Todas las flechas apuntan al centro: en altitud todo se mueve menos. Se midió dentro del mismo lanzador, así que no influye quién lanza dónde.',
+                'Cada lanzamiento aparece dos veces. El círculo azul es su movimiento promedio a nivel del mar y el punto rojo es el mismo lanzamiento en el Harp Helú. Todas las flechas apuntan al centro, porque en altitud todo se mueve menos. Se midió dentro del mismo lanzador, así que no influye quién lanza dónde.',
                 'Each pitch appears twice: the blue circle is its average movement at sea level and the red dot, the same pitch at Harp Helú. Every arrow points to the center: at altitude everything moves less. Measured within the same pitcher, so who pitches where does not matter.')}</Info>
             </h3>
             <LimiteError nombre={L('El mapa de movimiento', 'The movement map')}>
@@ -117,7 +117,7 @@ export function Resumen({ d, j, irA }: { d: DatosResumen; j: Jurado; irA: (v: 's
         <div className="envoltura rejilla-2">
           <div className="tarjeta">
             <h3 className="titulo-tarjeta">Qué arsenal produce el mejor Stuff+ en casa
-              <Info ancho>Arsenal: los tipos que un lanzador usa al menos 8 % de las veces, ordenados por uso. Sólo combinaciones con 6 lanzadores o más, para que el promedio no dependa de uno solo.</Info>
+              <Info ancho>El arsenal son los tipos que un lanzador usa al menos 8 % de las veces, ordenados por uso. Sólo combinaciones con 6 lanzadores o más, para que el promedio no dependa de uno solo.</Info>
             </h3>
             <p className="nota-tarjeta">Promedio de los lanzadores con cada combinación. Los que mezclan sinker y slider pierden menos que los que viven de la recta y la curva.</p>
             <div className="tabla-scroll">
@@ -140,7 +140,7 @@ export function Resumen({ d, j, irA }: { d: DatosResumen; j: Jurado; irA: (v: 's
 
           <div className="tarjeta">
             <h3 className="titulo-tarjeta">El riesgo extra de jonrón en altura
-              <Info ancho>Medido directo en los batazos de la liga: juegos en estadios de altitud extrema contra estadios a nivel del mar.</Info>
+              <Info ancho>Lo medimos directo en los batazos de la liga, con juegos en estadios de altitud extrema contra estadios a nivel del mar.</Info>
             </h3>
             {riesgo.mar && riesgo.hh && (
               <>
@@ -156,7 +156,7 @@ export function Resumen({ d, j, irA }: { d: DatosResumen; j: Jurado; irA: (v: 's
                   <div><span className="etiqueta">Batazos que son rodados</span>
                     <p><b className="num t-mar">{nf(riesgo.mar.gb * 100, 1)}</b> → <b className="num t-alt">{nf(riesgo.hh.gb * 100, 1)}</b> %</p></div>
                 </div>
-                <p className="remate">En casa, el elevado es el enemigo y el rodado el aliado: el aire no ayuda a una pelota que va por el suelo.</p>
+                <p className="remate">En casa, el elevado es el enemigo y el rodado el aliado. El aire no ayuda a una pelota que va por el suelo.</p>
               </>
             )}
           </div>
@@ -169,7 +169,7 @@ export function Resumen({ d, j, irA }: { d: DatosResumen; j: Jurado; irA: (v: 's
           <div className="tarjeta">
             <h3 className="titulo-tarjeta">{L('Qué lanzamientos forman la élite', 'Which pitches make up the elite')}
               <Info ancho>{L(
-                'De todos los lanzamientos, tomamos el 1 % con mejor Stuff+ en cada aire y vemos de qué tipo son. A nivel del mar la élite es casi toda recta; en el Harp Helú, el slider ocupa su lugar.',
+                'De todos los lanzamientos, tomamos el 1 % con mejor Stuff+ en cada aire y vemos de qué tipo son. A nivel del mar la élite es casi toda recta, y en el Harp Helú el slider ocupa su lugar.',
                 'Out of every pitch, we take the top 1% by Stuff+ in each kind of air and look at their type. At sea level the elite is mostly four-seamers; at Harp Helú, the slider takes their place.')}</Info>
             </h3>
             <MezclaElite mezcla={d.mezcla} />
@@ -205,11 +205,11 @@ export function Resumen({ d, j, irA }: { d: DatosResumen; j: Jurado; irA: (v: 's
           <div className="tarjeta checklist">
             <h3 className="titulo-tarjeta">Cómo perfilar un prospecto o agente libre para los Diablos</h3>
             <ol>
-              <li><b>¿Cuánto de su valor es movimiento?</b> Si es de élite a nivel del mar <i>porque</i> su recta o su curva se mueven mucho, esa ventaja no viaja a la Ciudad de México. Revisar su cambio estimado en la pestaña Lanzadores.</li>
+              <li><b>¿Cuánto de su valor es movimiento?</b> Si es de élite a nivel del mar <i>porque</i> su recta o su curva se mueven mucho, esa ventaja no viaja a la Ciudad de México. Revisa su cambio estimado en la pestaña Lanzadores.</li>
               <li><b>¿Su arsenal se apoya en cutter, slider o splitter?</b> Son los que menos pierden. Uno que vive de recta y curva llega devaluado.</li>
-              <li><b>¿Induce rodados?</b> En altura los elevados viajan unos 30 pies más; el rodado es el único batazo al que el aire no ayuda.</li>
+              <li><b>¿Induce rodados?</b> En altura los elevados viajan unos 30 pies más, y el rodado es el único batazo que el aire no ayuda.</li>
               <li><b>¿Es constante?</b> Entre dos candidatos parecidos, el que varía menos de un juego a otro es más fácil de planear.</li>
-              <li><b>Probarlo en el simulador</b> con sus números: velocidad, giro y movimiento dan su Stuff+ en los dos estadios lado a lado.</li>
+              <li><b>Pruébalo en el simulador.</b> Con su velocidad, giro y movimiento ves su Stuff+ en los dos estadios, lado a lado.</li>
             </ol>
             <p className="enlaces-sec">
               <button type="button" className="enlace" onClick={() => irA('simulador')}>Probar un lanzamiento en el simulador →</button>
@@ -284,7 +284,7 @@ function PerfilIdeal({ perfil }: { perfil: DatosResumen['perfil'] }) {
         })}
       </tbody>
       <tfoot>
-        <tr><td colSpan={4}>{L('La élite del Harp Helú se mueve menos y depende menos del giro: no apuesta al efecto del aire.',
+        <tr><td colSpan={4}>{L('La élite del Harp Helú se mueve menos y depende menos del giro. No apuesta al efecto del aire.',
                                 'The Harp Helú elite moves less and relies less on spin: it does not bet on the air.')}</td></tr>
       </tfoot>
     </table>

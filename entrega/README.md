@@ -2,9 +2,11 @@
 
 | Archivo | Qué es | Cómo se regenera |
 |---|---|---|
-| `documento_tecnico.pdf` | Documento técnico, 10 páginas (entregable 5) | `python3 docs/tecnico.py && node docs/pdf.mjs entrega/documento_tecnico.html entrega/documento_tecnico.pdf` |
-| `reporte.pdf` | Reporte de 17 láminas, patrón Coach DNA | `python3 docs/reporte.py && node docs/pdf.mjs entrega/reporte.html entrega/reporte.pdf lamina` |
-| `correo.md` | Borrador del correo de entrega (faltan integrantes y link) | — |
+| `documento_tecnico.pdf` | Documento técnico (portada, 9 páginas de cuerpo y anexo) | `python3 docs/tecnico.py && node docs/pdf.mjs entrega/documento_tecnico.html entrega/documento_tecnico.pdf` |
+| `reporte.pdf` | Reporte de 23 láminas con el patrón de Coach DNA | `python3 docs/reporte.py && node docs/pdf.mjs entrega/reporte.html entrega/reporte.pdf lamina` |
+| `correo.txt` | Borrador del correo, en texto plano para pegar (faltan integrantes y links) | |
 
-`docs/tecnico.py` necesita `pip install markdown`. `docs/pdf.mjs` usa Playwright (Chromium).
-Todos los números salen de `app/public/data/*.json` y de `docs/documento_tecnico.md`.
+Antes de regenerar, corre `python3 scripts/08_hipotesis.py` si cambió el modelo. `docs/tecnico.py` usa
+`pip install markdown` y KaTeX (`app/node_modules`, viene con `npm install`). `docs/pdf.mjs` usa
+Playwright con Chromium. Para revisar el estilo del texto corre
+`python3 docs/estilo.py entrega/documento_tecnico.html entrega/reporte.html`.
