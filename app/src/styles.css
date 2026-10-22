@@ -47,6 +47,38 @@
   --enrarecido: #E6E3DA; --tinta: #F6F3EA; --ceniza: #A1A69C;
   --rejilla: #2C3935; --gana: #9EE6B8; --aviso: #FFE38A; --escena: #1B2522;
 }
+/* --- un color por pestaña ------------------------------------------------
+   Cada sección tiene su propio tono, y los detalles de su página (eyebrows, bordes, marcadores,
+   enlaces, filas activas) lo usan. Se reparten en el círculo cromático evitando a propósito el
+   rojo y el azul, que son DATOS (Harp Helú y nivel del mar) y no deben confundirse con adorno.
+   Oscuros por omisión; la paleta crema, que es la de omisión del sitio, los lleva más profundos. */
+:root {
+  --c-inicio: #FB923C;      /* naranja */
+  --c-metodologia: #FACC15; /* ocre */
+  --c-causal: #A3E635;      /* oliva */
+  --c-confianza: #4ADE80;   /* verde */
+  --c-lanzadores: #2DD4BF;  /* turquesa */
+  --c-simulador: #818CF8;   /* índigo */
+  --c-hipotesis: #C084FC;   /* morado */
+  --c-arsenal: #F472B6;     /* frambuesa */
+  --c-anexo: #A8A29E;       /* piedra */
+}
+:root[data-theme='crema'] {
+  --c-inicio: #C2410C; --c-metodologia: #A16207; --c-causal: #4D7C0F; --c-confianza: #15803D;
+  --c-lanzadores: #0F766E; --c-simulador: #4338CA; --c-hipotesis: #7E22CE; --c-arsenal: #BE185D;
+  --c-anexo: #57534E;
+}
+main { --seccion: var(--diablo); }
+main.vista-inicio { --seccion: var(--c-inicio); }
+main.vista-metodologia { --seccion: var(--c-metodologia); }
+main.vista-confianza { --seccion: var(--c-confianza); }
+main.vista-lanzadores { --seccion: var(--c-lanzadores); }
+main.vista-arsenal { --seccion: var(--c-arsenal); }
+main.vista-hipotesis { --seccion: var(--c-hipotesis); }
+main.vista-causal { --seccion: var(--c-causal); }
+main.vista-simulador { --seccion: var(--c-simulador); }
+main.vista-anexo { --seccion: var(--c-anexo); }
+
 :root {
   --altitud: var(--diablo);
   --mar:     var(--nivel-mar);

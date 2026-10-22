@@ -21,8 +21,12 @@ const C = {
 
 export type Camara = 'catcher' | 'lado' | 'pitcher';
 const CAMARAS: Record<Camara, { ojo: [number, number, number]; mira: [number, number, number]; fov: number }> = {
-  catcher: { ojo: [0.9, 4.6, HOME + 9], mira: [0, 2.6, HOME - 30], fov: 34 },
-  lado: { ojo: [22, 5.5, 34], mira: [0, 3.2, 33], fov: 42 },
+  // Con la mira a la altura de la zona el home quedaba justo bajo el borde del cuadro: se retrocede la
+  // cámara y se baja la mira para que el home entre completo, sin achicar mucho la zona.
+  catcher: { ojo: [0.9, 5.2, HOME + 13], mira: [0, 0.5, HOME - 30], fov: 36 },
+  // De lado tiene que caber el vuelo completo, de la goma al plato (≈60 pies): a 22 pies sólo entraba un
+  // pedazo, pegado al horizonte. Más lejos y más alto se ven el montículo, el arco y el home a la vez.
+  lado: { ojo: [50, 12, 34], mira: [0, 2.2, 33], fov: 46 },
   pitcher: { ojo: [-1.2, 7.2, -11], mira: [0, 2.6, HOME], fov: 26 },
 };
 
@@ -96,11 +100,23 @@ function Pelota({ traj, rpm, t, ciclo }: { traj: Trajectory; rpm: number; t: Rea
 
 /* ------------------------------------------------------------------ el campo */
 
+/** El pentágono del home (17 in de frente), escalado por `k`. */
+function pentagono(k: number) {
+  const s = new THREE.Shape();
+  s.moveTo(-0.708 * k, 0.5 * k); s.lineTo(0.708 * k, 0.5 * k); s.lineTo(0.708 * k, -0.2 * k);
+  s.lineTo(0, -0.92 * k); s.lineTo(-0.708 * k, -0.2 * k); s.closePath();
+  return s;
+}
+
 function Campo() {
   const franjas = useMemo(() => Array.from({ length: 16 }, (_, i) => i), []);
   const diag = 90 / Math.SQRT2;
+  // Las placas van más grandes que en la realidad (base 15 in → 2.75 ft, goma 1.6×, home 1.5×): a 30 a 70 pies
+  // de la cámara, a escala real eran puntos. Es contexto para ubicarse; la zona de strike sí va a escala real.
   const base = (x: number, z: number) => (
-    <mesh position={[x, 0.08, z]} rotation={[-Math.PI / 2, 0, Math.PI / 4]}><planeGeometry args={[1.25, 1.25]} /><meshStandardMaterial color={C.cal} /></mesh>
+    <mesh position={[x, 0.13, z]} rotation={[0, Math.PI / 4, 0]} castShadow receiveShadow>
+      <boxGeometry args={[2.75, 0.24, 2.75]} /><meshStandardMaterial color={C.cal} roughness={0.55} />
+    </mesh>
   );
   const linea = (a: [number, number], b: [number, number]) => (
     <Line points={[[a[0], 0.06, a[1]], [b[0], 0.06, b[1]]]} color={C.cal} lineWidth={2.2} />
@@ -119,11 +135,14 @@ function Campo() {
       {/* el montículo, más alto que el resto, y la goma */}
       <mesh position={[0, 0.2, 1.5]} receiveShadow><cylinderGeometry args={[9, 9.4, 0.4, 64]} /><meshStandardMaterial color={C.tierraLomo} /></mesh>
       <mesh position={[0, 0.45, 1.5]}><cylinderGeometry args={[4.5, 9, 0.5, 64]} /><meshStandardMaterial color={C.tierraLomo} /></mesh>
-      <mesh position={[0, 0.72, 0]}><boxGeometry args={[2, 0.08, 0.5]} /><meshStandardMaterial color={C.cal} /></mesh>
+      <mesh position={[0, 0.76, 0]} castShadow><boxGeometry args={[3.2, 0.16, 0.8]} /><meshStandardMaterial color={C.cal} roughness={0.55} /></mesh>
       {/* home plate, cajas de bateo y líneas de foul */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.07, PLATO + 0.5]}>
-        <shapeGeometry args={[(() => { const s = new THREE.Shape(); s.moveTo(-0.708, 0.5); s.lineTo(0.708, 0.5); s.lineTo(0.708, -0.2); s.lineTo(0, -0.92); s.lineTo(-0.708, -0.2); s.closePath(); return s; })()]} />
-        <meshStandardMaterial color={C.cal} side={THREE.DoubleSide} />
+      {/* home 1.5× con su bisel negro; el borde delantero queda alineado con el frente de la zona */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.065, PLATO + 0.5 * 1.62 - 0.07]}>
+        <shapeGeometry args={[pentagono(1.62)]} /><meshStandardMaterial color="#1f2622" side={THREE.DoubleSide} />
+      </mesh>
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.08, PLATO + 0.5 * 1.5]}>
+        <shapeGeometry args={[pentagono(1.5)]} /><meshStandardMaterial color={C.cal} side={THREE.DoubleSide} />
       </mesh>
       {[-1, 1].map(lado => (
         <Line key={lado} points={[[lado * 1.2, 0.06, PLATO - 2.5], [lado * 5.2, 0.06, PLATO - 2.5], [lado * 5.2, 0.06, PLATO + 3.5], [lado * 1.2, 0.06, PLATO + 3.5], [lado * 1.2, 0.06, PLATO - 2.5]]} color={C.cal} lineWidth={2} />

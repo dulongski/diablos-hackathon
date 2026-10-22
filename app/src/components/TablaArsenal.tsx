@@ -74,7 +74,7 @@ export function TablaArsenal({ tipos, activo, onActivo }: {
                   <span className="flechita">{t.delta_plus > 0 ? '▲' : '▼'}</span>{sg(t.delta_plus)}
                 </td>
                 <td className="barra-col">
-                  <span className={`barra ${t.delta_plus > 0 ? 'gana' : 'pierde'}`}
+                  <span className={`barra-delta ${t.delta_plus > 0 ? 'gana' : 'pierde'}`}
                         style={{ width: `${(Math.abs(t.delta_plus) / max) * 100}%` }} />
                 </td>
                 <td className="num n">{sg(dv)}<span className="unidad">in</span></td>

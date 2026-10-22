@@ -145,9 +145,15 @@ details.plegable[open] summary { margin-bottom: 10px; }
   background: none; border: 1px solid transparent; border-radius: 12px; cursor: pointer;
   padding: 8px 14px 8px 10px; color: var(--ceniza); transition: background .15s, border-color .15s;
 }
-.pestana.p-simulador { --acento: var(--aviso); }
-.pestana.p-confianza { --acento: var(--gana); }
-.pestana.p-lanzadores { --acento: var(--nivel-mar); }
+.pestana.p-inicio { --acento: var(--c-inicio); }
+.pestana.p-metodologia { --acento: var(--c-metodologia); }
+.pestana.p-confianza { --acento: var(--c-confianza); }
+.pestana.p-lanzadores { --acento: var(--c-lanzadores); }
+.pestana.p-arsenal { --acento: var(--c-arsenal); }
+.pestana.p-hipotesis { --acento: var(--c-hipotesis); }
+.pestana.p-causal { --acento: var(--c-causal); }
+.pestana.p-simulador { --acento: var(--c-simulador); }
+.pestana.p-anexo { --acento: var(--c-anexo); }
 .pestana-icono { width: 30px; height: 30px; padding: 6px; border-radius: 9px; flex: none;
   fill: var(--acento); background: color-mix(in srgb, var(--acento) 14%, transparent); }
 .pestana-texto { display: grid; gap: 1px; }
@@ -213,7 +219,7 @@ input[type='range']::-moz-range-thumb { width: 14px; height: 14px; border-radius
 /* --- tres ideas --------------------------------------------------------------- */
 
 .ideas-sec { border-top: none; padding-top: var(--s4); }
-.idea { --acento: var(--diablo); border-top: 3px solid var(--acento); display: flex; flex-direction: column; }
+.idea { --acento: var(--seccion); border-top: 3px solid var(--acento); display: flex; flex-direction: column; }
 .idea-n { font-size: 0.72rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--acento); }
 .idea h3 { font-size: 1.6rem; margin: 6px 0 12px; }
 .idea-cifra { display: flex; align-items: baseline; gap: 10px; margin: 0 0 10px; }
@@ -239,7 +245,7 @@ input[type='range']::-moz-range-thumb { width: 14px; height: 14px; border-radius
 .mapa figcaption, .compresion figcaption { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; margin-top: 8px; font-size: 0.82rem; color: var(--enrarecido); }
 .clave-nota { color: var(--ceniza); margin-left: auto; font-size: 0.78rem; }
 .remate { font-family: var(--display); font-weight: 700; font-size: 1.3rem; text-transform: uppercase; line-height: 1.05; color: var(--tinta);
-  border-left: 3px solid var(--diablo); padding-left: 12px; margin: auto 0 0; padding-top: 2px; }
+  border-left: 3px solid var(--seccion); padding-left: 12px; margin: auto 0 0; padding-top: 2px; }
 .compresion { margin-bottom: 16px; }
 
 /* élite */
@@ -282,7 +288,7 @@ th.n .ordenar { flex-direction: row; }
 .tabla-arsenal tbody th { display: flex; align-items: center; gap: 10px; }
 .tabla-arsenal tbody tr { border-bottom: var(--borde-tenue); transition: background .12s; }
 .tabla-arsenal tbody tr:last-child { border-bottom: none; }
-.tabla-arsenal tbody tr.activo { background: color-mix(in srgb, var(--diablo) 8%, transparent); }
+.tabla-arsenal tbody tr.activo { background: color-mix(in srgb, var(--seccion) 8%, transparent); }
 .tabla-arsenal .n { text-align: right; }
 .tabla-arsenal .destacado { font-weight: 700; font-size: 1rem; }
 .flechita { font-size: 0.7em; margin-right: 4px; }
@@ -291,9 +297,11 @@ th.n .ordenar { flex-direction: row; }
 .pildora.pierde { color: var(--aviso); background: color-mix(in srgb, var(--aviso) 15%, transparent); }
 .pildora.mucho { color: var(--diablo); background: color-mix(in srgb, var(--diablo) 15%, transparent); }
 .barra-col { width: 18%; min-width: 90px; }
-.barra-col .barra { display: block; height: 7px; border-radius: 4px; }
-.barra-col .barra.pierde { background: var(--diablo); }
-.barra-col .barra.gana { background: var(--gana); }
+/* Ojo con el nombre: ".barra" es la barra de navegación (sticky, z-index 50). Con ese nombre, estas
+   barritas heredaban "quédate pegada arriba" y se pintaban encima de las pestañas al hacer scroll. */
+.barra-delta { display: block; height: 7px; border-radius: 4px; }
+.barra-delta.pierde { background: var(--diablo); }
+.barra-delta.gana { background: var(--gana); }
 .pie-tabla { margin: 0; padding: 12px 14px; font-size: 0.82rem; color: var(--ceniza); border-top: var(--borde-tenue); max-width: none; display: flex; align-items: center; }
 
 /* --- cifras al final ---------------------------------------------------------------- */
@@ -303,7 +311,7 @@ th.n .ordenar { flex-direction: row; }
 .cifra b { font-size: 1.9rem; font-weight: 700; line-height: 1; color: var(--tinta); }
 .cifra span { font-size: 0.84rem; color: var(--ceniza); line-height: 1.35; }
 .enlaces-sec { display: flex; gap: 18px; flex-wrap: wrap; margin: 26px 0 0; max-width: none; }
-.enlace { background: none; border: none; padding: 0; cursor: pointer; font: inherit; font-weight: 600; color: var(--diablo); }
+.enlace { background: none; border: none; padding: 0; cursor: pointer; font: inherit; font-weight: 600; color: var(--seccion); }
 .enlace:hover { text-decoration: underline; }
 
 /* --- simulador ------------------------------------------------------------------- */
@@ -373,7 +381,7 @@ th.n .ordenar { flex-direction: row; }
 .metodo { padding-top: var(--s3); border-top: none; }
 .metodo-entrada { color: var(--ceniza); font-size: 1.02rem; max-width: 70ch; margin-bottom: 26px; }
 .partes { display: grid; gap: 18px; }
-.parte { --acento: var(--diablo); display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 16px;
+.parte { --acento: var(--seccion); display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 16px;
   background: var(--basalto-alto); border: var(--borde-tenue); border-left: 4px solid var(--acento); border-radius: var(--radio); padding: 22px 24px; }
 .parte-n { font-size: 1.8rem; font-weight: 700; color: var(--acento); line-height: 1; }
 .parte h3 { font-size: 1.6rem; margin: 0 0 12px; }
@@ -387,8 +395,8 @@ th.n .ordenar { flex-direction: row; }
 .formula { font-family: var(--dato); font-size: 1rem; background: var(--basalto); border: var(--borde-tenue); border-radius: 10px;
   padding: 12px 16px; margin: 0 0 12px; color: var(--tinta); display: inline-block; white-space: pre-wrap; }
 .campana { max-width: 680px; margin-top: 8px; }
-.campana-area { fill: color-mix(in srgb, var(--diablo) 16%, transparent); }
-.campana-linea { fill: none; stroke: var(--diablo); stroke-width: 2; }
+.campana-area { fill: color-mix(in srgb, var(--seccion) 16%, transparent); }
+.campana-linea { fill: none; stroke: var(--seccion); stroke-width: 2; }
 .tabla-simple { width: 100%; max-width: 760px; border-collapse: collapse; font-size: 0.9rem; margin: 6px 0 14px; }
 .tabla-simple th, .tabla-simple td { padding: 9px 10px; text-align: left; }
 .tabla-simple thead th { font-size: 0.76rem; font-weight: 600; color: var(--ceniza); border-bottom: var(--borde); }
@@ -510,7 +518,7 @@ footer { border-top: var(--borde-tenue); padding: var(--s3) 0 var(--s4); }
 .inicio-lede { font-size: 1.15rem; color: var(--enrarecido); max-width: 62ch; }
 .inicio-lede b { color: var(--tinta); }
 .para-quien { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin-top: var(--s4); }
-.para-quien > div { border-top: 2px solid var(--diablo); padding-top: 12px; }
+.para-quien > div { border-top: 2px solid var(--seccion); padding-top: 12px; }
 .para-quien > div:nth-child(2) { border-top-color: var(--nivel-mar); }
 .para-quien > div:nth-child(3) { border-top-color: var(--ceniza); }
 .para-quien p { margin: 6px 0 0; font-size: 0.95rem; }
@@ -519,7 +527,7 @@ footer { border-top: var(--borde-tenue); padding: var(--s3) 0 var(--s4); }
 
 .glosario { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
 .glosa { background: var(--basalto-alto); border: var(--borde-tenue); border-radius: var(--radio); padding: 16px 18px; }
-.glosa h3 { color: var(--diablo); margin-bottom: 8px; }
+.glosa h3 { color: var(--seccion); margin-bottom: 8px; }
 .glosa p { margin: 0; font-size: 0.93rem; }
 .glosa b { color: var(--tinta); font-weight: 600; }
 
@@ -529,16 +537,16 @@ footer { border-top: var(--borde-tenue); padding: var(--s3) 0 var(--s4); }
   background: var(--basalto-alto); border: var(--borde-tenue); border-radius: var(--radio); padding: 18px;
   transition: border-color .15s, transform .15s;
 }
-.pregunta:hover { border-color: var(--diablo); transform: translateY(-2px); }
+.pregunta:hover { border-color: var(--seccion); transform: translateY(-2px); }
 .pregunta-ent { font-family: var(--dato); font-size: 0.66rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ceniza); }
 .pregunta-q { font-family: var(--display); font-weight: 800; font-size: 1.35rem; text-transform: uppercase; line-height: 1.02; color: var(--tinta); }
 .pregunta-a { font-size: 0.92rem; flex: 1; }
-.pregunta-a b { color: var(--diablo); font-family: var(--dato); }
-.pregunta-ir { font-size: 0.84rem; font-weight: 600; color: var(--diablo); }
+.pregunta-a b { color: var(--seccion); font-family: var(--dato); }
+.pregunta-ir { font-size: 0.84rem; font-weight: 600; color: var(--seccion); }
 
 .respuestas { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
-.respuesta { border-left: 3px solid var(--diablo); padding: 4px 0 4px 16px; }
-.respuesta-n { font-family: var(--dato); font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--diablo); }
+.respuesta { border-left: 3px solid var(--seccion); padding: 4px 0 4px 16px; }
+.respuesta-n { font-family: var(--dato); font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--seccion); }
 .respuesta h3 { margin: 8px 0 10px; font-size: 1.5rem; }
 .respuesta p { font-size: 0.95rem; margin: 0; }
 .respuesta b { color: var(--tinta); }
@@ -619,7 +627,7 @@ svg .eje-cero { stroke: color-mix(in srgb, var(--ceniza) 70%, transparent); stro
 .tabla-cabeza .segmentado { flex-wrap: wrap; border-radius: 16px; }
 .buscar input { font: inherit; font-size: 0.9rem; color: var(--enrarecido); background: var(--basalto); border: var(--borde-tenue);
   border-radius: 999px; padding: 7px 14px; width: 220px; }
-.buscar input:focus { outline: 2px solid var(--diablo); outline-offset: 1px; }
+.buscar input:focus { outline: 2px solid var(--seccion); outline-offset: 1px; }
 
 .tabla-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 .tabla-datos { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
@@ -630,7 +638,7 @@ svg .eje-cero { stroke: color-mix(in srgb, var(--ceniza) 70%, transparent); stro
 .tabla-datos tbody tr { border-bottom: var(--borde-tenue); transition: background .12s; }
 .tabla-datos tbody tr[tabindex] { cursor: pointer; }
 .tabla-datos tbody tr[tabindex]:hover { background: var(--superficie-2); }
-.tabla-datos tbody tr.activa { background: color-mix(in srgb, var(--diablo) 10%, transparent); }
+.tabla-datos tbody tr.activa { background: color-mix(in srgb, var(--seccion) 10%, transparent); }
 .tabla-datos tbody th { font-weight: 600; color: var(--tinta); }
 .tabla-datos .n { text-align: right; }
 .tabla-datos .destacado { color: var(--diablo); font-weight: 700; }
@@ -658,10 +666,10 @@ svg .eje-cero { stroke: color-mix(in srgb, var(--ceniza) 70%, transparent); stro
 .riesgo .tenue { font-size: 0.8rem; }
 
 .checklist ol { margin: 0 0 18px; padding-left: 22px; display: grid; gap: 10px; max-width: 92ch; }
-.checklist li::marker { color: var(--diablo); font-family: var(--dato); font-weight: 700; }
+.checklist li::marker { color: var(--seccion); font-family: var(--dato); font-weight: 700; }
 .checklist b { color: var(--tinta); }
 .enlaces-sec { display: flex; flex-wrap: wrap; gap: 10px 24px; margin: 0; }
-.enlace { background: none; border: none; padding: 0; font: inherit; font-weight: 600; color: var(--diablo); cursor: pointer; }
+.enlace { background: none; border: none; padding: 0; font: inherit; font-weight: 600; color: var(--seccion); cursor: pointer; }
 .enlace:hover { text-decoration: underline; }
 
 /* --- Simulador: mapa de los más y menos efectivos -------------------------------- */
@@ -745,8 +753,6 @@ svg .eje-cero { stroke: color-mix(in srgb, var(--ceniza) 70%, transparent); stro
 /* pestañas: siete caben en una fila en escritorio */
 @media (max-width: 1500px) { .pestana-nota { display: none; } .pestana { padding: 8px 12px 8px 8px; } }
 @media (max-width: 1100px) { .pestanas-fila { overflow-x: auto; scrollbar-width: none; } .pestana { flex: none; } }
-.pestana.p-hipotesis { --acento: var(--nivel-mar); }
-.pestana.p-anexo { --acento: var(--ceniza); }
 
 /* --- Hipótesis ----------------------------------------------------------------- */
 .cifras-fila.cuatro { grid-template-columns: repeat(4, minmax(0, 1fr)); max-width: none; }
@@ -754,7 +760,7 @@ svg .eje-cero { stroke: color-mix(in srgb, var(--ceniza) 70%, transparent); stro
 .hip { display: grid; gap: 18px; }
 .hip.cf { margin-top: 20px; border-top: 4px solid var(--gana); }
 .hip-cabeza { display: grid; grid-template-columns: auto 1fr auto; gap: 16px; align-items: start; }
-.hip-n { font-family: var(--dato); font-weight: 700; font-size: 1.6rem; color: var(--diablo); line-height: 1; padding-top: 2px; }
+.hip-n { font-family: var(--dato); font-weight: 700; font-size: 1.6rem; color: var(--seccion); line-height: 1; padding-top: 2px; }
 .hip-cabeza h3 { font-size: 1.6rem; margin-bottom: 8px; }
 .hip-propone { font-size: 0.93rem; color: var(--ceniza); margin: 0; max-width: 84ch; }
 .hip-cuerpo { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 28px; align-items: start; }
@@ -792,10 +798,10 @@ svg .eje-cero { stroke: color-mix(in srgb, var(--ceniza) 70%, transparent); stro
 .mini-cero { fill: var(--ceniza); }
 .terminos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 28px; margin: 0; }
 .terminos > div { border-top: var(--borde-tenue); padding-top: 10px; }
-.terminos dt { font-family: var(--display); font-weight: 800; text-transform: uppercase; font-size: 1.15rem; color: var(--diablo); }
+.terminos dt { font-family: var(--display); font-weight: 800; text-transform: uppercase; font-size: 1.15rem; color: var(--seccion); }
 .terminos dd { margin: 4px 0 0; font-size: 0.92rem; }
 .supuestos { margin: 0; padding-left: 22px; display: grid; gap: 8px; max-width: 92ch; }
-.supuestos li::marker { color: var(--diablo); font-family: var(--dato); }
+.supuestos li::marker { color: var(--seccion); font-family: var(--dato); }
 
 @media (max-width: 1040px) {
   .hip-cuerpo, .tipos-anexo, .terminos { grid-template-columns: 1fr; }
@@ -816,8 +822,6 @@ svg .eje-cero { stroke: color-mix(in srgb, var(--ceniza) 70%, transparent); stro
    Metodología, Causal Forest y nueve pestañas
    ======================================================================== */
 
-.pestana.p-metodologia { --acento: var(--aviso); }
-.pestana.p-causal { --acento: var(--gana); }
 @media (max-width: 1500px) { .pestana { padding: 7px 10px 7px 7px; gap: 7px; } .pestana-etiqueta { font-size: 1rem; } }
 @media (max-width: 1340px) { .pestanas-fila { overflow-x: auto; scrollbar-width: none; } .pestana { flex: none; } }
 
@@ -827,8 +831,8 @@ svg .eje-cero { stroke: color-mix(in srgb, var(--ceniza) 70%, transparent); stro
 .pasos-metodo { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
 .pasos-metodo a { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px 6px 6px; border-radius: 999px;
   background: var(--basalto-alto); border: var(--borde-tenue); color: var(--enrarecido); text-decoration: none; font-size: 0.9rem; font-weight: 600; }
-.pasos-metodo a:hover { border-color: var(--diablo); }
-.pasos-metodo a span { width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; background: var(--diablo); color: #fff; font-size: 0.78rem; }
+.pasos-metodo a:hover { border-color: var(--seccion); }
+.pasos-metodo a span { width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; background: var(--seccion); color: #fff; font-size: 0.78rem; }
 .vista-sec.metodo .partes { display: grid; gap: 16px; }
 .parte { scroll-margin-top: 150px; }
 .capas { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 6px 0 16px; }
@@ -836,7 +840,7 @@ svg .eje-cero { stroke: color-mix(in srgb, var(--ceniza) 70%, transparent); stro
 .capas b { font-family: var(--display); text-transform: uppercase; font-size: 1.2rem; color: var(--tinta); }
 .capas span { font-size: 0.85rem; color: var(--ceniza); }
 .tabla-datos.variables td, .tabla-datos.variables th { white-space: normal; }
-.tabla-datos.variables td.num { font-size: 0.8rem; color: var(--diablo); }
+.tabla-datos.variables td.num { font-size: 0.8rem; color: var(--seccion); }
 .tabla-datos .grupo-fila th { background: var(--superficie-2); font-family: var(--display); text-transform: uppercase; font-size: 0.95rem; letter-spacing: 0.02em; color: var(--tinta); }
 .shap { margin-top: 18px; display: grid; gap: 8px; }
 .shap-fila { display: grid; grid-template-columns: 90px 1fr; gap: 10px; align-items: center; font-size: 0.88rem; font-weight: 600; }
@@ -891,7 +895,8 @@ svg .eje-cero { stroke: color-mix(in srgb, var(--ceniza) 70%, transparent); stro
 .sim-camaras { position: absolute; top: 10px; left: 10px; display: flex; gap: 4px; background: rgba(255,255,255,0.86); border-radius: 999px; padding: 3px; }
 .sim-camaras button { border: none; background: none; font: inherit; font-size: 0.78rem; font-weight: 600; padding: 5px 11px; border-radius: 999px; cursor: pointer; color: #24302A; }
 .sim-camaras button.activo { background: #10201A; color: #F6F3EA; }
-.sim-leyenda { position: absolute; bottom: 10px; left: 10px; display: flex; flex-wrap: wrap; gap: 6px 14px; background: rgba(255,255,255,0.86); border-radius: 10px; padding: 6px 12px; font-size: 0.8rem; color: #24302A; }
+/* arriba a la derecha: abajo tapaba el home */
+.sim-leyenda { position: absolute; top: 56px; right: 10px; display: flex; flex-wrap: wrap; gap: 6px 14px; background: rgba(255,255,255,0.86); border-radius: 10px; padding: 6px 12px; font-size: 0.8rem; color: #24302A; }
 .sim-leyenda i { display: inline-block; width: 18px; height: 0; vertical-align: middle; margin-right: 4px; }
 .sim-leyenda i.l-alt { border-top: 3px solid #D7362B; }
 .sim-leyenda i.l-mar { border-top: 3px dashed #2E6FA6; }
@@ -905,7 +910,7 @@ svg .eje-cero { stroke: color-mix(in srgb, var(--ceniza) 70%, transparent); stro
 .res-fisica > div { background: var(--basalto-alto); border: var(--borde-tenue); border-radius: 10px; padding: 10px 12px; display: grid; gap: 4px; }
 .res-fisica span { font-size: 0.8rem; color: var(--ceniza); }
 .res-fisica b { font-size: 1.05rem; color: var(--tinta); }
-.res-lectura { font-size: 1.05rem; margin: 0; max-width: none; border-left: 3px solid var(--diablo); padding-left: 12px; color: var(--enrarecido); }
+.res-lectura { font-size: 1.05rem; margin: 0; max-width: none; border-left: 3px solid var(--seccion); padding-left: 12px; color: var(--enrarecido); }
 
 @media (max-width: 1040px) {
   .sim-rejilla { grid-template-columns: 1fr; }
@@ -920,9 +925,9 @@ svg .eje-cero { stroke: color-mix(in srgb, var(--ceniza) 70%, transparent); stro
   .sim-camaras button { padding: 4px 8px; font-size: 0.72rem; }
 }
 .res-delta b.d-aguanta { color: var(--gana); } .res-delta b.d-pierde { color: var(--aviso); } .res-delta b.d-mucho { color: var(--diablo); }
-.respuesta-corta { margin: 22px 0 10px; padding: 18px 20px; background: var(--basalto-alto); border: var(--borde-tenue); border-left: 4px solid var(--diablo); border-radius: var(--radio); display: grid; gap: 14px; max-width: 1000px; }
+.respuesta-corta { margin: 22px 0 10px; padding: 18px 20px; background: var(--basalto-alto); border: var(--borde-tenue); border-left: 4px solid var(--seccion); border-radius: var(--radio); display: grid; gap: 14px; max-width: 1000px; }
 .rc-frase { font-size: 1.12rem; margin: 0; max-width: none; color: var(--enrarecido); }
-.rc-frase .etiqueta { display: block; margin-bottom: 4px; color: var(--diablo); }
+.rc-frase .etiqueta { display: block; margin-bottom: 4px; color: var(--seccion); }
 .rc-frase b { color: var(--tinta); }
 .rc-cifras { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
 .rc-cifras > div { display: grid; gap: 2px; }
@@ -931,3 +936,18 @@ svg .eje-cero { stroke: color-mix(in srgb, var(--ceniza) 70%, transparent); stro
 .inicio-anexo .enlace { font-size: inherit; }
 @media (max-width: 700px) { .rc-cifras { grid-template-columns: 1fr; } }
 .tres-entornos { margin-top: 20px; } .tabla-datos tr.total th, .tabla-datos tr.total td { border-top: 2px solid var(--tinta); font-weight: 700; }
+
+/* --- el color de la sección en los detalles de su página ------------------------------ */
+main .eyebrow { color: var(--seccion); }
+main .titulo-sec::before, main .cabeza-pregunta h2::before {
+  content: ''; display: inline-block; width: 6px; height: 0.8em; margin-right: 10px; border-radius: 2px;
+  background: var(--seccion); vertical-align: 0.02em; flex: none; }
+main .chip.activo { background: var(--seccion); border-color: var(--seccion); color: #fff; }
+main .segmentado button.activo { background: var(--seccion); color: #fff; }
+main .tarjeta { border-top: 3px solid color-mix(in srgb, var(--seccion) 70%, transparent); }
+main .titulo-tarjeta { color: var(--tinta); }
+main a, main .enlace { color: var(--seccion); }
+main ol > li::marker { color: var(--seccion); }
+/* En las paletas oscuras los tonos de sección son claros: el texto de un chip activo va oscuro. */
+:root:not([data-theme='crema']) main .chip.activo,
+:root:not([data-theme='crema']) main .segmentado button.activo { color: var(--basalto); }
