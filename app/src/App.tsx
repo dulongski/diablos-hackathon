@@ -4,19 +4,20 @@ import { Anexo } from './components/Anexo';
 import { Barra } from './components/Barra';
 import { Confianza } from './components/Confianza';
 import { ControlAltitud } from './components/ControlAltitud';
+import { CausalForest } from './components/CausalForest';
 import { Hipotesis } from './components/Hipotesis';
 import { Info } from './components/Info';
 import { Inicio } from './components/Inicio';
 import { Lanzadores } from './components/Lanzadores';
 import { LimiteError } from './components/LimiteError';
 import { MapaEfectivos } from './components/MapaEfectivos';
-import { Metodo } from './components/Metodo';
+import { Metodologia } from './components/Metodologia';
 import { Pestanas, type Vista } from './components/Pestanas';
 import { PitchFantasma } from './components/PitchFantasma';
 import { Resumen, type DatosResumen } from './components/Resumen';
 import { Simulador } from './components/Simulador';
 import type { TipoMigracion } from './components/MapaMigracion';
-import type { Hipotesis as DatosHipotesis, Jurado } from './jurado';
+import type { Causal, Extras, Hipotesis as DatosHipotesis, Jurado } from './jurado';
 import { Logos } from './components/Logos';
 import type { Model } from './lib/gbm';
 import { densityAtAltitude, dragIndexAtAltitude, type PitchInput } from './lib/physics';
@@ -40,6 +41,8 @@ interface Datos {
   models: Record<string, any>;
   jurado: Jurado;
   hipotesis: DatosHipotesis;
+  causal: Causal;
+  extras: Extras | null;
 }
 
 export function App() {
@@ -58,9 +61,11 @@ export function App() {
       if (!r.ok) throw new Error(`No se pudo cargar ${n}.json`);
       return r.json();
     });
-    Promise.all([j('model_stuff'), j('helpers'), j('scale'), j('arsenal'), j('physics'), j('models'), j('compresion'), j('jurado'), j('hipotesis')])
-      .then(([model, helpers, scale, arsenal, physics, models, compresion, jurado, hipotesis]) =>
-        setDatos({ model, helpers, escala: scale.stuff, arsenal, physics, models, compresion, jurado, hipotesis }))
+    Promise.all([j('model_stuff'), j('helpers'), j('scale'), j('arsenal'), j('physics'), j('models'), j('compresion'), j('jurado'), j('hipotesis'), j('causal'),
+                 // extras.json sale de la máquina con los datos crudos; si no está, la app sigue sin él
+                 j('extras').catch(() => null)])
+      .then(([model, helpers, scale, arsenal, physics, models, compresion, jurado, hipotesis, causal, extras]) =>
+        setDatos({ model, helpers, escala: scale.stuff, arsenal, physics, models, compresion, jurado, hipotesis, causal, extras }))
       .catch(e => setError(String(e.message ?? e)));
   }, []);
 
@@ -113,10 +118,10 @@ export function App() {
           <section><div className="envoltura"><p className="entrada">Cargando el modelo…</p></div></section>
         )}
 
-        {datos && vista === 'inicio' && <Inicio j={datos.jurado} irA={irA} porQue={porQue} />}
+        {datos && vista === 'inicio' && <Inicio j={datos.jurado} c={datos.causal} irA={irA} porQue={porQue} />}
 
         {datos && vista === 'lanzadores' && (
-          <LimiteError nombre="La tabla de lanzadores"><Lanzadores j={datos.jurado} /></LimiteError>
+          <LimiteError nombre="La tabla de lanzadores"><Lanzadores j={datos.jurado} c={datos.causal} /></LimiteError>
         )}
 
         {datos && vista === 'arsenal' && (
@@ -163,16 +168,21 @@ export function App() {
         )}
 
         {datos && vista === 'hipotesis' && (
-          <LimiteError nombre="Las hipótesis"><Hipotesis h={datos.hipotesis} /></LimiteError>
+          <LimiteError nombre="Las hipótesis"><Hipotesis h={datos.hipotesis} c={datos.causal} irCausal={() => irA('causal')} /></LimiteError>
         )}
 
         {datos && vista === 'anexo' && <Anexo j={datos.jurado} />}
 
+        {datos && vista === 'metodologia' && (
+          <Metodologia physics={datos.physics} models={datos.models} extras={datos.extras} irA={irA} />
+        )}
+
+        {datos && vista === 'causal' && (
+          <LimiteError nombre="El Causal Forest"><CausalForest c={datos.causal} extras={datos.extras} /></LimiteError>
+        )}
+
         {datos && vista === 'confianza' && (
-          <>
-            <LimiteError nombre="La validación"><Confianza j={datos.jurado} /></LimiteError>
-            <Metodo physics={datos.physics} models={datos.models} />
-          </>
+          <LimiteError nombre="La validación"><Confianza j={datos.jurado} /></LimiteError>
         )}
       </main>
 

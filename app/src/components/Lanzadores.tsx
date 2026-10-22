@@ -7,7 +7,7 @@
  * para buscar y la ficha del seleccionado.
  */
 import { useMemo, useState } from 'react';
-import type { Jurado, Pitcher } from '../jurado';
+import type { Causal, Jurado, Pitcher, PitcherCF } from '../jurado';
 import { plusEnPalabras, veredicto } from '../lexico';
 import { nf, sg } from '../settings';
 
@@ -85,7 +85,7 @@ function MapaFichajes({ p, sel, onSel }: { p: Pitcher[]; sel: Pitcher | null; on
 
 /* ------------------------------------------------------------------ la ficha */
 
-function Ficha({ x }: { x: Pitcher }) {
+function Ficha({ x, cf }: { x: Pitcher; cf?: PitcherCF }) {
   const v = veredicto(x.delta_hh);
   const obs = x.carreras_delta != null;
   return (
@@ -119,6 +119,16 @@ function Ficha({ x }: { x: Pitcher }) {
         <div><dt>Rodados (de lo que le pegan)</dt><dd className="num">{nf(x.gb * 100, 0)} %</dd></div>
       </dl>
 
+      {cf && (
+        <div className="ficha-obs cf">
+          <span className="etiqueta">Causal Forest, costo de la altura en carreras</span>
+          <p>
+            <b className="num">{sg(cf.tau, 2)}</b> carreras por cada 100 lanzamientos (intervalo de {nf(cf.tau_lo, 2)} a {nf(cf.tau_hi, 2)}).
+             <span className="tenue">Las diferencias entre lanzadores son chicas. Úsalo para confirmar, y decide con Stuff+.</span>
+          </p>
+        </div>
+      )}
+
       {obs && (
         <div className="ficha-obs">
           <span className="etiqueta">Lo que pasó de verdad</span>
@@ -135,7 +145,8 @@ function Ficha({ x }: { x: Pitcher }) {
 
 /* ------------------------------------------------------------------ la vista */
 
-export function Lanzadores({ j }: { j: Jurado }) {
+export function Lanzadores({ j, c }: { j: Jurado; c: Causal }) {
+  const porCF = useMemo(() => new Map(c.pitchers.map(p => [p.nombre, p])), [c.pitchers]);
   const [orden, setOrden] = useState<Orden>('aguantan');
   const [buscar, setBuscar] = useState('');
   const lista = useMemo(() => ordenar(j.pitchers, orden), [j.pitchers, orden]);
@@ -174,7 +185,7 @@ export function Lanzadores({ j }: { j: Jurado }) {
             <p className="nota-tarjeta">Cada punto es un lanzador. A la derecha, los mejores. Abajo, los que más pierden en casa. Arriba a la derecha está a quién conviene firmar.</p>
             <MapaFichajes p={j.pitchers} sel={sel} onSel={setSel} />
           </div>
-          {sel && <Ficha x={sel} />}
+          {sel && <Ficha x={sel} cf={porCF.get(sel.nombre)} />}
         </div>
 
         <div className="tarjeta tabla-lanz">
@@ -188,7 +199,7 @@ export function Lanzadores({ j }: { j: Jurado }) {
             </div>
             <label className="buscar">
               <span className="solo-lectores">Buscar lanzador o lanzamiento</span>
-              <input id="buscar-lanzador" type="search" placeholder="Buscar: 1099, slider…" value={buscar}
+              <input id="buscar-lanzador" type="search" placeholder="Busca 1099 o slider" value={buscar}
                      onChange={e => setBuscar(e.target.value)} />
             </label>
           </div>
@@ -200,7 +211,7 @@ export function Lanzadores({ j }: { j: Jurado }) {
                   <th>#</th><th>Lanzador</th><th>Arsenal</th>
                   <th className="n t-mar">Nivel del mar</th><th className="n t-alt">Harp Helú</th>
                   <th className="n">Cambio</th><th className="n">Location+</th><th className="n">Pitching+</th>
-                  <th className="n">Constancia</th><th className="n">Lanzamientos</th>
+                  <th className="n">Constancia</th><th className="n">Costo CF</th><th className="n">Lanzamientos</th>
                 </tr>
               </thead>
               <tbody>
@@ -218,6 +229,7 @@ export function Lanzadores({ j }: { j: Jurado }) {
                       <td className="num n">{nf(x.location, 1)}</td>
                       <td className="num n">{nf(x.pitching, 1)}</td>
                       <td className="num n">± {nf(x.sd_juego, 1)}</td>
+                      <td className="num n tenue">{porCF.has(x.nombre) ? sg(porCF.get(x.nombre)!.tau, 2) : 's/d'}</td>
                       <td className="num n tenue">{nf(x.n)}</td>
                     </tr>
                   );

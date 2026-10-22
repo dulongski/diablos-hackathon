@@ -6,7 +6,7 @@
  * los lanzamientos de un mismo brazo no son independientes. Lo produce scripts/08_hipotesis.py.
  */
 import type { ReactNode } from 'react';
-import type { Hipotesis as H } from '../jurado';
+import type { Causal, Hipotesis as H } from '../jurado';
 import { COLOR_TIPO_ES } from '../jurado';
 import { nf, sg } from '../settings';
 
@@ -78,8 +78,8 @@ function Barras({ filas, max, fmt, color }: { filas: { et: string; v: number; fu
   );
 }
 
-export function Hipotesis({ h }: { h: H }) {
-  const { h1, h2, h3, h4, causal_forest: cf } = h;
+export function Hipotesis({ h, c, irCausal }: { h: H; c: Causal; irCausal: () => void }) {
+  const { h1, h2, h3, h4 } = h;
   const nat = h1.nathan;
   const cam = h2.pares.find(p => p.tipo === 'Cambio')!;
   const rankCam = h2.pares.findIndex(p => p.tipo === 'Cambio') + 1;
@@ -158,27 +158,16 @@ export function Hipotesis({ h }: { h: H }) {
             <span className="hip-n">CF</span>
             <div>
               <h3>Modelo secundario, un Causal Forest</h3>
-              <p className="hip-propone">¿A qué tipo de lanzador le cuesta más la altura, medido en carreras reales y no en Stuff+? Un Causal Forest estima el efecto de lanzar en altura para cada perfil de lanzador.</p>
+              <p className="hip-propone">El reto sugiere un Causal Forest para preguntas de qué hubiera pasado. Lo usamos para dos. Qué lanzamiento conviene en cada conteo, en casa y de visitante. Y cuánto cuesta la altura en carreras reales.</p>
             </div>
-            <span className="sello sello-v-si">Coincide con Stuff+</span>
+            <span className="sello sello-v-parcial">Ver su pestaña</span>
           </header>
-          <div className="cifras-fila cuatro">
-            <div><b className="num d-mucho">{sg(cf.ate, 2)}</b><span>carreras por cada 100 lanzamientos cuesta la altura, en promedio (IC 90 % de {nf(cf.ate_ic90[0], 2)} a {nf(cf.ate_ic90[1], 2)})</span></div>
-            <div><b className="num">{nf(cf.pitchers)}</b><span>lanzadores que tiraron en los dos entornos</span></div>
-            <div><b className="num d-aguanta">{nf(cf.corr_con_delta_stuff.r, 2)}</b><span>correlación con la pérdida de Stuff+ del modelo principal, que el bosque nunca vio</span></div>
-            <div><b className="num">{cf.menos_afectados.slice(0, 3).map(x => x.nombre.replace('Lanzador ', '')).join(' · ')}</b><span>los menos afectados, los mismos que Stuff+ recomienda fichar</span></div>
+          <div className="cifras-fila tres">
+            <div><b className="num d-mucho">{sg(c.ate, 2)}</b><span>carreras más por cada 100 lanzamientos cuesta la altura, medido en el marcador (IC 90 % de {nf(c.ate_ic90[0], 2)} a {nf(c.ate_ic90[1], 2)})</span></div>
+            <div><b className="num">{nf(c.acuerdo_stuff.pearson, 2)}</b><span>correlación, fuera de muestra, entre lo que el bosque predice y la pérdida de Stuff+</span></div>
+            <div><b className="num">{nf(c.tau_rango[0], 2)} a {nf(c.tau_rango[1], 2)}</b><span>rango entre lanzadores. Es angosto y no se confirma fuera de muestra, así que para separar lanzadores usamos Stuff+</span></div>
           </div>
-          <div className="hip-cuerpo">
-            <div className="hip-figura">
-              <p className="fig-titulo">Qué explica que la altura le cueste más a unos que a otros</p>
-              <Barras color="var(--gana)" max={cf.importancia[0].peso} fmt={v => `${nf(v * 100, 0)} %`}
-                filas={cf.importancia.slice(0, 6).map(i => ({ et: i.variable, v: i.peso }))} />
-            </div>
-            <div className="hip-texto">
-              <p className="hip-resumen">Dos métodos que no comparten nada (uno es física y árboles sobre la forma, el otro son carreras observadas) señalan a los mismos lanzadores. Los menos afectados son <b>{cf.menos_afectados.slice(0, 3).map(x => `${x.nombre} (${x.arsenal.toLowerCase()})`).join(', ')}</b>.</p>
-              <p className="hip-prueba"><span className="etiqueta">Cómo lo probamos</span>Cada lanzador aparece dos veces, una por entorno, y se compara consigo mismo. El bosque (2,000 árboles honestos, con validación cruzada agrupada por lanzador) busca qué rasgos del lanzador hacen ese efecto más grande o más chico. Es exploratorio. Con {nf(cf.pitchers)} lanzadores las diferencias entre perfiles son pequeñas.</p>
-            </div>
-          </div>
+          <p className="enlaces-sec"><button type="button" className="enlace" onClick={irCausal}>Ver el Causal Forest completo →</button></p>
         </article>
       </div>
     </section>

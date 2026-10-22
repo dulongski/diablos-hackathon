@@ -811,3 +811,62 @@ svg .eje-cero { stroke: color-mix(in srgb, var(--ceniza) 70%, transparent); stro
   .pie-fila { flex-direction: column; align-items: flex-start; }
   .bosque .eje-titulo, .bosque .eje, .bosque .valor-barra { font-size: 20px; }
 }
+
+/* ===========================================================================
+   Metodología, Causal Forest y nueve pestañas
+   ======================================================================== */
+
+.pestana.p-metodologia { --acento: var(--aviso); }
+.pestana.p-causal { --acento: var(--gana); }
+@media (max-width: 1500px) { .pestana { padding: 7px 10px 7px 7px; gap: 7px; } .pestana-etiqueta { font-size: 1rem; } }
+@media (max-width: 1340px) { .pestanas-fila { overflow-x: auto; scrollbar-width: none; } .pestana { flex: none; } }
+
+.cifras-fila.tres { grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: none; }
+
+/* metodología */
+.pasos-metodo { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+.pasos-metodo a { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px 6px 6px; border-radius: 999px;
+  background: var(--basalto-alto); border: var(--borde-tenue); color: var(--enrarecido); text-decoration: none; font-size: 0.9rem; font-weight: 600; }
+.pasos-metodo a:hover { border-color: var(--diablo); }
+.pasos-metodo a span { width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; background: var(--diablo); color: #fff; font-size: 0.78rem; }
+.vista-sec.metodo .partes { display: grid; gap: 16px; }
+.parte { scroll-margin-top: 150px; }
+.capas { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 6px 0 16px; }
+.capas > div { border: var(--borde-tenue); border-radius: 10px; padding: 10px 12px; background: var(--basalto); display: grid; gap: 4px; }
+.capas b { font-family: var(--display); text-transform: uppercase; font-size: 1.2rem; color: var(--tinta); }
+.capas span { font-size: 0.85rem; color: var(--ceniza); }
+.tabla-datos.variables td, .tabla-datos.variables th { white-space: normal; }
+.tabla-datos.variables td.num { font-size: 0.8rem; color: var(--diablo); }
+.tabla-datos .grupo-fila th { background: var(--superficie-2); font-family: var(--display); text-transform: uppercase; font-size: 0.95rem; letter-spacing: 0.02em; color: var(--tinta); }
+.shap { margin-top: 18px; display: grid; gap: 8px; }
+.shap-fila { display: grid; grid-template-columns: 90px 1fr; gap: 10px; align-items: center; font-size: 0.88rem; font-weight: 600; }
+.shap-barra { display: flex; height: 22px; border-radius: 6px; overflow: hidden; background: var(--superficie-2); }
+.shap-barra i { display: grid; place-items: center; font-style: normal; font-size: 0.72rem; color: #fff; font-family: var(--dato); }
+.sg-física { background: var(--nivel-mar); } .sg-ubicación { background: var(--aviso); } .sg-arsenal { background: var(--gana); }
+.leyenda i.sg-física, .leyenda i.sg-ubicación, .leyenda i.sg-arsenal { border-radius: 3px; }
+
+/* causal forest */
+.dos-preguntas { margin: 14px 0 0; padding-left: 22px; display: grid; gap: 6px; max-width: 90ch; }
+.dos-preguntas li::marker { color: var(--gana); font-weight: 700; }
+.como-cf { margin-bottom: 8px; }
+.pasos-cf { margin: 0; padding-left: 22px; display: grid; gap: 10px; max-width: 100ch; }
+.pasos-cf li::marker { color: var(--gana); font-family: var(--dato); font-weight: 700; }
+.pendiente { border-left: 4px solid var(--aviso); }
+.pendiente code { font-family: var(--dato); font-size: 0.85em; background: var(--basalto); padding: 1px 6px; border-radius: 4px; }
+.rejillas-dos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin-top: 14px; }
+.rejilla-conteo { border-collapse: separate; border-spacing: 4px; width: 100%; max-width: 420px; }
+.rejilla-conteo th { font-size: 0.75rem; color: var(--ceniza); font-weight: 600; padding: 2px; }
+.rejilla-conteo td { text-align: center; padding: 12px 4px; border-radius: 8px; border: 2px solid transparent; }
+.rejilla-conteo td.dudoso { border: 2px dashed color-mix(in srgb, var(--ceniza) 60%, transparent); }
+.rejilla-conteo td b { font-size: 0.95rem; color: var(--tinta); }
+.ficha-obs.cf { border-left: 3px solid var(--gana); }
+.segmentado.pequeno { margin-top: 6px; }
+
+@media (max-width: 1040px) {
+  .capas, .rejillas-dos, .cifras-fila.tres { grid-template-columns: 1fr; }
+}
+.parte, .parte-cuerpo, .parte-texto, .parte-figura { min-width: 0; }
+@media (max-width: 700px) {
+  .formula { white-space: normal; overflow-wrap: anywhere; font-size: 0.85rem; }
+  .pasos-metodo a { font-size: 0.82rem; }
+}

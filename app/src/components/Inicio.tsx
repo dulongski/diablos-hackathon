@@ -7,12 +7,12 @@
  * como explicación, no como titular.
  */
 import type { ReactNode } from 'react';
-import type { Jurado } from '../jurado';
+import type { Causal, Jurado } from '../jurado';
 import { nf, sg } from '../settings';
 import { Logos } from './Logos';
 import type { Vista } from './Pestanas';
 
-export function Inicio({ j, irA, porQue }: { j: Jurado; irA: (v: Vista) => void; porQue: ReactNode }) {
+export function Inicio({ j, c, irA, porQue }: { j: Jurado; c: Causal; irA: (v: Vista) => void; porQue: ReactNode }) {
   const p = j.pitchers;
   const masPierde = [...p].sort((a, b) => a.delta_hh - b.delta_hh)[0];
   const fichaje = [...p].filter(x => x.delta_hh > -1 && x.sd_juego < 2.5).sort((a, b) => b.stuff_hh - a.stuff_hh)[0];
@@ -36,19 +36,19 @@ export function Inicio({ j, irA, porQue }: { j: Jurado; irA: (v: Vista) => void;
       ent: 'Entregables 1, 2 y 3', v: 'arsenal',
     },
     {
-      q: '¿Cuánto riesgo extra de jonrón hay en casa?',
-      a: mar && hh ? <>Un elevado viaja <b>{nf(hh.dist_fb - mar.dist_fb, 0)} pies más</b> y sale del parque {nf(hh.hr_fb * 100, 1)} % de las veces, contra {nf(mar.hr_fb * 100, 1)} %.</> : null,
-      ent: 'Entregable 3', v: 'arsenal',
-    },
-    {
       q: '¿Cuánto valdría un lanzamiento nuevo aquí y a nivel del mar?',
       a: <>Tú defines velocidad, giro y movimiento, y el modelo te da los dos Stuff+ lado a lado.</>,
       ent: 'Entregable 4', v: 'simulador',
     },
     {
       q: '¿Se cumplen las hipótesis que plantea el reto?',
-      a: <>H1 y H4 se confirman, H2 y H3 en parte. Un Causal Forest independiente señala a los mismos lanzadores.</>,
-      ent: 'Hipótesis H1 a H4 · Modelo secundario', v: 'hipotesis',
+      a: <>H1 y H4 se confirman, y H2 y H3 en parte. Cada una con su intervalo de confianza.</>,
+      ent: 'Hipótesis H1 a H4', v: 'hipotesis',
+    },
+    {
+      q: '¿Qué hubiera pasado con otra decisión?',
+      a: <>Un Causal Forest mide en carreras reales el costo de la altura, <b>{sg(c.ate, 2)}</b> por cada 100 lanzamientos, y qué lanzamiento conviene en cada conteo.</>,
+      ent: 'Modelo secundario · Causal Forest', v: 'causal',
     },
     {
       q: '¿Se puede confiar en la calificación?',

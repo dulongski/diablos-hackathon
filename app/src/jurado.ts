@@ -84,12 +84,36 @@ export interface Hipotesis {
       parejas: Record<'A' | 'B', { rpm: number; ivb: number; mar: number; hh: number }>;
     };
   };
-  causal_forest: {
-    pitchers: number; ate: number; ate_ic90: [number, number];
-    importancia: { variable: string; peso: number }[];
-    por_rodados: { grupo: string; tau: number; pitchers: number }[];
-    corr_con_delta_stuff: { r: number; p: number };
-    menos_afectados: { nombre: string; arsenal: string; tau: number }[];
-    mas_afectados: { nombre: string; arsenal: string; tau: number }[];
-  };
+}
+
+/* ---------------------------------------------- data/causal.json (scripts/09_causal_forest.py) */
+
+export interface PitcherCF {
+  nombre: string; arsenal: string; mano: string | null;
+  tau: number; tau_lo: number; tau_hi: number; tau_oof: number;
+  stuff_mar: number; stuff_hh: number; delta_hh: number; carreras_delta: number;
+  n_hh: number; n_mar: number; gb: number; whiff: number; velo: number; rank: number;
+}
+export interface Causal {
+  pitchers_n: number; ate: number; ate_ic90: [number, number]; tau_rango: [number, number];
+  importancia: { variable: string; clave: string; peso: number }[];
+  gates: { grupo: string; etiqueta: string; pitchers: number; predicho: number; observado: number; ic: [number, number] }[];
+  pendiente: { valor: number; ic: [number, number]; p_una_cola: number };
+  q4_menos_q1: { valor: number; ic: [number, number] };
+  acuerdo_stuff: { pearson: number; p: number; spearman: number };
+  pitchers: PitcherCF[];
+}
+
+/* ---------------------------------------------- data/extras.json (scripts/10_local_extras.py, opcional) */
+
+export interface CeldaTactica { altura: 0 | 1; conteo: string; mismo_lado: 0 | 1; efecto: number; ic90: [number, number]; n: number }
+export interface Contraste {
+  a: string; b: string; filas: number;
+  por_entorno: Record<'mar' | 'altura', { efecto: number; ic90: [number, number]; n: number }>;
+  cambio_por_altura: number; celdas: CeldaTactica[];
+}
+export interface Extras {
+  cf_tactico?: { contrastes: Record<string, Contraste> } | { error: string };
+  shap?: Record<'stuff' | 'location' | 'pitching', { top: { variable: string; peso: number }[]; grupos: Record<string, number> }> | { error: string };
+  tres_entornos?: { por_tipo: { tipo: string; n: number; mar: number; media: number; extrema: number }[]; liga: Record<'mar' | 'media' | 'extrema', number> } | { error: string };
 }

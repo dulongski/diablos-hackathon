@@ -1,7 +1,7 @@
 /** Navegación: cada pestaña es una pregunta del reto, con su ícono y una nota corta. */
 import type { ReactNode } from 'react';
 
-export type Vista = 'inicio' | 'lanzadores' | 'arsenal' | 'simulador' | 'hipotesis' | 'confianza' | 'anexo';
+export type Vista = 'inicio' | 'metodologia' | 'confianza' | 'lanzadores' | 'arsenal' | 'hipotesis' | 'causal' | 'simulador' | 'anexo';
 
 const ICONOS: Record<Vista, ReactNode> = {
   // una montaña: la altitud
@@ -16,18 +16,24 @@ const ICONOS: Record<Vista, ReactNode> = {
   confianza: <path d="M3.5 12.5 L9.5 18.5 L20.5 6.5 L18 4.5 L9.5 13.8 L6 10.2 Z" />,
   // un matraz: la prueba
   hipotesis: <path d="M9 2.5 H15 V4.5 H14 V9.5 L20 19 C20.8 20.4 19.9 21.5 18.4 21.5 H5.6 C4.1 21.5 3.2 20.4 4 19 L10 9.5 V4.5 H9 Z M7.6 15.5 H16.4 L13.4 10.6 V5 H10.6 V10.6 Z" fillRule="evenodd" />,
+  // tres pasos en escalera: la metodología
+  metodologia: <><rect x="3" y="15" width="6" height="6" rx="1.2" /><rect x="9" y="9" width="6" height="12" rx="1.2" /><rect x="15" y="3" width="6" height="18" rx="1.2" /></>,
+  // un árbol que se abre en dos ramas: el Causal Forest
+  causal: <path d="M11 2 H13 V8 L18.5 12.5 V17 H20.5 V22 H14.5 V17 H16.5 V13.5 L12 9.8 L7.5 13.5 V17 H9.5 V22 H3.5 V17 H5.5 V12.5 L11 8 Z" />,
   // un libro abierto: el anexo
   anexo: <path d="M2.5 5 C5.5 4 8.5 4.3 11.2 6 V20 C8.5 18.5 5.5 18.2 2.5 19 Z M12.8 6 C15.5 4.3 18.5 4 21.5 5 V19 C18.5 18.2 15.5 18.5 12.8 20 Z" />,
 };
 
 const VISTAS: { v: Vista; t: string; nota: string }[] = [
   { v: 'inicio', t: 'Inicio', nota: 'Qué responde' },
-  { v: 'lanzadores', t: 'Lanzadores', nota: 'Quién aguanta la altura' },
-  { v: 'arsenal', t: 'Arsenal y perfil', nota: 'Qué buscar en casa' },
+  { v: 'metodologia', t: 'Metodología', nota: 'Qué hicimos' },
+  { v: 'confianza', t: 'Validación', nota: 'Por qué confiar' },
+  { v: 'lanzadores', t: 'Lanzadores', nota: 'Quién aguanta' },
+  { v: 'arsenal', t: 'Arsenal y perfil', nota: 'Qué buscar' },
+  { v: 'hipotesis', t: 'Hipótesis', nota: 'H1 a H4' },
+  { v: 'causal', t: 'Causal Forest', nota: 'Qué hubiera pasado' },
   { v: 'simulador', t: 'Simulador', nota: 'Prueba un lanzamiento' },
-  { v: 'hipotesis', t: 'Hipótesis', nota: 'H1 a H4 del reto' },
-  { v: 'confianza', t: '¿Funciona?', nota: 'Validación' },
-  { v: 'anexo', t: 'Anexo', nota: 'Términos y supuestos' },
+  { v: 'anexo', t: 'Anexo', nota: 'Términos' },
 ];
 
 export function Pestanas({ vista, onVista }: { vista: Vista; onVista: (v: Vista) => void }) {

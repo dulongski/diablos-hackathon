@@ -1,4 +1,4 @@
-"""Prueba formal de las hipótesis H1 a H4 del reto y modelo secundario con Causal Forest.
+"""Prueba formal de las hipótesis H1 a H4 del reto. El Causal Forest está en 09_causal_forest.py.
 
 Corre sobre lo que ya exportaron los scripts 01 a 07 (artifacts/*.csv, el modelo LightGBM y
 artifacts/experimentos.json, que sale de app/scripts/experimentos.ts), así que no necesita los
@@ -8,7 +8,6 @@ datos crudos de la LMB.
   H2  Los lanzamientos de diferencial de velocidad (cambio) ganan valor relativo en altura.
   H3  Los lanzadores de rodados valen más en altura.
   H4  El giro por sí solo no predice Stuff+: importa cuánto de ese giro se vuelve movimiento.
-  CF  Causal Forest: qué perfiles de lanzador sufren más la altitud, en carreras observadas.
 
 Toda incertidumbre sale de bootstrap por lanzador (se remuestrean lanzadores, no lanzamientos),
 porque los lanzamientos de un mismo brazo no son independientes.
@@ -140,58 +139,7 @@ out["h4"] = {"importancia": imp, "rango_spinrate": rank["SpinRate"], "n_features
              "top5": [{"f": f, "peso": round(float(gain[f]), 4)} for f in gain.sort_values(ascending=False).index[:5]],
              "experimento": exp["h4"]}
 
-# ---------------------------------------------------------------------------- Causal Forest
-print("Causal Forest…", flush=True)
-from econml.dml import CausalForestDML
-from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
-
-shares = (ars.pivot_table(index="pitcher_anon_id", columns="pitch_type", values="n", fill_value=0))
-shares = shares.div(shares.sum(axis=1), axis=0).add_prefix("uso_")
-cf = (p3.merge(spp[["pitcher_anon_id", "ext"]], on="pitcher_anon_id", how="left")
-        .merge(shares, left_on="pitcher_anon_id", right_index=True, how="left").fillna(0))
-cf["zurdo"] = (cf.mano == "Left").astype(int)
-XCOLS = ["stuff_mar", "velo", "whiff", "gb", "ext", "zurdo"] + [c for c in shares.columns if c != "uso_Splitter"]
-NOMBRES = {"stuff_mar": "Stuff+ a nivel del mar", "velo": "Velocidad", "whiff": "Swings fallidos", "gb": "Rodados",
-           "ext": "Extensión", "zurdo": "Zurdo", **{f"uso_{k}": f"Uso de {ES[k].lower()}" for k in ES}}
-# Diseño apareado: cada lanzador aparece dos veces, una por entorno; el tratamiento es "lanzar en altura".
-largo = pd.concat([
-    cf.assign(T=1, Y=cf.carreras_hh, peso=cf.n_hh),
-    cf.assign(T=0, Y=cf.carreras_mar, peso=cf.n_mar),
-], ignore_index=True)
-est_cf = CausalForestDML(
-    model_y=RandomForestRegressor(n_estimators=300, min_samples_leaf=20, random_state=0),
-    model_t=RandomForestClassifier(n_estimators=300, min_samples_leaf=20, random_state=0),
-    discrete_treatment=True, n_estimators=2000, min_samples_leaf=15, max_depth=6,
-    cv=5, random_state=0, inference=True,
-)
-est_cf.fit(largo.Y.to_numpy(), largo["T"].to_numpy(), X=largo[XCOLS].to_numpy(),
-           sample_weight=largo.peso.to_numpy(), groups=largo.pitcher_anon_id.to_numpy())
-X1 = cf[XCOLS].to_numpy()
-tau = est_cf.effect(X1)
-lo, hi = est_cf.effect_interval(X1, alpha=0.1)
-ate = est_cf.ate_inference(X=X1)
-imp_cf = sorted(({"variable": NOMBRES.get(c, c), "peso": round(float(v), 4)} for c, v in zip(XCOLS, est_cf.feature_importances_)),
-                key=lambda r: -r["peso"])
-cf["tau"], cf["tau_lo"], cf["tau_hi"] = tau, lo, hi
-from scipy.stats import pearsonr
-r_mod, p_mod = pearsonr(cf.tau, -cf.delta_hh)       # más castigo en carreras ↔ más pérdida de Stuff+
-por_gb = [{"grupo": str(k), "tau": round(float(g.tau.mean()), 2), "pitchers": int(len(g))}
-          for k, g in cf.groupby(pd.qcut(cf.gb, 3, labels=["Pocos rodados", "Medio", "Muchos rodados"]), observed=True)]
-por_uso_ff = [{"grupo": str(k), "tau": round(float(g.tau.mean()), 2), "pitchers": int(len(g))}
-              for k, g in cf.groupby(pd.qcut(cf["uso_Four-Seam"], 3, labels=["Poca recta", "Media", "Mucha recta"]), observed=True)]
-out["causal_forest"] = {
-    "pitchers": int(len(cf)), "ate": round(float(ate.mean_point), 3),
-    "ate_ic90": [round(float(v), 3) for v in ate.conf_int_mean(alpha=0.1)],
-    "importancia": imp_cf[:8],
-    "por_rodados": por_gb, "por_uso_recta": por_uso_ff,
-    "corr_con_delta_stuff": {"r": round(float(r_mod), 3), "p": round(float(p_mod), 4)},
-    "pitchers_ic_sobre_cero": int((cf.tau_lo > 0).sum()),
-    "menos_afectados": [{"nombre": r.nombre, "arsenal": r.arsenal, "tau": round(float(r.tau), 2)}
-                        for r in cf.nsmallest(5, "tau").itertuples()],
-    "mas_afectados": [{"nombre": r.nombre, "arsenal": r.arsenal, "tau": round(float(r.tau), 2)}
-                      for r in cf.nlargest(5, "tau").itertuples()],
-    "unidad": "carreras extra por cada 100 lanzamientos al pasar de nivel del mar a altura (positivo = sufre)",
-}
+# El Causal Forest vive en scripts/09_causal_forest.py.
 
 (ART / "hipotesis.json").write_text(json.dumps(out, ensure_ascii=False, indent=1, allow_nan=False))
 (OUT / "hipotesis.json").write_text(json.dumps(out, ensure_ascii=False, separators=(",", ":"), allow_nan=False))
