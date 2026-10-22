@@ -1,10 +1,11 @@
 /**
- * METODOLOGÍA: qué hicimos, paso a paso. Cada paso dice primero qué hace en palabras simples, después por qué
- * y al final su evidencia. La validación completa vive en la pestaña Validación.
+ * METODOLOGÍA: qué hicimos, paso a paso, escrito para alguien que acaba de tomar un curso introductorio de ciencia
+ * de datos o estadística. Cada paso dice qué hicimos, por qué y con qué evidencia. Las cifras salen de los mismos
+ * archivos que el resto del dashboard.
  */
 import type { ReactNode } from 'react';
-import type { Extras } from '../jurado';
-import { nf } from '../settings';
+import type { Extras, Jurado } from '../jurado';
+import { nf, sg } from '../settings';
 import type { Vista } from './Pestanas';
 
 function Parte({ n, titulo, color, children, figura, id }: { n: number; titulo: string; color: string; children: ReactNode; figura?: ReactNode; id: string }) {
@@ -50,9 +51,9 @@ function Campana({ pct }: { pct: Record<string, number> }) {
 }
 
 const PASOS: { id: string; t: string }[] = [
-  { id: 'm-datos', t: 'Datos' }, { id: 'm-valor', t: 'Valor en carreras' }, { id: 'm-escala', t: 'Escala Stuff+' },
-  { id: 'm-aire', t: 'Medir el aire' }, { id: 'm-vuelo', t: 'Volar en otro aire' }, { id: 'm-capas', t: 'Tres capas' },
-  { id: 'm-pruebas', t: 'Pruebas' },
+  { id: 'm-pregunta', t: 'La pregunta' }, { id: 'm-datos', t: 'Los datos' }, { id: 'm-valor', t: 'La variable objetivo' },
+  { id: 'm-modelo', t: 'El modelo' }, { id: 'm-escala', t: 'La escala' }, { id: 'm-aire', t: 'Medir el aire' },
+  { id: 'm-vuelo', t: 'El contrafactual' }, { id: 'm-pruebas', t: 'La validación' },
 ];
 
 /** Cada variable que pide el reto y dónde vive en nuestro modelo. */
@@ -82,12 +83,16 @@ const VARIABLES: { grupo: string; filas: [string, string, string][] }[] = [
   ]},
 ];
 
-export function Metodologia({ physics, models, extras, irA }: {
-  physics: Record<string, any>; models: Record<string, any>; extras: Extras | null; irA: (v: Vista) => void;
+export function Metodologia({ physics, models, extras, j, irA }: {
+  physics: Record<string, any>; models: Record<string, any>; extras: Extras | null; j: Jurado; irA: (v: Vista) => void;
 }) {
   const mae = physics.mae_holdout ?? {};
   const cub = physics.rho_por_cubeta ?? {};
   const shap = extras?.shap && !('error' in extras.shap) ? extras.shap : null;
+  const nulo = j.modelo_nulo, hp = j.holdout.pitcher, ht = j.holdout.temporada.stuff, hq = j.holdout.parque.stuff;
+  const est = j.estabilidad;
+  const cal = j.calibracion;
+  const primero = cal[0], ultimo = cal[cal.length - 1];
 
   return (
     <section className="vista-sec metodo">
@@ -96,9 +101,12 @@ export function Metodologia({ physics, models, extras, irA }: {
           <p className="eyebrow">Metodología · Qué hicimos, paso a paso</p>
           <h2>Así construimos Diablos Stuff+</h2>
           <p className="entrada ancha">
-            La idea cabe en tres pasos. Primero le ponemos calificación a cada lanzamiento según cómo vuela. Después
-            calculamos cómo habría volado ese mismo lanzamiento en el aire del Harp Helú. Al final lo calificamos otra vez.
-            Lo que baja la calificación es lo que la altura le quita. Aquí está cada paso con más detalle.
+            Esta sección está escrita para alguien que conoce lo básico de estadística y ciencia de datos, como qué es una
+            regresión, una muestra de prueba o un intervalo de confianza, pero que no necesariamente sabe de béisbol. En
+            pocas palabras, entrenamos un modelo que predice cuántas carreras vale cada lanzamiento a partir de cómo vuela la
+            pelota, después usamos física para calcular cómo habría volado esa misma pelota en el aire del Harp Helú, y al
+            final le pedimos al mismo modelo que la vuelva a calificar. La diferencia entre las dos calificaciones es lo que
+            la altura le quita al lanzamiento. Abajo está cada paso con el detalle de qué hicimos y por qué.
           </p>
           <nav className="pasos-metodo" aria-label="Pasos">
             {PASOS.map((p, i) => (
@@ -110,106 +118,86 @@ export function Metodologia({ physics, models, extras, irA }: {
         </header>
 
         <div className="partes">
-          <Parte id="m-datos" n={1} color="var(--ceniza)" titulo="Los datos y lo que les falta"
+          <Parte id="m-pregunta" n={1} color="var(--ceniza)" titulo="La pregunta, escrita como un problema de datos">
+            <p>El club quiere saber qué lanzadores pierden más calidad cuando lanzan en el Estadio Alfredo Harp Helú, que está a
+              2,240 metros sobre el nivel del mar, y cuáles la mantienen. Para convertir esa pregunta en un problema de datos
+              definimos tres cosas, que son las mismas que definirías en cualquier proyecto de aprendizaje supervisado.</p>
+            <p>La <b>unidad de observación</b> es un lanzamiento, es decir, cada vez que el pitcher le tira la pelota al
+              bateador. La <b>variable objetivo</b>, la y que queremos predecir, es cuántas carreras le cuesta o le ahorra ese
+              lanzamiento al equipo que lanza (paso 3). Las <b>variables explicativas</b>, la X, son las mediciones físicas del
+              lanzamiento, como su velocidad, cuántas vueltas da la pelota y cuánto se desvía en el camino (paso 4).</p>
+            <p>La parte difícil es que la pregunta del club es contrafactual. No basta con describir cómo les fue a los lanzadores
+              en altura, porque muchos nunca han lanzado ahí y los que sí lo hicieron no son una muestra al azar de la liga.
+              Necesitamos estimar cuánto valdría un lanzamiento concreto si se hubiera lanzado en otro aire, y para eso
+              combinamos el modelo estadístico con un simulador físico del vuelo de la pelota (pasos 6 y 7).</p>
+          </Parte>
+
+          <Parte id="m-datos" n={2} color="var(--ceniza)" titulo="Los datos y lo que les falta"
             figura={<table className="tabla-simple">
               <thead><tr><th>Falta en los datos</th><th>Cómo lo resolvimos</th></tr></thead>
               <tbody>
-                <tr><td>Estadio y altitud</td><td>Medimos el aire en la trayectoria (paso 4)</td></tr>
-                <tr><td>Corredores en base</td><td>Valor sobre los 12 conteos (paso 2)</td></tr>
-                <tr><td>Fecha y número de lanzamiento</td><td>Orden del archivo, que viene cronológico</td></tr>
-                <tr><td>Los pelotazos al bateador venían en cero</td><td>Los recuperamos del resultado de cada lanzamiento</td></tr>
+                <tr><td>Estadio y altitud exacta</td><td>Medimos el aire con el frenado de la pelota (paso 6)</td></tr>
+                <tr><td>Corredores en base</td><td>Calculamos el valor de cada lanzamiento con los 12 conteos posibles (paso 3)</td></tr>
+                <tr><td>Fecha y número de lanzamiento</td><td>Usamos el orden del archivo, que viene cronológico dentro de cada juego</td></tr>
+                <tr><td>Los pelotazos al bateador venían en cero</td><td>Los recuperamos del resultado registrado de cada lanzamiento</td></tr>
               </tbody>
             </table>}>
-            <p>ISAC entregó 635,002 lanzamientos de la LMB, de 2024 a 2026, medidos con Trackman, un radar que sigue a la pelota
-              desde la mano del lanzador hasta el plato. Cada fila trae la velocidad, las vueltas que da la pelota, cuánto se
-              movió, desde dónde salió, dónde llegó, el conteo y qué pasó. La liga quitó los nombres de los lanzadores.</p>
-            <p>Partimos de tres supuestos.</p>
-            <ul className="limites">
-              <li><b>Un lanzador tira igual en cualquier estadio.</b> La velocidad con que suelta la pelota y las vueltas que le da
-                no cambian con la altura. Lo revisamos en los datos y las vueltas varían medio por ciento. Lo que sí cambia es cómo
-                se mueve la pelota en el camino, y eso depende del aire.</li>
-              <li><b>Calificamos lo que se espera de un lanzamiento, no lo que pasó en esa jugada.</b> Un batazo de suerte no hace
-                peor a un buen lanzamiento.</li>
-              <li><b>El 100 es el promedio de la LMB</b>, no el de Grandes Ligas.</li>
-            </ul>
+            <p>ISAC entregó una tabla con {nf(models.n_pitches ?? 635002)} filas, una por lanzamiento, de las temporadas 2024 a
+              2026 de la Liga Mexicana de Béisbol. Los datos vienen de Trackman, un radar que sigue a la pelota desde que sale de la
+              mano del lanzador hasta que cruza el plato, así que cada fila trae la velocidad, las vueltas por minuto, el
+              movimiento vertical y lateral, el punto exacto donde salió la pelota, dónde llegó, el conteo de bolas y strikes y qué
+              pasó con el lanzamiento. Los nombres de los lanzadores vienen reemplazados por identificadores anónimos.</p>
+            <p>Antes de modelar partimos de tres supuestos que conviene hacer explícitos. El primero es que un lanzador suelta la
+              pelota igual en cualquier estadio, con la misma velocidad y el mismo giro, y lo comprobamos comparando a cada
+              lanzador consigo mismo entre estadios, donde su giro cambia apenas medio por ciento. El segundo es que calificamos
+              el valor esperado de un lanzamiento y no su resultado puntual, porque el mismo lanzamiento puede terminar en ponche o
+              en hit según el bateador y el azar. El tercero es que la referencia de la escala es el promedio de la propia LMB.</p>
           </Parte>
 
-          <Parte id="m-valor" n={2} color="var(--diablo)" titulo="Qué medimos, el valor en carreras de cada lanzamiento">
-            <p>Para decir si un lanzamiento fue bueno necesitas una medida común, y la nuestra son carreras. Con 3 bolas y 0
-              strikes el bateador lleva ventaja y su equipo anota más. Con 0 bolas y 2 strikes pasa lo contrario. Cada lanzamiento
-              mueve el conteo o termina el turno, y ese cambio vale un número de carreras a favor o en contra del lanzador. El modelo
-              aprende a predecir ese número viendo sólo cómo vuela la pelota.</p>
-            <p>El reto sugiere juntar varias probabilidades, como la de que el bateador falle el swing, que persiga una bola mala o
-              que pegue un rodado. Las calculamos todas, pero no las sumamos con pesos inventados. Las carreras ya les dan su peso
-              justo, porque cada resultado cuenta lo que vale en el marcador. Esas probabilidades nos sirven para explicar por qué
-              un lanzamiento califica alto (pestaña Validación).</p>
+          <Parte id="m-valor" n={3} color="var(--diablo)" titulo="La variable objetivo, el valor en carreras de cada lanzamiento">
+            <p>Para entrenar un modelo necesitas una variable objetivo que mida lo que te importa, y en béisbol lo que importa son
+              las carreras. El problema es que un lanzamiento casi nunca produce una carrera por sí solo, así que usamos una idea
+              clásica de la sabermetría que se llama <b>valor de carrera</b>. Primero calculamos, para cada uno de los 12 conteos
+              posibles de bolas y strikes, cuántas carreras anota en promedio la ofensiva desde ese conteo hasta que termina el
+              turno del bateador. Por ejemplo, con 3 bolas y 0 strikes el bateador lleva mucha ventaja y ese conteo vale más
+              carreras para la ofensiva que uno de 0 bolas y 2 strikes.</p>
+            <p>Después, el valor de un lanzamiento es simplemente la diferencia entre el valor del conteo después del lanzamiento
+              y el valor del conteo antes. Un strike que pasa de 1 y 1 a 1 y 2 tiene un valor negativo para la ofensiva, es decir,
+              es bueno para el lanzador, y una bola que pasa de 3 y 2 a base por bolas tiene un valor positivo. Cuando el turno
+              termina, usamos el valor promedio del resultado, como un sencillo o un ponche. Así cada una de las filas tiene una y
+              continua, medida en carreras, y el problema queda como una regresión.</p>
+            <p className="nota">El reto sugiere combinar varias probabilidades, como la de que el bateador falle el swing o pegue un
+              rodado, con pesos elegidos a mano. También entrenamos esos ocho modelos, pero no los sumamos, porque el valor en
+              carreras ya pondera cada resultado por lo que vale en el marcador y no hay que inventar los pesos. Esos modelos nos
+              sirven para explicar de dónde sale cada calificación, y sus resultados están en la pestaña Validación.</p>
           </Parte>
 
-          <Parte id="m-escala" n={3} color="var(--diablo)" titulo="La escala Stuff+"
-            figura={models.distribucion_stuff_plus && <><p className="figura-titulo">Cómo se reparte Stuff+ en la LMB</p><Campana pct={models.distribucion_stuff_plus} /></>}>
-            <pre className="formula">Stuff+ = 100 + 10 × z(−carreras esperadas)</pre>
-            <p>Las carreras de un solo lanzamiento son números diminutos y difíciles de leer, así que las pasamos a una escala
-              parecida a la de un examen. 100 es el lanzamiento promedio de la liga. Cada 10 puntos es un escalón grande (una
-              desviación estándar, la z de la fórmula). 110 es muy bueno, 120 es de élite y 80 está entre los peores. Arriba de
-              100 siempre es mejor para el lanzador, porque la fórmula voltea el signo de las carreras.</p>
-          </Parte>
-
-          <Parte id="m-aire" n={4} color="var(--aviso)" titulo="Medimos el aire en la trayectoria"
-            figura={<table className="tabla-simple">
-              <thead><tr><th>Grupo de estadios</th><th className="n">Índice del aire</th></tr></thead>
-              <tbody>
-                <tr><td>Nivel del mar</td><td className="num n">{nf(cub['No Altitude'] ?? 1, 3)}</td></tr>
-                <tr><td>Altitud media</td><td className="num n">{nf(cub['Medium Altitude'] ?? 0.898, 3)}</td></tr>
-                <tr><td>Altitud extrema, Harp Helú</td><td className="num n destacado">{nf(cub['Extreme Altitude'] ?? 0.853, 3)}</td></tr>
-              </tbody>
-            </table>}>
-            <p>Los datos no dicen en qué estadio se lanzó cada pelota, pero la pelota lo delata. En aire delgado frena menos en su
-              camino al plato, y Trackman mide ese frenado. Si juntas el frenado de todos los lanzamientos de un juego, sabes qué
-              tan delgado estaba el aire ese día. Lo expresamos como un índice, 1.00 a nivel del mar y 0.85 en los estadios más
-              altos, como el Harp Helú.</p>
-            <p className="nota">Algo que encontramos en el camino. Con menos aire la pelota frena un poco menos, pero el empujón que le
-              da el giro se reduce mucho más. Por eso la altura le quita a la pelota más movimiento que velocidad. Si reduces todo
-              en la misma proporción, te quedas corto en un tercio del castigo.</p>
-          </Parte>
-
-          <Parte id="m-vuelo" n={5} color="var(--nivel-mar)" titulo="Volamos cada lanzamiento en el otro aire"
-            figura={<><p className="figura-titulo">Error al predecir la forma en altura, con lanzadores que la calibración nunca vio</p>
-              <table className="tabla-simple">
-                <thead><tr><th>Error</th><th className="n">Sin ajustar</th><th className="n">Sólo densidad</th><th className="n">Nuestro modelo</th></tr></thead>
-                <tbody>
-                  <tr><td>Movimiento vertical</td><td className="num n">{nf(mae.sin_transferir?.ivb ?? 2.573, 2)} in</td><td className="num n">{nf(mae.solo_densidad?.ivb ?? 1.119, 2)} in</td><td className="num n destacado">{nf(mae.calibrado?.ivb ?? 0.802, 2)} in</td></tr>
-                  <tr><td>Movimiento lateral</td><td className="num n">{nf(mae.sin_transferir?.hb ?? 2.932, 2)} in</td><td className="num n">{nf(mae.solo_densidad?.hb ?? 1.612, 2)} in</td><td className="num n destacado">{nf(mae.calibrado?.hb ?? 0.875, 2)} in</td></tr>
-                  <tr><td>Velocidad al plato</td><td className="num n">{nf(mae.sin_transferir?.zone_speed ?? 1.323, 2)} mph</td><td className="num n">{nf(mae.solo_densidad?.zone_speed ?? 0.578, 2)} mph</td><td className="num n destacado">{nf(mae.calibrado?.zone_speed ?? 0.574, 2)} mph</td></tr>
-                </tbody>
-              </table></>}>
-            <div className="flujo">
-              <div className="paso"><b>Lanzamiento real</b><span>cómo salió de la mano, medido por Trackman</span></div>
-              <span className="flujo-flecha" aria-hidden>→</span>
-              <div className="paso"><b>Mismo lanzamiento, otro aire</b><span>sale igual de la mano y se mueve distinto</span></div>
-              <span className="flujo-flecha" aria-hidden>→</span>
-              <div className="paso"><b>Calificación nueva</b><span>el mismo modelo lo vuelve a calificar</span></div>
-            </div>
-            <p>La altura no entra al modelo como un dato más de la tabla. Si así fuera, el modelo aprendería quién suele lanzar en
-              altura y no qué le hace el aire a la pelota, y no podrías evaluar a alguien que nunca ha lanzado aquí. Entra por
-              física. Un simulador de vuelo toma cómo salió la pelota de la mano y la vuelve a lanzar con el aire del otro estadio.
-              La pelota llega con otro movimiento, y el mismo modelo la califica de nuevo.</p>
-            <p className="nota">Para probar el simulador usamos a 444 lanzadores que tiraron en los dos aires. Lo ajustamos con la mitad y
-              medimos su error con la otra mitad, que el ajuste nunca vio. Ese error es la tabla de al lado. También reproduce el
-              cálculo clásico del físico Alan Nathan para Coors Field, en Denver, donde una pelota con 18 pulgadas de movimiento se
-              queda en 14.9.</p>
-          </Parte>
-
-          <Parte id="m-capas" n={6} color="var(--gana)" titulo="Tres capas, como pide el reto">
-            <p>Las tres capas son el mismo tipo de modelo, LightGBM. Es un conjunto de cientos de árboles de decisión chicos, donde
-              cada árbol corrige lo que los anteriores fallaron. Lo usamos porque descubre solo cómo se combinan velocidad,
-              movimiento y giro, sin que le demos la fórmula. Lo único que cambia entre capas es qué información ve.</p>
+          <Parte id="m-modelo" n={4} color="var(--gana)" titulo="El modelo, tres regresiones con árboles de decisión">
+            <p>El algoritmo es <b>gradient boosting</b>, en su implementación LightGBM. La idea es construir cientos de árboles de
+              decisión pequeños, uno después de otro, donde cada árbol nuevo se entrena para corregir los errores que dejaron los
+              anteriores, y la predicción final es la suma de todos. Lo elegimos sobre una regresión lineal porque el valor de un
+              lanzamiento depende de combinaciones de variables, por ejemplo, mucho movimiento vertical ayuda bastante en una recta
+              rápida y casi nada en una lenta, y los árboles encuentran esas interacciones solos sin que tengamos que escribirlas.
+              La función de pérdida es el error cuadrático medio, así que cada modelo estima el valor esperado en carreras dado lo
+              que ve.</p>
+            <p>Entrenamos tres modelos con la misma variable objetivo, y lo único que cambia entre ellos es qué variables pueden ver.
+              Esa separación es lo que permite responder la pregunta del club, porque Stuff+ sólo ve física y por lo tanto es el
+              único que tiene sentido volver a calificar cuando cambiamos el aire.</p>
             <div className="capas">
-              <div><b>Stuff+</b><span>16 variables. Sólo ve cómo vuela la pelota, por eso es la que volamos en otro aire.</span></div>
-              <div><b>Location+</b><span>23 variables. Además ve dónde llegó la pelota, el conteo y de qué lado batea el rival.</span></div>
-              <div><b>Pitching+</b><span>33 variables. Además ve el resto de los lanzamientos del pitcher y cómo los combina.</span></div>
+              <div><b>Stuff+</b><span>Usa 16 variables, todas de cómo vuela la pelota, como velocidad, giro, movimiento y punto de salida.</span></div>
+              <div><b>Location+</b><span>Usa 23 variables. Además de la física, ve dónde cruzó la pelota el plato, el conteo y de qué lado batea el rival.</span></div>
+              <div><b>Pitching+</b><span>Usa 33 variables. Además ve el resto del repertorio del lanzador y cómo se compara cada lanzamiento con su recta.</span></div>
             </div>
-            <p className="nota">La tabla es para quien quiera revisar que usamos cada variable que pide el reto. Los nombres de la
-              columna del medio son los de Trackman.</p>
+            <p>Dos decisiones de modelado merecen explicación. La primera es que quitamos de Stuff+ los ángulos con que sale y llega
+              la pelota, aunque son medidas físicas, porque al revisar el modelo encontramos que con ellos Stuff+ estaba aprendiendo
+              hacia dónde apuntaba el lanzador, y eso es ubicación, que le toca a Location+. Con los ángulos, la ubicación en el
+              plato explicaba el 58 % de la variación de Stuff+, y sin ellos explica casi nada. La segunda es que Stuff+ va mucho
+              más regularizado que las otras dos capas, con árboles más simples y hojas de al menos 4,000 lanzamientos, porque el
+              punto de salida de la pelota funciona casi como una huella de cada lanzador y un modelo flexible aprendería a
+              reconocer lanzadores en lugar de aprender física. Eso es sobreajuste, y lo detectamos porque el modelo poco
+              regularizado predecía peor que el promedio con lanzadores que no había visto.</p>
+            <p className="nota">La tabla siguiente es para quien quiera revisar que usamos cada variable que pide el reto. La columna
+              del medio trae los nombres de las columnas de Trackman.</p>
             <div className="tabla-scroll">
               <table className="tabla-datos compacta variables">
                 <thead><tr><th>Lo que pide el reto</th><th>Cómo lo usamos</th><th>Capa</th></tr></thead>
@@ -223,7 +211,7 @@ export function Metodologia({ physics, models, extras, irA }: {
             </div>
             {shap && (
               <div className="shap">
-                <p className="fig-titulo">Qué pesa en cada capa, según SHAP (la contribución media de cada variable a la predicción)</p>
+                <p className="fig-titulo">Cuánto pesa cada grupo de variables en cada capa, medido con SHAP. SHAP reparte cada predicción entre las variables que la produjeron, y aquí sumamos ese reparto por grupo.</p>
                 {(['stuff', 'location', 'pitching'] as const).map(k => (
                   <div key={k} className="shap-fila">
                     <span>{k === 'stuff' ? 'Stuff+' : k === 'location' ? 'Location+' : 'Pitching+'}</span>
@@ -239,27 +227,123 @@ export function Metodologia({ physics, models, extras, irA }: {
             )}
           </Parte>
 
-          <Parte id="m-pruebas" n={7} color="var(--nivel-mar)" titulo="Cómo lo pusimos a prueba">
+          <Parte id="m-escala" n={5} color="var(--diablo)" titulo="La escala, un puntaje z con media 100"
+            figura={models.distribucion_stuff_plus && <><p className="figura-titulo">Cómo se reparte Stuff+ en la LMB</p><Campana pct={models.distribucion_stuff_plus} /></>}>
+            <pre className="formula">Stuff+ = 100 + 10 × z(−carreras esperadas)</pre>
+            <p>La predicción del modelo está en carreras por lanzamiento, y son números muy pequeños, del orden de centésimas, que
+              cuesta leer. Por eso la estandarizamos como harías con cualquier variable. Le restamos la media de la liga, la
+              dividimos entre la desviación estándar de la liga y obtenemos un puntaje z, que dice a cuántas desviaciones estándar
+              está un lanzamiento del promedio.</p>
+            <p>Después multiplicamos el puntaje z por 10 y le sumamos 100, que es la convención de estadísticas como ERA+ u OPS+. Así,
+              100 es el lanzamiento promedio de la liga, 110 está una desviación estándar arriba, 120 está dos arriba y es de
+              élite, y 80 está dos abajo. Antes de estandarizar le cambiamos el signo a las carreras, porque para el lanzador menos
+              carreras es mejor, y queremos que un número más alto siempre signifique un mejor lanzamiento.</p>
+          </Parte>
+
+          <Parte id="m-aire" n={6} color="var(--aviso)" titulo="Medir el aire de cada juego sin saber el estadio"
+            figura={<table className="tabla-simple">
+              <thead><tr><th>Grupo de estadios</th><th className="n">Índice del aire</th></tr></thead>
+              <tbody>
+                <tr><td>Nivel del mar</td><td className="num n">{nf(cub['No Altitude'] ?? 1, 3)}</td></tr>
+                <tr><td>Altitud media</td><td className="num n">{nf(cub['Medium Altitude'] ?? 0.898, 3)}</td></tr>
+                <tr><td>Altitud extrema, Harp Helú</td><td className="num n destacado">{nf(cub['Extreme Altitude'] ?? 0.853, 3)}</td></tr>
+              </tbody>
+            </table>}>
+            <p>Para simular el vuelo en otro aire primero necesitamos saber cuánto aire había en cada juego, y los datos no dicen en
+              qué estadio se jugó, sólo traen tres categorías de altitud. La solución viene de la física. Trackman reporta la
+              aceleración de la pelota, y si le quitas la gravedad te queda la parte que produce el aire, que tiene dos componentes.
+              Una apunta en contra del movimiento y frena la pelota, que es el arrastre, y la otra es perpendicular y la desvía, que
+              es el efecto del giro, llamado efecto Magnus.</p>
+            <p>El arrastre es proporcional a la densidad del aire, así que con el frenado de cada lanzamiento podemos estimar qué
+              tan denso estaba el aire. Como el frenado de una sola pelota es ruidoso, tomamos la mediana de todos los lanzamientos
+              de un juego, porque a la mediana casi no la mueven los valores extremos, y la dividimos entre la mediana de los juegos a nivel del mar. El resultado
+              es un índice donde 1.00 es el aire a nivel del mar y 0.85 es el aire de los estadios más altos.</p>
+            <p className="nota">Encontramos además que el empuje del giro baja más rápido que el frenado cuando el aire se adelgaza.
+              Si en lugar de medir cada fuerza por separado las reduces a las dos en la misma proporción, subestimas en cerca de un
+              tercio cuánto movimiento pierde la pelota en altura.</p>
+          </Parte>
+
+          <Parte id="m-vuelo" n={7} color="var(--nivel-mar)" titulo="El contrafactual, volar la misma pelota en otro aire"
+            figura={<><p className="figura-titulo">Error medio al predecir el movimiento en altura, en lanzadores que no se usaron para calibrar</p>
+              <table className="tabla-simple">
+                <thead><tr><th>Error</th><th className="n">Sin ajustar</th><th className="n">Sólo densidad</th><th className="n">Nuestro modelo</th></tr></thead>
+                <tbody>
+                  <tr><td>Movimiento vertical</td><td className="num n">{nf(mae.sin_transferir?.ivb ?? 2.573, 2)} in</td><td className="num n">{nf(mae.solo_densidad?.ivb ?? 1.119, 2)} in</td><td className="num n destacado">{nf(mae.calibrado?.ivb ?? 0.802, 2)} in</td></tr>
+                  <tr><td>Movimiento lateral</td><td className="num n">{nf(mae.sin_transferir?.hb ?? 2.932, 2)} in</td><td className="num n">{nf(mae.solo_densidad?.hb ?? 1.612, 2)} in</td><td className="num n destacado">{nf(mae.calibrado?.hb ?? 0.875, 2)} in</td></tr>
+                  <tr><td>Velocidad al plato</td><td className="num n">{nf(mae.sin_transferir?.zone_speed ?? 1.323, 2)} mph</td><td className="num n">{nf(mae.solo_densidad?.zone_speed ?? 0.578, 2)} mph</td><td className="num n destacado">{nf(mae.calibrado?.zone_speed ?? 0.574, 2)} mph</td></tr>
+                </tbody>
+              </table></>}>
+            <div className="flujo">
+              <div className="paso"><b>Lanzamiento real</b><span>cómo salió de la mano, medido por Trackman</span></div>
+              <span className="flujo-flecha" aria-hidden>→</span>
+              <div className="paso"><b>Mismo lanzamiento, otro aire</b><span>sale igual de la mano y se mueve distinto</span></div>
+              <span className="flujo-flecha" aria-hidden>→</span>
+              <div className="paso"><b>Calificación nueva</b><span>el mismo modelo Stuff+ la vuelve a calificar</span></div>
+            </div>
+            <p>La forma más obvia de medir el efecto de la altura sería agregar la altitud como una variable más del modelo, pero
+              eso tiene un problema de confusión. Los lanzadores que lanzan seguido en altura no son una muestra al azar de la
+              liga, así que el coeficiente de la altitud mezclaría el efecto del aire con quiénes son esos lanzadores, y además no
+              podrías estimar nada para alguien que nunca ha lanzado en altura.</p>
+            <p>Por eso la altura entra por física y no como variable. Para cada lanzamiento reconstruimos su estado al salir de la
+              mano, que incluye la posición, la velocidad y la dirección del giro, y resolvemos numéricamente las ecuaciones del
+              vuelo con el aire del otro estadio. Usamos el simulador sólo para calcular cuánto cambia el movimiento entre los dos
+              aires, y ese cambio se lo sumamos a lo que midió Trackman, así que el único error posible está en el cambio y no en
+              el nivel. Con esa forma nueva le pedimos a Stuff+ una segunda calificación, y la resta entre las dos es el efecto de
+              la altura para ese lanzamiento.</p>
+            <p className="nota">Validamos el simulador como se valida cualquier modelo. Tomamos a los 444 lanzadores que tiraron tanto
+              a nivel del mar como en altura, calibramos con la mitad y medimos el error con la otra mitad, que el ajuste nunca vio.
+              La tabla compara ese error contra no corregir nada y contra corregir sólo por la densidad del aire. El simulador
+              también reproduce el cálculo clásico del físico Alan Nathan para Coors Field, en Denver, donde una pelota con 18
+              pulgadas de movimiento se queda en 14.9.</p>
+          </Parte>
+
+          <Parte id="m-pruebas" n={8} color="var(--nivel-mar)" titulo="La validación, cómo sabemos que el modelo funciona">
+            <p>Todas las métricas que reportamos se calculan con datos que el modelo no vio al entrenar, porque medir el error en
+              los mismos datos de entrenamiento premia al modelo que memoriza. Usamos cinco pruebas, y cada una responde una
+              pregunta distinta.</p>
             <ul className="limites">
-              <li><b>Contra lo más simple posible.</b> Un modelo que sólo sabe el conteo y nada del lanzamiento. Si no le ganas a ese,
-                el tuyo no sirve. El reto lo llama modelo nulo.</li>
-              <li><b>Con datos que el modelo nunca vio.</b> Lanzadores nuevos, una temporada nueva y estadios de altura cuando sólo
-                aprendió con estadios bajos.</li>
-              <li><b>Que los números cumplan.</b> Juntamos los lanzamientos por su Stuff+ y revisamos que los de calificación más alta
-                de verdad permitan menos carreras.</li>
-              <li><b>Las cuatro hipótesis del reto</b>, cada una con su margen de error. Para sacarlo repetimos el cálculo 2,000
-                veces, cada vez con lanzadores escogidos al azar.</li>
-              <li><b>Un Causal Forest</b>, un modelo que estima qué habría pasado con otra decisión, por ejemplo tirar slider en vez
-                de cambio en cierto conteo.</li>
+              <li><b>¿Le gana a lo más simple?</b> El reto pide comparar contra un modelo nulo que sólo conoce el conteo de bolas y
+                strikes y predice el valor promedio de ese conteo. Ese modelo tiene un R² de {nf(nulo.r2, 5)}, prácticamente cero,
+                y cualquier modelo útil tiene que superarlo.</li>
+              <li><b>¿Funciona con lanzadores nuevos?</b> Hicimos validación cruzada agrupada por lanzador, que significa que todos
+                los lanzamientos de un mismo lanzador quedan juntos en entrenamiento o juntos en prueba, nunca repartidos. Si los
+                repartiéramos, el modelo podría reconocer al lanzador y el resultado se vería mejor de lo que es. Con lanzadores
+                nuevos, Stuff+ logra un R² de {nf(hp.stuff.r2, 4)} y Pitching+ uno de {nf(hp.pitching.r2, 3)}. También probamos
+                entrenar con 2024 y 2025 y predecir 2026 (R² de {nf(ht.r2, 4)}), y entrenar sin estadios de altura y predecir sólo
+                en altura (correlación de {nf(hq.corr ?? 0, 3)}).</li>
+              <li><b>¿Por qué el R² es tan bajo?</b> Porque el resultado de un solo lanzamiento es casi todo azar. El mismo
+                lanzamiento perfecto a veces termina en jonrón, así que ningún modelo puede explicar mucha de la varianza de un
+                lanzamiento suelto. Lo que importa es que, cuando agregas muchos lanzamientos, las predicciones ordenen bien las
+                carreras, y eso lo miden las dos pruebas siguientes.</li>
+              <li><b>¿Las predicciones cumplen?</b> Es una prueba de calibración. Agrupamos los lanzamientos por su Stuff+ y
+                comparamos las carreras predichas con las que de verdad ocurrieron. Los lanzamientos con Stuff+ menor a 80
+                permitieron {sg(primero?.carreras_100 ?? 0, 1)} carreras por cada 100, los de 120 o más {sg(ultimo?.carreras_100 ?? 0, 1)},
+                y en medio las carreras bajan escalón por escalón sin excepción.</li>
+              {est && <li><b>¿Mide algo estable del lanzador?</b> Es una prueba de confiabilidad. Partimos al azar los lanzamientos
+                de cada uno de {nf(est.lanzadores_mitades)} lanzadores en dos mitades y correlacionamos su Stuff+ promedio en una
+                mitad con el de la otra. La correlación es {nf(est.mitades.stuff, 3)}, mientras que la de sus carreras reales es
+                {' '}{nf(est.mitades.rv, 3)}. Eso dice que Stuff+ mide un rasgo del lanzador y que las carreras de unos cientos de
+                lanzamientos todavía tienen mucho ruido.</li>}
             </ul>
+            <p>Para las hipótesis del reto y para todos los intervalos de confianza usamos <b>bootstrap por lanzador</b>. En cada
+              una de 2,000 repeticiones sacamos una muestra de lanzadores con reemplazo, llevándonos todos sus lanzamientos, y
+              recalculamos el resultado. El intervalo de 95 % es el rango que deja fuera el 2.5 % más bajo y el 2.5 % más alto de
+              esas 2,000 estimaciones. Remuestreamos lanzadores y no lanzamientos sueltos porque los lanzamientos de una misma
+              persona se parecen entre sí, y tratarlos como independientes daría intervalos demasiado angostos.</p>
+            <p>Por último, Stuff+ es un modelo de predicción y no de causalidad, así que no responde qué habría pasado si el
+              lanzador hubiera tomado otra decisión. Para esas preguntas agregamos un <b>Causal Forest</b>, un método que estima
+              efectos causales que pueden variar según las características de cada caso, controlando por las variables que
+              confunden la comparación. Lo usamos para medir cuánto cuesta la altura en carreras reales y para comparar qué tipo
+              de lanzamiento conviene en cada conteo.</p>
             <p className="enlaces-sec">
               <button type="button" className="enlace" onClick={() => irA('confianza')}>Ver la validación →</button>
               <button type="button" className="enlace" onClick={() => irA('hipotesis')}>Ver las hipótesis →</button>
               <button type="button" className="enlace" onClick={() => irA('causal')}>Ver el Causal Forest →</button>
             </p>
-            <p className="nota">Lo que el modelo no hace. No sabe en qué estadio exacto fue cada juego, sólo qué tan delgado estaba el
-              aire. No separa la altura del clima de ese día. No toma en cuenta quién batea. Y Stuff+ dice cuánto vale un
-              lanzamiento, no qué habría pasado si el lanzador decidía otra cosa. Para eso está el Causal Forest.</p>
+            <p className="nota">El modelo también tiene límites que conviene conocer. No sabe en qué estadio exacto fue cada juego,
+              sólo qué tan denso estaba el aire, así que tampoco puede separar la altura del clima de ese día. No toma en cuenta
+              quién batea. Y su calificación describe el valor promedio de un lanzamiento, no garantiza el resultado de uno en
+              particular.</p>
           </Parte>
         </div>
       </div>

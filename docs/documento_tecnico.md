@@ -208,7 +208,7 @@ entrenamos, y explican de dónde sale cada calificación, pero no entran en el c
 ### 3.6 Validación fuera de muestra
 
 Calculamos todas las métricas con datos que el modelo no vio.
-**Holdout de lanzador.** Validación cruzada de 5 pliegues agrupada por lanzador. Ningún lanzador está en
+**Holdout de lanzador.** Validación cruzada de 4 pliegues agrupada por lanzador. Ningún lanzador está en
 entrenamiento y prueba a la vez.
 **Holdout de temporada.** Entrenamos con 2024 y 2025 y probamos con 2026.
 **Holdout de parque.** Entrenamos sin altitud extrema y probamos sólo en altitud extrema.

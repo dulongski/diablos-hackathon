@@ -165,7 +165,7 @@ export function App() {
         {datos && vista === 'anexo' && <Anexo j={datos.jurado} />}
 
         {datos && vista === 'metodologia' && (
-          <Metodologia physics={datos.physics} models={datos.models} extras={datos.extras} irA={irA} />
+          <Metodologia physics={datos.physics} models={datos.models} extras={datos.extras} j={datos.jurado} irA={irA} />
         )}
 
         {datos && vista === 'causal' && (
