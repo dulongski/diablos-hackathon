@@ -147,7 +147,7 @@ export function Hipotesis({ h, c, irCausal }: { h: H; c: Causal; irCausal: () =>
             <div className="tabla-scroll pareja"><table className="tabla-datos compacta">
               <thead><tr><th>Dos rectas</th><th className="n">Giro</th><th className="n">Elevación</th><th className="n t-mar">Mar</th><th className="n t-alt">Harp Helú</th></tr></thead>
               <tbody>
-                <tr><th scope="row">A · gira mucho, eje de bala</th><td className="num n">{nf(A.rpm)}</td><td className="num n">{nf(A.ivb, 1)} in</td><td className="num n">{nf(A.mar, 1)}</td><td className="num n destacado">{nf(A.hh, 1)}</td></tr>
+                <tr><th scope="row">A · gira mucho, pero poco de ese giro la mueve</th><td className="num n">{nf(A.rpm)}</td><td className="num n">{nf(A.ivb, 1)} in</td><td className="num n">{nf(A.mar, 1)}</td><td className="num n destacado">{nf(A.hh, 1)}</td></tr>
                 <tr><th scope="row">B · gira menos, todo es movimiento</th><td className="num n">{nf(B.rpm)}</td><td className="num n">{nf(B.ivb, 1)} in</td><td className="num n">{nf(B.mar, 1)}</td><td className="num n destacado">{nf(B.hh, 1)}</td></tr>
               </tbody>
             </table></div>

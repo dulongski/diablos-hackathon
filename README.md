@@ -20,7 +20,7 @@ La altitud no entra al modelo como una variable. Entra por física.
 
 1. **Medimos el aire en la trayectoria.** Los datos no dicen el estadio, pero Trackman mide cuánto frena
    cada pelota, y eso depende del aire.
-2. **Volamos cada lanzamiento en el otro aire.** Mismo brazo, mismo giro, otro aire. El simulador de vuelo
+2. **Volamos cada lanzamiento en el otro aire.** El lanzador suelta igual, y sólo cambia el aire. El simulador de vuelo
    reproduce la cifra de Alan Nathan para Coors Field (18 pulgadas se vuelven 14.9).
 3. **Lo calificamos otra vez.** Stuff+ sólo ve física, así que la diferencia es el efecto del aire.
 

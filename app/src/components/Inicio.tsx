@@ -3,8 +3,8 @@
  *
  * El orden es el de una conversación con el director deportivo: qué pregunta respondemos, para
  * quién, cómo leer los números, qué responde cada pestaña (mapeado a los entregables del reto) y
- * las tres respuestas que cambian decisiones. La física (por qué la altitud importa) va después,
- * como explicación, no como titular.
+ * las tres respuestas que cambian decisiones. Arriba a la derecha va la escena 3D con el control de
+ * altitud, para que lo primero que veas sea la misma pelota en dos aires.
  */
 import type { ReactNode } from 'react';
 import type { Causal, Jurado } from '../jurado';
@@ -13,7 +13,7 @@ import { CORTE_AGUANTA } from '../lexico';
 import { Logos } from './Logos';
 import type { Vista } from './Pestanas';
 
-export function Inicio({ j, c, irA, porQue }: { j: Jurado; c: Causal; irA: (v: Vista) => void; porQue: ReactNode }) {
+export function Inicio({ j, c, irA, escena }: { j: Jurado; c: Causal; irA: (v: Vista) => void; escena: ReactNode }) {
   const p = j.pitchers;
   const masPierde = [...p].sort((a, b) => a.delta_hh - b.delta_hh)[0];
   // Perfil de fichaje: aguanta la altura y está en la mitad más constante; de esos, el mejor en casa.
@@ -68,13 +68,21 @@ export function Inicio({ j, c, irA, porQue }: { j: Jurado; c: Causal; irA: (v: V
       <section className="inicio-hero">
         <div className="envoltura">
           <div className="inicio-marca"><Logos /><p className="eyebrow">Hackathon ISAC 2026 · Reto Diablos Rojos del México</p></div>
-          <h1 className="inicio-titulo">¿Qué lanzadores le sirven a los Diablos a 2,240 metros?</h1>
-          <p className="inicio-lede">
-            Calificamos cada lanzamiento de la Liga Mexicana de Béisbol con <b>Stuff+</b> (una
-            calificación donde 100 es el promedio de la liga) y calculamos cuánto vale ese mismo
-            lanzamiento en el Estadio Alfredo Harp Helú, donde el aire es 20 % más delgado y la
-            pelota se mueve menos.
-          </p>
+          <div className="inicio-arriba">
+            <h1 className="inicio-titulo">Stuff+ para la Liga Mexicana de Béisbol</h1>
+            {escena}
+            <div className="inicio-texto">
+              <p className="inicio-lede">
+                Un modelo que califica cada lanzamiento de la LMB por su física (<b>Stuff+</b>), por dónde
+                llega (<b>Location+</b>) y por cómo encaja en el plan del lanzador (<b>Pitching+</b>). En las
+                tres, 100 es el promedio de la liga.
+              </p>
+              <p className="inicio-lede">
+                Después vuela cada lanzamiento en el aire de otro estadio y lo vuelve a calificar. Así ves
+                cuánto vale en el Estadio Alfredo Harp Helú, a 2,240 metros, contra un parque a nivel del mar.
+              </p>
+            </div>
+          </div>
           <div className="respuesta-corta">
             <p className="rc-frase"><span className="etiqueta">La respuesta corta</span>
               La altitud apenas toca al lanzamiento malo y <b>borra la ventaja del bueno</b>. En casa conviene el lanzador que
@@ -146,7 +154,6 @@ export function Inicio({ j, c, irA, porQue }: { j: Jurado; c: Causal; irA: (v: V
         </section>
       )}
 
-      {porQue}
     </>
   );
 }

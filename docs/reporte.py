@@ -279,16 +279,16 @@ lamina("Definiciones", "Stuff+ dice qué tan difícil de batear es un lanzamient
   <div class="def"><h3>Pitching+</h3><p>Suma además el <b>resto del repertorio</b>, la diferencia de velocidades y la secuencia con el lanzamiento anterior.</p></div>
 </div>
 <div class="escala"><span>90 · malo</span><span class="cien">100 · promedio de la liga</span><span>110 · muy bueno</span><span>120 · élite</span></div>
-<p class="nota centro">Cada 10 puntos son una desviación estándar. El anexo del dashboard explica los siete tipos de lanzamiento con dibujos de su movimiento real.</p>""")
+<p class="nota centro">Cada 10 puntos son una desviación estándar. El anexo del dashboard explica los siete tipos de lanzamiento con dibujos de su vuelo, de la mano al plato.</p>""")
 
 # 5 · supuestos --------------------------------------------------------------------------------
 lamina("Supuestos", "Cuatro supuestos sostienen todo, y los probamos",
        "En esta lámina están las condiciones que damos por ciertas y cómo las verificamos.", """
 <div class="dos">
   <ol class="hacer">
-    <li><b>El brazo no cambia con la altitud.</b> El mismo lanzador suelta igual en los dos estadios. Dentro de cada lanzador, su giro cambia 0.5 % y su velocidad 0.1 %.</li>
-    <li><b>Lo que cambia en el vuelo viene del aire.</b> Por eso volamos la misma pelota en otro aire y la calificamos otra vez.</li>
-    <li><b>Medimos valor, no suerte.</b> Un lanzamiento vale las carreras que en promedio quita según el conteo, no lo que pasó esa vez.</li>
+    <li><b>Un lanzador suelta la pelota igual en cualquier estadio.</b> La velocidad y las vueltas que le da no dependen de la altura. Comparamos a cada lanzador consigo mismo y sus vueltas cambian 0.5 % y su velocidad 0.1 %.</li>
+    <li><b>Lo que cambia es el camino de la pelota, y eso lo decide el aire.</b> Por eso volamos la misma pelota en otro aire y la calificamos otra vez.</li>
+    <li><b>Calificamos lo que se espera del lanzamiento, no lo que pasó esa vez.</b> El mismo lanzamiento puede acabar en ponche o en hit por el bateador o la suerte. Por eso vale las carreras que quita en promedio según el conteo.</li>
     <li><b>La referencia es la liga tal como lanzó.</b> El 100 es el promedio de todos sus lanzamientos, en sus tres tipos de estadio. A nivel del mar el lanzamiento típico queda arriba de 100 y en altura abajo, y esa diferencia es la respuesta.</li>
   </ol>
   <div class="aviso-dato"><b>El conjunto no dice en qué estadio se lanzó.</b> Sólo trae tres categorías de altitud. La densidad del aire la sacamos del frenado que Trackman mide en cada pelota.</div>
@@ -312,8 +312,8 @@ lamina("Método · paso 1", "La pelota nos dice cuánto aire había",
 <div class="dos">
   <div><p class="grande">Trackman mide cuánto frena cada pelota. Ese frenado depende del aire. Su mediana por juego es un
   <b>índice del aire</b>, donde 1.00 es el nivel del mar.</p>
-  <p>El frenado cae menos que la densidad. Con menos aire baja el número de Reynolds y sube el coeficiente de arrastre
-  de la pelota. Un solo exponente ({PH['altitud_a_indice_arrastre']['exponente']:.2f}), ajustado al Harp Helú, predice <b>{PH['altitud_a_indice_arrastre']['verificacion_cubeta_intermedia']['predicho']:.3f}</b> para la altitud media.
+  <p>El frenado baja menos que el aire. En aire delgado la pelota corta el aire un poco peor (sube su coeficiente de
+  arrastre), y eso compensa una parte. Un solo exponente ({PH['altitud_a_indice_arrastre']['exponente']:.2f}), ajustado al Harp Helú, predice <b>{PH['altitud_a_indice_arrastre']['verificacion_cubeta_intermedia']['predicho']:.3f}</b> para la altitud media.
   Medimos <b>{PH['altitud_a_indice_arrastre']['verificacion_cubeta_intermedia']['medido']:.3f}</b>, sin haberla usado en el ajuste.</p></div>
   <div>{barras_h([('Nivel del mar', PH['rho_por_cubeta']['No Altitude']), ('Altitud media', PH['rho_por_cubeta']['Medium Altitude']), ('Altitud extrema', PH['rho_por_cubeta']['Extreme Altitude'])], maxv=1.05, fmt=lambda v: f'{v:.3f}', etiqueta_w=150, colores={'Nivel del mar': AZUL, 'Altitud media': AMBAR, 'Altitud extrema': ROJO})}
   <p class="nota">Índice del aire por categoría, 1.00 es el nivel del mar.</p></div>
@@ -337,7 +337,7 @@ lamina("Método · paso 3", "Calificamos la forma y comparamos los dos aires",
 <div class="flujo">
   <div class="paso"><span>1</span><h3>Medir el aire</h3><p>El frenado de cada pelota da el índice del aire de cada juego. Lámina 7.</p></div>
   <div class="flecha">→</div>
-  <div class="paso"><span>2</span><h3>Volar en otro aire</h3><p>Mismo brazo, otro aire. El simulador da la forma que tendría el lanzamiento en el otro estadio. Lámina 8.</p></div>
+  <div class="paso"><span>2</span><h3>Volar en otro aire</h3><p>El lanzador suelta igual y el aire cambia. El simulador da cómo se movería ese lanzamiento en el otro estadio. Lámina 8.</p></div>
   <div class="flecha">→</div>
   <div class="paso"><span>3</span><h3>Calificar y comparar</h3><p>Un modelo de árboles (LightGBM) que sólo ve física califica las dos formas. La diferencia es el efecto del aire. Location+ suma ubicación y conteo, y Pitching+ suma el arsenal (diferencias contra la recta, túnel, uso y secuencia).</p></div>
 </div>
@@ -399,7 +399,7 @@ lamina("H2 · se confirma en parte", "El cambio sí gana contra la recta, pero s
        "En esta lámina comparamos cada tipo contra la recta del mismo lanzador, con su intervalo de 95 %.", f"""
 <div class="dos ancho-izq">
   <div>{bosque_svg([(t['tipo'], t['ventaja_vs_recta'], t['ic']) for t in h2['pares']], 0, 10, fuerte='Cambio')}</div>
-  <div><p class="grande">El cambio pierde <b>{s(cam['ventaja_vs_recta'], 2)} puntos menos</b> que la recta del mismo brazo, y gana en el {cam['pct_pitchers_gana'] * 100:.0f} % de los {n(cam['pitchers'])} lanzadores que tiran los dos.</p>
+  <div><p class="grande">El cambio pierde <b>{s(cam['ventaja_vs_recta'], 2)} puntos menos</b> que la recta del mismo lanzador, y gana en el {cam['pct_pitchers_gana'] * 100:.0f} % de los {n(cam['pitchers'])} lanzadores que tiran los dos.</p>
   <p>Pero queda cuarto. Un cambio de derecho se mueve unas 12 pulgadas hacia el brazo, y ese movimiento también lo paga. En altura no gana el que engaña por velocidad. Gana <b>el que nunca dependió del movimiento</b>.</p></div>
 </div>""")
 
@@ -422,8 +422,8 @@ lamina("H4 · se confirma", "Importa cuánto se mueve la pelota, no cuánto gira
   <p class="nota">Peso de cada grupo de variables dentro de Stuff+. El giro es la variable {h4['rango_spinrate']} de {h4['n_features']}.</p></div>
   <div><p class="grande">100 revoluciones más <b>con el mismo movimiento</b> cambian Stuff+ en {s(h4['experimento']['stuff_por_100rpm'], 2)}. Una pulgada más de elevación <b>con el mismo giro</b> suma {s(h4['experimento']['stuff_por_pulgada'], 2)}.</p>
   <table class="perfil"><tr><th>Dos rectas</th><th>Giro</th><th>Elevación</th><th>Mar</th><th>Harp Helú</th></tr>
-  <tr><td>A, eje de bala</td><td>{n(A['rpm'])}</td><td>{A['ivb']:.1f} in</td><td>{A['mar']:.1f}</td><td><b>{A['hh']:.1f}</b></td></tr>
-  <tr><td>B, todo es movimiento</td><td>{n(B['rpm'])}</td><td>{B['ivb']:.1f} in</td><td>{B['mar']:.1f}</td><td><b>{B['hh']:.1f}</b></td></tr></table>
+  <tr><td>A, gira mucho, poco de ese giro la mueve</td><td>{n(A['rpm'])}</td><td>{A['ivb']:.1f} in</td><td>{A['mar']:.1f}</td><td><b>{A['hh']:.1f}</b></td></tr>
+  <tr><td>B, gira menos, casi todo su giro la mueve</td><td>{n(B['rpm'])}</td><td>{B['ivb']:.1f} in</td><td>{B['mar']:.1f}</td><td><b>{B['hh']:.1f}</b></td></tr></table>
   <p>B le saca {B['mar'] - A['mar']:.1f} puntos a A a nivel del mar y sólo {B['hh'] - A['hh']:.1f} en casa. El aire se lleva justo la ventaja del movimiento.</p></div>
 </div>""")
 
@@ -438,7 +438,7 @@ lamina("Perfil ideal · entregable 2", "En altura la élite es slider, no recta"
   <tr><td>Movimiento total</td><td>{pf['movement_total']['optimo_nivel_mar']:.1f} in</td><td><b>{pf['movement_total']['optimo_altitud']:.1f} in</b></td></tr>
   <tr><td>Giro que se vuelve movimiento</td><td>{pf['spin_efficiency']['optimo_nivel_mar'] * 100:.0f} %</td><td><b>{pf['spin_efficiency']['optimo_altitud'] * 100:.0f} %</b></td></tr>
   <tr><td>Velocidad</td><td>{pf['RelSpeed']['optimo_nivel_mar']:.1f} mph</td><td><b>{pf['RelSpeed']['optimo_altitud']:.1f} mph</b></td></tr></table>
-  <p>El perfil a buscar no apuesta al Magnus. Giro de bala, movimiento moderado y engaño por túnel.</p></div>
+  <p>El perfil a buscar no depende del empuje del aire. Lanzamientos que giran mucho pero casi no se desvían por ese giro, movimiento moderado y que salen de la mano igual que la recta, lo que se llama túnel.</p></div>
 </div>""")
 
 # 19 · por lanzador ----------------------------------------------------------------------------

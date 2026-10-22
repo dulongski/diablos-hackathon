@@ -6,7 +6,7 @@
  * en pies. La goma está en z = 0 y la punta del plato en z = 60.5.
  */
 import { Line, OrbitControls, PerspectiveCamera } from '@react-three/drei';
-import { Canvas, useFrame } from '@react-three/fiber';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { RUBBER_Y, Y_PLATE_FRONT, type Trajectory } from '../lib/physics';
@@ -23,7 +23,8 @@ export type Camara = 'catcher' | 'lado' | 'pitcher';
 const CAMARAS: Record<Camara, { ojo: [number, number, number]; mira: [number, number, number]; fov: number }> = {
   // Con la mira a la altura de la zona el home quedaba justo bajo el borde del cuadro: se retrocede la
   // cámara y se baja la mira para que el home entre completo, sin achicar mucho la zona.
-  catcher: { ojo: [0.9, 5.2, HOME + 13], mira: [0, 0.5, HOME - 30], fov: 36 },
+  // Un poco más atrás y más arriba para que el vuelo entero, de la mano al plato, entre en el cuadro.
+  catcher: { ojo: [0.9, 6.4, HOME + 19], mira: [0, 1.2, HOME - 30], fov: 38 },
   // De lado tiene que caber el vuelo completo, de la goma al plato (≈60 pies): a 22 pies sólo entraba un
   // pedazo, pegado al horizonte. Más lejos y más alto se ven el montículo, el arco y el home a la vez.
   lado: { ojo: [50, 12, 34], mira: [0, 2.2, 33], fov: 46 },
@@ -170,7 +171,24 @@ function ZonaStrike() {
 
 /* ------------------------------------------------------------------ escena */
 
-function Contenido({ principal, fantasma, rpm, camara }: { principal: Trajectory; fantasma?: Trajectory; rpm: number; camara: Camara }) {
+/**
+ * Acerca o aleja la cámara sobre la línea que la une con su mira, sin perder el giro que haya hecho el
+ * usuario. La distancia base es la de la cámara definida para esa vista, no la del primer cuadro: al
+ * montar, R3F todavía trae su cámara por defecto.
+ */
+function Acercamiento({ zoom, ojo, mira }: { zoom: number; ojo: [number, number, number]; mira: [number, number, number] }) {
+  const camera = useThree(s => s.camera);
+  useEffect(() => {
+    const m = new THREE.Vector3(...mira);
+    const base = new THREE.Vector3(...ojo).distanceTo(m);
+    const dir = camera.position.clone().sub(m);
+    if (dir.lengthSq() < 1e-6) return;
+    camera.position.copy(m.add(dir.setLength(base * zoom)));
+  }, [zoom, camera, ojo, mira]);
+  return null;
+}
+
+function Contenido({ principal, fantasma, rpm, camara, zoom }: { principal: Trajectory; fantasma?: Trajectory; rpm: number; camara: Camara; zoom: number }) {
   const t = useRef(0);
   const [quieto] = useState(() => typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches);
   const CICLO = 0.3;                         // cámara lenta: el vuelo real dura ~0.4 s
@@ -195,24 +213,41 @@ function Contenido({ principal, fantasma, rpm, camara }: { principal: Trajectory
       {fin && <mesh position={fin}><ringGeometry args={[0.2, 0.28, 32]} /><meshBasicMaterial color={C.rojo} side={THREE.DoubleSide} /></mesh>}
       <Pelota traj={principal} rpm={rpm} t={t} ciclo={CICLO} />
       <OrbitControls key={`o-${camara}`} makeDefault target={cam.mira} enablePan={false} enableZoom={false} maxPolarAngle={Math.PI / 2.05} />
+      <Acercamiento key={`z-${camara}`} zoom={zoom} ojo={cam.ojo} mira={cam.mira} />
     </>
   );
 }
 
-export function Diamante3D({ principal, fantasma, rpm, camara = 'catcher', alto = '100%' }: {
-  principal: Trajectory; fantasma?: Trajectory; rpm: number; camara?: Camara; alto?: string;
+const ZOOMS = [0.55, 0.7, 0.85, 1, 1.25, 1.55, 1.9];
+
+export function Diamante3D({ principal, fantasma, rpm, camara = 'catcher', alto = '100%', leyenda = false }: {
+  principal: Trajectory; fantasma?: Trajectory; rpm: number; camara?: Camara; alto?: string; leyenda?: boolean;
 }) {
   // Si WebGL no existe (una impresora o un navegador viejo), no se intenta pintar nada.
   const [ok, setOk] = useState(true);
+  const [nivel, setNivel] = useState(3);
   useEffect(() => {
     try { const c = document.createElement('canvas'); setOk(!!(c.getContext('webgl2') || c.getContext('webgl'))); } catch { setOk(false); }
   }, []);
+  useEffect(() => setNivel(3), [camara]);
   if (!ok) return <div className="sin-3d">Tu navegador no puede mostrar la escena en 3D.</div>;
   return (
-    <Canvas dpr={[1, 2]} shadows gl={{ antialias: true }} style={{ width: '100%', height: alto }}>
-      <color attach="background" args={[C.cielo]} />
-      <fog attach="fog" args={[C.cielo, 140, 420]} />
-      <Contenido principal={principal} fantasma={fantasma} rpm={rpm} camara={camara} />
-    </Canvas>
+    <div className="diamante" style={{ height: alto }}>
+      <Canvas dpr={[1, 2]} shadows gl={{ antialias: true }} style={{ width: '100%', height: '100%' }}>
+        <color attach="background" args={[C.cielo]} />
+        <fog attach="fog" args={[C.cielo, 140, 420]} />
+        <Contenido principal={principal} fantasma={fantasma} rpm={rpm} camara={camara} zoom={ZOOMS[nivel]} />
+      </Canvas>
+      {leyenda && (
+        <div className="diamante-leyenda">
+          <span><i className="ley-roja" />Estadio elegido</span>
+          <span><i className="ley-azul" />Nivel del mar</span>
+        </div>
+      )}
+      <div className="diamante-zoom" role="group" aria-label="Acercar o alejar">
+        <button type="button" aria-label="Acercar" disabled={nivel === 0} onClick={() => setNivel(n => Math.max(0, n - 1))}>+</button>
+        <button type="button" aria-label="Alejar" disabled={nivel === ZOOMS.length - 1} onClick={() => setNivel(n => Math.min(ZOOMS.length - 1, n + 1))}>−</button>
+      </div>
+    </div>
   );
 }

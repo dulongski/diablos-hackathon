@@ -47,7 +47,7 @@ CSS = """
 @page { size: Letter; margin: 15mm 16mm 15mm; @bottom-right { content: counter(page); } }
 :root { --rojo:#D7362B; --azul:#2E6FA6; --tinta:#10201A; --texto:#24302A; --ceniza:#6E7A73; --linea:#E3DCCB; --fondo:#FBF9F4; }
 * { box-sizing: border-box; }
-body { font-family: Inter, system-ui, sans-serif; font-size: 9.1pt; line-height: 1.4; color: var(--texto); margin: 0; }
+body { font-family: Inter, system-ui, sans-serif; font-size: 9pt; line-height: 1.37; color: var(--texto); margin: 0; }
 h1, h2, h3 { font-family: 'Big Shoulders Display', sans-serif; text-transform: uppercase; color: var(--tinta); line-height: 1; letter-spacing: .005em; }
 h2 { font-size: 18pt; font-weight: 800; margin: 12pt 0 5pt; padding-top: 7pt; border-top: 2px solid var(--rojo); break-after: avoid; }
 h3 { font-size: 12.5pt; font-weight: 700; margin: 13pt 0 5pt; break-after: avoid; }

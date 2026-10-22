@@ -66,12 +66,15 @@ trae una categoría de altitud con tres niveles (nivel del mar, altitud media y 
 | Hay tipos de lanzamiento residuales | Los agrupamos en siete tipos estables |
 
 Trabajamos con cuatro supuestos.
-**S1.** El brazo no cambia con la altitud. Lo comprobamos dentro de cada lanzador. Entre nivel del mar
-y altitud extrema su giro cambia 0.5 %, su eficiencia de giro 0.3 % y su velocidad de salida 0.1 %.
-**S2.** Todo lo que cambia en el vuelo de la pelota entre estadios viene del aire.
-**S3.** Medimos el valor de un lanzamiento en carreras esperadas según el conteo. El resultado que tuvo
-depende del bateador y del azar.
-**S4.** La escala toma como referencia a la liga tal como lanzó, en sus tres tipos de estadio. 100 es ese promedio, así que a nivel del mar el lanzamiento típico queda arriba de 100 y en altura abajo.
+**S1.** Un lanzador suelta la pelota igual en cualquier estadio. La velocidad y las vueltas que le da no
+dependen de la altura. Lo comprobamos comparando a cada lanzador consigo mismo. Entre nivel del mar y
+altitud extrema sus vueltas cambian 0.5 %, su eficiencia de giro 0.3 % y su velocidad de salida 0.1 %.
+**S2.** Entonces lo que cambia entre estadios es el camino de la pelota después de soltarla, y eso lo
+decide el aire.
+**S3.** Calificamos lo que se espera de un lanzamiento, no lo que pasó en esa jugada. Un mismo
+lanzamiento puede terminar en ponche o en hit según el bateador y la suerte, así que medimos su valor
+promedio en carreras según el conteo.
+**S4.** El 100 es el promedio de la liga tal como lanzó, en sus tres tipos de estadio. Por eso a nivel del mar el lanzamiento típico queda arriba de 100 y en altura abajo.
 
 ## 3. Metodología
 
@@ -83,7 +86,8 @@ muestra al azar. Y no podrías responder la pregunta que importa. ¿Cuánto vald
 lanzamiento que nunca se ha tirado ahí?
 
 1. **Medimos el aire** de cada juego con el frenado de la pelota.
-2. **Transferimos la forma.** Volvemos a volar cada lanzamiento con el aire de otro estadio.
+2. **Transferimos la forma.** La forma de un lanzamiento es cómo se mueve en el camino, cuánto sube o cae y
+   hacia qué lado se va. Volvemos a volar cada lanzamiento con el aire de otro estadio y medimos su forma nueva.
 3. **Calificamos la forma** con un modelo que sólo ve física (Stuff+) y con dos capas que suman contexto.
 4. **Comparamos** el mismo lanzamiento en los dos aires. La diferencia es el efecto de la altitud.
 
@@ -119,7 +123,8 @@ combinaciones en siete niveles de densidad), las dos fuerzas responden distinto.
 
 $$k_{\text{drag}} \propto \rho^{0.96}, \qquad k_{\text{M}} \propto \rho^{1.39}$$
 
-El Magnus responde casi 1.5 veces más fuerte que el arrastre. Por S1 no es el giro. Es el aire.
+El Magnus responde casi 1.5 veces más fuerte que el arrastre. Como el lanzador le da las mismas vueltas a la
+pelota en los dos estadios (S1), esa caída del empuje viene del aire.
 
 ### 3.3 Transferencia de forma, el mismo lanzamiento en otro aire
 
@@ -134,12 +139,13 @@ reproduce la forma medida. Los exponentes $\gamma_v = 1.7$ (vertical) y $\gamma_
 calibramos fuera de muestra (sección 4.1). El eje de giro $\hat{\boldsymbol\omega}$ se conserva y la
 fuerza queda perpendicular a la velocidad todo el vuelo.
 
-**Usamos el integrador por diferencias.** No predice la forma. Sólo predice cuánto cambia entre dos
-aires, y ese cambio se suma a la medición real.
+**Usamos el simulador sólo para medir diferencias.** No le pedimos que adivine cómo se movió la pelota,
+eso ya lo midió Trackman. Le pedimos cuánto cambiaría el movimiento al pasar de un aire a otro, y ese
+cambio se lo sumamos a la medición real.
 
 $$\text{forma}_{\text{HH}} = \text{forma}_{\text{Trackman}} + \big[f(I_{\text{HH}}) - f(I_{\text{obs}})\big]$$
 
-Así los niveles coinciden con Trackman por construcción, y el único error posible es el del cambio.
+Así siempre partimos de lo que midió Trackman, y el único error posible está en cuánto cambia la forma.
 
 ### 3.4 El valor en carreras de cada lanzamiento
 
@@ -202,7 +208,7 @@ entrenamos, y explican de dónde sale cada calificación, pero no entran en el c
 ### 3.6 Validación fuera de muestra
 
 Calculamos todas las métricas con datos que el modelo no vio.
-**Holdout de lanzador.** Validación cruzada de 5 pliegues agrupada por lanzador. Ningún brazo está en
+**Holdout de lanzador.** Validación cruzada de 5 pliegues agrupada por lanzador. Ningún lanzador está en
 entrenamiento y prueba a la vez.
 **Holdout de temporada.** Entrenamos con 2024 y 2025 y probamos con 2026.
 **Holdout de parque.** Entrenamos sin altitud extrema y probamos sólo en altitud extrema.
@@ -214,8 +220,8 @@ las carreras que pasaron.
 ### 3.7 Pruebas de hipótesis
 
 Medimos toda la incertidumbre con **bootstrap por lanzador** de 2,000 remuestreos. Remuestreamos
-lanzadores completos y no lanzamientos sueltos, porque los lanzamientos de un mismo brazo no son
-independientes.
+lanzadores completos y no lanzamientos sueltos, porque los lanzamientos de un mismo lanzador se
+parecen entre sí y no cuentan como pruebas independientes.
 
 **H1.** Para cada tipo de lanzamiento $t$ calculamos la pérdida media, ponderada por número de
 lanzamientos, sobre 2,808 combinaciones de lanzador y tipo.
@@ -225,7 +231,7 @@ $$\bar\Delta_t = \frac{\sum_i n_{it}\,\Delta_{it}}{\sum_i n_{it}}, \qquad \Delta
 Además comparamos el integrador con la cifra de Nathan.
 
 **H2.** Usamos un diseño pareado dentro del lanzador. Para quien tira cambio y recta,
-$D_i = \Delta_{i,\text{cambio}} - \Delta_{i,\text{recta}}$. Al comparar contra la recta del mismo brazo se
+$D_i = \Delta_{i,\text{cambio}} - \Delta_{i,\text{recta}}$. Al comparar contra la recta del mismo lanzador se
 cancela todo lo que es del lanzador y queda sólo el efecto del aire sobre cada forma. Si $D > 0$, el
 cambio pierde menos que la recta.
 
@@ -414,8 +420,8 @@ El modelo sí usa el giro. Es la tercera de 16 variables, pero sobre todo para d
 lanzamiento de otro. En el experimento controlado, 100 revoluciones más **con el mismo movimiento**
 cambian Stuff+ en 0.05 puntos, nada. Una pulgada más de elevación **con el mismo giro** suma 2.61.
 Y la ventaja del movimiento es la que el aire se lleva. Una recta B con 2,150 rpm y 18.0 pulgadas de
-elevación vale 105.7 a nivel del mar, 18.1 puntos más que una recta A con más giro pero eje de bala
-(2,650 rpm y 13.5 pulgadas, 87.6). En el Harp Helú B vale 86.0 y A 80.0. La ventaja se reduce a un
+elevación vale 105.7 a nivel del mar, 18.1 puntos más que una recta A que gira más pero a la que ese giro
+casi no mueve (2,650 rpm y 13.5 pulgadas, 87.6). En el Harp Helú B vale 86.0 y A 80.0. La ventaja se reduce a un
 tercio.
 
 ## 6. Lo que significa para el club
@@ -443,7 +449,7 @@ al Harp Helú con la mayor parte del ajuste hecho.
 ### 6.2 El perfil físico ideal
 
 Promediamos el 1 % mejor calificado en cada aire, sólo lanzadores derechos y sólo lanzamientos reales.
-Una rejilla libre produciría combinaciones que ningún brazo hace.
+Una rejilla libre produciría combinaciones que ningún lanzador hace.
 
 | Variable | Élite a nivel del mar | Élite en altura | Mediana de la liga |
 |---|---|---|---|
@@ -455,7 +461,8 @@ Una rejilla libre produciría combinaciones que ningún brazo hace.
 | Giro (rpm) | 2,554 | 2,504 | 2,328 |
 
 La élite de altura es de rompientes que caen y cortan hacia el guante, no de rectas que suben. Gira casi
-lo mismo que la otra, pero convierte mucho menos de ese giro en movimiento. No apuesta al Magnus.
+lo mismo que la otra, pero convierte mucho menos de ese giro en movimiento. No depende del empuje del aire,
+que es justo lo que la altura le quita.
 
 ### 6.3 Por lanzador
 
@@ -587,7 +594,7 @@ sólo la física a 18.9 % con ubicación y a 19.4 % con arsenal y secuencia.
 | Eficiencia de giro | La parte del giro que produce movimiento |
 | Rodado y elevado | Batazo por el suelo y batazo por el aire |
 | Arsenal | Los tipos que un lanzador usa al menos 8 % de las veces |
-| Tipos de lanzamiento | Recta, sinker, cutter, slider, curva, cambio y splitter. El anexo del dashboard dibuja el movimiento real de cada uno |
+| Tipos de lanzamiento | Recta, sinker, cutter, slider, curva, cambio y splitter. El anexo del dashboard dibuja el vuelo de cada uno, de la mano al plato |
 | Intervalo de confianza de 95 % | El rango donde está el valor real con alta probabilidad. Si no cruza el cero, el efecto no es casualidad |
 
 *Usamos los datos de la LMB sólo para esta competencia. Este documento presenta resultados, no datos.*

@@ -81,30 +81,16 @@ export function App() {
 
   const irA = (v: Vista) => { setVista(v); window.scrollTo({ top: 0 }); };
 
-  /* El pitch fantasma ya no es el titular: es la explicación de por qué la altitud importa. */
-  const porQue = (
-    <section className="porque-sec">
-      <div className="envoltura hero-rejilla">
-        <div className="hero-texto">
-          <p className="eyebrow">Por qué importa la altitud</p>
-          <h2 className="porque-titulo">El mismo lanzamiento, dos estadios</h2>
-          <p className="entrada">
-            Una recta típica de la LMB, con la misma mano, la misma velocidad y el mismo giro. La pelota vuela por
-            la línea roja, la del Harp Helú. La línea azul punteada es por dónde habría pasado a nivel del mar. Con
-            menos aire el giro la empuja menos, y llega más baja de lo que el bateador espera. Mueve la altitud y
-            mira cómo se separan.
-          </p>
-          <ControlAltitud metros={metros} onChange={setMetros} />
+  /* La escena del inicio: la misma recta en el estadio elegido (rojo) y a nivel del mar (azul). */
+  const escena = (
+    <div className="inicio-escena">
+      <LimiteError nombre="La escena 3D">
+        <div className="escenario claro">
+          <Diamante3D principal={fantasma.alt} fantasma={fantasma.mar} rpm={PITCH_INICIAL.spinRate} camara="catcher" leyenda />
         </div>
-        <div className="hero-escena">
-          <LimiteError nombre="La escena 3D">
-            <div className="escenario claro">
-              <Diamante3D principal={fantasma.alt} fantasma={fantasma.mar} rpm={PITCH_INICIAL.spinRate} camara="catcher" />
-            </div>
-          </LimiteError>
-        </div>
-      </div>
-    </section>
+      </LimiteError>
+      <ControlAltitud metros={metros} onChange={setMetros} solo />
+    </div>
   );
 
   return (
@@ -125,7 +111,7 @@ export function App() {
           <section><div className="envoltura"><p className="entrada">Cargando el modelo…</p></div></section>
         )}
 
-        {datos && vista === 'inicio' && <Inicio j={datos.jurado} c={datos.causal} irA={irA} porQue={porQue} />}
+        {datos && vista === 'inicio' && <Inicio j={datos.jurado} c={datos.causal} irA={irA} escena={escena} />}
 
         {datos && vista === 'lanzadores' && (
           <LimiteError nombre="La tabla de lanzadores"><Lanzadores j={datos.jurado} c={datos.causal} /></LimiteError>

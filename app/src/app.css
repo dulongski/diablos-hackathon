@@ -787,7 +787,7 @@ svg .eje-cero { stroke: color-mix(in srgb, var(--ceniza) 70%, transparent); stro
 
 /* --- Anexo ---------------------------------------------------------------------- */
 .tipos-anexo { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
-.tipo-anexo { display: grid; grid-template-columns: 120px 1fr; gap: 16px; align-items: start; }
+.tipo-anexo { display: grid; grid-template-columns: 1fr; gap: 12px; align-items: start; }
 .tipo-anexo h4 { margin: 0 0 6px; font-family: var(--display); font-size: 1.35rem; text-transform: uppercase; color: var(--tinta); display: flex; align-items: center; gap: 8px; }
 .tipo-anexo h4 i { width: 10px; height: 10px; border-radius: 50%; }
 .tipo-anexo p { font-size: 0.9rem; margin: 0 0 6px; }
@@ -812,7 +812,6 @@ svg .eje-cero { stroke: color-mix(in srgb, var(--ceniza) 70%, transparent); stro
   .hip-cabeza .sello { grid-column: 1 / -1; justify-self: start; }
   .hbarra { grid-template-columns: 1fr 48px; gap: 4px 10px; }
   .hbarra > span { grid-column: 1 / -1; }
-  .tipo-anexo { grid-template-columns: 84px 1fr; }
   .mini-mov { width: 84px; height: 84px; }
   .pie-fila { flex-direction: column; align-items: flex-start; }
   .bosque .eje-titulo, .bosque .eje, .bosque .valor-barra { font-size: 20px; }
@@ -951,3 +950,38 @@ main ol > li::marker { color: var(--seccion); }
 /* En las paletas oscuras los tonos de sección son claros: el texto de un chip activo va oscuro. */
 :root:not([data-theme='crema']) main .chip.activo,
 :root:not([data-theme='crema']) main .segmentado button.activo { color: var(--basalto); }
+
+/* --- Diamante 3D: zoom y leyenda ------------------------------------------------ */
+.diamante { position: relative; width: 100%; }
+.diamante-zoom { position: absolute; right: 12px; bottom: 12px; display: flex; flex-direction: column; gap: 6px; }
+.diamante-zoom button { width: 34px; height: 34px; border-radius: 8px; border: var(--borde-tenue); background: rgba(255, 255, 255, 0.92); color: var(--tinta); font: 600 1.15rem/1 var(--f-ui, inherit); cursor: pointer; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12); }
+.diamante-zoom button:disabled { opacity: 0.4; cursor: default; }
+.diamante-zoom button:not(:disabled):hover { background: #fff; }
+.diamante-leyenda { position: absolute; left: 12px; top: 12px; display: flex; gap: 14px; padding: 6px 10px; border-radius: 8px; background: rgba(255, 255, 255, 0.88); font-size: 0.8rem; color: var(--tinta); }
+.diamante-leyenda span { display: inline-flex; align-items: center; gap: 6px; }
+.diamante-leyenda i { display: inline-block; width: 18px; height: 0; border-top: 3px solid #D7362B; }
+.diamante-leyenda i.ley-azul { border-top: 2px dashed #2E6FA6; }
+
+/* --- Inicio: título e introducción a la izquierda, escena a la derecha -------------- */
+.inicio-arriba { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); grid-template-areas: "titulo escena" "texto escena"; column-gap: var(--s4); row-gap: 0; align-items: end; margin-top: 6px; }
+.inicio-arriba > * { min-width: 0; }
+.inicio-arriba .inicio-titulo { grid-area: titulo; max-width: 16ch; margin-bottom: 14px; }
+.inicio-texto { grid-area: texto; align-self: start; }
+.inicio-escena { grid-area: escena; display: grid; gap: 10px; align-self: center; }
+.inicio-escena .escenario { aspect-ratio: 16 / 11; min-height: 0; }
+.control-altitud.solo { margin: 0; padding: 12px 16px; }
+@media (max-width: 900px) {
+  .inicio-arriba { grid-template-columns: 1fr; grid-template-areas: "titulo" "escena" "texto"; row-gap: 14px; }
+  .inicio-escena .escenario { aspect-ratio: 4 / 3; }
+}
+
+/* --- Anexo: el vuelo de cada tipo ---------------------------------------------------- */
+.vuelo { width: 100%; max-width: 420px; height: auto; display: block; }
+.vuelo-t { font-size: 10px; font-weight: 600; fill: var(--enrarecido); text-transform: uppercase; letter-spacing: 0.06em; }
+.vuelo-eje { font-size: 9px; fill: var(--ceniza); }
+.vuelo-n { font-size: 10px; font-weight: 700; fill: var(--tinta); font-family: var(--mono, monospace); }
+.vuelo-piso { stroke: var(--tezontle); stroke-width: 1; }
+.vuelo-piso.tenue { stroke: var(--rejilla); stroke-dasharray: 2 3; }
+.vuelo-zona { fill: var(--rejilla); }
+.vuelo-sin { fill: none; stroke: var(--ceniza); stroke-width: 1.6; stroke-dasharray: 4 3; }
+.vuelo-real { fill: none; stroke-width: 2.6; stroke-linecap: round; }
