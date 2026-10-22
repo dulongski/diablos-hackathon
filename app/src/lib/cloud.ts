@@ -6,9 +6,9 @@
  * dónde cae la nube entera, y cuánto se corre esa nube al cambiar de estadio.
  *
  * El release base se resuelve UNA vez y después se perturba directamente, en vez de
- * resolver el problema inverso para cada envío. Es más rápido —dos integraciones por
+ * resolver el problema inverso para cada envío. Es más rápido , dos integraciones por
  * envío en lugar de nueve, que es lo que permite mover un control y ver mil lanzamientos
- * responder— y además es lo que de verdad pasa: el lanzador varía el brazo, y el quiebre
+ * responder,  y además es lo que de verdad pasa: el lanzador varía el brazo, y el quiebre
  * es consecuencia.
  */
 import { predict, toPlus, type Model } from './gbm';

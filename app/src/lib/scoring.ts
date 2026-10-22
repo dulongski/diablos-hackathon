@@ -2,8 +2,8 @@
  * Del lanzamiento al Stuff+.
  *
  * Une las dos mitades del sistema: el integrador produce la forma fisica y el ensamble de
- * arboles la convierte en un indice. Como el modelo Stuff+ solo ve forma —nunca ubicacion,
- * conteo ni parque— basta con transferir la forma a otro aire y volver a puntuar para
+ * arboles la convierte en un indice. Como el modelo Stuff+ solo ve forma , nunca ubicacion,
+ * conteo ni parque,  basta con transferir la forma a otro aire y volver a puntuar para
  * obtener el contrafactual: el mismo lanzamiento, otro estadio.
  */
 import { predict, toPlus, type Model } from './gbm';
@@ -22,7 +22,7 @@ export interface Escala { center: number; scale: number }
  *
  * `ref` es la forma a nivel del mar y `traj` la del aire que se esta evaluando. La
  * distincion importa: hay features que el aire mueve y otras que no, y mezclarlas produce
- * combinaciones imposibles —mucha eficiencia de giro con poco movimiento— donde el modelo
+ * combinaciones imposibles (mucha eficiencia de giro con poco movimiento) donde el modelo
  * extrapola sin control.
  *
  * Espeja exactamente `TRANSFERRED` en src/stuffplus/physics.py.
@@ -79,7 +79,7 @@ export interface Puntuacion {
 /**
  * Puntua un lanzamiento en un aire dado.
  *
- * Se resuelve una sola vez el release —el brazo no cambia— y se suelta en los dos aires.
+ * Se resuelve una sola vez el release (el brazo no cambia) y se suelta en los dos aires.
  * La forma a nivel del mar sirve de referencia para las features invariantes.
  */
 export function scorePitch(

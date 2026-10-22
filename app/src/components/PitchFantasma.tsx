@@ -1,5 +1,5 @@
 /**
- * EL PITCH FANTASMA — el elemento firma de la página.
+ * EL PITCH FANTASMA: el elemento firma de la página.
  *
  * Dos pelotas salen de la misma mano, en el mismo instante, con el mismo brazo y el mismo
  * giro. Una vuela en el aire del Harp Helú y la otra a nivel del mar. Llegan al plato

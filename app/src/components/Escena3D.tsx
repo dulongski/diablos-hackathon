@@ -315,7 +315,7 @@ function Contenido({ pares, vista = 'plato', escalera, onProgreso }: Escena3DPro
 
       {escalera && principal && Array.from({ length: 8 }, (_, i) => {
         // Cuatro pulgadas sobre sesenta pies son invisibles a escala real. En vez de
-        // exagerar la distancia —que sería mentir sobre la magnitud— se dibujan travesaños
+        // exagerar la distancia (que sería mentir sobre la magnitud) se dibujan travesaños
         // entre las dos trayectorias. La separación se lee porque los travesaños crecen.
         const f = 0.3 + (i / 7) * 0.7;
         const a = principal.alt.points[Math.floor(f * (principal.alt.points.length - 1))];

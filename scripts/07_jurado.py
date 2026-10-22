@@ -54,7 +54,7 @@ def main() -> None:
     s = scale["stuff"]
     df["stuff_oof"] = 100 + 10 * (-oof[0] - s["center"]) / s["scale"]
     tramos = [-np.inf, 80, 90, 100, 110, 120, np.inf]
-    nombres_t = ["< 80", "80–90", "90–100", "100–110", "110–120", "120 +"]
+    nombres_t = ["< 80", "80-90", "90-100", "100-110", "110-120", "120 +"]
     df["tramo"] = pd.cut(df.stuff_oof, tramos, labels=nombres_t)
     g = df.groupby("tramo", observed=True)
     cal = pd.DataFrame({

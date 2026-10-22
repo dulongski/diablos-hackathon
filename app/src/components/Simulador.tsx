@@ -1,5 +1,5 @@
 /**
- * SIMULADOR — la herramienta del pitching coach.
+ * SIMULADOR: la herramienta del pitching coach.
  *
  * No evalúa un lanzamiento: evalúa un repertorio. Se define un lanzamiento base y cuánto varía
  * tiro a tiro, y se ven miles de lanzamientos caer en el plato en los dos aires. Lo que importa
@@ -101,7 +101,7 @@ export function Simulador({ metros, arrastre, model, helpers, escala }: Simulado
    *
    * El flag `is_rhp` por sí solo no mueve nada: es la feature menos importante del modelo
    * (0.13 % de la ganancia, puesto 20 de 20). Lo que de verdad distingue a un zurdo es la
-   * geometría, y en los datos es un espejo casi exacto — la recta mediana de un diestro
+   * geometría, y en los datos es un espejo casi exacto: la recta mediana de un diestro
    * sale a +1.57 ft con +8.4 in de quiebre horizontal, y la de un zurdo a −1.56 con −8.3.
    * `RelSide` es, de hecho, la feature más importante del modelo.
    */

@@ -3,7 +3,7 @@
  *
  * Cada punto es un envío. Azul: dónde cae al nivel del mar. Rojo: dónde cae exactamente el
  * mismo envío en el aire del Harp Helú. La nube entera se corre hacia abajo, y ese
- * corrimiento —no el de un lanzamiento perfecto— es lo que cambia el porcentaje de strikes.
+ * corrimiento (no el de un lanzamiento perfecto) es lo que cambia el porcentaje de strikes.
  *
  * Va en canvas y no en SVG: con miles de puntos por nube, SVG crea miles de nodos y el
  * arrastre de un control deja de ser fluido.

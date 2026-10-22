@@ -1,5 +1,5 @@
 /**
- * LANZADORES — la pregunta del club: qué lanzadores sufren la altitud y cuáles aguantan.
+ * LANZADORES: la pregunta del club: qué lanzadores sufren la altitud y cuáles aguantan.
  * Entregable 1 (Stuff+, Location+ y Pitching+ por pitcher; CDMX contra nivel del mar).
  *
  * Primero el mapa, que contesta la pregunta de fichaje de un vistazo: qué tan bueno es cada
@@ -28,7 +28,7 @@ function ordenar(p: Pitcher[], o: Orden): Pitcher[] {
   return c.filter(x => x.stuff_hh >= 100).sort((a, b) => a.sd_juego - b.sd_juego);
 }
 
-const mano = (m: Pitcher['mano']) => (m === 'Left' ? 'Zurdo' : m === 'Right' ? 'Derecho' : '—');
+const mano = (m: Pitcher['mano']) => (m === 'Left' ? 'Zurdo' : m === 'Right' ? 'Derecho' : 's/d');
 
 /* ------------------------------------------------------------------ el mapa */
 

@@ -1,5 +1,5 @@
 /**
- * MÉTODO — cómo se mide y qué tan confiable es. Se lee como un artículo corto: primero la idea en
+ * MÉTODO: cómo se mide y qué tan confiable es. Se lee como un artículo corto: primero la idea en
  * palabras simples, después el detalle técnico y las cifras de validación.
  */
 import type { ReactNode } from 'react';
@@ -78,8 +78,8 @@ export function Metodo({ physics, models }: { physics: Record<string, any>; mode
                    <p className="figura-titulo">{L('Cómo se reparte Stuff+ en la LMB', 'How Stuff+ is spread across the LMB')}</p>
                    <Campana pct={models.distribucion_stuff_plus} /></>}>
             <p>{L(
-              'Un modelo mira sólo la física de cada lanzamiento —velocidad, movimiento, giro, desde dónde sale— y estima cuántas carreras le quita al rival en promedio. No mira el resultado (un buen lanzamiento puede terminar en jonrón por suerte), ni la ubicación, ni el bateador, ni el estadio.',
-              'A model looks only at the physics of each pitch —velocity, movement, spin, release point— and estimates how many runs it saves on average. It does not look at the outcome (a good pitch can end in a homer by luck), the location, the hitter or the ballpark.')}</p>
+              'Un modelo mira sólo la física de cada lanzamiento (velocidad, movimiento, giro, desde dónde sale) y estima cuántas carreras le quita al rival en promedio. No mira el resultado (un buen lanzamiento puede terminar en jonrón por suerte), ni la ubicación, ni el bateador, ni el estadio.',
+              'A model looks only at the physics of each pitch (velocity, movement, spin, release point) and estimates how many runs it saves on average. It does not look at the outcome (a good pitch can end in a homer by luck), the location, the hitter or the ballpark.')}</p>
             <p>{L('Después ese valor se pasa a una escala fácil de leer:', 'That value is then put on an easy-to-read scale:')}</p>
             <pre className="formula">Stuff+ = 100 + 10 × z(−{L('carreras esperadas', 'expected runs')})</pre>
             <p className="nota">{L(
@@ -138,14 +138,14 @@ export function Metodo({ physics, models }: { physics: Record<string, any>; mode
             <table className="tabla-simple">
               <thead><tr><th>{L('Capa', 'Layer')}</th><th>{L('Qué ve', 'What it sees')}</th><th className="n">{L('Error', 'Error')}</th><th className="n">{L('Mejora vs. base', 'Gain vs. baseline')}</th></tr></thead>
               <tbody>
-                <tr><td>{L('Base (promedio por conteo)', 'Baseline (count average)')}</td><td>—</td><td className="num n">{nf(nulo, 4)}</td><td className="num n tenue">—</td></tr>
+                <tr><td>{L('Base (promedio por conteo)', 'Baseline (count average)')}</td><td>0</td><td className="num n">{nf(nulo, 4)}</td><td className="num n tenue">base</td></tr>
                 <tr><td>Stuff+</td><td>{L('sólo física', 'physics only')}</td><td className="num n">{nf(hp.stuff?.rmse ?? 0.2654, 4)}</td><td className="num n destacado">{mejora(hp.stuff?.rmse ?? 0.2654)}</td></tr>
                 <tr><td>Location+</td><td>{L('+ ubicación y conteo', '+ location and count')}</td><td className="num n">{nf(hp.location?.rmse ?? 0.2624, 4)}</td><td className="num n destacado">{mejora(hp.location?.rmse ?? 0.2624)}</td></tr>
                 <tr><td>Pitching+</td><td>{L('+ repertorio y secuencia', '+ arsenal and sequence')}</td><td className="num n">{nf(hp.pitching?.rmse ?? 0.2623, 4)}</td><td className="num n destacado">{mejora(hp.pitching?.rmse ?? 0.2623)}</td></tr>
               </tbody>
             </table>
             <div className="mini-cifras">
-              <div><span>{L('Temporada nueva', 'New season')}<Info>{L('Entrena con 2024–2025 y se prueba en 2026.', 'Trained on 2024–2025, tested on 2026.')}</Info></span><b className="num">{nf(models.holdout_temporada?.stuff?.rmse ?? 0.2636, 4)}</b></div>
+              <div><span>{L('Temporada nueva', 'New season')}<Info>{L('Entrena con 2024-2025 y se prueba en 2026.', 'Trained on 2024-2025, tested on 2026.')}</Info></span><b className="num">{nf(models.holdout_temporada?.stuff?.rmse ?? 0.2636, 4)}</b></div>
               <div><span>{L('Estadio nuevo', 'New ballpark')}<Info>{L('Entrena sin los estadios de altitud extrema y se prueba en ellos. Sale peor, y eso es justo lo que este trabajo mide: un modelo de nivel del mar no sirve igual en altura.', 'Trained without extreme-altitude parks and tested on them. It does worse, which is exactly what this work measures: a sea-level model does not carry over to altitude.')}</Info></span><b className="num">{nf(models.holdout_parque?.stuff?.rmse ?? 0.275, 4)}</b></div>
               <div><span>{L('Strike cantado', 'Called strike')}<Info>{L('Qué tanto mejor que adivinar con la tasa promedio predice el modelo si un lanzamiento será strike cantado (1 = perfecto, 0 = igual que adivinar).', 'How much better than guessing with the average rate the model predicts a called strike (1 = perfect, 0 = same as guessing).')}</Info></span><b className="num">+{nf(models.componentes?.y_called_strike?.skill ?? 0.726, 2)}</b></div>
             </div>

@@ -131,7 +131,7 @@ export function App() {
               <header className="cabeza-pregunta">
                 <p className="eyebrow">Entregable 4 · Dashboard simulador</p>
                 <h2>¿Cuánto valdría este lanzamiento aquí y a nivel del mar?
-                  <Info ancho>Define un lanzamiento con sus números físicos —velocidad, giro, movimiento, punto de salida— y cuánto varía de tiro a tiro. El modelo lanza miles de copias en los dos aires y muestra dónde caen y cuánto vale cada una. Todo corre en esta página: no hay servidor detrás.</Info>
+                  <Info ancho>Define un lanzamiento con sus números físicos (velocidad, giro, movimiento, punto de salida) y cuánto varía de tiro a tiro. El modelo lanza miles de copias en los dos aires y muestra dónde caen y cuánto vale cada una. Todo corre en esta página: no hay servidor detrás.</Info>
                 </h2>
                 <p className="entrada ancha">
                   Para el pitching coach: escribe los números de un lanzamiento (los da Trackman después de cada

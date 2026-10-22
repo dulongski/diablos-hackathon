@@ -1,5 +1,5 @@
 /**
- * MAPA DE MOVIMIENTO de los lanzamientos más y menos efectivos — Entregable 4.
+ * MAPA DE MOVIMIENTO de los lanzamientos más y menos efectivos: Entregable 4.
  *
  * Lanzamientos reales de derechos (el movimiento lateral de un zurdo es el espejo), calificados
  * con el aire del Harp Helú. Para cada tipo se dibuja el 10 % mejor y el 10 % peor: la distancia

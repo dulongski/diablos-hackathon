@@ -1,5 +1,5 @@
 /**
- * ¿FUNCIONA? — criterios 1 (calidad) y 2 (robustez fuera de muestra).
+ * ¿FUNCIONA?: criterios 1 (calidad) y 2 (robustez fuera de muestra).
  *
  * La prueba que entiende cualquiera: si la calificación sirve, los lanzamientos con Stuff+ alto
  * deben permitir menos carreras que los de Stuff+ bajo, y eso tiene que pasar con lanzadores que
@@ -80,7 +80,7 @@ const COMP: Record<string, string> = {
 
 export function Confianza({ j }: { j: Jurado }) {
   const c = j.calibracion;
-  const bajo = c[0], alto = c.find(t => t.tramo === '110–120') ?? c[c.length - 1];
+  const bajo = c[0], alto = c.find(t => t.tramo === '110-120') ?? c[c.length - 1];
   const hp = j.holdout.pitcher, nul = j.modelo_nulo;
   // r² fuera de muestra en %: qué parte de lo que pasa explica el modelo. El nulo explica ~0 %.
   const mejora = (r2: number) => nf(r2 * 100, 1) + ' %';
@@ -116,7 +116,7 @@ export function Confianza({ j }: { j: Jurado }) {
           <Prueba titulo="Lanzadores nuevos · pitcher holdout"
                   que="Se entrena sin un grupo de lanzadores y se prueba sólo con ellos."
                   cifra={mejora(hp.stuff.r2)} unidad={`de lo que pasa, explicado · el nulo: ${nf(nul.r2 * 100, 2)} %`}
-                  nota={`Pitching+, con todo el contexto: ${mejora(hp.pitching.r2)}. El modelo nulo —promedio por conteo— explica ${nf(nul.r2 * 100, 2)} %.`} />
+                  nota={`Pitching+, con todo el contexto: ${mejora(hp.pitching.r2)}. El modelo nulo (promedio por conteo) explica ${nf(nul.r2 * 100, 2)} %.`} />
           <Prueba titulo="Temporada nueva · season holdout"
                   que="Se entrena con 2024 y 2025 y se prueba con 2026."
                   cifra={mejora(j.holdout.temporada.stuff.r2)} unidad={`de lo que pasa, explicado · el nulo: ${nf(nul.r2 * 100, 2)} %`}

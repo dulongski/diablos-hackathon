@@ -1,9 +1,9 @@
 /**
- * INICIO — para qué sirve esto, en una pantalla, para alguien que nunca ha visto béisbol.
+ * INICIO: para qué sirve esto, en una pantalla, para alguien que nunca ha visto béisbol.
  *
  * El orden es el de una conversación con el director deportivo: qué pregunta respondemos, para
  * quién, cómo leer los números, qué responde cada pestaña (mapeado a los entregables del reto) y
- * las tres respuestas que cambian decisiones. La física —por qué la altitud importa— va después,
+ * las tres respuestas que cambian decisiones. La física (por qué la altitud importa) va después,
  * como explicación, no como titular.
  */
 import type { ReactNode } from 'react';
@@ -25,7 +25,7 @@ export function Inicio({ j, irA, porQue }: { j: Jurado; irA: (v: Vista) => void;
   const masPierde = [...p].sort((a, b) => a.delta_hh - b.delta_hh)[0];
   const fichaje = [...p].filter(x => x.delta_hh > -1 && x.sd_juego < 2.5).sort((a, b) => b.stuff_hh - a.stuff_hh)[0];
   const cal = j.calibracion;
-  const alto = cal.find(c => c.tramo === '110–120');
+  const alto = cal.find(c => c.tramo === '110-120');
   const bajo = cal.find(c => c.tramo === '< 80');
   const mar = j.riesgo.find(r => r.altitude_category === 'No Altitude');
   const hh = j.riesgo.find(r => r.altitude_category === 'Extreme Altitude');
@@ -60,7 +60,7 @@ export function Inicio({ j, irA, porQue }: { j: Jurado; irA: (v: Vista) => void;
     },
     {
       q: '¿Se puede confiar en la calificación?',
-      a: alto && bajo ? <>Con pitchers que el modelo nunca vio: Stuff+ de 110–120 permite <b>{sg(alto.carreras_100)}</b> carreras por cada 100 lanzamientos; menos de 80, <b>{sg(bajo.carreras_100)}</b>.</> : null,
+      a: alto && bajo ? <>Con pitchers que el modelo nunca vio: Stuff+ de 110-120 permite <b>{sg(alto.carreras_100)}</b> carreras por cada 100 lanzamientos; menos de 80, <b>{sg(bajo.carreras_100)}</b>.</> : null,
       ent: 'Criterios 1 y 2', v: 'confianza',
     },
   ];
@@ -72,8 +72,8 @@ export function Inicio({ j, irA, porQue }: { j: Jurado; irA: (v: Vista) => void;
           <p className="eyebrow">Hackathon ISAC 2026 · Diablos Rojos del México</p>
           <h1 className="inicio-titulo">¿Qué lanzadores le sirven a los Diablos a 2,240 metros?</h1>
           <p className="inicio-lede">
-            Calificamos cada lanzamiento de la Liga Mexicana de Béisbol con <b>Stuff+</b> —una
-            calificación donde 100 es el promedio de la liga— y calculamos cuánto vale ese mismo
+            Calificamos cada lanzamiento de la Liga Mexicana de Béisbol con <b>Stuff+</b> (una
+            calificación donde 100 es el promedio de la liga) y calculamos cuánto vale ese mismo
             lanzamiento en el Estadio Alfredo Harp Helú, donde el aire es 20 % más delgado y la
             pelota se mueve menos.
           </p>
@@ -88,7 +88,7 @@ export function Inicio({ j, irA, porQue }: { j: Jurado; irA: (v: Vista) => void;
             </div>
             <div>
               <span className="etiqueta">Con qué datos</span>
-              <p>635,002 lanzamientos de la LMB, 2024–2026, medidos con Trackman. Nombres anonimizados por la liga.</p>
+              <p>635,002 lanzamientos de la LMB, 2024-2026, medidos con Trackman. Nombres anonimizados por la liga.</p>
             </div>
           </div>
         </div>

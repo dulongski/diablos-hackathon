@@ -18,7 +18,7 @@ export function BarraInstrumento({ metros }: { metros: number }) {
           </span>
           <span className="lectura oculta-movil">
             <span className="etiqueta">datos</span>
-            <b className="num">LMB 24–26</b>
+            <b className="num">LMB 24-26</b>
           </span>
         </div>
       </div>

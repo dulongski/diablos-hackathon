@@ -1,5 +1,5 @@
 /**
- * RESUMEN — el argumento en una pantalla: tres ideas, sus gráficas y la tabla para decidir.
+ * RESUMEN: el argumento en una pantalla: tres ideas, sus gráficas y la tabla para decidir.
  * Las explicaciones viven en los íconos "i"; lo que se ve primero son las cifras.
  */
 import { useState } from 'react';

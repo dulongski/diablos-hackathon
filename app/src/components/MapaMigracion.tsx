@@ -1,7 +1,7 @@
 /**
  * EL MAPA DE MOVIMIENTO.
  *
- * El plano clásico —movimiento lateral contra vertical— con cada tipo de lanzamiento dos veces:
+ * El plano clásico (movimiento lateral contra vertical) con cada tipo de lanzamiento dos veces:
  * dónde vive al nivel del mar y dónde termina en el aire del Harp Helú. La flecha es el efecto de
  * la altitud, medido dentro del mismo lanzador, así que no lo contamina quién lanza dónde.
  */
