@@ -73,6 +73,9 @@ table { border-collapse: collapse; width: 100%; }
 .portada .cifra b { color: #F6F3EA !important; }
 .portada .cifra span { color: #A1A69C; }
 
+.conteo { border-collapse: separate; border-spacing: 5px; width: 100%; font-family: 'JetBrains Mono', monospace; font-size: 17px; }
+.conteo th { font-size: 13px; color: #6E7A73; font-weight: 600; }
+.conteo td { text-align: center; padding: 14px 6px; border-radius: 8px; }
 .logos { display: inline-flex; align-items: center; gap: 14px; }
 .logos img { display: block; width: auto; }
 .pie .l-isac { height: 20px; } .pie .l-diablos { height: 24px; }
@@ -95,12 +98,13 @@ table { border-collapse: collapse; width: 100%; }
   medimos cuánto vale cada uno en el Estadio Alfredo Harp Helú, donde hay 20 % menos aire. La respuesta corta es
   <b>Lanzador 1099</b> sí y <b>Lanzador 529</b> no tanto.</p>
   <div class="cifras"><div class="cifra"><b style="color:#10201A">635,002</b><span>lanzamientos, 2024 a 2026</span></div><div class="cifra"><b style="color:#2E6FA6">561</b><span>lanzadores comparados</span></div><div class="cifra"><b style="color:#D7362B">−2.4</b><span>puntos de Stuff+ que pierde el lanzamiento promedio en altura</span></div></div>
-<div class="pie"><span>Diablos Stuff+</span><span>Hackathon ISAC 2026</span></div></section><section class="lam "><div class="eyebrow">Qué responde este reporte</div><h2>Siete preguntas del club, cada una con su número</h2><p class="en-esta">En esta lámina están las preguntas del reto y la lámina donde respondemos cada una.</p>
+<div class="pie"><span>Diablos Stuff+</span><span>Hackathon ISAC 2026</span></div></section><section class="lam "><div class="eyebrow">Qué responde este reporte</div><h2>Ocho preguntas del club, cada una con su número</h2><p class="en-esta">En esta lámina están las preguntas del reto y la lámina donde respondemos cada una.</p>
 <div class="cuerpo">
 <table class="mapa-preguntas">
 <tr><td>¿Cómo calificamos un lanzamiento y por qué la altitud cambia todo?</td><td>Método en lenguaje simple</td><td>3 a 9</td></tr>
 <tr><td>¿Se puede confiar en la calificación?</td><td>Ordena carreras con lanzadores nuevos</td><td>10 a 12</td></tr>
 <tr><td>¿Se cumplen las hipótesis del reto?</td><td>H1 y H4 sí, H2 y H3 en parte</td><td>13 a 17</td></tr>
+<tr><td>¿Qué hubiera pasado con otra decisión?</td><td>La altura cuesta 1.5 carreras por cada 100</td><td>21</td></tr>
 <tr><td>¿Qué perfil físico rinde en el Harp Helú?</td><td>Menos movimiento, menos dependencia del giro</td><td>18</td></tr>
 <tr><td>¿Qué lanzadores sufren más la altitud y cuáles aguantan?</td><td>58 aguantan y 246 pierden mucho</td><td>19 a 21</td></tr>
 <tr><td>¿Cuánto riesgo extra de jonrón hay en casa?</td><td>+31 pies por elevado</td><td>16</td></tr>
@@ -139,7 +143,7 @@ table { border-collapse: collapse; width: 100%; }
 <tr><td><b>H2</b> El cambio de velocidad gana valor relativo</td><td>Su cambio contra su propia recta, lanzador por lanzador</td><td class="v-parcial">En parte</td></tr>
 <tr><td><b>H3</b> Los lanzadores de rodados valen más en altura</td><td>Carreras contra rodados en cada entorno, mismos lanzadores</td><td class="v-parcial">En parte</td></tr>
 <tr><td><b>H4</b> El giro solo no predice Stuff+, importa el movimiento</td><td>Peso en el modelo y experimento controlado</td><td class="v-si">Se confirma</td></tr>
-<tr><td><b>CF</b> Modelo secundario, Causal Forest</td><td>Efecto de la altura en carreras reales, por perfil de lanzador</td><td class="v-si">Coincide</td></tr>
+<tr><td><b>CF</b> Modelo secundario, Causal Forest</td><td>Qué lanzamiento conviene por conteo y entorno, y el costo de la altura en carreras</td><td class="v-parcial">Promedio sí</td></tr>
 </table>
 <p class="nota">Toda la incertidumbre sale de remuestrear lanzadores completos 2,000 veces (bootstrap por lanzador). Un intervalo que no cruza el cero no es casualidad.</p></div><div class="pie"><span class="logos"><img src="file:///home/user/diablos-hackathon/app/public/logos/isac.svg" alt="ISAC" class="l-isac"><img src="file:///home/user/diablos-hackathon/app/public/logos/diablos.png" alt="Diablos Rojos del México" class="l-diablos"></span><span>Diablos Stuff+ · Hackathon ISAC 2026 · Reto Diablos Rojos del México</span><span>06 / 23</span></div></section><section class="lam "><div class="eyebrow">Método · paso 1</div><h2>La pelota nos dice cuánto aire había</h2><p class="en-esta">En esta lámina está cómo medimos la densidad del aire sin saber el estadio.</p>
 <div class="cuerpo">
@@ -167,7 +171,7 @@ table { border-collapse: collapse; width: 100%; }
   <div class="flecha">→</div>
   <div class="paso"><span>2</span><h3>Volar en otro aire</h3><p>Mismo brazo, otro aire. El simulador da la forma que tendría el lanzamiento en el otro estadio. Lámina 8.</p></div>
   <div class="flecha">→</div>
-  <div class="paso"><span>3</span><h3>Calificar y comparar</h3><p>Un modelo de árboles (LightGBM) que sólo ve física califica las dos formas. La diferencia es el efecto del aire.</p></div>
+  <div class="paso"><span>3</span><h3>Calificar y comparar</h3><p>Un modelo de árboles (LightGBM) que sólo ve física califica las dos formas. La diferencia es el efecto del aire. Location+ suma ubicación y conteo, y Pitching+ suma el arsenal (diferencias contra la recta, túnel, uso y secuencia).</p></div>
 </div>
 <p class="nota">Si la altitud fuera una variable del modelo, su efecto se mezclaría con <i>quién</i> lanza en altura, y no podrías calificar en el Harp Helú a alguien que nunca ha lanzado ahí. Literatura en la lámina 23.</p></div><div class="pie"><span class="logos"><img src="file:///home/user/diablos-hackathon/app/public/logos/isac.svg" alt="ISAC" class="l-isac"><img src="file:///home/user/diablos-hackathon/app/public/logos/diablos.png" alt="Diablos Rojos del México" class="l-diablos"></span><span>Diablos Stuff+ · Hackathon ISAC 2026 · Reto Diablos Rojos del México</span><span>09 / 23</span></div></section><section class="lam "><div class="eyebrow">Validación · física</div><h2>El vuelo simulado acierta, con 69 % menos error que no corregir</h2><p class="en-esta">En esta lámina predecimos lo que 444 lanzadores tiraron en altura a partir de lo que tiraron a nivel del mar.</p>
 <div class="cuerpo">
@@ -252,17 +256,12 @@ table { border-collapse: collapse; width: 100%; }
   <div class="salto"><div><span>Nivel del mar</span><b style="color:#2E6FA6">104.8</b></div><div class="fl">→</div>
   <div><span>Harp Helú</span><b style="color:#D7362B">97.2</b></div><div><span>Cambio</span><b style="color:#D7362B">−7.6</b></div></div>
   <p>Location+ 102.0 · Pitching+ 101.7 · constancia ± 4.2 entre juegos · rodados 31 %</p></div></div>
-<p class="grande centro">A nivel del mar valen casi lo mismo (104.5 contra 104.8). En el Harp Helú los separan 6.9 puntos, casi tres cuartos de desviación estándar.</p></div><div class="pie"><span class="logos"><img src="file:///home/user/diablos-hackathon/app/public/logos/isac.svg" alt="ISAC" class="l-isac"><img src="file:///home/user/diablos-hackathon/app/public/logos/diablos.png" alt="Diablos Rojos del México" class="l-diablos"></span><span>Diablos Stuff+ · Hackathon ISAC 2026 · Reto Diablos Rojos del México</span><span>20 / 23</span></div></section><section class="lam "><div class="eyebrow">Modelo secundario · Causal Forest</div><h2>Un método que no usa Stuff+ llega a los mismos lanzadores</h2><p class="en-esta">En esta lámina está el efecto de la altura en carreras reales, estimado para cada perfil de lanzador.</p>
+<p class="grande centro">A nivel del mar valen casi lo mismo (104.5 contra 104.8). En el Harp Helú los separan 6.9 puntos, casi tres cuartos de desviación estándar.</p></div><div class="pie"><span class="logos"><img src="file:///home/user/diablos-hackathon/app/public/logos/isac.svg" alt="ISAC" class="l-isac"><img src="file:///home/user/diablos-hackathon/app/public/logos/diablos.png" alt="Diablos Rojos del México" class="l-diablos"></span><span>Diablos Stuff+ · Hackathon ISAC 2026 · Reto Diablos Rojos del México</span><span>20 / 23</span></div></section><section class="lam "><div class="eyebrow">Modelo secundario · Causal Forest</div><h2>En carreras reales, la altura cuesta 1.5 por cada 100 lanzamientos</h2><p class="en-esta">En esta lámina el Causal Forest mide el costo de la altura comparando a cada lanzador consigo mismo, sin usar Stuff+.</p>
 <div class="cuerpo">
-<div class="cuatro">
-  <div class="cifra"><b style="color:#D7362B">+1.46</b><span>carreras más por cada 100 lanzamientos cuesta la altura (IC 90 %, 1.23 a 1.69)</span></div>
-  <div class="cifra"><b style="color:#2E6FA6">333</b><span>lanzadores comparados consigo mismos en los dos entornos</span></div>
-  <div class="cifra"><b style="color:#1A9A6E">0.41</b><span>correlación con la pérdida de Stuff+, que el bosque nunca vio</span></div>
-  <div class="cifra"><b style="color:#1A9A6E">1075 · 682 · 1099</b><span>los menos afectados, los mismos que recomienda Stuff+</span></div>
-</div>
-<div class="dos">
-  <p class="grande">Cada lanzador aparece dos veces, una por entorno, y se compara consigo mismo. Un bosque causal (Double Machine Learning con 2,000 árboles honestos) busca qué rasgos hacen la altura más cara.</p>
-  <p>Lo que más mueve el efecto son los swings fallidos, el uso de slider, el Stuff+ a nivel del mar y los rodados. Con 333 lanzadores las diferencias entre perfiles son chicas. Por eso lo leemos como una confirmación independiente, no como otra lista.</p>
+<div class="dos ancho-izq">
+  <div><svg viewBox="0 0 620 300" class="g"><line x1="50" x2="620" y1="244.0" y2="244.0" stroke="#6E7A73"/><text x="42" y="249.0" text-anchor="end" class="eje">0</text><line x1="50" x2="620" y1="158.9" y2="158.9" stroke="#E3DCCB"/><text x="42" y="163.9" text-anchor="end" class="eje">+1</text><line x1="50" x2="620" y1="73.9" y2="73.9" stroke="#E3DCCB"/><text x="42" y="78.9" text-anchor="end" class="eje">+2</text><rect x="81.3" y="80.4" width="79.8" height="163.6" rx="4" fill="#D7362B" opacity=".8"/><line x1="121.2" x2="121.2" y1="125.8" y2="41.5" stroke="#10201A" stroke-width="2.5"/><circle cx="121.2" cy="130.3" r="7" fill="#10201A" stroke="#fff" stroke-width="2"/><text x="121.2" y="266" text-anchor="middle" class="et">Aguantan más</text><rect x="223.8" y="125.7" width="79.8" height="118.3" rx="4" fill="#D7362B" opacity=".8"/><line x1="263.8" x2="263.8" y1="166.6" y2="83.1" stroke="#10201A" stroke-width="2.5"/><circle cx="263.8" cy="123.0" r="7" fill="#10201A" stroke="#fff" stroke-width="2"/><text x="263.8" y="266" text-anchor="middle" class="et">Segundo grupo</text><rect x="366.4" y="118.7" width="79.8" height="125.3" rx="4" fill="#D7362B" opacity=".8"/><line x1="406.2" x2="406.2" y1="156.7" y2="79.8" stroke="#10201A" stroke-width="2.5"/><circle cx="406.2" cy="117.7" r="7" fill="#10201A" stroke="#fff" stroke-width="2"/><text x="406.2" y="266" text-anchor="middle" class="et">Tercer grupo</text><rect x="508.9" y="129.8" width="79.8" height="114.2" rx="4" fill="#D7362B" opacity=".8"/><line x1="548.8" x2="548.8" y1="166.2" y2="97.1" stroke="#10201A" stroke-width="2.5"/><circle cx="548.8" cy="107.9" r="7" fill="#10201A" stroke="#fff" stroke-width="2"/><text x="548.8" y="266" text-anchor="middle" class="et">Sufren más</text></svg><p class="nota">Lanzadores agrupados por el efecto que predice un bosque que no los vio. Barras, castigo observado con su intervalo. Puntos, castigo predicho.</p></div>
+  <div><p class="grande">El costo promedio es firme, <b>+1.46 carreras</b> por cada 100 lanzamientos (IC 90 % de 1.23 a 1.69). Es lo mismo que predice la física.</p>
+  <p>Pero las barras no suben. Las carreras de unos cientos de lanzamientos tienen demasiado azar para separar a un lanzador de otro. Por eso decides con Stuff+, que mide algo estable, la forma. El bosque sí apunta en la misma dirección que Stuff+ (correlación de 0.21 fuera de muestra).</p></div>
 </div></div><div class="pie"><span class="logos"><img src="file:///home/user/diablos-hackathon/app/public/logos/isac.svg" alt="ISAC" class="l-isac"><img src="file:///home/user/diablos-hackathon/app/public/logos/diablos.png" alt="Diablos Rojos del México" class="l-diablos"></span><span>Diablos Stuff+ · Hackathon ISAC 2026 · Reto Diablos Rojos del México</span><span>21 / 23</span></div></section><section class="lam "><div class="eyebrow">Qué hacer</div><h2>Ficha arsenales de cutter, slider y splitter, y no pagues por movimiento</h2><p class="en-esta">En esta lámina están las decisiones concretas para el director deportivo y el pitching coach.</p>
 <div class="cuerpo">
 <div class="dos">

@@ -21,8 +21,9 @@ cambian tus decisiones.
 2. **De 561 lanzadores, 58 aguantan la altura.** Se apoyan en cutter, slider y splitter, y provocan
    rodados.
 3. **Probamos las cuatro hipótesis del reto.** H1 y H4 se confirman. H2 y H3 se confirman en parte.
-4. **Un Causal Forest sobre carreras reales llega a los mismos lanzadores**, sin usar Stuff+. Su
-   estimación correlaciona 0.41 con la pérdida de Stuff+.
+4. **Un Causal Forest sobre carreras reales confirma el costo de la altura**, 1.46 carreras más por cada
+   100 lanzamientos, sin usar Stuff+. También muestra por qué necesitas la física para separar a un
+   lanzador de otro, porque las carreras solas no alcanzan.
 
 ## 1. Planteamiento
 
@@ -159,6 +160,12 @@ lanzamientos por hoja y regularización $L_2 = 5$). Sólo cambia lo que ve cada 
 | Location+ | 27 | Además, dónde llegó la pelota, el conteo y el lado del bateador |
 | Pitching+ | 37 | Además, el arsenal del lanzador y la secuencia con el lanzamiento anterior |
 
+La función de pérdida es el error cuadrático (L2) sobre el valor en carreras. Pitching+ incluye las
+variables relacionales de arsenal que pide el reto, todas contra la recta principal del lanzador en esa
+temporada. Diferencia de velocidad, de elevación y de movimiento lateral, similitud de túnel (qué tan
+parecido sale de la mano), uso de cada lanzamiento, tamaño del arsenal, lanzamiento anterior y vuelta al
+orden.
+
 Stuff+ nunca ve ubicación, conteo, bateador ni estadio. Por eso lo puedes transferir. Para saber qué
 vale un lanzamiento en otro aire, le das la forma transferida y lo vuelves a calificar. La escala sigue
 la convención sabermétrica.
@@ -167,9 +174,11 @@ $$\text{Stuff+} = 100 + 10\, z\!\left(-\widehat{\text{RV}}\right)$$
 
 Aquí $z$ estandariza con la media y la desviación estándar de la liga. 100 es el promedio y cada 10
 puntos son una desviación estándar. El signo se invierte porque menos carreras es mejor para el
-lanzador. Aparte entrenamos ocho modelos de componente (swing, swing fallido, strike cantado,
-persecución, contacto débil, rodado, contacto duro y barril). Esos modelos explican de dónde sale el
-valor, pero no entran en el cálculo de Stuff+.
+lanzador. El reto propone que la calificación final sea una combinación ponderada de varios objetivos (swing
+fallido, persecución, strike cantado, contacto débil, rodado, contacto duro, valor en carreras). Elegimos
+predecir directo el valor esperado en carreras porque ya es esa combinación, ponderada por lo que cada
+resultado vale en el marcador, y así no tienes que inventar pesos. Los ocho modelos de componente sí los
+entrenamos, y explican de dónde sale cada calificación, pero no entran en el cálculo de Stuff+.
 
 ### 3.6 Validación fuera de muestra
 
@@ -215,18 +224,30 @@ de la cancha no permiten.
 
 ### 3.8 Modelo secundario, un Causal Forest
 
-La pregunta táctica es otra. ¿A qué perfil de lanzador le cuesta más la altura **en carreras reales**, sin
-usar Stuff+? Cada lanzador aparece dos veces, una por entorno. El tratamiento $T$ es lanzar en altura y
-el resultado $Y$ son sus carreras permitidas por cada 100 lanzamientos. Usamos el modelo parcialmente
-lineal de Double Machine Learning (Chernozhukov y coautores, 2018).
+Stuff+ valora lanzamientos. Un Causal Forest responde otra cosa, preguntas de qué hubiera pasado. Lo usamos
+para dos, con Double Machine Learning (Chernozhukov y coautores, 2018) y un bosque causal honesto (Wager y
+Athey, 2018).
 
-$$Y = \theta(X)\,T + g(X) + \varepsilon, \qquad T = m(X) + \eta$$
+$$Y = \theta(X)\,T + g(X, W) + \varepsilon, \qquad T = m(X, W) + \eta$$
 
-El efecto de la altura para un lanzador con rasgos $X$ es $\theta(X)$. Lo estimamos con un bosque
-causal honesto (Wager y Athey, 2018) sobre los residuos ortogonalizados. $X$ incluye su Stuff+ a nivel
-del mar, velocidad, swings fallidos, rodados, extensión, mano y el uso de cada tipo de lanzamiento. El
-bosque tiene 2,000 árboles, validación cruzada de 5 pliegues **agrupada por lanzador** y pesos por número
-de lanzamientos.
+Dos modelos de árboles predicen el resultado $Y$ y la decisión $T$ a partir de los controles $W$, y el
+bosque estima el efecto $\theta(X)$ sobre lo que esos modelos no explican.
+
+**La pregunta táctica, la que plantea el reto.** ¿Qué hubiera pasado si el pitcher lanzaba slider en vez de
+cambio en este conteo, contra este bateador? Cada lanzamiento de dos tipos (por ejemplo slider o cambio) es
+una observación. $T$ es elegir el primero, $Y$ es su valor en carreras, $X$ es el conteo, si el bateador es del
+mismo lado, el entorno (nivel del mar o altitud extrema) y si el lanzamiento anterior fue recta. $W$ controla
+lo que confunde la elección, la calidad del lanzador, cuánto usa cada tipo, la vuelta al orden, las manos y
+la velocidad de su recta. El resultado es una tabla por conteo, lado del bateador y entorno que dice qué
+lanzamiento conviene, en casa y de visitante. Contrastamos slider contra cambio, slider contra recta, cambio
+contra recta y curva contra slider.
+
+**La pregunta de entorno.** ¿Cuánto cuesta la altura en carreras reales, y le cuesta distinto a cada
+lanzador? Cada lanzador con al menos 120 lanzamientos en cada entorno aparece dos veces y se compara consigo
+mismo. $T$ es lanzar en altura, $Y$ son sus carreras por cada 100 lanzamientos, y $X$ son sus rasgos (Stuff+,
+velocidad, swings fallidos, rodados, extensión, mano y uso de cada tipo). Para no engañarnos, a cada lanzador
+le damos el efecto de un bosque que no lo vio y aplicamos la prueba GATES (Chernozhukov y coautores, 2018).
+Agrupamos por efecto predicho y comprobamos si el castigo observado sube de grupo en grupo.
 
 ## 4. Validación
 
@@ -392,15 +413,21 @@ Lanzador 529 (cambio y recta) baja de 104.8 a 97.2. Tu perfil de fichaje es Lanz
 slider y curva). Vale 104.5 a nivel del mar y 104.1 en el Harp Helú, el mejor Stuff+ de la liga en
 altura, y es de los más constantes entre juegos ($\pm 1.6$).
 
-### 6.4 El Causal Forest llega a los mismos lanzadores
+### 6.4 Lo que dice el Causal Forest
 
-Lanzar en altura cuesta en promedio **1.46 carreras más por cada 100 lanzamientos** (IC 90 % de 1.23 a
-1.69). El efecto estimado para cada lanzador correlaciona **0.41** con su pérdida de Stuff+, aunque el
-bosque nunca vio Stuff+ en altura. Los menos afectados son Lanzador 1075 (slider, recta y cutter),
-Lanzador 682 (slider y sinker) y Lanzador 1099 (cutter, slider y curva). Son los mismos que recomienda el
-modelo principal. Los rasgos que más mueven el efecto son los swings fallidos, el uso de slider, el
-Stuff+ a nivel del mar y los rodados. Las diferencias entre perfiles son chicas (de 1.23 a 1.64) con 333
-lanzadores, así que lee este resultado como confirmación y no como una lista aparte.
+**El costo promedio es firme.** Lanzar en altura cuesta **1.46 carreras más por cada 100 lanzamientos** (IC 90 %
+de 1.23 a 1.69), medido en el marcador y sin usar Stuff+. Es la misma dirección que predice la física.
+
+**Las diferencias entre lanzadores no se sostienen.** El bosque estima efectos entre 1.23 y 1.64, y para 331
+de 333 lanzadores el intervalo incluye el promedio. En la prueba fuera de muestra, el castigo observado no
+sube con el efecto predicho (pendiente de $-2.1$, IC 95 % de $-4.3$ a $+0.1$). El bosque sí aprende la misma
+dirección que Stuff+ (correlación de 0.21 fuera de muestra, $p < 0.001$), pero las carreras de unos cientos
+de lanzamientos tienen demasiado azar para confirmarlo lanzador por lanzador.
+
+Ese resultado justifica el diseño del trabajo. Para separar a un lanzador de otro necesitas algo estable, y
+eso es su forma, medida con física. Las carreras confirman el tamaño del castigo promedio. El análisis
+táctico por conteo usa los 635,002 lanzamientos en lugar de 333 lanzadores, y está en la pestaña Causal
+Forest del dashboard.
 
 ## 7. Recomendaciones
 
@@ -430,8 +457,8 @@ pierden mucho rinden más de visitante.
 - **No separamos aire de clima.** El índice de arrastre junta densidad, temperatura y humedad. Sirve para
   predecir movimiento, no para atribuirlo sólo a la altitud.
 - **No modelamos al bateador.** Desde la física, el barril casi no se puede predecir (1 % de habilidad).
-- **Stuff+ no es causal.** Es un modelo de valoración. El Causal Forest es exploratorio, con 333
-  lanzadores y diferencias chicas entre perfiles.
+- **Stuff+ no es causal.** Es un modelo de valoración. Para las preguntas de qué hubiera pasado usamos el
+  Causal Forest, que confirma el costo promedio pero no separa a un lanzador de otro.
 - **El exponente de Reynolds es empírico.** Lo calibramos y verificamos fuera de muestra, pero no sale de
   primeros principios.
 
@@ -445,7 +472,9 @@ python scripts/03_models.py        # las tres capas y sus holdouts
 python scripts/04_export.py        # modelo y tablas al simulador
 python scripts/05_deliverables.py  # entregables 1, 2 y 3
 python scripts/07_jurado.py        # tabla por lanzador, calibración y mapa
-python scripts/08_hipotesis.py     # H1 a H4 y Causal Forest
+python scripts/08_hipotesis.py     # H1 a H4
+python scripts/09_causal_forest.py # Causal Forest de entorno
+python scripts/10_local_extras.py  # Causal Forest táctico, SHAP y tres entornos
 cd app && npm install && npm test && npm run dev
 ```
 
@@ -453,6 +482,7 @@ cd app && npm install && npm test && npm run dev
 
 - Athey, S., Tibshirani, J. y Wager, S. (2019). Generalized random forests. *Annals of Statistics*, 47(2).
 - Chernozhukov, V. y coautores (2018). Double/debiased machine learning for treatment and structural parameters. *The Econometrics Journal*, 21(1).
+- Chernozhukov, V., Demirer, M., Duflo, E. y Fernández Val, I. (2018). Generic machine learning inference on heterogeneous treatment effects in randomized experiments. NBER Working Paper 24678.
 - Efron, B. (1979). Bootstrap methods, another look at the jackknife. *Annals of Statistics*, 7(1).
 - Huang, G. y Hsu, M. (2021). Big data analytics in baseball, a review. *SAGE Open*, 11(4).
 - Ke, G. y coautores (2017). LightGBM, a highly efficient gradient boosting decision tree. *NeurIPS*.

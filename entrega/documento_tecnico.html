@@ -66,8 +66,9 @@ cambian tus decisiones.</p>
 <li><strong>De 561 lanzadores, 58 aguantan la altura.</strong> Se apoyan en cutter, slider y splitter, y provocan
    rodados.</li>
 <li><strong>Probamos las cuatro hipótesis del reto.</strong> H1 y H4 se confirman. H2 y H3 se confirman en parte.</li>
-<li><strong>Un Causal Forest sobre carreras reales llega a los mismos lanzadores</strong>, sin usar Stuff+. Su
-   estimación correlaciona 0.41 con la pérdida de Stuff+.</li>
+<li><strong>Un Causal Forest sobre carreras reales confirma el costo de la altura</strong>, 1.46 carreras más por cada
+   100 lanzamientos, sin usar Stuff+. También muestra por qué necesitas la física para separar a un
+   lanzador de otro, porque las carreras solas no alcanzan.</li>
 </ol>
 <h2>1. Planteamiento</h2>
 <h3>1.1 La pregunta del club</h3>
@@ -254,6 +255,11 @@ lanzamientos por hoja y regularización <span class="katex"><span class="katex-h
 </tr>
 </tbody>
 </table>
+<p>La función de pérdida es el error cuadrático (L2) sobre el valor en carreras. Pitching+ incluye las
+variables relacionales de arsenal que pide el reto, todas contra la recta principal del lanzador en esa
+temporada. Diferencia de velocidad, de elevación y de movimiento lateral, similitud de túnel (qué tan
+parecido sale de la mano), uso de cada lanzamiento, tamaño del arsenal, lanzamiento anterior y vuelta al
+orden.</p>
 <p>Stuff+ nunca ve ubicación, conteo, bateador ni estadio. Por eso lo puedes transferir. Para saber qué
 vale un lanzamiento en otro aire, le das la forma transferida y lo vuelves a calificar. La escala sigue
 la convención sabermétrica.</p>
@@ -261,9 +267,11 @@ la convención sabermétrica.</p>
 c-1 5-5 9-11 9h-2L532 67 19 159h-2c-5 0-9-4-11-9l-5-22c-1-6 2-12 8-13z"/></svg></span></span></span></span></span></span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size2">)</span></span></span></span></span></span></span></div>
 <p>Aquí <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.04398em;">z</span></span></span></span> estandariza con la media y la desviación estándar de la liga. 100 es el promedio y cada 10
 puntos son una desviación estándar. El signo se invierte porque menos carreras es mejor para el
-lanzador. Aparte entrenamos ocho modelos de componente (swing, swing fallido, strike cantado,
-persecución, contacto débil, rodado, contacto duro y barril). Esos modelos explican de dónde sale el
-valor, pero no entran en el cálculo de Stuff+.</p>
+lanzador. El reto propone que la calificación final sea una combinación ponderada de varios objetivos (swing
+fallido, persecución, strike cantado, contacto débil, rodado, contacto duro, valor en carreras). Elegimos
+predecir directo el valor esperado en carreras porque ya es esa combinación, ponderada por lo que cada
+resultado vale en el marcador, y así no tienes que inventar pesos. Los ocho modelos de componente sí los
+entrenamos, y explican de dónde sale cada calificación, pero no entran en el cálculo de Stuff+.</p>
 <h3>3.6 Validación fuera de muestra</h3>
 <p>Calculamos todas las métricas con datos que el modelo no vio.
 <strong>Holdout de lanzador.</strong> Validación cruzada de 5 pliegues agrupada por lanzador. Ningún brazo está en
@@ -295,16 +303,26 @@ ganancia total de los árboles que las usan. Después corrimos un experimento co
 simulador. Movimos una sola perilla (giro o movimiento) y dejamos fijo todo lo demás, algo que los datos
 de la cancha no permiten.</p>
 <h3>3.8 Modelo secundario, un Causal Forest</h3>
-<p>La pregunta táctica es otra. ¿A qué perfil de lanzador le cuesta más la altura <strong>en carreras reales</strong>, sin
-usar Stuff+? Cada lanzador aparece dos veces, una por entorno. El tratamiento <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span></span></span></span> es lanzar en altura y
-el resultado <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">Y</span></span></span></span> son sus carreras permitidas por cada 100 lanzamientos. Usamos el modelo parcialmente
-lineal de Double Machine Learning (Chernozhukov y coautores, 2018).</p>
-<div class="ecuacion"><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">Y</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">θ</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">ε</span><span class="mpunct">,</span><span class="mspace" style="margin-right:2em;"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">m</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">η</span></span></span></span></span></div>
-<p>El efecto de la altura para un lanzador con rasgos <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span></span></span></span> es <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">θ</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="mclose">)</span></span></span></span>. Lo estimamos con un bosque
-causal honesto (Wager y Athey, 2018) sobre los residuos ortogonalizados. <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span></span></span></span> incluye su Stuff+ a nivel
-del mar, velocidad, swings fallidos, rodados, extensión, mano y el uso de cada tipo de lanzamiento. El
-bosque tiene 2,000 árboles, validación cruzada de 5 pliegues <strong>agrupada por lanzador</strong> y pesos por número
-de lanzamientos.</p>
+<p>Stuff+ valora lanzamientos. Un Causal Forest responde otra cosa, preguntas de qué hubiera pasado. Lo usamos
+para dos, con Double Machine Learning (Chernozhukov y coautores, 2018) y un bosque causal honesto (Wager y
+Athey, 2018).</p>
+<div class="ecuacion"><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">Y</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">θ</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">ε</span><span class="mpunct">,</span><span class="mspace" style="margin-right:2em;"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">m</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">η</span></span></span></span></span></div>
+<p>Dos modelos de árboles predicen el resultado <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">Y</span></span></span></span> y la decisión <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span></span></span></span> a partir de los controles <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span></span></span></span>, y el
+bosque estima el efecto <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">θ</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="mclose">)</span></span></span></span> sobre lo que esos modelos no explican.</p>
+<p><strong>La pregunta táctica, la que plantea el reto.</strong> ¿Qué hubiera pasado si el pitcher lanzaba slider en vez de
+cambio en este conteo, contra este bateador? Cada lanzamiento de dos tipos (por ejemplo slider o cambio) es
+una observación. <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span></span></span></span> es elegir el primero, <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">Y</span></span></span></span> es su valor en carreras, <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span></span></span></span> es el conteo, si el bateador es del
+mismo lado, el entorno (nivel del mar o altitud extrema) y si el lanzamiento anterior fue recta. <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span></span></span></span> controla
+lo que confunde la elección, la calidad del lanzador, cuánto usa cada tipo, la vuelta al orden, las manos y
+la velocidad de su recta. El resultado es una tabla por conteo, lado del bateador y entorno que dice qué
+lanzamiento conviene, en casa y de visitante. Contrastamos slider contra cambio, slider contra recta, cambio
+contra recta y curva contra slider.</p>
+<p><strong>La pregunta de entorno.</strong> ¿Cuánto cuesta la altura en carreras reales, y le cuesta distinto a cada
+lanzador? Cada lanzador con al menos 120 lanzamientos en cada entorno aparece dos veces y se compara consigo
+mismo. <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span></span></span></span> es lanzar en altura, <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">Y</span></span></span></span> son sus carreras por cada 100 lanzamientos, y <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span></span></span></span> son sus rasgos (Stuff+,
+velocidad, swings fallidos, rodados, extensión, mano y uso de cada tipo). Para no engañarnos, a cada lanzador
+le damos el efecto de un bosque que no lo vio y aplicamos la prueba GATES (Chernozhukov y coautores, 2018).
+Agrupamos por efecto predicho y comprobamos si el castigo observado sube de grupo en grupo.</p>
 <h2>4. Validación</h2>
 <h3>4.1 La transferencia de forma</h3>
 <p>444 lanzadores tiraron en ambos entornos. Calibramos los exponentes con la mitad y dejamos la otra mitad
@@ -763,14 +781,18 @@ puntos, y 246 pierden más de 2.5. Los que más pierden son buenos a nivel del m
 Lanzador 529 (cambio y recta) baja de 104.8 a 97.2. Tu perfil de fichaje es Lanzador 1099 (cutter,
 slider y curva). Vale 104.5 a nivel del mar y 104.1 en el Harp Helú, el mejor Stuff+ de la liga en
 altura, y es de los más constantes entre juegos (<span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">±</span><span class="mord">1.6</span></span></span></span>).</p>
-<h3>6.4 El Causal Forest llega a los mismos lanzadores</h3>
-<p>Lanzar en altura cuesta en promedio <strong>1.46 carreras más por cada 100 lanzamientos</strong> (IC 90 % de 1.23 a
-1.69). El efecto estimado para cada lanzador correlaciona <strong>0.41</strong> con su pérdida de Stuff+, aunque el
-bosque nunca vio Stuff+ en altura. Los menos afectados son Lanzador 1075 (slider, recta y cutter),
-Lanzador 682 (slider y sinker) y Lanzador 1099 (cutter, slider y curva). Son los mismos que recomienda el
-modelo principal. Los rasgos que más mueven el efecto son los swings fallidos, el uso de slider, el
-Stuff+ a nivel del mar y los rodados. Las diferencias entre perfiles son chicas (de 1.23 a 1.64) con 333
-lanzadores, así que lee este resultado como confirmación y no como una lista aparte.</p>
+<h3>6.4 Lo que dice el Causal Forest</h3>
+<p><strong>El costo promedio es firme.</strong> Lanzar en altura cuesta <strong>1.46 carreras más por cada 100 lanzamientos</strong> (IC 90 %
+de 1.23 a 1.69), medido en el marcador y sin usar Stuff+. Es la misma dirección que predice la física.</p>
+<p><strong>Las diferencias entre lanzadores no se sostienen.</strong> El bosque estima efectos entre 1.23 y 1.64, y para 331
+de 333 lanzadores el intervalo incluye el promedio. En la prueba fuera de muestra, el castigo observado no
+sube con el efecto predicho (pendiente de <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">2.1</span></span></span></span>, IC 95 % de <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">4.3</span></span></span></span> a <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">+</span><span class="mord">0.1</span></span></span></span>). El bosque sí aprende la misma
+dirección que Stuff+ (correlación de 0.21 fuera de muestra, <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7335em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">p</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0.001</span></span></span></span>), pero las carreras de unos cientos
+de lanzamientos tienen demasiado azar para confirmarlo lanzador por lanzador.</p>
+<p>Ese resultado justifica el diseño del trabajo. Para separar a un lanzador de otro necesitas algo estable, y
+eso es su forma, medida con física. Las carreras confirman el tamaño del castigo promedio. El análisis
+táctico por conteo usa los 635,002 lanzamientos en lugar de 333 lanzadores, y está en la pestaña Causal
+Forest del dashboard.</p>
 <h2>7. Recomendaciones</h2>
 <p><strong>Fichajes.</strong> No pagues de más por movimiento. Una recta del quintil más alto llega a 2,240 metros
 valiendo 105.2 en lugar de 113.6. El mercado cobra esa prima a nivel del mar, y tú la pagarías por algo
@@ -794,8 +816,8 @@ pierden mucho rinden más de visitante.</p>
 <li><strong>No separamos aire de clima.</strong> El índice de arrastre junta densidad, temperatura y humedad. Sirve para
   predecir movimiento, no para atribuirlo sólo a la altitud.</li>
 <li><strong>No modelamos al bateador.</strong> Desde la física, el barril casi no se puede predecir (1 % de habilidad).</li>
-<li><strong>Stuff+ no es causal.</strong> Es un modelo de valoración. El Causal Forest es exploratorio, con 333
-  lanzadores y diferencias chicas entre perfiles.</li>
+<li><strong>Stuff+ no es causal.</strong> Es un modelo de valoración. Para las preguntas de qué hubiera pasado usamos el
+  Causal Forest, que confirma el costo promedio pero no separa a un lanzador de otro.</li>
 <li><strong>El exponente de Reynolds es empírico.</strong> Lo calibramos y verificamos fuera de muestra, pero no sale de
   primeros principios.</li>
 </ul>
@@ -807,13 +829,16 @@ python scripts/03_models.py        # las tres capas y sus holdouts
 python scripts/04_export.py        # modelo y tablas al simulador
 python scripts/05_deliverables.py  # entregables 1, 2 y 3
 python scripts/07_jurado.py        # tabla por lanzador, calibración y mapa
-python scripts/08_hipotesis.py     # H1 a H4 y Causal Forest
+python scripts/08_hipotesis.py     # H1 a H4
+python scripts/09_causal_forest.py # Causal Forest de entorno
+python scripts/10_local_extras.py  # Causal Forest táctico, SHAP y tres entornos
 cd app &amp;&amp; npm install &amp;&amp; npm test &amp;&amp; npm run dev
 </code></pre>
 <h2>Referencias</h2>
 <ul>
 <li>Athey, S., Tibshirani, J. y Wager, S. (2019). Generalized random forests. <em>Annals of Statistics</em>, 47(2).</li>
 <li>Chernozhukov, V. y coautores (2018). Double/debiased machine learning for treatment and structural parameters. <em>The Econometrics Journal</em>, 21(1).</li>
+<li>Chernozhukov, V., Demirer, M., Duflo, E. y Fernández Val, I. (2018). Generic machine learning inference on heterogeneous treatment effects in randomized experiments. NBER Working Paper 24678.</li>
 <li>Efron, B. (1979). Bootstrap methods, another look at the jackknife. <em>Annals of Statistics</em>, 7(1).</li>
 <li>Huang, G. y Hsu, M. (2021). Big data analytics in baseball, a review. <em>SAGE Open</em>, 11(4).</li>
 <li>Ke, G. y coautores (2017). LightGBM, a highly efficient gradient boosting decision tree. <em>NeurIPS</em>.</li>

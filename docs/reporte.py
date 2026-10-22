@@ -208,7 +208,11 @@ def cifra(v, et, c=TINTA):
     return f'<div class="cifra"><b style="color:{c}">{v}</b><span>{et}</span></div>'
 
 
-h1, h2, h3, h4, cf = HI["h1"], HI["h2"], HI["h3"], HI["h4"], HI["causal_forest"]
+h1, h2, h3, h4 = HI["h1"], HI["h2"], HI["h3"], HI["h4"]
+CF = json.loads((D / "causal.json").read_text())
+_ex = D / "extras.json"
+EX = json.loads(_ex.read_text()) if _ex.exists() else {}
+TACT = (EX.get("cf_tactico") or {}).get("contrastes") or {}
 nat = h1["nathan"]
 cam = next(r for r in h2["pares"] if r["tipo"] == "Cambio")
 A, B = h4["experimento"]["parejas"]["A"], h4["experimento"]["parejas"]["B"]
@@ -228,12 +232,13 @@ LAMINAS.append(("portada", None, None, f"""
 """, ""))
 
 # 2 · qué responde ----------------------------------------------------------------------------
-lamina("Qué responde este reporte", "Siete preguntas del club, cada una con su número",
+lamina("Qué responde este reporte", "Ocho preguntas del club, cada una con su número",
        "En esta lámina están las preguntas del reto y la lámina donde respondemos cada una.", f"""
 <table class="mapa-preguntas">
 <tr><td>¿Cómo calificamos un lanzamiento y por qué la altitud cambia todo?</td><td>Método en lenguaje simple</td><td>3 a 9</td></tr>
 <tr><td>¿Se puede confiar en la calificación?</td><td>Ordena carreras con lanzadores nuevos</td><td>10 a 12</td></tr>
 <tr><td>¿Se cumplen las hipótesis del reto?</td><td>H1 y H4 sí, H2 y H3 en parte</td><td>13 a 17</td></tr>
+<tr><td>¿Qué hubiera pasado con otra decisión?</td><td>La altura cuesta 1.5 carreras por cada 100</td><td>21</td></tr>
 <tr><td>¿Qué perfil físico rinde en el Harp Helú?</td><td>Menos movimiento, menos dependencia del giro</td><td>18</td></tr>
 <tr><td>¿Qué lanzadores sufren más la altitud y cuáles aguantan?</td><td>{aguantan} aguantan y {mucho} pierden mucho</td><td>19 a 21</td></tr>
 <tr><td>¿Cuánto riesgo extra de jonrón hay en casa?</td><td>{s(hh['dist_fb'] - mar['dist_fb'], 0)} pies por elevado</td><td>16</td></tr>
@@ -284,7 +289,7 @@ lamina("Hipótesis", "El reto propone cuatro hipótesis, y probamos las cuatro",
 <tr><td><b>H2</b> El cambio de velocidad gana valor relativo</td><td>Su cambio contra su propia recta, lanzador por lanzador</td><td class="v-parcial">En parte</td></tr>
 <tr><td><b>H3</b> Los lanzadores de rodados valen más en altura</td><td>Carreras contra rodados en cada entorno, mismos lanzadores</td><td class="v-parcial">En parte</td></tr>
 <tr><td><b>H4</b> El giro solo no predice Stuff+, importa el movimiento</td><td>Peso en el modelo y experimento controlado</td><td class="v-si">Se confirma</td></tr>
-<tr><td><b>CF</b> Modelo secundario, Causal Forest</td><td>Efecto de la altura en carreras reales, por perfil de lanzador</td><td class="v-si">Coincide</td></tr>
+<tr><td><b>CF</b> Modelo secundario, Causal Forest</td><td>Qué lanzamiento conviene por conteo y entorno, y el costo de la altura en carreras</td><td class="v-parcial">Promedio sí</td></tr>
 </table>
 <p class="nota">Toda la incertidumbre sale de remuestrear lanzadores completos 2,000 veces (bootstrap por lanzador). Un intervalo que no cruza el cero no es casualidad.</p>""")
 
@@ -321,7 +326,7 @@ lamina("Método · paso 3", "Calificamos la forma y comparamos los dos aires",
   <div class="flecha">→</div>
   <div class="paso"><span>2</span><h3>Volar en otro aire</h3><p>Mismo brazo, otro aire. El simulador da la forma que tendría el lanzamiento en el otro estadio. Lámina 8.</p></div>
   <div class="flecha">→</div>
-  <div class="paso"><span>3</span><h3>Calificar y comparar</h3><p>Un modelo de árboles (LightGBM) que sólo ve física califica las dos formas. La diferencia es el efecto del aire.</p></div>
+  <div class="paso"><span>3</span><h3>Calificar y comparar</h3><p>Un modelo de árboles (LightGBM) que sólo ve física califica las dos formas. La diferencia es el efecto del aire. Location+ suma ubicación y conteo, y Pitching+ suma el arsenal (diferencias contra la recta, túnel, uso y secuencia).</p></div>
 </div>
 <p class="nota">Si la altitud fuera una variable del modelo, su efecto se mezclaría con <i>quién</i> lanza en altura, y no podrías calificar en el Harp Helú a alguien que nunca ha lanzado ahí. Literatura en la lámina 23.</p>""")
 
@@ -444,18 +449,55 @@ lamina("Ejemplo completo", f"{fichaje['nombre']} llega intacto y {peor['nombre']
 <p class="grande centro">A nivel del mar valen casi lo mismo ({fichaje['stuff_mar']:.1f} contra {peor['stuff_mar']:.1f}). En el Harp Helú los separan {fichaje['stuff_hh'] - peor['stuff_hh']:.1f} puntos, casi tres cuartos de desviación estándar.</p>""")
 
 # 21 · causal forest ----------------------------------------------------------------------------
-lamina("Modelo secundario · Causal Forest", "Un método que no usa Stuff+ llega a los mismos lanzadores",
-       "En esta lámina está el efecto de la altura en carreras reales, estimado para cada perfil de lanzador.", f"""
-<div class="cuatro">
-  {cifra(s(cf['ate'], 2), f"carreras más por cada 100 lanzamientos cuesta la altura (IC 90 %, {cf['ate_ic90'][0]:.2f} a {cf['ate_ic90'][1]:.2f})", ROJO)}
-  {cifra(n(cf['pitchers']), 'lanzadores comparados consigo mismos en los dos entornos', AZUL)}
-  {cifra(f"{cf['corr_con_delta_stuff']['r']:.2f}", 'correlación con la pérdida de Stuff+, que el bosque nunca vio', VERDE)}
-  {cifra(' · '.join(x['nombre'].replace('Lanzador ', '') for x in cf['menos_afectados'][:3]), 'los menos afectados, los mismos que recomienda Stuff+', VERDE)}
-</div>
-<div class="dos">
-  <p class="grande">Cada lanzador aparece dos veces, una por entorno, y se compara consigo mismo. Un bosque causal (Double Machine Learning con 2,000 árboles honestos) busca qué rasgos hacen la altura más cara.</p>
-  <p>Lo que más mueve el efecto son los swings fallidos, el uso de slider, el Stuff+ a nivel del mar y los rodados. Con {cf['pitchers']} lanzadores las diferencias entre perfiles son chicas. Por eso lo leemos como una confirmación independiente, no como otra lista.</p>
+def gates_svg(g):
+    W, H, PL, PB, PT = 620, 300, 50, 56, 16
+    y1 = max(x["ic"][1] for x in g) + 0.3
+    bw = (W - PL) / len(g)
+    sx = lambda i: PL + bw * i + bw / 2
+    sy = lambda v: PT + (y1 - v) / y1 * (H - PT - PB)
+    o = [f'<svg viewBox="0 0 {W} {H}" class="g">']
+    for v in (0, 1, 2):
+        o.append(f'<line x1="{PL}" x2="{W}" y1="{sy(v):.1f}" y2="{sy(v):.1f}" stroke="{CENIZA if v == 0 else LINEA}"/>')
+        o.append(f'<text x="{PL - 8}" y="{sy(v) + 5:.1f}" text-anchor="end" class="eje">{s(v, 0)}</text>')
+    for i, x in enumerate(g):
+        o.append(f'<rect x="{sx(i) - bw * .28:.1f}" y="{sy(x["observado"]):.1f}" width="{bw * .56:.1f}" height="{sy(0) - sy(x["observado"]):.1f}" rx="4" fill="{ROJO}" opacity=".8"/>')
+        o.append(f'<line x1="{sx(i):.1f}" x2="{sx(i):.1f}" y1="{sy(x["ic"][0]):.1f}" y2="{sy(x["ic"][1]):.1f}" stroke="{TINTA}" stroke-width="2.5"/>')
+        o.append(f'<circle cx="{sx(i):.1f}" cy="{sy(x["predicho"]):.1f}" r="7" fill="{TINTA}" stroke="#fff" stroke-width="2"/>')
+        o.append(f'<text x="{sx(i):.1f}" y="{H - PB + 22}" text-anchor="middle" class="et">{x["etiqueta"]}</text>')
+    o.append("</svg>")
+    return "".join(o)
+
+
+lamina("Modelo secundario · Causal Forest", "En carreras reales, la altura cuesta 1.5 por cada 100 lanzamientos",
+       "En esta lámina el Causal Forest mide el costo de la altura comparando a cada lanzador consigo mismo, sin usar Stuff+.", f"""
+<div class="dos ancho-izq">
+  <div>{gates_svg(CF['gates'])}<p class="nota">Lanzadores agrupados por el efecto que predice un bosque que no los vio. Barras, castigo observado con su intervalo. Puntos, castigo predicho.</p></div>
+  <div><p class="grande">El costo promedio es firme, <b>{s(CF['ate'], 2)} carreras</b> por cada 100 lanzamientos (IC 90 % de {CF['ate_ic90'][0]:.2f} a {CF['ate_ic90'][1]:.2f}). Es lo mismo que predice la física.</p>
+  <p>Pero las barras no suben. Las carreras de unos cientos de lanzamientos tienen demasiado azar para separar a un lanzador de otro. Por eso decides con Stuff+, que mide algo estable, la forma. El bosque sí apunta en la misma dirección que Stuff+ (correlación de {CF['acuerdo_stuff']['pearson']:.2f} fuera de muestra).</p></div>
 </div>""")
+
+if TACT:
+    c0 = TACT.get("Slider en vez de Cambio") or next(iter(TACT.values()))
+    def rejilla(c, alt):
+        filas = ""
+        for b in range(4):
+            celdas = ""
+            for st in range(3):
+                x = next((k for k in c["celdas"] if k["altura"] == alt and k["mismo_lado"] == 0 and k["conteo"] == f"{b}-{st}"), None)
+                if x is None:
+                    celdas += "<td></td>"; continue
+                col = VERDE if x["efecto"] < 0 else ROJO
+                celdas += f'<td style="background:{col}22;color:{col}"><b>{s(x["efecto"], 1)}</b></td>'
+            filas += f"<tr><th>{b}</th>{celdas}</tr>"
+        return f'<table class="conteo"><tr><th>Bolas \\ Strikes</th><th>0</th><th>1</th><th>2</th></tr>{filas}</table>'
+    m, a = c0["por_entorno"]["mar"], c0["por_entorno"]["altura"]
+    lamina("Causal Forest · la pregunta táctica", f"{c0['a']} o {c0['b']}, la respuesta depende del conteo y del estadio",
+           f"En esta lámina cada celda dice cuántas carreras por cada 100 lanzamientos cambian si el pitcher tira {c0['a'].lower()} en vez de {c0['b'].lower()}, contra un bateador del lado contrario.", f"""
+<div class="dos">
+  <div><p class="tag" style="color:{AZUL}">Nivel del mar · promedio {s(m['efecto'], 2)}</p>{rejilla(c0, 0)}</div>
+  <div><p class="tag" style="color:{ROJO}">Altitud extrema · promedio {s(a['efecto'], 2)}</p>{rejilla(c0, 1)}</div>
+</div>
+<p class="nota centro">Verde quiere decir que {c0['a'].lower()} es mejor para el pitcher y rojo que {c0['b'].lower()} es mejor. {n(c0['filas'])} lanzamientos, controlando por la calidad del lanzador, su uso de cada tipo, la vuelta al orden y las manos. Más parejas en la pestaña Causal Forest del dashboard.</p>""")
 
 # 22 · qué hacer -------------------------------------------------------------------------------
 aguantan_top = sorted([x for x in P if x["stuff_hh"] >= 100], key=lambda x: -x["delta_hh"])[:5]
@@ -572,6 +614,9 @@ table {{ border-collapse: collapse; width: 100%; }}
 """
 
 CSS += f"""
+.conteo {{ border-collapse: separate; border-spacing: 5px; width: 100%; font-family: 'JetBrains Mono', monospace; font-size: 17px; }}
+.conteo th {{ font-size: 13px; color: {CENIZA}; font-weight: 600; }}
+.conteo td {{ text-align: center; padding: 14px 6px; border-radius: 8px; }}
 .logos {{ display: inline-flex; align-items: center; gap: 14px; }}
 .logos img {{ display: block; width: auto; }}
 .pie .l-isac {{ height: 20px; }} .pie .l-diablos {{ height: 24px; }}
