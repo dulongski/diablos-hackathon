@@ -47,6 +47,26 @@ Pipeline completo corrido en local con el modelo limpio (01 a 10). Documento, re
 actualizados con las cifras nuevas. El venv rápido está en `~/.venvs/diablos` (el `.venv` dentro de iCloud
 se cuelga al importar).
 
+### Simulador con arrastre real (nube, 2026-10-22, después del modelo limpio)
+
+- **Problema.** Con el modelo limpio, el simulador daba pérdidas en altura del doble que el pipeline (recta
+  típica −24 contra −11.6 de la liga). Causa: `SpeedDrop` es la variable 1 de Stuff+ y el árbol tiene un
+  escalón entre 5 y 7 mph (la caída de velocidad delata el aire). El pipeline vuela cada lanzamiento real con
+  su propio arrastre medido; el simulador volaba todo con el arrastre mediano y caía justo en el escalón.
+- **Arreglo.** `stuffEstable` en `app/src/lib/scoring.ts`: promedio de 49 variaciones (Halton en seis
+  dimensiones) y cada una vuela con un arrastre sacado de la dispersión real entre pelotas
+  (`helpers.arrastre.log_sd`, 0.15 por defecto). Lo usan el simulador y `experimentos.ts`. El nivel
+  absoluto del integrador sí coincide con Trackman (12 lanzamientos del fixture, SpeedDrop +0.13 mph).
+- **Apuntar.** "A dónde apunta" ahora dice "sólo mueve la trayectoria": con el modelo limpio mover el
+  objetivo cambia Stuff+ en ~1 punto, como debe ser.
+- **Recalculado.** `artifacts/experimentos.json`, `hipotesis.json` (sólo cambió el experimento de H4),
+  documento 3.7 y 5.4, PDFs, dashboard republicado (versión 6).
+- **Pendiente local.** Correr `python scripts/04_export.py` para que `helpers.json` traiga el
+  `arrastre.log_sd` medido (ya está el código en `export.fit_helpers`). Luego `cd app && npm run consistencia`
+  (simulador contra pipeline por tipo; hoy error medio 3.2 puntos), y si `log_sd` cambia, volver a correr
+  `experimentos.ts` (ver su encabezado, el bundle tiene que quedar en `app/scripts/`) y `08_hipotesis.py`,
+  actualizar 5.4 del documento y las cifras de H4 abajo, regenerar PDFs y republicar.
+
 ## Estado anterior (después de la sesión en la nube)
 
 Rama de trabajo: **`claude/confident-ptolemy-sz210m`** (todo lo nuevo está ahí, no en `main`).
@@ -140,8 +160,8 @@ no cuentan). En la app los tooltips `<Info>` no salen en el texto visible: revis
 - **Lanzadores.** 561, **21 aguantan**, 354 pierden más de una carrera. Más afectado Lanzador 174 (recta ·
   cambio, 111.3 → 92.8). Fichaje Lanzador 1099 (cutter · slider · curva, 110.2 → 109.8, ± 2.6).
 - **Hipótesis.** H1 Nathan 18 → 14.9 (Coors) / 13.8 (HH), rho −0.83 · H2 cambio +4.10 (3.48 a 4.69), cuarto
-  de seis · H3 p = 0.08 una cola · H4 movimiento 30 %, giro 8 % (variable 3 de 16), +0.15 por 100 rpm contra
-  +2.35 por pulgada; las rectas A y B ya NO se invierten (B gana por 16.3 a nivel del mar y por 6.8 en casa).
+  de seis · H3 p = 0.08 una cola · H4 movimiento 30 %, giro 8 % (variable 3 de 16), +0.05 por 100 rpm contra
+  +2.61 por pulgada; las rectas A y B ya NO se invierten (B gana por 18.1 a nivel del mar y por 6.0 en casa).
 - **Causal Forest.** ATE +1.52 (IC 90 % 1.27 a 1.78). La pérdida de Stuff+ de la liga equivale a 1.12, unas
   tres cuartas partes. GATES plano (pendiente −1.95, IC −4.0 a +0.2). Acuerdo con Stuff+ 0.17 (p = 0.002).
 - **Riesgo.** Elevado +31 pies; jonrón por elevado 12.4 % → 16.3 %; rodados 40.5 % → 44.8 %.

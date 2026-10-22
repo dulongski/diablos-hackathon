@@ -2,15 +2,15 @@
  * SIMULADOR: la herramienta del pitching coach (entregable 4).
  *
  * Eliges un tipo de lanzamiento o escribes sus números, y ves la misma pelota volar en el estadio que elijas
- * con su Stuff+ al lado del Stuff+ a nivel del mar. Todo se recalcula al mover cualquier control, porque es
- * un solo lanzamiento: dos integraciones del vuelo y dos pasadas por los árboles.
+ * con su Stuff+ al lado del Stuff+ a nivel del mar. Todo se recalcula al mover cualquier control. El número
+ * sale de `stuffEstable` (49 variaciones con arrastre real), el mismo que usan los experimentos de H4.
  *
  * Todo corre en esta página, sin servidor.
  */
 import { useDeferredValue, useMemo, useState } from 'react';
 import type { Model } from '../lib/gbm';
 import { solveRelease, type PitchInput } from '../lib/physics';
-import { scorePitch, type Escala, type Helpers } from '../lib/scoring';
+import { scorePitch, stuffEstable, type Escala, type Helpers } from '../lib/scoring';
 import { plusEnPalabras, CORTE_AGUANTA, CORTE_MUCHO } from '../lexico';
 import { COLOR_TIPO_ES } from '../jurado';
 import { nf, sg } from '../settings';
@@ -29,14 +29,6 @@ const TIPOS: { t: string; p: Partial<PitchInput> }[] = [
   { t: 'Splitter', p: { relSpeed: 84.0, ivb: 3.3, hb: 6.4, spinRate: 1450, plateZ: 1.9, plateX: 0.2 } },
 ];
 
-/** 25 variaciones fijas (secuencia de Halton en cinco dimensiones, centrada en cero): siempre las mismas, así el
- *  número no cambia si no cambias nada. */
-const VARIACIONES: number[][] = (() => {
-  const primos = [2, 3, 5, 7, 11];
-  const halton = (i: number, b: number) => { let f = 1, r = 0; while (i > 0) { f /= b; r += f * (i % b); i = Math.floor(i / b); } return r; };
-  return Array.from({ length: 25 }, (_, i) => primos.map(b => (halton(i + 1, b) - 0.5) * 2));
-})();
-
 interface Campo { k: keyof PitchInput; t: string; min: number; max: number; paso: number; u: string; info?: string }
 const GRUPOS: { titulo: string; campos: Campo[] }[] = [
   { titulo: 'El lanzamiento', campos: [
@@ -45,9 +37,9 @@ const GRUPOS: { titulo: string; campos: Campo[] }[] = [
     { k: 'ivb', t: 'Movimiento vertical', min: -20, max: 24, paso: 0.5, u: 'in', info: 'Cuánto cae menos (positivo) o más (negativo) que una pelota sin giro. Una recta con mucho parece que sube y una curva es negativa.' },
     { k: 'hb', t: 'Movimiento lateral', min: -22, max: 22, paso: 0.5, u: 'in', info: 'Positivo es hacia el lado del brazo del lanzador y negativo hacia el lado del guante.' },
   ]},
-  { titulo: 'A dónde apunta', campos: [
-    { k: 'plateZ', t: 'Altura en el plato', min: 0.8, max: 4.2, paso: 0.1, u: 'ft', info: 'La zona de strike va más o menos de 1.5 a 3.5 pies.' },
-    { k: 'plateX', t: 'Lado del plato', min: -1.5, max: 1.5, paso: 0.1, u: 'ft', info: '0 es el centro del plato.' },
+  { titulo: 'A dónde apunta (sólo mueve la trayectoria)', campos: [
+    { k: 'plateZ', t: 'Altura en el plato', min: 0.8, max: 4.2, paso: 0.1, u: 'ft', info: 'La zona de strike va más o menos de 1.5 a 3.5 pies. Stuff+ no ve la ubicación, así que este control mueve el dibujo y casi no mueve el número. La ubicación la califica Location+.' },
+    { k: 'plateX', t: 'Lado del plato', min: -1.5, max: 1.5, paso: 0.1, u: 'ft', info: '0 es el centro del plato. Igual que la altura, mueve la trayectoria y casi no mueve Stuff+.' },
   ]},
   { titulo: 'La mecánica', campos: [
     { k: 'extension', t: 'Extensión', min: 4.5, max: 7.5, paso: 0.1, u: 'ft', info: 'Qué tan adelante de la goma suelta la pelota.' },
@@ -95,7 +87,7 @@ export function Simulador({ metros, onMetros, arrastre, model, helpers, escala }
   };
   const mover = (k: keyof PitchInput) => (v: number) => { setTipo(null); setPitch(q => ({ ...q, [k]: v })); };
 
-  // La pelota que se dibuja es el lanzamiento exacto. La calificación es el promedio de 25 variaciones chicas
+  // La pelota que se dibuja es el lanzamiento exacto. La calificación es el promedio de 49 variaciones chicas
   // alrededor de él, porque un lanzador nunca repite exacto y un modelo de árboles da escalones: calificar un
   // solo punto haría saltar el número por un detalle.
   const lento = useDeferredValue({ pitch, arrastre, derecho });
@@ -104,16 +96,7 @@ export function Simulador({ metros, onMetros, arrastre, model, helpers, escala }
     const rel = solveRelease(q);
     const mar = scorePitch(q, 1.0, d, model, helpers, escala, rel);
     const alt = scorePitch(q, idx, d, model, helpers, escala, rel);
-    let sm0 = 0, sa0 = 0;
-    for (const v of VARIACIONES) {
-      const qv: PitchInput = { ...q, relSpeed: q.relSpeed + v[0] * 0.8, ivb: q.ivb + v[1] * 1.2, hb: q.hb + v[2] * 1.2,
-                               spinRate: q.spinRate + v[3] * 60, relHeight: q.relHeight + v[4] * 0.08 };
-      const relv = solveRelease(qv);
-      sm0 += scorePitch(qv, 1.0, d, model, helpers, escala, relv).plus;
-      sa0 += scorePitch(qv, idx, d, model, helpers, escala, relv).plus;
-    }
-    mar.plus = sm0 / VARIACIONES.length;
-    alt.plus = sa0 / VARIACIONES.length;
+    [mar.plus, alt.plus] = stuffEstable(q, [1.0, idx], d, model, helpers, escala);
     const sm = mar.traj.shape, sa = alt.traj.shape;
     return {
       mar, alt,
@@ -182,7 +165,7 @@ export function Simulador({ metros, onMetros, arrastre, model, helpers, escala }
 
           <div className="sim-resultados">
             <div className="res-plus">
-              <div><span className="etiqueta t-mar">Stuff+ a nivel del mar<Info>Promediamos 25 variaciones chicas alrededor de este lanzamiento (velocidad, movimiento, giro y salida), porque un lanzador nunca repite exacto. Así el número no salta por un detalle.</Info></span><b className="num">{nf(r.mar.plus, 1)}</b><span className="tenue">{plusEnPalabras(r.mar.plus)}</span></div>
+              <div><span className="etiqueta t-mar">Stuff+ a nivel del mar<Info>Promediamos 49 variaciones chicas alrededor de este lanzamiento (velocidad, movimiento, giro y salida), porque un lanzador nunca repite exacto. Cada una vuela con un arrastre distinto, porque dos pelotas no frenan igual. Así el número no salta por un detalle y se compara con el de la liga.</Info></span><b className="num">{nf(r.mar.plus, 1)}</b><span className="tenue">{plusEnPalabras(r.mar.plus)}</span></div>
               <div className="res-flecha" aria-hidden>→</div>
               <div><span className="etiqueta t-alt">Stuff+ en {lugar.replace(/^el /, '')}</span><b className="num">{nf(r.alt.plus, 1)}</b><span className="tenue">{plusEnPalabras(r.alt.plus)}</span></div>
               <div className="res-delta"><span className="etiqueta">Cambio</span><b className={`num ${veredicto}`}>{sg(dPlus)}</b></div>

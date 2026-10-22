@@ -8,7 +8,7 @@
  *   node /tmp/exp.mjs > ../artifacts/experimentos.json
  */
 import { readFileSync } from 'node:fs';
-import { scorePitch, type Escala, type Helpers } from '../src/lib/scoring';
+import { stuffEstable, type Escala, type Helpers } from '../src/lib/scoring';
 import { densityAtAltitude, dragIndexAtAltitude, releaseAt, solveRelease, type PitchInput } from '../src/lib/physics';
 import type { Model } from '../src/lib/gbm';
 
@@ -35,8 +35,9 @@ function forma(p: PitchInput, idx: number) {
   const s = releaseAt(rel, idx, p.spinRate).shape;
   return { ivb: s.ivb, hb: s.hb, total: Math.hypot(s.ivb, s.hb), zoneSpeed: s.zoneSpeed };
 }
+/** El mismo Stuff+ que muestra el simulador: promedio sobre variaciones chicas y el arrastre real. */
 function plus(p: PitchInput, idx: number) {
-  return scorePitch(p, idx, true, model, helpers, escala).plus;
+  return stuffEstable(p, [idx], true, model, helpers, escala)[0];
 }
 
 /* ---------------------------------------------------------------- H1 · Nathan en Coors Field */

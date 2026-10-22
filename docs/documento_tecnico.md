@@ -239,7 +239,9 @@ El peso de cada lanzador es $w_i = 2\,(1/n_{i,\text{alt}} + 1/n_{i,\text{mar}})^
 **H4.** Hicimos dos pruebas. Primero medimos el peso de cada grupo de variables dentro de Stuff+, como la
 ganancia total de los árboles que las usan. Después corrimos un experimento controlado con el
 simulador. Movimos una sola perilla (giro o movimiento) y dejamos fijo todo lo demás, algo que los datos
-de la cancha no permiten.
+de la cancha no permiten. Cada punto es el promedio de 49 variaciones chicas del mismo lanzamiento, y
+cada variación vuela con un arrastre sacado de la dispersión real entre pelotas, como en el pipeline,
+donde cada lanzamiento vuela con su propio arrastre medido.
 
 ### 3.8 Modelo secundario, un Causal Forest
 
@@ -410,11 +412,11 @@ rodado sube de 40.5 % a 44.8 % en altitud extrema y el jonrón por elevado sube 
 
 El modelo sí usa el giro. Es la tercera de 16 variables, pero sobre todo para distinguir un tipo de
 lanzamiento de otro. En el experimento controlado, 100 revoluciones más **con el mismo movimiento**
-cambian Stuff+ en 0.15 puntos. Una pulgada más de elevación **con el mismo giro** suma 2.35, quince
-veces más. Y la ventaja del movimiento es la que el aire se lleva. Una recta B con 2,150 rpm y 18.0
-pulgadas de elevación vale 107.0 a nivel del mar, 16.3 puntos más que una recta A con más giro pero eje
-de bala (2,650 rpm y 13.5 pulgadas, 90.7). En el Harp Helú B vale 83.1 y A 76.3. La ventaja se reduce a
-menos de la mitad.
+cambian Stuff+ en 0.05 puntos, nada. Una pulgada más de elevación **con el mismo giro** suma 2.61.
+Y la ventaja del movimiento es la que el aire se lleva. Una recta B con 2,150 rpm y 18.0 pulgadas de
+elevación vale 105.7 a nivel del mar, 18.1 puntos más que una recta A con más giro pero eje de bala
+(2,650 rpm y 13.5 pulgadas, 87.6). En el Harp Helú B vale 86.0 y A 80.0. La ventaja se reduce a un
+tercio.
 
 ## 6. Lo que significa para el club
 

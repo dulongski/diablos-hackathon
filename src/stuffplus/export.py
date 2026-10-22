@@ -94,6 +94,19 @@ def fit_helpers(df: pd.DataFrame) -> dict:
         "terms": ["1", "movement_total", "SpinRate", "RelSpeed"],
         "r2": float(1 - ((m.spin_efficiency - pred) ** 2).sum() / ((m.spin_efficiency - m.spin_efficiency.mean()) ** 2).sum()),
     }
+
+    # Dispersion del arrastre entre pelotas. Dentro de un mismo juego el aire es uno, asi que lo que
+    # varia de un lanzamiento a otro es la pelota (costuras, desgaste) mas el ruido de Trackman. El
+    # pipeline vuela cada lanzamiento con su propio arrastre; el simulador promedia sobre esta
+    # dispersion para que su Stuff+ por forma sea comparable. Escala robusta (MAD) del log.
+    if {"k_drag", "game_anon_id"}.issubset(df.columns):
+        k = df["k_drag"].where(df["k_drag"] > 0)
+        lk = np.log(k)
+        r = (lk - lk.groupby(df["game_anon_id"]).transform("median")).dropna().to_numpy()
+        out["arrastre"] = {
+            "log_sd": float(1.4826 * np.median(np.abs(r - np.median(r)))),
+            "n": int(len(r)),
+        }
     return out
 
 

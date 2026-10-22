@@ -247,12 +247,12 @@ export function solveRelease(input: PitchInput): Release {
  * giro, misma velocidad) y solo se reescalan las dos fuerzas que dependen del aire. Por
  * eso la pelota termina en otro lugar, que es justamente lo que se quiere mostrar.
  */
-export function releaseAt(rel: Release, dragIndex: number, spinRate = 0): Trajectory {
+export function releaseAt(rel: Release, dragIndex: number, spinRate = 0, kMult = 1): Trajectory {
   const rv = Math.pow(dragIndex, MAGNUS_GAMMA_V);
   const rh = Math.pow(dragIndex, MAGNUS_GAMMA_H);
   const t = integrate(
     rel.init,
-    K_DRAG_SEA * dragIndex,
+    K_DRAG_SEA * kMult * dragIndex,
     [rel.magnus[0] * rh, rel.magnus[1] * rh, rel.magnus[2] * rv],
   );
   t.shape.spinRate = spinRate;

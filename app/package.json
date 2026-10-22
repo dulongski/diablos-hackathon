@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
-    "test": "esbuild test/physics.test.ts --bundle --platform=node --format=cjs --outfile=node_modules/.cache/ptest.cjs --log-level=error && node node_modules/.cache/ptest.cjs"
+    "test": "esbuild test/physics.test.ts --bundle --platform=node --format=cjs --outfile=node_modules/.cache/ptest.cjs --log-level=error && node node_modules/.cache/ptest.cjs",
+    "consistencia": "esbuild scripts/consistencia.ts --bundle --platform=node --format=esm --outfile=scripts/.consistencia.mjs --log-level=error && node scripts/.consistencia.mjs"
   },
   "dependencies": {
     "@react-three/drei": "^9.117.3",
