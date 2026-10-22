@@ -75,8 +75,20 @@ método con literatura → validación con baseline al azar → ejemplo completo
 - Corrección. Stuff+ predice el valor en carreras directamente; los ocho modelos de componente sólo
   explican de dónde sale el valor.
 
+### Tercera ronda (misma sesión en la nube, con la página del reto)
+- Texto completo del reto revisado punto por punto; mapa en `README.md`.
+- **Causal Forest de entorno** (`scripts/09_causal_forest.py`, `causal.json`). Promedio firme, +1.46 carreras
+  por cada 100 lanzamientos en altura. Las diferencias entre lanzadores NO se sostienen fuera de muestra
+  (GATES plano). No decir que "llega a los mismos lanzadores".
+- **Causal Forest táctico, SHAP y tres entornos** en `scripts/10_local_extras.py`. Necesita los datos crudos;
+  escribe `app/public/data/extras.json`. El dashboard y el reporte lo muestran solos cuando existe.
+- Dashboard con nueve pestañas (Inicio, Metodología, Validación, Lanzadores, Arsenal y perfil, Hipótesis,
+  Causal Forest, Simulador, Anexo). Simulador nuevo con una pelota en un campo de día; su Stuff+ es el
+  promedio de 25 variaciones fijas para que el árbol no haga saltar el número.
+
 ### Falta
-1. Completar `entrega/correo.txt` (integrantes y links) y enviarlo **hoy**.
+1. Correr `scripts/10_local_extras.py` en la Mac y subir `extras.json`; luego regenerar reporte y documento.
+2. Completar `entrega/correo.txt` (integrantes y links) y enviarlo **hoy**.
 
 ## Las cifras que cuentan la historia (de `app/public/data/jurado.json`)
 

@@ -10,7 +10,7 @@ import { Info } from './Info';
 import { LimiteError } from './LimiteError';
 import { MapaMigracion, type TipoMigracion } from './MapaMigracion';
 import { TablaArsenal } from './TablaArsenal';
-import type { Jurado } from '../jurado';
+import type { Extras, Jurado } from '../jurado';
 
 export interface DatosResumen {
   tipos: TipoMigracion[];
@@ -20,7 +20,8 @@ export interface DatosResumen {
   physics: Record<string, any>;
 }
 
-export function Resumen({ d, j, irA }: { d: DatosResumen; j: Jurado; irA: (v: 'simulador' | 'confianza') => void }) {
+export function Resumen({ d, j, extras, irA }: { d: DatosResumen; j: Jurado; extras: Extras | null; irA: (v: 'simulador' | 'confianza') => void }) {
+  const tres = extras?.tres_entornos && !('error' in extras.tres_entornos) ? extras.tres_entornos : null;
   const [activo, setActivo] = useState<string | null>(null);
   const tiposQ = Object.keys(d.quintiles).filter(k => k !== 'TODOS');
   const [tipoQ, setTipoQ] = useState('Four-Seam');
@@ -68,10 +69,28 @@ export function Resumen({ d, j, irA }: { d: DatosResumen; j: Jurado; irA: (v: 's
             <article className="tarjeta porque">
               <span className="etiqueta d-pierde">Lo bueno pierde más</span>
               <h3>Las mejores rectas pierden {sg(qMejor)}</h3>
-              <p>Las peores no pierden nada ({sg(qPeor)}). La altitud borra justo lo que hace especial a una recta de
+              <p>Las peores hasta ganan un poco ({sg(qPeor)}). La altitud borra justo lo que hace especial a una recta de
                  élite. No pagues de más por un lanzador cuyo valor sea una recta que se mueve mucho.</p>
             </article>
           </div>
+          {tres && (
+            <div className="tarjeta tres-entornos">
+              <h3 className="titulo-tarjeta">Stuff+ en los tres entornos de la LMB</h3>
+              <p className="nota-tarjeta">El mismo lanzamiento calificado con el aire de cada grupo de estadios. Altitud media es el grupo intermedio de la liga; altitud extrema incluye al Harp Helú.</p>
+              <div className="tabla-scroll">
+                <table className="tabla-datos compacta">
+                  <thead><tr><th>Tipo</th><th className="n t-mar">Nivel del mar</th><th className="n">Altitud media</th><th className="n t-alt">Altitud extrema</th><th className="n">Cambio total</th></tr></thead>
+                  <tbody>
+                    {tres.por_tipo.map(t => (
+                      <tr key={t.tipo}><th scope="row">{t.tipo}</th><td className="num n">{nf(t.mar, 1)}</td><td className="num n">{nf(t.media, 1)}</td>
+                        <td className="num n destacado">{nf(t.extrema, 1)}</td><td className={`num n ${t.extrema - t.mar > -2 ? 'd-aguanta' : t.extrema - t.mar > -3 ? 'd-pierde' : 'd-mucho'}`}>{sg(t.extrema - t.mar)}</td></tr>
+                    ))}
+                    <tr className="total"><th scope="row">Liga</th><td className="num n">{nf(tres.liga.mar, 1)}</td><td className="num n">{nf(tres.liga.media, 1)}</td><td className="num n destacado">{nf(tres.liga.extrema, 1)}</td><td className="num n">{sg(tres.liga.extrema - tres.liga.mar)}</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
         </div>
       </section>
 

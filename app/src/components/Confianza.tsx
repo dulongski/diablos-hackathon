@@ -126,6 +126,25 @@ export function Confianza({ j }: { j: Jurado }) {
                   cifra={mejora(j.holdout.parque.stuff.r2)} unidad={`de lo que pasa, explicado (el nulo explica ${nf(nul.r2 * 100, 2)} %)`}
                   nota="Sigue funcionando en un aire que nunca vio, aunque rinde menos. Ese es justo el efecto que medimos." />
         </div>
+        <div className="tarjeta metricas">
+          <h3 className="titulo-tarjeta">Las métricas, como las pide la rúbrica</h3>
+          <p className="nota-tarjeta">Error cuadrático medio (RMSE) y R², en carreras por lanzamiento, siempre con datos que el modelo no vio. Menor RMSE es mejor.</p>
+          <div className="tabla-scroll">
+            <table className="tabla-datos compacta">
+              <thead><tr><th>Prueba</th><th>Capa</th><th className="n">Variables</th><th className="n">RMSE</th><th className="n">R²</th><th className="n">RMSE contra el nulo</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">Modelo nulo, promedio por conteo</th><td>Ninguna</td><td className="num n">0</td><td className="num n">{nf(nul.rmse, 5)}</td><td className="num n">{nf(nul.r2, 5)}</td><td className="num n tenue">base</td></tr>
+                {([['Lanzadores nuevos', 'Stuff+', hp.stuff], ['Lanzadores nuevos', 'Location+', j.holdout.pitcher.location], ['Lanzadores nuevos', 'Pitching+', hp.pitching],
+                   ['Temporada nueva', 'Stuff+', j.holdout.temporada.stuff], ['Estadio nuevo, en altura', 'Stuff+', j.holdout.parque.stuff]] as const).map(([prueba, capa, m]) => (
+                  <tr key={prueba + capa}><th scope="row">{prueba}</th><td>{capa}</td><td className="num n">{m.n_features ?? 20}</td><td className="num n">{nf(m.rmse, 5)}</td><td className="num n">{nf(m.r2, 5)}</td>
+                    <td className="num n destacado">{prueba.startsWith('Estadio') ? 'ver nota' : `${sg(((m.rmse - nul.rmse) / nul.rmse) * 100, 2)} %`}</td></tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="tenue nota-pie">El estadio nuevo se prueba sólo en altura, donde hay más carreras y más azar, así que su RMSE no se compara con el nulo de toda la liga. Ahí lo justo es el R², que sigue arriba de cero.</p>
+        </div>
+
         <p className="aclaracion">
           <b>Por qué los porcentajes se ven chicos.</b> El resultado de un lanzamiento suelto es casi puro azar.
           El mismo lanzamiento perfecto a veces termina en jonrón. Ningún modelo explica mucho de un lanzamiento

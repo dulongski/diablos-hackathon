@@ -159,6 +159,7 @@ export function Lanzadores({ j, c }: { j: Jurado; c: Causal }) {
 
   const masPierde = [...j.pitchers].sort((a, b) => a.delta_hh - b.delta_hh)[0];
   const aguantan = j.pitchers.filter(x => x.delta_hh > -1.2).length;
+  const constante = ordenar(j.pitchers, 'constantes')[0];
   const nota = ORDENES.find(o => o.k === orden)!.nota;
 
   return (
@@ -166,16 +167,19 @@ export function Lanzadores({ j, c }: { j: Jurado; c: Causal }) {
       <div className="envoltura">
         <header className="cabeza-pregunta">
           <p className="eyebrow">La pregunta del club · Entregable 1</p>
-          <h2>¿Qué lanzadores sufren la altitud y cuáles aguantan?</h2>
+          <h2>¿Qué lanzadores sufren la altitud, cuáles aguantan y cuáles son constantes?</h2>
           <p className="entrada ancha">
             Para cada uno de los {nf(j.pitchers_n)} lanzadores con suficientes datos, tomamos <b>todos sus
             lanzamientos reales</b> y los recalculamos en los dos aires, a nivel del mar y en el Harp Helú.
-            La diferencia dice cuánto de su calidad se queda en el camino al subir a la Ciudad de México.
+            La diferencia dice cuánto de su calidad se queda en el camino al subir a la Ciudad de México. La
+            constancia dice cuánto cambia su Stuff+ de un juego a otro. Menos variación quiere decir un lanzador
+            más fácil de planear.
           </p>
-          <div className="cifras-fila">
+          <div className="cifras-fila cuatro">
             <div><b className="num">{nf(j.pitchers_n)}</b><span>lanzadores comparados</span></div>
             <div><b className="num">{nf(aguantan)}</b><span>aguantan la altura (pierden menos de 1.2 puntos)</span></div>
             <div><b className="num">{sg(masPierde.delta_hh)}</b><span>pierde {masPierde.nombre}, el más afectado</span></div>
+            <div><b className="num">± {nf(constante.sd_juego, 1)}</b><span>varía {constante.nombre}, el más constante entre los buenos en casa</span></div>
           </div>
         </header>
 

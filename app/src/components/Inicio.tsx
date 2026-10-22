@@ -22,6 +22,8 @@ export function Inicio({ j, c, irA, porQue }: { j: Jurado; c: Causal; irA: (v: V
   const mar = j.riesgo.find(r => r.altitude_category === 'No Altitude');
   const hh = j.riesgo.find(r => r.altitude_category === 'Extreme Altitude');
   const mejorArs = j.arsenales[0];
+  const aguantan = p.filter(x => x.delta_hh > -1.2).length;
+  const promedioLiga = j.tipos.reduce((a, t) => a + t.delta * t.n, 0) / j.tipos.reduce((a, t) => a + t.n, 0);
   const tiposOrd = [...j.tipos].sort((a, b) => b.delta - a.delta);
 
   const PREGUNTAS: { q: string; a: ReactNode; ent: string; v: Vista }[] = [
@@ -52,7 +54,7 @@ export function Inicio({ j, c, irA, porQue }: { j: Jurado; c: Causal; irA: (v: V
     },
     {
       q: '¿Se puede confiar en la calificación?',
-      a: alto && bajo ? <>Con lanzadores que el modelo nunca vio, un Stuff+ de 110 a 120 permite <b>{sg(alto.carreras_100)}</b> carreras por cada 100 lanzamientos y uno menor a 80 permite <b>{sg(bajo.carreras_100)}</b>.</> : null,
+      a: alto && bajo ? <>Con lanzadores que el modelo nunca vio, un Stuff+ de 110 a 120 le quita <b>{nf(-alto.carreras_100, 1)}</b> carreras al rival por cada 100 lanzamientos, y uno menor a 80 le regala <b>{nf(bajo.carreras_100, 1)}</b>.</> : null,
       ent: 'Criterios 1 y 2', v: 'confianza',
     },
   ];
@@ -69,7 +71,18 @@ export function Inicio({ j, c, irA, porQue }: { j: Jurado; c: Causal; irA: (v: V
             lanzamiento en el Estadio Alfredo Harp Helú, donde el aire es 20 % más delgado y la
             pelota se mueve menos.
           </p>
-          <p className="inicio-anexo">¿Nuevo en el béisbol? <button type="button" className="enlace" onClick={() => irA('anexo')}>Los términos y los siete tipos de lanzamiento, en el anexo →</button></p>
+          <div className="respuesta-corta">
+            <p className="rc-frase"><span className="etiqueta">La respuesta corta</span>
+              La altitud no daña al lanzamiento malo, <b>borra la ventaja del bueno</b>. En casa conviene el lanzador que
+              engaña sin depender del movimiento, con cutter, slider y splitter, y que provoca rodados.</p>
+            <div className="rc-cifras">
+              <div><b className="num d-mucho">{sg(promedioLiga, 1)}</b><span>puntos de Stuff+ pierde el lanzamiento promedio en el Harp Helú</span></div>
+              <div><b className="num d-aguanta">{nf(aguantan)} de {nf(j.pitchers_n)}</b><span>lanzadores aguantan la altura, pierden menos de 1.2 puntos</span></div>
+              <div><b className="num d-mucho">{sg(c.ate, 2)}</b><span>carreras más por cada 100 lanzamientos, medido en el marcador</span></div>
+            </div>
+          </div>
+          <p className="inicio-anexo">Si tienes cinco minutos, recorre <button type="button" className="enlace" onClick={() => irA('lanzadores')}>Lanzadores</button>, <button type="button" className="enlace" onClick={() => irA('simulador')}>Simulador</button> y <button type="button" className="enlace" onClick={() => irA('metodologia')}>Metodología</button>.
+            ¿Nuevo en el béisbol? <button type="button" className="enlace" onClick={() => irA('anexo')}>Los términos y los siete tipos de lanzamiento, en el anexo →</button></p>
           <div className="para-quien">
             <div>
               <span className="etiqueta">Para el pitching coach</span>
@@ -112,12 +125,12 @@ export function Inicio({ j, c, irA, porQue }: { j: Jurado; c: Causal; irA: (v: V
               <article className="respuesta">
                 <span className="respuesta-n">Fichajes</span>
                 <h3>No pagues de más por movimiento</h3>
-                <p>Los lanzadores que más pierden en el Harp Helú dependen de rectas y curvas que se mueven mucho. El que más pierde, <b>{masPierde.nombre}</b> ({masPierde.arsenal.toLowerCase()}), baja de {nf(masPierde.stuff_mar, 1)} a {nf(masPierde.stuff_hh, 1)}.</p>
+                <p>Los lanzadores que más pierden en el Harp Helú dependen de lanzamientos que se mueven mucho. El que más pierde, <b>{masPierde.nombre}</b> ({masPierde.arsenal.toLowerCase()}), baja de {nf(masPierde.stuff_mar, 1)} a {nf(masPierde.stuff_hh, 1)}.</p>
               </article>
               <article className="respuesta">
                 <span className="respuesta-n">El perfil a buscar</span>
                 <h3>Cutter, slider y splitter aguantan</h3>
-                <p>Engañan por parecerse a la recta al salir de la mano, no por moverse mucho, así que el aire delgado les quita poco. Mira a <b>{fichaje.nombre}</b> ({fichaje.arsenal.toLowerCase()}) vale {nf(fichaje.stuff_mar, 1)} a nivel del mar y {nf(fichaje.stuff_hh, 1)} en casa.</p>
+                <p>Engañan por parecerse a la recta al salir de la mano, no por moverse mucho, así que el aire delgado les quita poco. Por ejemplo, <b>{fichaje.nombre}</b> ({fichaje.arsenal.toLowerCase()}) vale {nf(fichaje.stuff_mar, 1)} a nivel del mar y {nf(fichaje.stuff_hh, 1)} en casa.</p>
               </article>
               <article className="respuesta">
                 <span className="respuesta-n">En casa</span>

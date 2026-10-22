@@ -132,7 +132,7 @@ export function App() {
         )}
 
         {datos && vista === 'arsenal' && (
-          <Resumen irA={irA} j={datos.jurado} d={{
+          <Resumen irA={irA} j={datos.jurado} extras={datos.extras} d={{
             tipos: datos.arsenal.tipos,
             quintiles: datos.compresion.quintiles ?? {},
             mezcla: datos.compresion.mezcla_top_1pct ?? {},

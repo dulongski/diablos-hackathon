@@ -920,3 +920,14 @@ svg .eje-cero { stroke: color-mix(in srgb, var(--ceniza) 70%, transparent); stro
   .sim-camaras button { padding: 4px 8px; font-size: 0.72rem; }
 }
 .res-delta b.d-aguanta { color: var(--gana); } .res-delta b.d-pierde { color: var(--aviso); } .res-delta b.d-mucho { color: var(--diablo); }
+.respuesta-corta { margin: 22px 0 10px; padding: 18px 20px; background: var(--basalto-alto); border: var(--borde-tenue); border-left: 4px solid var(--diablo); border-radius: var(--radio); display: grid; gap: 14px; max-width: 1000px; }
+.rc-frase { font-size: 1.12rem; margin: 0; max-width: none; color: var(--enrarecido); }
+.rc-frase .etiqueta { display: block; margin-bottom: 4px; color: var(--diablo); }
+.rc-frase b { color: var(--tinta); }
+.rc-cifras { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.rc-cifras > div { display: grid; gap: 2px; }
+.rc-cifras b { font-size: 1.7rem; line-height: 1.1; }
+.rc-cifras span { font-size: 0.85rem; color: var(--ceniza); }
+.inicio-anexo .enlace { font-size: inherit; }
+@media (max-width: 700px) { .rc-cifras { grid-template-columns: 1fr; } }
+.tres-entornos { margin-top: 20px; } .tabla-datos tr.total th, .tabla-datos tr.total td { border-top: 2px solid var(--tinta); font-weight: 700; }
