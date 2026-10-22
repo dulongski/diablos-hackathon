@@ -2,8 +2,8 @@
  * Del lanzamiento al Stuff+.
  *
  * Une las dos mitades del sistema: el integrador produce la forma fisica y el ensamble de
- * arboles la convierte en un indice. Como el modelo Stuff+ solo ve forma , nunca ubicacion,
- * conteo ni parque,  basta con transferir la forma a otro aire y volver a puntuar para
+ * arboles la convierte en un indice. Como el modelo Stuff+ solo ve forma, nunca ubicacion,
+ * conteo ni parque, basta con transferir la forma a otro aire y volver a puntuar para
  * obtener el contrafactual: el mismo lanzamiento, otro estadio.
  */
 import { predict, toPlus, type Model } from './gbm';

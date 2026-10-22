@@ -137,8 +137,9 @@ export function Confianza({ j }: { j: Jurado }) {
         <div className="tarjeta">
           <h3 className="titulo-tarjeta">Qué tan bien predice cada pieza</h3>
           <p className="nota-tarjeta">
-            Stuff+ combina ocho predicciones. Cada barra dice cuánto mejor que adivinar con el promedio de la liga es
-            cada una, con lanzadores nunca vistos. 0 % sería no saber nada.
+            Stuff+ predice directamente las carreras. Aparte, ocho modelos de componente explican de dónde sale ese valor
+            (el swing, el swing fallido, el contacto). Cada barra dice cuánto mejor que adivinar con el promedio de la liga
+            predice cada uno, con lanzadores nunca vistos. 0 % sería no saber nada.
           </p>
           <div className="habilidades">
             {comps.map(([k, v]) => (

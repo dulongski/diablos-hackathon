@@ -1,9 +1,23 @@
 """Documento técnico: docs/documento_tecnico.md → entrega/documento_tecnico.html (y luego PDF con pdf.mjs)."""
-import pathlib, re, markdown
+import json, pathlib, re, subprocess, markdown
 
 AQUI = pathlib.Path(__file__).parent
 md = (AQUI / "documento_tecnico.md").read_text()
+
+# Las fórmulas se sacan antes del Markdown (que se comería los _ y los *) y se componen con KaTeX.
+FORMULAS = []
+def guardar(m, display):
+    FORMULAS.append({"tex": m.group(1).strip(), "display": display})
+    return f"@@F{len(FORMULAS) - 1}@@"
+md = re.sub(r"\$\$(.+?)\$\$", lambda m: guardar(m, True), md, flags=re.S)
+md = re.sub(r"(?<![\\$])\$([^$\n]+?)\$", lambda m: guardar(m, False), md)
+html_f = json.loads(subprocess.run(["node", str(AQUI / "katex.mjs")], input=json.dumps(FORMULAS),
+                                   capture_output=True, text=True, check=True).stdout)
 cuerpo = markdown.markdown(md, extensions=["tables", "fenced_code"])
+cuerpo = re.sub(r"<p>@@F(\d+)@@</p>", lambda m: f'<div class="ecuacion">{html_f[int(m.group(1))]}</div>', cuerpo)
+cuerpo = re.sub(r"@@F(\d+)@@", lambda m: html_f[int(m.group(1))], cuerpo)
+# los anexos empiezan en página nueva
+cuerpo = cuerpo.replace("<h2>Anexo A", '<h2 class="anexo">Anexo A', 1)
 # las columnas numéricas se alinean a la derecha; las de texto, no
 NUM = re.compile(r"^(<strong>)?[\s+\-−–\d.,%→ ]+(in|mph|ft)?(</strong>)?$")
 def alinear(t):
@@ -57,30 +71,39 @@ hr { border: none; border-top: 1px solid var(--linea); margin: 14pt 0; }
 .cifras div:nth-child(2) { border-top-color: var(--azul); }
 .cifras b { display: block; font-family: 'JetBrains Mono', monospace; font-size: 20pt; color: var(--tinta); }
 .cifras span { font-size: 8.5pt; color: var(--ceniza); }
+.logos-portada { display: flex; align-items: center; gap: 22pt; margin-bottom: 34pt; }
+.l-isac { height: 34pt; } .l-diablos { height: 46pt; }
+.ecuacion { margin: 8pt 0 10pt; overflow-x: auto; }
+.katex { font-size: 1.06em; } .katex-display { margin: 0; }
+h2.anexo { break-before: page; }
 .pie { font-size: 8pt; color: var(--ceniza); border-top: 1px solid var(--linea); padding-top: 8pt; }
 """
 
 PORTADA = """
 <section class="portada">
   <div>
-    <div class="eyebrow">Hackathon ISAC 2026 · Diablos Rojos del México · Documento técnico</div>
-    <h1>Stuff+ calibrado<br>a <em>2,240</em> metros</h1>
-    <p class="sub">Un modelo de calidad de lanzamiento ajustado por entorno para el Estadio Alfredo Harp Helú:
-    qué lanzadores sufren la altitud, cuáles aguantan y qué perfil conviene buscar.</p>
+    <div class="logos-portada"><img src="{isac}" alt="ISAC" class="l-isac"><img src="{diablos}" alt="Diablos Rojos del México" class="l-diablos"></div>
+    <div class="eyebrow">Hackathon ISAC 2026 · Reto Diablos Rojos del México · Documento técnico</div>
+    <h1>Diablos <em>Stuff+</em></h1>
+    <p class="sub">Calidad de lanzamiento ajustada por la altitud del Estadio Alfredo Harp Helú. Qué lanzadores
+    sufren los 2,240 metros, cuáles aguantan y qué perfil te conviene buscar.</p>
     <div class="cifras">
-      <div><b>635,002</b><span>lanzamientos de la LMB, 2024–2026, con Trackman</span></div>
+      <div><b>635,002</b><span>lanzamientos de la LMB, 2024 a 2026, medidos con Trackman</span></div>
       <div><b>561</b><span>lanzadores comparados entre el nivel del mar y el Harp Helú</span></div>
-      <div><b>−2.4</b><span>puntos de Stuff+ que pierde el lanzamiento promedio en altura</span></div>
+      <div><b>4 + 1</b><span>hipótesis del reto probadas, más un Causal Forest como modelo secundario</span></div>
     </div>
   </div>
-  <p class="pie">Los datos de la LMB se usaron únicamente para esta competencia: este documento presenta resultados, no datos.
-  Lanzadores anonimizados por la liga.</p>
+  <p class="pie">Trabajo independiente de los participantes. No es un producto oficial de ISAC ni del club. Usamos los datos de la
+  LMB sólo para esta competencia y aquí presentamos resultados, no datos. La liga anonimizó a los lanzadores.</p>
 </section>
 """
 
-html = f"""<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Stuff+ a 2,240 m · Documento técnico</title>
+KATEX_CSS = (AQUI.parent / "app" / "node_modules" / "katex" / "dist" / "katex.min.css").as_uri()
+LOGOS = AQUI.parent / "app" / "public" / "logos"
+html = f"""<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Diablos Stuff+ · Documento técnico</title>
 <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<style>{CSS}</style></head><body>{PORTADA}{cuerpo}</body></html>"""
+<link rel="stylesheet" href="{KATEX_CSS}">
+<style>{CSS}</style></head><body>{PORTADA.format(isac=(LOGOS / 'isac.svg').as_uri(), diablos=(LOGOS / 'diablos.png').as_uri())}{cuerpo}</body></html>"""
 salida = AQUI.parent / "entrega" / "documento_tecnico.html"
 salida.write_text(html)
 print("HTML:", salida)

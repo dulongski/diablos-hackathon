@@ -1,5 +1,6 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Stuff+ a 2,240 m · Documento técnico</title>
+<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Diablos Stuff+ · Documento técnico</title>
 <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="file:///home/user/diablos-hackathon/app/node_modules/katex/dist/katex.min.css">
 <style>
 @page { size: Letter; margin: 15mm 16mm 15mm; @bottom-right { content: counter(page); } }
 :root { --rojo:#D7362B; --azul:#2E6FA6; --tinta:#10201A; --texto:#24302A; --ceniza:#6E7A73; --linea:#E3DCCB; --fondo:#FBF9F4; }
@@ -28,91 +29,154 @@ hr { border: none; border-top: 1px solid var(--linea); margin: 14pt 0; }
 .cifras div:nth-child(2) { border-top-color: var(--azul); }
 .cifras b { display: block; font-family: 'JetBrains Mono', monospace; font-size: 20pt; color: var(--tinta); }
 .cifras span { font-size: 8.5pt; color: var(--ceniza); }
+.logos-portada { display: flex; align-items: center; gap: 22pt; margin-bottom: 34pt; }
+.l-isac { height: 34pt; } .l-diablos { height: 46pt; }
+.ecuacion { margin: 8pt 0 10pt; overflow-x: auto; }
+.katex { font-size: 1.06em; } .katex-display { margin: 0; }
+h2.anexo { break-before: page; }
 .pie { font-size: 8pt; color: var(--ceniza); border-top: 1px solid var(--linea); padding-top: 8pt; }
 </style></head><body>
 <section class="portada">
   <div>
-    <div class="eyebrow">Hackathon ISAC 2026 · Diablos Rojos del México · Documento técnico</div>
-    <h1>Stuff+ calibrado<br>a <em>2,240</em> metros</h1>
-    <p class="sub">Un modelo de calidad de lanzamiento ajustado por entorno para el Estadio Alfredo Harp Helú:
-    qué lanzadores sufren la altitud, cuáles aguantan y qué perfil conviene buscar.</p>
+    <div class="logos-portada"><img src="file:///home/user/diablos-hackathon/app/public/logos/isac.svg" alt="ISAC" class="l-isac"><img src="file:///home/user/diablos-hackathon/app/public/logos/diablos.png" alt="Diablos Rojos del México" class="l-diablos"></div>
+    <div class="eyebrow">Hackathon ISAC 2026 · Reto Diablos Rojos del México · Documento técnico</div>
+    <h1>Diablos <em>Stuff+</em></h1>
+    <p class="sub">Calidad de lanzamiento ajustada por la altitud del Estadio Alfredo Harp Helú. Qué lanzadores
+    sufren los 2,240 metros, cuáles aguantan y qué perfil te conviene buscar.</p>
     <div class="cifras">
-      <div><b>635,002</b><span>lanzamientos de la LMB, 2024–2026, con Trackman</span></div>
+      <div><b>635,002</b><span>lanzamientos de la LMB, 2024 a 2026, medidos con Trackman</span></div>
       <div><b>561</b><span>lanzadores comparados entre el nivel del mar y el Harp Helú</span></div>
-      <div><b>−2.4</b><span>puntos de Stuff+ que pierde el lanzamiento promedio en altura</span></div>
+      <div><b>4 + 1</b><span>hipótesis del reto probadas, más un Causal Forest como modelo secundario</span></div>
     </div>
   </div>
-  <p class="pie">Los datos de la LMB se usaron únicamente para esta competencia: este documento presenta resultados, no datos.
-  Lanzadores anonimizados por la liga.</p>
+  <p class="pie">Trabajo independiente de los participantes. No es un producto oficial de ISAC ni del club. Usamos los datos de la
+  LMB sólo para esta competencia y aquí presentamos resultados, no datos. La liga anonimizó a los lanzadores.</p>
 </section>
 
-<h2>1. Marco teórico</h2>
-<p>La sabermetría moderna evalúa el lanzamiento, no el resultado. Un <em>slider</em> que induce un
-swing fallido y uno que termina en jonrón pueden ser físicamente idénticos: la diferencia
-está en el bateador, el parque y el azar. Los modelos tipo Stuff+ separan la calidad del
-lanzamiento de su desenlace observado, estimando el valor esperado a partir de las
-propiedades físicas del envío.</p>
-<p>Esa separación depende de un supuesto que en la LMB no se sostiene: que la relación entre
-la física del lanzamiento y su resultado es la misma en todos los estadios. Los modelos
-Stuff+ de MLB se entrenaron casi enteramente con parques cercanos al nivel del mar. El
-Harp Helú está a 2,240 metros, más alto que Coors Field (1,609 m), el estadio más
-favorable al bateo de las Grandes Ligas.</p>
-<p>El mecanismo es directo. El movimiento de un lanzamiento lo produce el aire: la fuerza de
-Magnus, que desvía la pelota, es proporcional a la densidad del aire. Con menos aire hay
-menos fuerza y menos movimiento. Alan Nathan estima que en Coors Field un lanzamiento con
-18 pulgadas de quiebre puede moverse 14 o 15. La pregunta de este trabajo es cuánto, y
-para qué formas de lanzamiento, en las condiciones específicas de la LMB.</p>
-<h2>2. Datos</h2>
-<p>El conjunto entregado por ISAC contiene 635,002 lanzamientos rastreados con
-Trackman a lo largo de tres temporadas, con identificadores anonimizados de juego,
-lanzador, bateador y receptor.</p>
-<p>La limitación central para este reto es que <strong>el conjunto no identifica el estadio ni su
-altitud</strong>: sólo trae <code>altitude_category</code>, una variable de tres niveles. La sección 3
-explica cómo se recupera una medida continua de la densidad del aire a partir de la propia
-trayectoria.</p>
-<p>Otras limitaciones y su tratamiento:</p>
+<h2>Resumen</h2>
+<p>Los modelos Stuff+ califican qué tan difícil de batear es un lanzamiento a partir de su física. El
+problema es que se construyeron en estadios a nivel del mar. El Harp Helú está a 2,240 metros, con
+20 % menos aire, y ahí la pelota se mueve menos. Construimos un Stuff+ para la LMB en el que <strong>la
+altitud no es una variable del modelo sino una transformación física</strong>. Volvemos a volar cada
+lanzamiento con el aire de otro estadio y lo calificamos de nuevo. Encontramos cuatro cosas que
+cambian tus decisiones.</p>
+<ol>
+<li><strong>Todo lanzamiento pierde en altura, pero no lo mismo.</strong> La recta pierde 3.4 puntos de Stuff+ y
+   el cutter 0.9. La mejor recta de la liga pierde 8.4.</li>
+<li><strong>De 561 lanzadores, 58 aguantan la altura.</strong> Se apoyan en cutter, slider y splitter, y provocan
+   rodados.</li>
+<li><strong>Probamos las cuatro hipótesis del reto.</strong> H1 y H4 se confirman. H2 y H3 se confirman en parte.</li>
+<li><strong>Un Causal Forest sobre carreras reales llega a los mismos lanzadores</strong>, sin usar Stuff+. Su
+   estimación correlaciona 0.41 con la pérdida de Stuff+.</li>
+</ol>
+<h2>1. Planteamiento</h2>
+<h3>1.1 La pregunta del club</h3>
+<p>¿Qué lanzadores sufren más la altitud y cuáles son los más consistentes? De esa respuesta salen tus
+fichajes, tu rotación en casa y el desarrollo de tus prospectos.</p>
+<h3>1.2 Por qué importa la altitud</h3>
+<p>Una pelota que gira desvía el aire hacia un lado, y el aire la empuja hacia el otro. Es el efecto
+Magnus. Ese empuje produce el movimiento que engaña al bateador, y crece con la densidad del aire.
+Con menos aire hay menos empuje, menos movimiento y menos engaño. A la vez, el aire frena menos y los
+batazos llegan más lejos. Alan Nathan estima que en Coors Field, a 1,609 metros, un lanzamiento con 18
+pulgadas de quiebre se mueve 14 o 15. El Harp Helú está 631 metros más arriba.</p>
+<h3>1.3 Las hipótesis del reto</h3>
 <table>
 <thead>
 <tr>
-<th>Limitación</th>
-<th>Tratamiento</th>
+<th></th>
+<th>Hipótesis</th>
+<th>Cómo la probamos</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Sin estado de corredores (24 estados base-out)</td>
-<td>Valor de carrera sobre la cadena de 12 estados de conteo</td>
+<td>H1</td>
+<td>La baja densidad reduce el movimiento que produce el giro</td>
+<td>Física contra Nathan y pérdida de Stuff+ por tipo, con intervalos</td>
 </tr>
 <tr>
-<td>Sin fecha ni número de lanzamiento</td>
-<td>Orden reconstruido del archivo; las filas vienen cronológicas y contiguas por juego</td>
+<td>H2</td>
+<td>Los lanzamientos de diferencial de velocidad ganan valor relativo</td>
+<td>El cambio contra la recta del mismo lanzador</td>
 </tr>
 <tr>
-<td><code>is_hit_by_pitch</code> viene en cero en las 635,002 filas</td>
-<td>Reconstruido de <code>PitchCall</code>; es el único de catorce flags derivados con este problema</td>
+<td>H3</td>
+<td>Los lanzadores de rodados valen más en altura</td>
+<td>Pendiente de carreras contra rodados en cada entorno</td>
 </tr>
 <tr>
-<td><code>AutoPitchType</code> con clases residuales</td>
-<td>Colapsadas a un vocabulario estable de siete tipos</td>
+<td>H4</td>
+<td>El giro por sí solo no predice Stuff+</td>
+<td>Peso en el modelo y experimento controlado</td>
 </tr>
 </tbody>
 </table>
-<h2>3. La densidad del aire, medida en la trayectoria</h2>
-<p>Restando la gravedad, la aceleración medida en el release se descompone en dos partes
-ortogonales: una paralela a la velocidad, que es el arrastre, y una perpendicular, que es
-Magnus.</p>
-<pre><code>a_aero  = a_medida − g
-a_drag  = (a_aero · v̂) v̂
-a_magnus = a_aero − a_drag
-</code></pre>
-<p>Como el arrastre va con ρ·C_d·v², el cociente <strong>k_drag = |a_drag| / v²</strong> es proporcional a
-la densidad del aire y se puede calcular para cada lanzamiento. Su mediana por juego da un
-índice estable, con variación día a día dentro de cada estadio:</p>
+<h2>2. Datos y supuestos</h2>
+<p>ISAC entregó 635,002 lanzamientos medidos con Trackman en tres temporadas, con identificadores
+anónimos de juego, lanzador, bateador y receptor. El conjunto <strong>no dice en qué estadio se lanzó</strong>. Sólo
+trae una categoría de altitud con tres niveles (nivel del mar, altitud media y altitud extrema).</p>
+<table>
+<thead>
+<tr>
+<th>Limitación</th>
+<th>Cómo la resolvimos</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>No hay estadio ni altitud</td>
+<td>Medimos la densidad del aire en la trayectoria (sección 3.2)</td>
+</tr>
+<tr>
+<td>No hay corredores en base</td>
+<td>Valor de carrera sobre los 12 conteos posibles</td>
+</tr>
+<tr>
+<td>No hay fecha ni número de lanzamiento</td>
+<td>Reconstruimos el orden, el archivo viene cronológico por juego</td>
+</tr>
+<tr>
+<td><code>is_hit_by_pitch</code> vale cero en todas las filas</td>
+<td>Lo reconstruimos desde <code>PitchCall</code></td>
+</tr>
+<tr>
+<td>Hay tipos de lanzamiento residuales</td>
+<td>Los agrupamos en siete tipos estables</td>
+</tr>
+</tbody>
+</table>
+<p>Trabajamos con cuatro supuestos.
+<strong>S1.</strong> El brazo no cambia con la altitud. Lo comprobamos dentro de cada lanzador. Entre nivel del mar
+y altitud extrema su giro cambia 0.5 %, su eficiencia de giro 0.3 % y su velocidad de salida 0.1 %.
+<strong>S2.</strong> Todo lo que cambia en el vuelo de la pelota entre estadios viene del aire.
+<strong>S3.</strong> Medimos el valor de un lanzamiento en carreras esperadas según el conteo. El resultado que tuvo
+depende del bateador y del azar.
+<strong>S4.</strong> La escala toma como referencia a la liga a nivel del mar, donde 100 es el promedio.</p>
+<h2>3. Metodología</h2>
+<h3>3.1 La idea en cuatro pasos</h3>
+<p>La decisión central es que <strong>la altitud nunca entra como variable del modelo de calidad</strong>. Si entrara,
+su efecto se mezclaría con quién lanza dónde, porque los lanzadores de los equipos de altura no son una
+muestra al azar. Y no podrías responder la pregunta que importa. ¿Cuánto valdría en el Harp Helú un
+lanzamiento que nunca se ha tirado ahí?</p>
+<ol>
+<li><strong>Medimos el aire</strong> de cada juego con el frenado de la pelota.</li>
+<li><strong>Transferimos la forma.</strong> Volvemos a volar cada lanzamiento con el aire de otro estadio.</li>
+<li><strong>Calificamos la forma</strong> con un modelo que sólo ve física (Stuff+) y con dos capas que suman contexto.</li>
+<li><strong>Comparamos</strong> el mismo lanzamiento en los dos aires. La diferencia es el efecto de la altitud.</li>
+</ol>
+<h3>3.2 La densidad del aire, medida en la trayectoria</h3>
+<p>Trackman reporta la aceleración de cada pelota. Le quitamos la gravedad y nos queda la parte
+aerodinámica. La separamos en una componente paralela a la velocidad (el arrastre) y una perpendicular
+(el Magnus).</p>
+<div class="ecuacion"><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5944em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathbf">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">aero</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6667em;vertical-align:-0.0833em;"></span><span class="mord mathbf">a</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7305em;vertical-align:-0.2861em;"></span><span class="mord mathbf" style="margin-right:0.01597em;">g</span><span class="mpunct">,</span><span class="mspace" style="margin-right:2em;"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathbf">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">drag</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathbf">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">aero</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7079em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathbf" style="margin-right:0.01597em;">v</span></span><span style="top:-3.0134em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.2222em;"><span class="mord">^</span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7079em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathbf" style="margin-right:0.01597em;">v</span></span><span style="top:-3.0134em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.2222em;"><span class="mord">^</span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:2em;"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathbf">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">M</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathbf">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">aero</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7305em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathbf">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">drag</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span></span></div>
+<p>El arrastre vale <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.1901em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8451em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mord mathnormal">ρ</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">d</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathnormal">A</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mord">/</span><span class="mord mathnormal">m</span></span></span></span>. Por eso el cociente <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9805em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03148em;">k</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0315em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">drag</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.1002em;vertical-align:-0.2861em;"></span><span class="mopen">∥</span><span class="mord"><span class="mord mathbf">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">drag</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mclose">∥</span><span class="mord">/</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span>
+es proporcional a <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">ρ</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">d</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>, y lo calculamos para cada lanzamiento. Su mediana por juego, normalizada
+al nivel del mar, es el <strong>índice de arrastre</strong> <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span></span></span></span> de ese juego.</p>
 <table>
 <thead>
 <tr>
 <th>Categoría</th>
-<th class="n">Índice de arrastre (mediana)</th>
+<th class="n">Índice de arrastre <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span></span></span></span> (mediana)</th>
 </tr>
 </thead>
 <tbody>
@@ -130,71 +194,129 @@ la densidad del aire y se puede calcular para cada lanzamiento. Su mediana por j
 </tr>
 </tbody>
 </table>
-<h3>3.1 El arrastre no es la densidad</h3>
-<p>El índice mide ρ·C_d, no ρ. A 2,240 metros la atmósfera estándar da una densidad de 0.802,
-pero el arrastre medido cae sólo a 0.8534. La diferencia es el
-coeficiente de arrastre: el número de Reynolds baja con la densidad y C_d sube.</p>
-<p>Ajustando un solo exponente que ancle el índice medido a la altitud del Harp Helú se
-obtiene <strong>0.7184</strong> (índice = densidad ISA^0.7184). La verificación es
-independiente: con ese exponente, un estadio a la altura de Coors Field (1,609 m) debería dar
-<strong>0.8931</strong>, y la cubeta intermedia de la LMB, que nunca entró al ajuste, mide <strong>0.8981</strong>.</p>
-<h3>3.2 El movimiento cae más que la densidad</h3>
-<p>Si arrastre y Magnus fueran ambos proporcionales a ρ, el movimiento caería en la misma
-proporción que el frenado. No ocurre. Midiendo la respuesta <strong>dentro de cada lanzador</strong>
-—1,187 combinaciones lanzador × tipo, siete cubetas de densidad, respuesta monótona—:</p>
-<pre><code>k_drag ~ ρ^0.96          k_magnus ~ ρ^1.39
-</code></pre>
-<p>El Magnus responde alrededor de 1.45 veces más fuerte que el arrastre. Verificado que <strong>no
-es el giro</strong>: entre nivel del mar y altitud extrema, dentro del mismo lanzador, la
-frecuencia de giro cambia +0.5 %, el <em>spin factor</em> +0.3 % y la velocidad de salida +0.1 %.
-Es el aire.</p>
-<h2>4. Arquitectura</h2>
-<p>La decisión central es que <strong>la altitud no entra al modelo Stuff+ como variable</strong>.
-Introducirla como indicador dejaría su efecto confundido con qué lanzadores tiran dónde, e
-impediría responder la pregunta operativa: ¿cuánto valdría este lanzamiento, que nunca se
-ha tirado en altura, en el Harp Helú? En su lugar, dos etapas donde la altitud queda
-identificada por física:</p>
-<p><strong>Etapa 1 — transferencia de forma.</strong> Con el punto de salida y el giro fijos, se reintegra
-la trayectoria escalando arrastre por el cociente de densidades y Magnus por ese cociente
-elevado a los exponentes calibrados (vertical 1.7,
-horizontal 2.2). El integrador es Runge-Kutta de cuarto orden
-anclado en el punto real de salida (y = 60.5 − extensión), con el eje de giro conservado y
-la fuerza de Magnus perpendicular a la velocidad en todo el vuelo.</p>
-<p>Se usa por diferencias: el integrador no predice la forma, sólo su <em>cambio</em> entre dos
-densidades, y ese cambio se suma a la medición real de Trackman. Así los niveles coinciden
-con Trackman por construcción y el único error que queda es el diferencial.</p>
-<p><strong>Etapa 2 — Stuff+ sobre forma pura.</strong> Un modelo de <em>gradient boosting</em> que ve únicamente
-la física del envío: velocidad, quiebres, giro, punto y ángulos de salida, extensión,
-ángulos de aproximación. Nunca ve ubicación, conteo, bateador ni estadio. Por eso es
-transferible: para saber qué vale el mismo lanzamiento en otro aire, se le pasa la forma
-transferida y se vuelve a puntuar.</p>
-<p>Sobre esa base, Location+ agrega ubicación y conteo, y Pitching+ agrega arsenal y
-secuencia.</p>
-<h3>4.1 Función de pérdida y escala</h3>
-<p>El objetivo es el valor de carrera del lanzamiento, construido sobre la cadena de conteos:</p>
-<pre><code>RV(lanzamiento) = valor(estado después) − valor(estado antes)
-</code></pre>
-<p>donde el valor de un conteo es el valor de carrera esperado de los turnos que pasan por él
-y el de un evento terminal es su peso lineal, recentrado con las frecuencias de la LMB. La
-escala sigue la convención sabermétrica:</p>
-<pre><code>Stuff+ = 100 + 10 × z(−xRV)
-</code></pre>
-<p>100 es el promedio de la liga y cada 10 puntos es una desviación estándar; el signo se
-invierte porque un valor de carrera bajo favorece al lanzador.</p>
-<h2>5. Validación fuera de muestra</h2>
-<h3>5.1 La transferencia de forma</h3>
-<p>La prueba decisiva: tomar los lanzamientos de un lanzador <strong>a nivel del mar</strong>, transferirlos
-al aire de altitud, y comparar contra lo que ese mismo lanzador realmente tiró allá.
-444 lanzadores tiraron en ambos entornos; la mitad se usó para calibrar
-los exponentes y la otra mitad <strong>nunca</strong>. Sobre esas 436 celdas de
-evaluación:</p>
+<p><strong>El arrastre no es la densidad.</strong> A 2,240 metros la atmósfera estándar da <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">ρ</span><span class="mord">/</span><span class="mord"><span class="mord mathnormal">ρ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0.802</span></span></span></span>, pero
+medimos un índice de 0.853. La causa es aerodinámica. Con menos aire baja el número de Reynolds y sube
+el coeficiente de arrastre <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">d</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>. Anclamos un solo exponente <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.05278em;">β</span></span></span></span> a la altitud del Harp Helú.</p>
+<div class="ecuacion"><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mopen">(</span><span class="mord mathnormal">h</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.1491em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal">ρ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">ISA</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">h</span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8991em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05278em;">β</span></span></span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:2em;"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">ρ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">ISA</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">h</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.4181em;vertical-align:-0.35em;"></span><span class="minner"><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size1">(</span></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord">2.25577</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord">1</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mtight">5</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">h</span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size1">)</span></span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:1.0681em;"><span style="top:-3.317em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">4.25588</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:2em;"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.05278em;">β</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0.7184</span></span></span></span></span></div>
+<p>La prueba es independiente del ajuste. Con ese <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.05278em;">β</span></span></span></span>, un estadio a la altura de Coors Field debería
+dar <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0.8931</span></span></span></span>. La categoría de altitud media de la LMB nunca entró al ajuste y mide 0.8981.</p>
+<p><strong>El movimiento cae más que el arrastre.</strong> Dentro del mismo lanzador y tipo de lanzamiento (1,187
+combinaciones en siete niveles de densidad), las dos fuerzas responden distinto.</p>
+<div class="ecuacion"><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9805em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03148em;">k</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0315em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">drag</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∝</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.0585em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal">ρ</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0.96</span></span></span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:2em;"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03148em;">k</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0315em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">M</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∝</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.0585em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal">ρ</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1.39</span></span></span></span></span></span></span></span></span></span></span></span></span></div>
+<p>El Magnus responde casi 1.5 veces más fuerte que el arrastre. Por S1 no es el giro. Es el aire.</p>
+<h3>3.3 Transferencia de forma, el mismo lanzamiento en otro aire</h3>
+<p>Para cada lanzamiento resolvemos su estado de salida (posición, velocidad y eje de giro) a partir de lo
+que midió Trackman. Después integramos el vuelo desde la mano hasta el plato con Runge Kutta de cuarto
+orden y pasos de 2 milisegundos.</p>
+<div class="ecuacion"><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:2.0574em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3714em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">d</span><span class="mord mathnormal">t</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">d</span><span class="mord mathbf" style="margin-right:0.01597em;">v</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">−</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03148em;">k</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0315em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">d</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mopen">∥</span><span class="mord mathbf" style="margin-right:0.01597em;">v</span><span class="mclose">∥</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathbf" style="margin-right:0.01597em;">v</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:2.4271em;vertical-align:-0.936em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7144em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05556em;">γ</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.4911em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mopen">∥</span><span class="mord"><span class="mord mathbf" style="margin-right:0.01597em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.016em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose"><span class="mclose">∥</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7401em;"><span style="top:-2.989em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mopen">∥</span><span class="mord mathbf" style="margin-right:0.01597em;">v</span><span class="mclose"><span class="mclose">∥</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.936em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3849em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mopen">∥</span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7079em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord boldsymbol" style="margin-right:0.03704em;">ω</span></span></span></span><span style="top:-3.0134em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;"><span class="mord">^</span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathbf" style="margin-right:0.01597em;">v</span><span class="mclose">∥</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7079em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord boldsymbol" style="margin-right:0.03704em;">ω</span></span></span></span><span style="top:-3.0134em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;"><span class="mord">^</span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathbf" style="margin-right:0.01597em;">v</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.936em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6389em;vertical-align:-0.1944em;"></span><span class="mord mathbf" style="margin-right:0.01597em;">g</span></span></span></span></span></div>
+<p>Aquí <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03148em;">k</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0315em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">d</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0.001588</span></span></span></span> es la mediana de la LMB a nivel del mar y <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span></span></span></span> es la magnitud de Magnus que
+reproduce la forma medida. Los exponentes <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05556em;">γ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0556em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03588em;">v</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1.7</span></span></span></span> (vertical) y <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05556em;">γ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0556em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">h</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">2.2</span></span></span></span> (lateral) los
+calibramos fuera de muestra (sección 4.1). El eje de giro <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7079em;"></span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7079em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord boldsymbol" style="margin-right:0.03704em;">ω</span></span></span></span><span style="top:-3.0134em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;"><span class="mord">^</span></span></span></span></span></span></span></span></span></span> se conserva y la
+fuerza queda perpendicular a la velocidad todo el vuelo.</p>
+<p><strong>Usamos el integrador por diferencias.</strong> No predice la forma. Sólo predice cuánto cambia entre dos
+aires, y ese cambio se suma a la medición real.</p>
+<div class="ecuacion"><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord text"><span class="mord">forma</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">HH</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord text"><span class="mord">forma</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">Trackman</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.2em;vertical-align:-0.35em;"></span><span class="mord"><span class="delimsizing size1">[</span></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">HH</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.2em;vertical-align:-0.35em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">obs</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mord"><span class="delimsizing size1">]</span></span></span></span></span></span></div>
+<p>Así los niveles coinciden con Trackman por construcción, y el único error posible es el del cambio.</p>
+<h3>3.4 El valor en carreras de cada lanzamiento</h3>
+<p>Sin corredores en base, el estado del turno es el conteo, con 12 combinaciones de bolas y strikes. El
+valor de un conteo <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">V</span><span class="mopen">(</span><span class="mord mathnormal">c</span><span class="mclose">)</span></span></span></span> es el promedio de las carreras de los turnos que pasan por él. Los eventos
+finales usan pesos lineales (sencillo 0.70, doble 1.00, jonrón 1.65, ponche <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">0.27</span></span></span></span>), recentrados para
+que el turno promedio de la LMB valga cero. El valor de un lanzamiento es cuánto mueve el turno.</p>
+<div class="ecuacion"><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord">RV</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.0361em;vertical-align:-0.2861em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">V</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">despu</span><span class="mord accent mtight"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6944em;"><span style="top:-2.7em;"><span class="pstrut" style="height:2.7em;"></span><span class="mord mtight">e</span></span><span style="top:-2.7em;"><span class="pstrut" style="height:2.7em;"></span><span class="accent-body" style="left:-0.25em;"><span class="mord mtight">ˊ</span></span></span></span></span></span></span><span class="mord mtight">s</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">V</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">antes</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span></div>
+<h3>3.5 Stuff+, Location+ y Pitching+</h3>
+<p>Las tres capas predicen el mismo objetivo, el valor esperado en carreras <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9233em;"></span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.9233em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord text"><span class="mord">RV</span></span></span><span class="svg-align" style="top:-3.6833em;"><span class="pstrut" style="height:3em;"></span><span style="height:0.24em;"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="0.24em" viewBox="0 0 1062 239" preserveAspectRatio="none"><path d="M529 0h5l519 115c5 1 9 5 9 10 0 1-1 2-1 3l-4 22
+c-1 5-5 9-11 9h-2L532 67 19 159h-2c-5 0-9-4-11-9l-5-22c-1-6 2-12 8-13z"/></svg></span></span></span></span></span></span></span></span></span>, con
+gradient boosting en LightGBM (500 árboles, tasa de aprendizaje 0.05, 96 hojas, al menos 400
+lanzamientos por hoja y regularización <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">L</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">5</span></span></span></span>). Sólo cambia lo que ve cada una.</p>
 <table>
 <thead>
 <tr>
-<th>Magnitud</th>
+<th>Capa</th>
+<th class="n">Variables</th>
+<th>Qué ve</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Stuff+</td>
+<td class="n">20</td>
+<td>Sólo física. Velocidad, quiebres, giro, eje, punto y ángulos de salida, extensión, ángulos de llegada y eficiencia de giro</td>
+</tr>
+<tr>
+<td>Location+</td>
+<td class="n">27</td>
+<td>Además, dónde llegó la pelota, el conteo y el lado del bateador</td>
+</tr>
+<tr>
+<td>Pitching+</td>
+<td class="n">37</td>
+<td>Además, el arsenal del lanzador y la secuencia con el lanzamiento anterior</td>
+</tr>
+</tbody>
+</table>
+<p>Stuff+ nunca ve ubicación, conteo, bateador ni estadio. Por eso lo puedes transferir. Para saber qué
+vale un lanzamiento en otro aire, le das la forma transferida y lo vuelves a calificar. La escala sigue
+la convención sabermétrica.</p>
+<div class="ecuacion"><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7778em;vertical-align:-0.0833em;"></span><span class="mord text"><span class="mord">Stuff+</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">100</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.8em;vertical-align:-0.65em;"></span><span class="mord">10</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.04398em;">z</span><span class="mspace" style="margin-right:-0.1667em;"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size2">(</span></span><span class="mord">−</span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.9233em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord text"><span class="mord">RV</span></span></span><span class="svg-align" style="top:-3.6833em;"><span class="pstrut" style="height:3em;"></span><span style="height:0.24em;"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="0.24em" viewBox="0 0 1062 239" preserveAspectRatio="none"><path d="M529 0h5l519 115c5 1 9 5 9 10 0 1-1 2-1 3l-4 22
+c-1 5-5 9-11 9h-2L532 67 19 159h-2c-5 0-9-4-11-9l-5-22c-1-6 2-12 8-13z"/></svg></span></span></span></span></span></span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size2">)</span></span></span></span></span></span></span></div>
+<p>Aquí <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.04398em;">z</span></span></span></span> estandariza con la media y la desviación estándar de la liga. 100 es el promedio y cada 10
+puntos son una desviación estándar. El signo se invierte porque menos carreras es mejor para el
+lanzador. Aparte entrenamos ocho modelos de componente (swing, swing fallido, strike cantado,
+persecución, contacto débil, rodado, contacto duro y barril). Esos modelos explican de dónde sale el
+valor, pero no entran en el cálculo de Stuff+.</p>
+<h3>3.6 Validación fuera de muestra</h3>
+<p>Calculamos todas las métricas con datos que el modelo no vio.
+<strong>Holdout de lanzador.</strong> Validación cruzada de 5 pliegues agrupada por lanzador. Ningún brazo está en
+entrenamiento y prueba a la vez.
+<strong>Holdout de temporada.</strong> Entrenamos con 2024 y 2025 y probamos con 2026.
+<strong>Holdout de parque.</strong> Entrenamos sin altitud extrema y probamos sólo en altitud extrema.
+<strong>Modelo nulo.</strong> El promedio del valor en carreras por conteo, lo mínimo que sabes sin mirar el
+lanzamiento.
+<strong>Calibración.</strong> Agrupamos los lanzamientos por su Stuff+ fuera de muestra y comparamos lo predicho con
+las carreras que pasaron.</p>
+<h3>3.7 Pruebas de hipótesis</h3>
+<p>Medimos toda la incertidumbre con <strong>bootstrap por lanzador</strong> de 2,000 remuestreos. Remuestreamos
+lanzadores completos y no lanzamientos sueltos, porque los lanzamientos de un mismo brazo no son
+independientes.</p>
+<p><strong>H1.</strong> Para cada tipo de lanzamiento <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6151em;"></span><span class="mord mathnormal">t</span></span></span></span> calculamos la pérdida media, ponderada por número de
+lanzamientos, sobre 2,808 combinaciones de lanzador y tipo.</p>
+<div class="ecuacion"><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9701em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8201em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord">Δ</span></span><span style="top:-3.2523em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;"><span class="mord">ˉ</span></span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.4254em;vertical-align:-0.9857em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.4397em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mop"><span class="mop op-symbol small-op" style="position:relative;top:0em;">∑</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.162em;"><span style="top:-2.4003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2997em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">n</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">t</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.6897em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mop"><span class="mop op-symbol small-op" style="position:relative;top:0em;">∑</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.162em;"><span style="top:-2.4003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2997em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">n</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">t</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord">Δ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">t</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.9857em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:2em;"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord">Δ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">t</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.1727em;vertical-align:-0.247em;"></span><span class="mord"><span class="mord text"><span class="mord">Stuff+</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.9257em;"><span style="top:-2.453em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">t</span></span></span></span><span style="top:-3.1473em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mspace mtight" style="margin-right:0.1952em;"></span><span class="mord text mtight"><span class="mord mtight">HH</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.9957em;vertical-align:-0.247em;"></span><span class="mord"><span class="mord text"><span class="mord">Stuff+</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.7487em;"><span style="top:-2.453em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">t</span></span></span></span><span style="top:-3.1473em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mspace mtight" style="margin-right:0.1952em;"></span><span class="mord text mtight"><span class="mord mtight">mar</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span></span></span></span></span></div>
+<p>Además comparamos el integrador con la cifra de Nathan.</p>
+<p><strong>H2.</strong> Usamos un diseño pareado dentro del lanzador. Para quien tira cambio y recta,
+<span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord">Δ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mpunct mtight">,</span><span class="mord text mtight"><span class="mord mtight">cambio</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord">Δ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mpunct mtight">,</span><span class="mord text mtight"><span class="mord mtight">recta</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span>. Al comparar contra la recta del mismo brazo se
+cancela todo lo que es del lanzador y queda sólo el efecto del aire sobre cada forma. Si <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7224em;vertical-align:-0.0391em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&gt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0</span></span></span></span>, el
+cambio pierde menos que la recta.</p>
+<p><strong>H3.</strong> Tomamos los 333 lanzadores que tiraron al menos 120 veces en cada entorno. Estimamos por mínimos
+cuadrados ponderados la pendiente de carreras contra rodados en cada entorno <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">e</span></span></span></span>.</p>
+<div class="ecuacion"><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0077em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">e</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">e</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">e</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord text"><span class="mord">GB</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal">ε</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">e</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:2em;"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.08125em;">H</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0813em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">⇔</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">alt</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">mar</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0</span></span></span></span></span></div>
+<p>El peso de cada lanzador es <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.0361em;vertical-align:-0.2861em;"></span><span class="mord">2</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mopen">(</span><span class="mord">1/</span><span class="mord"><span class="mord mathnormal">n</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mpunct mtight">,</span><span class="mord text mtight"><span class="mord mtight">alt</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.1002em;vertical-align:-0.2861em;"></span><span class="mord">1/</span><span class="mord"><span class="mord mathnormal">n</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mpunct mtight">,</span><span class="mord text mtight"><span class="mord mtight">mar</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mtight">1</span></span></span></span></span></span></span></span></span></span></span></span>, la precisión de una diferencia.</p>
+<p><strong>H4.</strong> Hicimos dos pruebas. Primero medimos el peso de cada grupo de variables dentro de Stuff+, como la
+ganancia total de los árboles que las usan. Después corrimos un experimento controlado con el
+simulador. Movimos una sola perilla (giro o movimiento) y dejamos fijo todo lo demás, algo que los datos
+de la cancha no permiten.</p>
+<h3>3.8 Modelo secundario, un Causal Forest</h3>
+<p>La pregunta táctica es otra. ¿A qué perfil de lanzador le cuesta más la altura <strong>en carreras reales</strong>, sin
+usar Stuff+? Cada lanzador aparece dos veces, una por entorno. El tratamiento <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span></span></span></span> es lanzar en altura y
+el resultado <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">Y</span></span></span></span> son sus carreras permitidas por cada 100 lanzamientos. Usamos el modelo parcialmente
+lineal de Double Machine Learning (Chernozhukov y coautores, 2018).</p>
+<div class="ecuacion"><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">Y</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">θ</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">ε</span><span class="mpunct">,</span><span class="mspace" style="margin-right:2em;"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">m</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">η</span></span></span></span></span></div>
+<p>El efecto de la altura para un lanzador con rasgos <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span></span></span></span> es <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">θ</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="mclose">)</span></span></span></span>. Lo estimamos con un bosque
+causal honesto (Wager y Athey, 2018) sobre los residuos ortogonalizados. <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span></span></span></span> incluye su Stuff+ a nivel
+del mar, velocidad, swings fallidos, rodados, extensión, mano y el uso de cada tipo de lanzamiento. El
+bosque tiene 2,000 árboles, validación cruzada de 5 pliegues <strong>agrupada por lanzador</strong> y pesos por número
+de lanzamientos.</p>
+<h2>4. Validación</h2>
+<h3>4.1 La transferencia de forma</h3>
+<p>444 lanzadores tiraron en ambos entornos. Calibramos los exponentes con la mitad y dejamos la otra mitad
+<strong>sin tocar</strong>. En esas 436 combinaciones predecimos lo que el lanzador tiró en altura a partir de lo que
+tiró a nivel del mar.</p>
+<table>
+<thead>
+<tr>
+<th>Error medio</th>
 <th class="n">Sin transferir</th>
 <th class="n">Sólo densidad</th>
-<th class="n">Modelo calibrado</th>
+<th class="n">Nuestro modelo</th>
 <th class="n">Reducción</th>
 </tr>
 </thead>
@@ -222,721 +344,460 @@ evaluación:</p>
 </tr>
 </tbody>
 </table>
-<p>La columna «sólo densidad» es un modelo que escala todo por la densidad del aire, sin la
-corrección de Reynolds. Subestima el castigo de la altitud en cerca de un tercio.</p>
-<h3>5.2 Delta de forma por tipo de lanzamiento</h3>
-<p>Medido dentro del mismo lanzador y el mismo tipo, en pulgadas de quiebre vertical:</p>
+<p>Si escalas todo sólo por la densidad del aire, sin la corrección de Reynolds, subestimas el efecto en
+cerca de un tercio.</p>
+<h3>4.2 Calidad y robustez</h3>
 <table>
 <thead>
 <tr>
-<th>Lanzamiento</th>
-<th class="n">Observado</th>
-<th class="n">Predicho</th>
-<th class="n">Celdas</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Four-Seam</td>
-<td class="n">-3.73</td>
-<td class="n">-3.94</td>
-<td class="n">328</td>
-</tr>
-<tr>
-<td>Cutter</td>
-<td class="n">-2.50</td>
-<td class="n">-2.49</td>
-<td class="n">25</td>
-</tr>
-<tr>
-<td>Changeup</td>
-<td class="n">-2.25</td>
-<td class="n">-1.84</td>
-<td class="n">104</td>
-</tr>
-<tr>
-<td>Sinker</td>
-<td class="n">-2.10</td>
-<td class="n">-2.40</td>
-<td class="n">159</td>
-</tr>
-<tr>
-<td>Splitter</td>
-<td class="n">-0.91</td>
-<td class="n">-0.96</td>
-<td class="n">3</td>
-</tr>
-<tr>
-<td>Slider</td>
-<td class="n">-0.74</td>
-<td class="n">-0.95</td>
-<td class="n">228</td>
-</tr>
-<tr>
-<td>Curveball</td>
-<td class="n">+1.82</td>
-<td class="n">+1.65</td>
-<td class="n">64</td>
-</tr>
-</tbody>
-</table>
-<h3>5.3 Las tres capas, holdout de lanzador</h3>
-<p>Validación cruzada agrupada: ningún lanzador aparece a la vez en entrenamiento y prueba.</p>
-<table>
-<thead>
-<tr>
+<th>Prueba</th>
 <th>Capa</th>
 <th>Variables</th>
 <th class="n">RMSE</th>
-<th class="n">R²</th>
+<th class="n"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span></th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Modelo nulo (promedio por conteo)</td>
-<td>—</td>
+<td>Modelo nulo, promedio por conteo</td>
+<td></td>
+<td></td>
 <td class="n">0.26810</td>
 <td class="n">0.00003</td>
 </tr>
 <tr>
+<td>Holdout de lanzador</td>
 <td>Stuff+</td>
 <td>20</td>
 <td class="n">0.26541</td>
 <td class="n">0.01996</td>
 </tr>
 <tr>
+<td>Holdout de lanzador</td>
 <td>Location+</td>
 <td>27</td>
 <td class="n">0.26235</td>
 <td class="n">0.04245</td>
 </tr>
 <tr>
+<td>Holdout de lanzador</td>
 <td>Pitching+</td>
 <td>37</td>
 <td class="n">0.26230</td>
 <td class="n">0.04282</td>
 </tr>
-</tbody>
-</table>
-<p>El R² a nivel de lanzamiento individual es bajo por construcción: el desenlace de un envío
-suelto lo domina el azar. Lo relevante es la comparación contra el modelo nulo que pide la
-rúbrica, y la estabilidad al agregar por lanzador.</p>
-<p><strong>Holdout de temporada</strong> (entrena 2024–2025, prueba 2026):
-RMSE 0.26359, R² 0.02083.</p>
-<p><strong>Holdout de parque</strong> (entrena sin altitud extrema, prueba en altitud extrema):
-RMSE 0.27504, R² 0.01414.
-La degradación frente al holdout de lanzador es exactamente el fenómeno que este trabajo
-mide: un modelo entrenado a nivel del mar no traslada limpio a la altura.</p>
-<h3>5.4 Modelos de componente</h3>
-<table>
-<thead>
 <tr>
-<th>Objetivo</th>
-<th class="n">n</th>
-<th class="n">Brier</th>
-<th class="n">Skill sobre tasa base</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>swing</code></td>
-<td class="n">635 002</td>
-<td class="n">0.14853</td>
-<td class="n">+0.4037</td>
+<td>Holdout de temporada</td>
+<td>Stuff+</td>
+<td>20</td>
+<td class="n">0.26359</td>
+<td class="n">0.02083</td>
 </tr>
 <tr>
-<td><code>whiff</code></td>
-<td class="n">298 029</td>
-<td class="n">0.14744</td>
-<td class="n">+0.1947</td>
-</tr>
-<tr>
-<td><code>called_strike</code></td>
-<td class="n">336 973</td>
-<td class="n">0.05621</td>
-<td class="n">+0.7265</td>
-</tr>
-<tr>
-<td><code>chase</code></td>
-<td class="n">411 912</td>
-<td class="n">0.14567</td>
-<td class="n">+0.3530</td>
-</tr>
-<tr>
-<td><code>groundball</code></td>
-<td class="n">115 948</td>
-<td class="n">0.22899</td>
-<td class="n">+0.0621</td>
-</tr>
-<tr>
-<td><code>barrel</code></td>
-<td class="n">115 948</td>
-<td class="n">0.02437</td>
-<td class="n">+0.0081</td>
-</tr>
-<tr>
-<td><code>hard_contact</code></td>
-<td class="n">115 948</td>
-<td class="n">0.16672</td>
-<td class="n">+0.0521</td>
-</tr>
-<tr>
-<td><code>weak_contact</code></td>
-<td class="n">115 948</td>
-<td class="n">0.19575</td>
-<td class="n">+0.1000</td>
+<td>Holdout de parque</td>
+<td>Stuff+</td>
+<td>20</td>
+<td class="n">0.27504</td>
+<td class="n">0.01414</td>
 </tr>
 </tbody>
 </table>
-<p>El barril es el caso honesto de límite del modelo: con una tasa base de 2.5 %, la calidad
-del contacto depende mucho más del bateador que del lanzamiento, y la habilidad predictiva
-desde la física del envío es marginal.</p>
-<h3>5.5 Aporte del arsenal</h3>
-<p>Sobre el valor de carrera agregado el arsenal aporta poco, porque la varianza de un
-lanzamiento suelto la dominan la ubicación y el conteo. Donde sí se ve es en el swing
-fallido, que es el mecanismo que el arsenal explica —diferencial de velocidad y túnel—:</p>
+<p>El <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span> de un lanzamiento suelto es bajo por construcción, porque su desenlace lo domina el azar. La
+rúbrica pide vencer al modelo nulo, y las tres capas lo vencen en las tres pruebas. El holdout de parque
+rinde menos que el de lanzador. Un modelo entrenado sin altura no se traslada limpio a la altura, y ese
+es justo el fenómeno que medimos.</p>
+<p><strong>Calibración.</strong> La escala ordena carreras cuando agregas lanzamientos, que es donde importa.</p>
 <table>
 <thead>
 <tr>
-<th>Capa</th>
-<th class="n">Brier</th>
-<th class="n">Skill</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>stuff</td>
-<td class="n">0.15400</td>
-<td class="n">+0.1588</td>
-</tr>
-<tr>
-<td>location</td>
-<td class="n">0.14852</td>
-<td class="n">+0.1887</td>
-</tr>
-<tr>
-<td>pitching</td>
-<td class="n">0.14744</td>
-<td class="n">+0.1947</td>
-</tr>
-</tbody>
-</table>
-<h3>5.6 Calibración: ¿la escala ordena carreras?</h3>
-<p>La prueba que entiende cualquier director deportivo: los lanzamientos con Stuff+ alto deben
-permitir menos carreras que los de Stuff+ bajo, <strong>con lanzadores que el modelo nunca vio</strong>.
-Cada lanzamiento se puntuó con el modelo del pliegue que excluía a su lanzador:</p>
-<table>
-<thead>
-<tr>
-<th>Stuff+ (fuera de muestra)</th>
+<th>Stuff+ fuera de muestra</th>
 <th class="n">Lanzamientos</th>
-<th class="n">Carreras / 100 observadas</th>
-<th class="n">Carreras / 100 predichas</th>
+<th>Carreras por 100, observadas</th>
+<th>Carreras por 100, predichas</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>&lt; 80</td>
 <td class="n">27,774</td>
-<td class="n">+9.7</td>
-<td class="n">+11.0</td>
+<td>+9.7</td>
+<td>+11.0</td>
 </tr>
 <tr>
-<td>80–90</td>
+<td>80 a 90</td>
 <td class="n">76,646</td>
-<td class="n">+6.3</td>
-<td class="n">+6.2</td>
+<td>+6.3</td>
+<td>+6.2</td>
 </tr>
 <tr>
-<td>90–100</td>
+<td>90 a 100</td>
 <td class="n">177,931</td>
-<td class="n">+1.4</td>
-<td class="n">+1.9</td>
+<td>+1.4</td>
+<td>+1.9</td>
 </tr>
 <tr>
-<td>100–110</td>
+<td>100 a 110</td>
 <td class="n">266,476</td>
-<td class="n">-2.2</td>
-<td class="n">-2.0</td>
+<td><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">2.2</span></span></span></span></td>
+<td><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">2.0</span></span></span></span></td>
 </tr>
 <tr>
-<td>110–120</td>
+<td>110 a 120</td>
 <td class="n">82,730</td>
-<td class="n">-4.2</td>
-<td class="n">-5.6</td>
+<td><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">4.2</span></span></span></span></td>
+<td><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">5.6</span></span></span></span></td>
 </tr>
 <tr>
-<td>120 +</td>
+<td>120 o más</td>
 <td class="n">3,445</td>
-<td class="n">-5.5</td>
-<td class="n">-9.4</td>
+<td><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">5.5</span></span></span></span></td>
+<td><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">9.4</span></span></span></span></td>
 </tr>
 </tbody>
 </table>
-<p>La relación es monótona en los seis tramos: de un extremo al otro hay unas 14 carreras por
-cada 100 lanzamientos. Entre 80 y 110, donde está el 82 % de los lanzamientos, lo predicho cae
-a menos de media carrera de lo observado. En los extremos el modelo es más optimista de lo
-que se observa (120+: -9.4 contra -5.5), consistente con la regresión a la media esperable
-en un tramo con sólo 3,445 lanzamientos.</p>
-<h2>6. Resultados</h2>
-<h3>6.0 Por lanzador: quién sufre la altitud y quién aguanta</h3>
-<p>Para cada uno de los <strong>561 lanzadores</strong> con al menos 300 lanzamientos se tomaron todos sus
-envíos reales, se transfirieron a los dos aires y se puntuaron con el mismo modelo. La
-diferencia es su delta de altitud.</p>
-<ul>
-<li><strong>58</strong> aguantan (pierden menos de 1.2 puntos); <strong>246</strong> pierden más de 2.5.</li>
-<li><strong>Los que más pierden</strong> son lanzadores de élite a nivel del mar cuyo valor es movimiento:
-  Lanzador 529 (cambio · recta) baja de 104.8 a 97.2; Lanzador 174 (recta · cambio), de 104.9
-  a 98.1; Lanzador 297 (recta · curva), de 103.0 a 96.7.</li>
-<li><strong>El perfil de fichaje</strong>: Lanzador 1099 (cutter · slider · curva) vale 104.5 a nivel del
-  mar y 104.1 en el Harp Helú, el mejor Stuff+ de la liga en altura, y es de los más
-  constantes entre juegos (± 1.6). Lo siguen Lanzador 1075 (slider · recta · cutter,
-  104.2 → 103.2) y Lanzador 386 (slider · sinker · recta, 103.4 → 102.3).</li>
-<li><strong>Comprobación contra lo observado.</strong> De los 561, 333 lanzaron al menos 120 veces en cada
-  entorno. Para ellos, el delta del modelo y la diferencia observada de carreras permitidas
-  (altura menos nivel del mar) correlacionan a <strong>0.23</strong>: misma dirección, moderada porque
-  120 lanzamientos son pocos para medir carreras. La decisión se toma con el Stuff+, que es
-  estable; lo observado sirve de verificación.</li>
-</ul>
-<p>La tabla completa, con Location+, Pitching+ y constancia, está en la pestaña <em>Lanzadores</em> del
-dashboard y en <code>artifacts/pitchers_jurado.csv</code>.</p>
-<h3>6.1 Efecto de la altitud por tipo de lanzamiento</h3>
-<p>Cada lanzamiento del conjunto se transfirió a las dos densidades y se puntuó con el mismo
-modelo. Como Stuff+ sólo ve forma, la diferencia es atribuible al aire.</p>
+<p>La relación baja en los seis tramos, sin excepción. De un extremo al otro hay unas 14 carreras por cada
+100 lanzamientos. Entre 80 y 110 está el 82 % de los lanzamientos, y ahí lo predicho queda a menos de
+media carrera de lo observado. En los extremos el modelo es más optimista que la realidad.</p>
+<h2>5. Hipótesis</h2>
+<h3>5.1 H1 · La baja densidad reduce el movimiento. Se confirma</h3>
+<p><strong>La física reproduce a Nathan.</strong> Tomamos una recta con 18.0 pulgadas de quiebre a nivel del mar y la
+volamos en otros aires con el integrador, calibrado sólo con datos de la LMB.</p>
 <table>
 <thead>
 <tr>
-<th>Lanzamiento</th>
-<th class="n">n</th>
-<th class="n">Stuff+ nivel del mar</th>
-<th class="n">Stuff+ Harp Helú</th>
-<th class="n">Δ</th>
-<th class="n">Δ vs. recta</th>
-<th class="n">Whiff observado</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Cutter</td>
-<td class="n">26 468</td>
-<td class="n">100.5</td>
-<td class="n">99.6</td>
-<td class="n">-0.89</td>
-<td class="n">+2.44</td>
-<td class="n">10.9 %</td>
-</tr>
-<tr>
-<td>Splitter</td>
-<td class="n">7 289</td>
-<td class="n">102.0</td>
-<td class="n">100.5</td>
-<td class="n">-1.56</td>
-<td class="n">+1.76</td>
-<td class="n">16.8 %</td>
-</tr>
-<tr>
-<td>Slider</td>
-<td class="n">139 717</td>
-<td class="n">101.9</td>
-<td class="n">100.2</td>
-<td class="n">-1.65</td>
-<td class="n">+1.68</td>
-<td class="n">15.4 %</td>
-</tr>
-<tr>
-<td>Changeup</td>
-<td class="n">78 925</td>
-<td class="n">100.1</td>
-<td class="n">98.0</td>
-<td class="n">-2.17</td>
-<td class="n">+1.15</td>
-<td class="n">14.3 %</td>
-</tr>
-<tr>
-<td>Curveball</td>
-<td class="n">54 024</td>
-<td class="n">101.4</td>
-<td class="n">99.1</td>
-<td class="n">-2.26</td>
-<td class="n">+1.06</td>
-<td class="n">14.3 %</td>
-</tr>
-<tr>
-<td>Sinker</td>
-<td class="n">110 899</td>
-<td class="n">99.8</td>
-<td class="n">97.5</td>
-<td class="n">-2.28</td>
-<td class="n">+1.05</td>
-<td class="n">6.7 %</td>
-</tr>
-<tr>
-<td>Four-Seam</td>
-<td class="n">217 618</td>
-<td class="n">100.3</td>
-<td class="n">97.0</td>
-<td class="n">-3.33</td>
-<td class="n">+0.00</td>
-<td class="n">9.2 %</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Todo pierde.</strong> El promedio de la liga cae -2.42 puntos. Pero la
-pérdida está ordenada, y el orden tiene un mecanismo: <strong>la altitud es un impuesto sobre el
-efecto Magnus, y cada lanzamiento paga en proporción a cuánto de su valor viene de ahí.</strong></p>
-<p>En un extremo, el <em>cutter</em> casi no paga (-0.89): se mueve poco y su
-engaño está en salir igual que la recta. En el otro, la recta de cuatro costuras paga más
-que nadie (-3.33): vive de su elevación, y pierde 3.73 pulgadas de quiebre vertical, más que
-ningún otro tipo. Cambio, curva y sinker quedan en medio, alrededor de -2.2: tienen mucho
-movimiento, y el movimiento es justo lo que el aire delgado se lleva.</p>
-<h3>6.2 La composición del talento cambia</h3>
-<p>Si en vez de promediar se mira <strong>qué lanzamientos componen el 1 % mejor puntuado</strong> en cada
-entorno, el desplazamiento es más elocuente que cualquier delta:</p>
-<table>
-<thead>
-<tr>
-<th>Lanzamiento</th>
-<th class="n">Toda la liga</th>
-<th class="n">Top 1 % a nivel del mar</th>
-<th class="n">Top 1 % en el Harp Helú</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Slider</td>
-<td class="n">22.7 %</td>
-<td class="n">7.7 %</td>
-<td class="n">32.6 %</td>
-</tr>
-<tr>
-<td>Curveball</td>
-<td class="n">7.9 %</td>
-<td class="n">8.5 %</td>
-<td class="n">14.2 %</td>
-</tr>
-<tr>
-<td>Cutter</td>
-<td class="n">3.3 %</td>
-<td class="n">1.2 %</td>
-<td class="n">5.5 %</td>
-</tr>
-<tr>
-<td>Splitter</td>
-<td class="n">1.5 %</td>
-<td class="n">3.9 %</td>
-<td class="n">6.0 %</td>
-</tr>
-<tr>
-<td>Changeup</td>
-<td class="n">11.6 %</td>
-<td class="n">6.6 %</td>
-<td class="n">8.6 %</td>
-</tr>
-<tr>
-<td>Sinker</td>
-<td class="n">17.5 %</td>
-<td class="n">16.9 %</td>
-<td class="n">11.1 %</td>
-</tr>
-<tr>
-<td>Four-Seam</td>
-<td class="n">35.6 %</td>
-<td class="n">55.3 %</td>
-<td class="n">22.0 %</td>
-</tr>
-</tbody>
-</table>
-<p>El <em>slider</em> pasa de 7.7 % a
-32.6 % de la élite: casi se triplica. La recta cae de
-55.3 % a 22.0 % y
-el <em>sinker</em> se parte a la mitad, de 16.9 % a
-11.1 %.</p>
-<h3>6.3 El castigo es regresivo</h3>
-<p>El promedio esconde lo más importante. Partiendo los lanzamientos en quintiles según su
-Stuff+ <strong>a nivel del mar</strong>, el castigo de la altitud no se reparte parejo:</p>
-<table>
-<thead>
-<tr>
-<th>Quintil de calidad</th>
-<th class="n">Stuff+ nivel del mar</th>
-<th class="n">Stuff+ Harp Helú</th>
-<th class="n">Δ recta 4C</th>
-<th class="n">Δ todos</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td class="n">82.7</td>
-<td class="n">84.0</td>
-<td class="n"><strong>+1.26</strong></td>
-<td class="n">1.03</td>
-</tr>
-<tr>
-<td>2</td>
-<td class="n">95.2</td>
-<td class="n">94.3</td>
-<td class="n"><strong>-0.94</strong></td>
-<td class="n">-0.71</td>
-</tr>
-<tr>
-<td>3</td>
-<td class="n">102.5</td>
-<td class="n">99.4</td>
-<td class="n"><strong>-3.12</strong></td>
-<td class="n">-2.16</td>
-</tr>
-<tr>
-<td>4</td>
-<td class="n">107.5</td>
-<td class="n">102.1</td>
-<td class="n"><strong>-5.39</strong></td>
-<td class="n">-3.77</td>
-</tr>
-<tr>
-<td>5</td>
-<td class="n">113.6</td>
-<td class="n">105.2</td>
-<td class="n"><strong>-8.44</strong></td>
-<td class="n">-6.47</td>
-</tr>
-</tbody>
-</table>
-<p>La recta del quintil más bajo <strong>no pierde nada: gana +1.26</strong>. La del
-quintil más alto pierde -8.44, y pasa de
-113.6 —élite— a 105.2, apenas por encima del
-promedio de la liga.</p>
-<p><strong>La altitud no daña al lanzamiento malo. Borra la ventaja del bueno.</strong> Es un efecto de
-compresión: el aire delgado se lleva el movimiento, y el movimiento es precisamente aquello
-en lo que un lanzamiento de élite se distingue de uno mediocre. Quien no tenía nada
-excepcional que perder, no pierde nada.</p>
-<p>Esto reencuadra por completo la pregunta de reclutamiento, y es el resultado con más
-consecuencias prácticas de todo el trabajo (sección 7).</p>
-<h3>6.4 El riesgo al otro lado del bate</h3>
-<table>
-<thead>
-<tr>
-<th>Entorno</th>
-<th class="n">Velocidad de salida</th>
-<th class="n">Distancia</th>
-<th class="n">HR por bola en juego</th>
-<th class="n">Tasa de rodado</th>
+<th>Aire</th>
+<th class="n">Quiebre total</th>
+<th>Según Nathan</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>Nivel del mar</td>
-<td class="n">83.0 mph</td>
-<td class="n">157 ft</td>
-<td class="n">3.65 %</td>
-<td class="n">40.5 %</td>
+<td class="n">18.0 in</td>
+<td>18</td>
 </tr>
 <tr>
-<td>Altitud extrema</td>
-<td class="n">84.0 mph</td>
-<td class="n">161 ft</td>
-<td class="n">4.26 %</td>
-<td class="n">44.8 %</td>
+<td>Coors Field, 1,609 m</td>
+<td class="n"><strong>14.9 in</strong></td>
+<td>14 a 15</td>
+</tr>
+<tr>
+<td>Harp Helú, 2,240 m</td>
+<td class="n"><strong>13.8 in</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>Coors, escalando sólo por densidad</td>
+<td class="n">15.4 in</td>
+<td></td>
 </tr>
 </tbody>
 </table>
-<p>Restringido a elevados, que es donde la altitud cobra:</p>
+<p>Una curva típica de 78 mph y 12.4 pulgadas de quiebre total cae 1.4 pulgadas menos en Coors y 2.0 menos
+en el Harp Helú. Su quiebre total baja 2.5 y 3.4 pulgadas.</p>
+<p><strong>Todos los tipos pierden Stuff+.</strong> En los siete el intervalo de 95 % queda bajo cero.</p>
 <table>
 <thead>
 <tr>
-<th>Entorno</th>
-<th class="n">Distancia media</th>
-<th class="n">HR por elevado</th>
+<th>Tipo</th>
+<th class="n">Lanzadores</th>
+<th><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8201em;"></span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8201em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord">Δ</span></span><span style="top:-3.2523em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;"><span class="mord">ˉ</span></span></span></span></span></span></span></span></span></span> Stuff+</th>
+<th>IC 95 %</th>
+<th>Cambio de elevación medido (in)</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Nivel del mar</td>
-<td class="n">291.9 ft</td>
-<td class="n">12.4 %</td>
+<td>Cutter</td>
+<td class="n">164</td>
+<td><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">0.89</span></span></span></span></td>
+<td><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">1.10</span></span></span></span> a <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">0.69</span></span></span></span></td>
+<td><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">2.50</span></span></span></span></td>
 </tr>
 <tr>
-<td>Altitud extrema</td>
-<td class="n">322.8 ft</td>
-<td class="n">16.3 %</td>
+<td>Slider</td>
+<td class="n">644</td>
+<td><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">1.66</span></span></span></span></td>
+<td><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">1.73</span></span></span></span> a <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">1.58</span></span></span></span></td>
+<td><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">0.74</span></span></span></span></td>
+</tr>
+<tr>
+<td>Splitter</td>
+<td class="n">43</td>
+<td><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">1.86</span></span></span></span></td>
+<td><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">2.26</span></span></span></span> a <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">1.33</span></span></span></span></td>
+<td><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">0.91</span></span></span></span></td>
+</tr>
+<tr>
+<td>Cambio</td>
+<td class="n">427</td>
+<td><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">2.25</span></span></span></span></td>
+<td><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">2.45</span></span></span></span> a <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">2.04</span></span></span></span></td>
+<td><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">2.25</span></span></span></span></td>
+</tr>
+<tr>
+<td>Sinker</td>
+<td class="n">489</td>
+<td><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">2.31</span></span></span></span></td>
+<td><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">2.50</span></span></span></span> a <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">2.11</span></span></span></span></td>
+<td><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">2.10</span></span></span></span></td>
+</tr>
+<tr>
+<td>Curva</td>
+<td class="n">333</td>
+<td><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">2.32</span></span></span></span></td>
+<td><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">2.53</span></span></span></span> a <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">2.10</span></span></span></span></td>
+<td><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">+</span><span class="mord">1.82</span></span></span></span></td>
+</tr>
+<tr>
+<td>Recta</td>
+<td class="n">708</td>
+<td><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">3.36</span></span></span></span></td>
+<td><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">3.50</span></span></span></span> a <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">3.22</span></span></span></span></td>
+<td><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">3.73</span></span></span></span></td>
 </tr>
 </tbody>
 </table>
-<p>Un elevado viaja <strong>31.0 pies más</strong> y su
-probabilidad de salir del parque sube de 12.4 % a
-16.3 %.</p>
-<h3>6.5 Perfil físico ideal para el Harp Helú</h3>
-<p>Caracterización del 1 % de lanzamientos <strong>reales</strong> mejor puntuados en cada entorno,
-restringido a lanzadores derechos para que el quiebre horizontal no se cancele al promediar.</p>
-<p>Se buscó dentro de los envíos observados y no sobre una rejilla libre de los ejes físicos:
-una rejilla produce combinaciones que nunca ocurren —una recta de 100 mph con quiebre de
-curva— y ahí un modelo de árboles extrapola cualquier cosa. La respuesta tiene que quedarse
-sobre lo que un brazo humano puede realmente hacer.</p>
+<p>La recta pierde casi cuatro veces lo que pierde el cutter. La curva gana elevación, o sea que cae menos,
+y por eso pierde. Su valor es caer.</p>
+<h3>5.2 H2 · El cambio gana valor relativo. Se confirma en parte</h3>
+<table>
+<thead>
+<tr>
+<th>Contra la recta del mismo lanzador</th>
+<th class="n">Lanzadores</th>
+<th class="n">Ventaja <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8201em;"></span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8201em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span></span><span style="top:-3.2523em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1944em;"><span class="mord">ˉ</span></span></span></span></span></span></span></span></span></span></th>
+<th>IC 95 %</th>
+<th class="n">Lanzadores donde gana</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Splitter</td>
+<td class="n">40</td>
+<td class="n">+1.88</td>
+<td>+1.47 a +2.40</td>
+<td class="n">93 %</td>
+</tr>
+<tr>
+<td>Cutter</td>
+<td class="n">155</td>
+<td class="n">+1.71</td>
+<td>+1.39 a +2.06</td>
+<td class="n">85 %</td>
+</tr>
+<tr>
+<td>Slider</td>
+<td class="n">555</td>
+<td class="n">+1.45</td>
+<td>+1.28 a +1.63</td>
+<td class="n">79 %</td>
+</tr>
+<tr>
+<td><strong>Cambio</strong></td>
+<td class="n"><strong>372</strong></td>
+<td class="n"><strong>+1.27</strong></td>
+<td><strong>+1.05 a +1.49</strong></td>
+<td class="n"><strong>77 %</strong></td>
+</tr>
+<tr>
+<td>Sinker</td>
+<td class="n">386</td>
+<td class="n">+1.03</td>
+<td>+0.85 a +1.21</td>
+<td class="n">74 %</td>
+</tr>
+<tr>
+<td>Curva</td>
+<td class="n">289</td>
+<td class="n">+0.84</td>
+<td>+0.54 a +1.14</td>
+<td class="n">68 %</td>
+</tr>
+</tbody>
+</table>
+<p>El cambio sí gana valor contra la recta, y no es casualidad. Pero queda cuarto de seis, detrás del
+splitter, el cutter y el slider. La razón está en su forma. Un cambio de derecho se mueve unas 12
+pulgadas hacia el lado del brazo, y ese movimiento también lo paga. En altura no gana el que engaña por
+velocidad. Gana <strong>el que nunca dependió del movimiento</strong>. Por eso el splitter, que engaña por velocidad y
+además casi no gira, gana más que todos.</p>
+<h3>5.3 H3 · Los lanzadores de rodados valen más en altura. Se confirma en parte</h3>
+<table>
+<thead>
+<tr>
+<th>Entorno</th>
+<th>Pendiente <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">e</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>, carreras por 100 por cada 10 puntos de rodados</th>
+<th>IC 95 %</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Altura</td>
+<td><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">0.38</span></span></span></span></td>
+<td><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">0.62</span></span></span></span> a <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">0.13</span></span></span></span></td>
+</tr>
+<tr>
+<td>Nivel del mar</td>
+<td><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">0.16</span></span></span></span></td>
+<td><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">0.36</span></span></span></span> a <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">+</span><span class="mord">0.07</span></span></span></span></td>
+</tr>
+<tr>
+<td>Diferencia</td>
+<td><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">0.22</span></span></span></span></td>
+<td><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">0.52</span></span></span></span> a <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">+</span><span class="mord">0.08</span></span></span></span></td>
+</tr>
+</tbody>
+</table>
+<p>En altura los rodados previenen carreras con claridad. A nivel del mar el efecto no se distingue de
+cero. La diferencia va en la dirección de la hipótesis con 90 % de confianza (<span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">p</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0.07</span></span></span></span>, una cola), pero
+no llega al 95 %. Por tercios, los lanzadores con pocos rodados (34 %) permiten 1.76 carreras más por
+cada 100 lanzamientos en altura, y los de muchos rodados (50 %) sólo 1.37. En los batazos de la liga, el
+rodado sube de 40.5 % a 44.8 % en altitud extrema y el jonrón por elevado sube de 12.4 % a 16.3 %.</p>
+<h3>5.4 H4 · Importa cuánto se mueve, no cuánto gira. Se confirma</h3>
+<table>
+<thead>
+<tr>
+<th>Grupo de variables en Stuff+</th>
+<th class="n">Peso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Punto y ángulos de salida, extensión</td>
+<td class="n">43 %</td>
+</tr>
+<tr>
+<td>Ángulos de llegada al plato</td>
+<td class="n">17 %</td>
+</tr>
+<tr>
+<td>Movimiento, los quiebres</td>
+<td class="n">15 %</td>
+</tr>
+<tr>
+<td>Velocidad</td>
+<td class="n">14 %</td>
+</tr>
+<tr>
+<td><strong>Giro en rpm</strong></td>
+<td class="n"><strong>4 %</strong></td>
+</tr>
+<tr>
+<td>Eficiencia de giro</td>
+<td class="n">4 %</td>
+</tr>
+<tr>
+<td>Eje de giro</td>
+<td class="n">3 %</td>
+</tr>
+</tbody>
+</table>
+<p>El giro es la variable 9 de 20. En el experimento controlado, 100 revoluciones más <strong>con el mismo
+movimiento</strong> cambian Stuff+ en <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">0.1</span></span></span></span> puntos. Una pulgada más de elevación <strong>con el mismo giro</strong> suma 1.9.
+Y el giro que se vuelve movimiento te expone en altura. Una recta B con 2,150 rpm y 18.0 pulgadas de
+elevación vale 113.0 a nivel del mar. Una recta A con más giro pero eje de bala (2,650 rpm y 13.5
+pulgadas) vale 107.7. En el Harp Helú se invierten, A vale 101.7 y B vale 100.8.</p>
+<h2>6. Lo que significa para el club</h2>
+<h3>6.1 La altitud borra la ventaja del bueno</h3>
+<p>Partimos las rectas en quintiles por su Stuff+ a nivel del mar. El castigo no es parejo. El quintil más
+bajo <strong>gana</strong> 1.26 puntos (de 82.7 a 84.0). El más alto pierde 8.44 (de 113.6 a 105.2) y queda apenas
+arriba del promedio. Lo que separa a una recta de élite de una mediocre es el movimiento, y el movimiento
+es lo que el aire se lleva. Entre el 1 % mejor calificado, el slider pasa de 7.7 % a 32.6 % y la recta
+cae de 55.3 % a 22.0 %.</p>
+<h3>6.2 El perfil físico ideal</h3>
+<p>Promediamos el 1 % mejor calificado en cada aire, sólo lanzadores derechos y sólo lanzamientos reales.
+Una rejilla libre produciría combinaciones que ningún brazo hace.</p>
 <table>
 <thead>
 <tr>
 <th>Variable</th>
 <th class="n">Élite a nivel del mar</th>
-<th class="n">Élite en altitud</th>
-<th class="n">Diferencia</th>
+<th class="n">Élite en altura</th>
 <th class="n">Mediana de la liga</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>RelSpeed</td>
-<td class="n">90.63</td>
-<td class="n">87.25</td>
-<td class="n">-3.38</td>
-<td class="n">88.90</td>
+<td>Velocidad (mph)</td>
+<td class="n">90.6</td>
+<td class="n">87.3</td>
+<td class="n">88.9</td>
 </tr>
 <tr>
-<td>InducedVertBreak</td>
-<td class="n">11.30</td>
-<td class="n">4.22</td>
-<td class="n">-7.08</td>
-<td class="n">9.16</td>
+<td>Elevación (in)</td>
+<td class="n">11.3</td>
+<td class="n">4.2</td>
+<td class="n">9.2</td>
 </tr>
 <tr>
-<td>HorzBreak</td>
-<td class="n">8.36</td>
-<td class="n">1.87</td>
-<td class="n">-6.49</td>
-<td class="n">7.25</td>
+<td>Movimiento lateral (in)</td>
+<td class="n">8.4</td>
+<td class="n">1.9</td>
+<td class="n">7.3</td>
 </tr>
 <tr>
-<td>SpinRate</td>
-<td class="n">2 334.11</td>
-<td class="n">2 352.39</td>
-<td class="n">+18.28</td>
-<td class="n">2 327.65</td>
+<td>Movimiento total (in)</td>
+<td class="n">18.9</td>
+<td class="n">12.8</td>
+<td class="n">14.7</td>
 </tr>
 <tr>
-<td>SpinAxis</td>
-<td class="n">199.43</td>
-<td class="n">165.43</td>
-<td class="n">-34.00</td>
-<td class="n">210.92</td>
-</tr>
-<tr>
-<td>Extension</td>
-<td class="n">6.02</td>
-<td class="n">5.90</td>
-<td class="n">-0.12</td>
-<td class="n">5.88</td>
-</tr>
-<tr>
-<td>RelHeight</td>
-<td class="n">5.73</td>
-<td class="n">5.66</td>
-<td class="n">-0.07</td>
-<td class="n">5.79</td>
-</tr>
-<tr>
-<td>RelSide</td>
-<td class="n">1.91</td>
-<td class="n">1.99</td>
-<td class="n">+0.07</td>
-<td class="n">1.72</td>
-</tr>
-<tr>
-<td>spin_efficiency</td>
+<td>Eficiencia de giro</td>
 <td class="n">1.02</td>
 <td class="n">0.69</td>
-<td class="n">-0.33</td>
 <td class="n">0.81</td>
 </tr>
 <tr>
-<td>movement_total</td>
-<td class="n">18.87</td>
-<td class="n">12.84</td>
-<td class="n">-6.03</td>
-<td class="n">14.68</td>
+<td>Giro (rpm)</td>
+<td class="n">2,334</td>
+<td class="n">2,352</td>
+<td class="n">2,328</td>
 </tr>
 </tbody>
 </table>
-<p>Dos renglones cargan el hallazgo. El <strong>movimiento total</strong> de la élite baja de
-18.9 a
-12.8 pulgadas, y la <strong>eficiencia de giro</strong> baja de
-1.02 a
-0.69.</p>
-<p>La eficiencia de giro es la fracción del giro que se convierte en movimiento. Que la élite
-de altura la tenga <em>más baja</em> significa que el giro de tipo giroscópico —el que no produce
-Magnus— gana valor relativo. Es coherente: si el aire delgado grava el Magnus, conviene no
-depender de él.</p>
-<h2>7. Recomendaciones operativas</h2>
-<p><strong>Lo primero, porque cambia el cálculo de cualquier contratación: no pague sobreprecio por
-una recta de élite para lanzar en el Harp Helú.</strong> No la va a recibir. Una recta del quintil
-superior llega a 2,240 metros valiendo 105.2 en vez de
-113.6, mientras que una del quintil inferior llega igual o levemente
-mejor. La prima que el mercado le cobra por esa recta se paga a nivel del mar y se cobra en
-un estadio donde no existe. El mismo dinero rinde más en un brazo cuyo valor no dependa del
-movimiento.</p>
-<p>La regla que resume el resto: <strong>en el Harp Helú, no apueste al Magnus.</strong></p>
-<p><strong>Qué gana valor relativo.</strong> El <em>cutter</em> y el <em>slider</em>. Pierden
--0.89 y -1.65 puntos contra
--3.33 de la recta, y entre los dos pasan de
-8.9 % a
-38.2 % de la élite. El
-mecanismo no es que se muevan más, sino que nunca dependieron de moverse mucho: su engaño
-está en salir indistinguibles de la recta y romper tarde y poco. El giro giroscópico no
-produce Magnus, así que el aire delgado no tiene qué quitarle.</p>
-<p><strong>Qué pierde.</strong> Sobre todo la recta de cuatro costuras, y en segundo plano la curva, el
-cambio y el sinker, por la razón opuesta: su valor es movimiento. La recta pierde 3.73 pulgadas de
-elevación, y una recta alta que llega con menos elevación de la que el bateador anticipa no
-produce el swing por debajo: produce el elevado. En el Harp Helú ese elevado viaja
-31.0 pies más y sale del parque
-16.3 % de las veces contra 12.4 % a
-nivel del mar. El <em>sinker</em> pierde parecido y su participación en la élite se parte a la mitad.</p>
-<p><strong>Sobre la hipótesis del cambio de velocidad.</strong> El planteamiento del reto (H2) propone que
-el cambio gane valor relativo porque engaña por diferencial de velocidad y no por Magnus.
-Los datos lo sostienen, pero <strong>débilmente</strong>: el cambio pierde
--2.17 puntos, apenas +1.15
-mejor que la recta contra la que juega, muy por debajo del
-+2.44 del <em>cutter</em>. La razón es que el cambio sí tiene
-mucho movimiento horizontal —2.2 pulgadas de las
-cuales pierde una parte importante— y ese componente sí paga el impuesto. El ganador de la
-altitud no es el que engaña por velocidad: es el que nunca dependió del movimiento.</p>
-<p><strong>Cómo perfilar un prospecto.</strong> Cuatro preguntas, en este orden:</p>
-<ol>
-<li>
-<p><em>¿Cuánto de su valor está en el percentil alto de movimiento?</em> Es la pregunta que más
-   dinero decide. Si su Stuff+ a nivel del mar está en el quintil superior y ese Stuff+
-   viene del quiebre, el diferencial que lo hace caro no viaja a la Ciudad de México.</p>
-</li>
-<li>
-<p><em>¿Cuánto de su valor viene del Magnus?</em> No es cuántas revoluciones, sino qué fracción
-   del giro se convierte en pulgadas. Eficiencia de giro alta es una virtud a nivel del
-   mar y una exposición en altura: la élite de altura la tiene en
-   0.69 contra
-   1.02 de la élite a nivel del mar.</p>
-</li>
-<li><em>¿Su arsenal se apoya en cortadas y sliders o en curvas y sinkers?</em> El primer perfil
-   llega al Harp Helú prácticamente intacto; el segundo llega devaluado.</li>
-<li><em>¿Induce rodados?</em> La tasa de rodado sube de 40.5 % a
-   44.8 % en altitud, y el rodado es el único batazo al que el
-   aire no le hace nada. Es la contrapartida: la altitud castiga al lanzador en el
-   movimiento, pero le devuelve algo en el tipo de contacto.</li>
-</ol>
-<p>El simulador incluido permite evaluar cualquier combinación física en los dos entornos sin
-necesidad de servidor.</p>
-<h2>8. Alcance y fronteras</h2>
-<p>Lo que este modelo <strong>no</strong> hace, dicho explícitamente:</p>
+<p>La élite de altura gira lo mismo que la otra, pero convierte menos de ese giro en movimiento. No apuesta
+al Magnus.</p>
+<h3>6.3 Por lanzador</h3>
+<p>Analizamos 561 lanzadores con al menos 300 lanzamientos. <strong>58 aguantan</strong>, es decir, pierden menos de 1.2
+puntos, y 246 pierden más de 2.5. Los que más pierden son buenos a nivel del mar porque se mueven mucho.
+Lanzador 529 (cambio y recta) baja de 104.8 a 97.2. Tu perfil de fichaje es Lanzador 1099 (cutter,
+slider y curva). Vale 104.5 a nivel del mar y 104.1 en el Harp Helú, el mejor Stuff+ de la liga en
+altura, y es de los más constantes entre juegos (<span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">±</span><span class="mord">1.6</span></span></span></span>).</p>
+<h3>6.4 El Causal Forest llega a los mismos lanzadores</h3>
+<p>Lanzar en altura cuesta en promedio <strong>1.46 carreras más por cada 100 lanzamientos</strong> (IC 90 % de 1.23 a
+1.69). El efecto estimado para cada lanzador correlaciona <strong>0.41</strong> con su pérdida de Stuff+, aunque el
+bosque nunca vio Stuff+ en altura. Los menos afectados son Lanzador 1075 (slider, recta y cutter),
+Lanzador 682 (slider y sinker) y Lanzador 1099 (cutter, slider y curva). Son los mismos que recomienda el
+modelo principal. Los rasgos que más mueven el efecto son los swings fallidos, el uso de slider, el
+Stuff+ a nivel del mar y los rodados. Las diferencias entre perfiles son chicas (de 1.23 a 1.64) con 333
+lanzadores, así que lee este resultado como confirmación y no como una lista aparte.</p>
+<h2>7. Recomendaciones</h2>
+<p><strong>Fichajes.</strong> No pagues de más por movimiento. Una recta del quintil más alto llega a 2,240 metros
+valiendo 105.2 en lugar de 113.6. El mercado cobra esa prima a nivel del mar, y tú la pagarías por algo
+que en tu estadio no existe.</p>
+<p><strong>Perfil.</strong> Busca arsenales de cutter, slider y splitter, y lanzadores que provoquen rodados. En altura un
+elevado viaja 31 pies más (de 292 a 323) y sale del parque 16.3 % de las veces contra 12.4 %.</p>
+<p><strong>Rotación.</strong> Abre en casa con los lanzadores que aguantan (pestaña Lanzadores del dashboard). Los que
+pierden mucho rinden más de visitante.</p>
+<p><strong>Prospectos.</strong> Hazte cinco preguntas, en este orden.
+1. ¿Cuánto de su valor es movimiento? Si su Stuff+ está en el quintil más alto por su quiebre, esa
+   ventaja no viaja a la Ciudad de México.
+2. ¿Cuánto de su giro se vuelve movimiento? La eficiencia alta ayuda a nivel del mar y te expone en
+   altura (élite de altura 0.69 contra 1.02).
+3. ¿Su arsenal se apoya en cutter, slider o splitter, o en recta y curva? El primero llega casi intacto
+   y el segundo llega devaluado.
+4. ¿Provoca rodados? Es el único batazo que el aire no ayuda.
+5. Pasa sus números de Trackman por el simulador. Te da su Stuff+ en los dos estadios.</p>
+<h2>8. Límites</h2>
 <ul>
-<li><strong>No identifica estadios.</strong> La cubeta de «altitud extrema» agrupa varios parques. Los
-  resultados se leen como el contraste entre un entorno de altitud de la LMB y uno a nivel
-  del mar, con el Harp Helú como caso más extremo, no como una estimación específica de
-  ese estadio.</li>
-<li><strong>No separa aire de clima.</strong> El índice de arrastre recoge densidad, temperatura y
-  humedad juntas. Es lo correcto para predecir movimiento, pero no permite atribuir el
-  efecto sólo a la altitud.</li>
-<li><strong>No modela al bateador.</strong> Sin identidad de bateador como variable, la calidad del
-  contacto queda en el límite de lo predecible (sección 5.4).</li>
-<li><strong>No es causal.</strong> Stuff+ es un modelo de valoración. La pregunta contrafactual táctica
-  («¿qué habría pasado con un slider en vez del cambio?») requiere otro instrumento.</li>
-<li><strong>El exponente de Reynolds es empírico.</strong> Está calibrado fuera de muestra y corroborado
-  por una medición independiente dentro de lanzador, pero no derivado de primeros
-  principios.</li>
+<li><strong>No identificamos estadios.</strong> La altitud extrema agrupa varios parques, y el Harp Helú es el más alto.</li>
+<li><strong>No separamos aire de clima.</strong> El índice de arrastre junta densidad, temperatura y humedad. Sirve para
+  predecir movimiento, no para atribuirlo sólo a la altitud.</li>
+<li><strong>No modelamos al bateador.</strong> Desde la física, el barril casi no se puede predecir (1 % de habilidad).</li>
+<li><strong>Stuff+ no es causal.</strong> Es un modelo de valoración. El Causal Forest es exploratorio, con 333
+  lanzadores y diferencias chicas entre perfiles.</li>
+<li><strong>El exponente de Reynolds es empírico.</strong> Lo calibramos y verificamos fuera de muestra, pero no sale de
+  primeros principios.</li>
 </ul>
 <h2>9. Reproducción</h2>
 <pre><code class="language-bash">uv venv &amp;&amp; uv pip install -e .
@@ -945,16 +806,128 @@ python scripts/02_features.py      # secuencia, arsenal, objetivos
 python scripts/03_models.py        # las tres capas y sus holdouts
 python scripts/04_export.py        # modelo y tablas al simulador
 python scripts/05_deliverables.py  # entregables 1, 2 y 3
-python scripts/06_report.py        # este documento
-python scripts/07_jurado.py        # tabla por lanzador, calibración y mapa (dashboard)
+python scripts/07_jurado.py        # tabla por lanzador, calibración y mapa
+python scripts/08_hipotesis.py     # H1 a H4 y Causal Forest
 cd app &amp;&amp; npm install &amp;&amp; npm test &amp;&amp; npm run dev
 </code></pre>
-<h2>10. Referencias</h2>
+<h2>Referencias</h2>
 <ul>
-<li>Nathan, A. <em>The effect of altitude on baseball trajectories.</em> Physics of Baseball.</li>
+<li>Athey, S., Tibshirani, J. y Wager, S. (2019). Generalized random forests. <em>Annals of Statistics</em>, 47(2).</li>
+<li>Chernozhukov, V. y coautores (2018). Double/debiased machine learning for treatment and structural parameters. <em>The Econometrics Journal</em>, 21(1).</li>
+<li>Efron, B. (1979). Bootstrap methods, another look at the jackknife. <em>Annals of Statistics</em>, 7(1).</li>
+<li>Huang, G. y Hsu, M. (2021). Big data analytics in baseball, a review. <em>SAGE Open</em>, 11(4).</li>
+<li>Ke, G. y coautores (2017). LightGBM, a highly efficient gradient boosting decision tree. <em>NeurIPS</em>.</li>
+<li>Nathan, A. <em>The effect of altitude on baseball trajectories.</em> The Physics of Baseball.</li>
 <li>SABR. <em>High altitude offense.</em> Baseball Research Journal.</li>
-<li>Tango, T., Lichtman, M. &amp; Dolphin, A. (2007). <em>The Book: Playing the Percentages in Baseball.</em></li>
-<li>Huang, G. &amp; Hsu, M. (2021). Big data analytics in baseball: a review. <em>SAGE Open</em>, 11(4).</li>
-<li>Deshpande, S. K. &amp; Wyner, A. J. (2017). A hierarchical Bayesian model of pitch framing. arXiv:1704.00823.</li>
+<li>Tango, T., Lichtman, M. y Dolphin, A. (2007). <em>The Book, Playing the Percentages in Baseball.</em></li>
+<li>Wager, S. y Athey, S. (2018). Estimation and inference of heterogeneous treatment effects using random forests. <em>JASA</em>, 113(523).</li>
 </ul>
-</body></html>
+<h2 class="anexo">Anexo A · Modelos de componente</h2>
+<p>Estos modelos explican de dónde sale el valor y no entran en Stuff+. La habilidad mide cuánto mejoran
+sobre la tasa base, con holdout de lanzador.</p>
+<table>
+<thead>
+<tr>
+<th>Objetivo</th>
+<th class="n">Lanzamientos</th>
+<th class="n">Brier</th>
+<th class="n">Habilidad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Strike cantado</td>
+<td class="n">336,973</td>
+<td class="n">0.0562</td>
+<td class="n">+72.7 %</td>
+</tr>
+<tr>
+<td>Swing</td>
+<td class="n">635,002</td>
+<td class="n">0.1485</td>
+<td class="n">+40.4 %</td>
+</tr>
+<tr>
+<td>Persecución</td>
+<td class="n">411,912</td>
+<td class="n">0.1457</td>
+<td class="n">+35.3 %</td>
+</tr>
+<tr>
+<td>Swing fallido</td>
+<td class="n">298,029</td>
+<td class="n">0.1474</td>
+<td class="n">+19.5 %</td>
+</tr>
+<tr>
+<td>Contacto débil</td>
+<td class="n">115,948</td>
+<td class="n">0.1958</td>
+<td class="n">+10.0 %</td>
+</tr>
+<tr>
+<td>Rodado</td>
+<td class="n">115,948</td>
+<td class="n">0.2290</td>
+<td class="n">+6.2 %</td>
+</tr>
+<tr>
+<td>Contacto duro</td>
+<td class="n">115,948</td>
+<td class="n">0.1667</td>
+<td class="n">+5.2 %</td>
+</tr>
+<tr>
+<td>Barril</td>
+<td class="n">115,948</td>
+<td class="n">0.0244</td>
+<td class="n">+0.8 %</td>
+</tr>
+</tbody>
+</table>
+<p>El arsenal se nota donde actúa su mecanismo, en el swing fallido. Ahí la habilidad sube de 15.9 % con
+sólo la física a 18.9 % con ubicación y a 19.5 % con arsenal y secuencia.</p>
+<h2>Anexo B · Glosario</h2>
+<table>
+<thead>
+<tr>
+<th>Término</th>
+<th>Qué significa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Stuff+</td>
+<td>Calidad del lanzamiento por cómo sale de la mano. 100 es el promedio y 10 puntos son una desviación estándar</td>
+</tr>
+<tr>
+<td>Location+ y Pitching+</td>
+<td>La misma escala, sumando ubicación y conteo, y después arsenal y secuencia</td>
+</tr>
+<tr>
+<td>Elevación</td>
+<td>Cuánto cae menos una recta de lo que caería sin giro</td>
+</tr>
+<tr>
+<td>Eficiencia de giro</td>
+<td>La parte del giro que produce movimiento</td>
+</tr>
+<tr>
+<td>Rodado y elevado</td>
+<td>Batazo por el suelo y batazo por el aire</td>
+</tr>
+<tr>
+<td>Arsenal</td>
+<td>Los tipos que un lanzador usa al menos 8 % de las veces</td>
+</tr>
+<tr>
+<td>Tipos de lanzamiento</td>
+<td>Recta, sinker, cutter, slider, curva, cambio y splitter. El anexo del dashboard dibuja el movimiento real de cada uno</td>
+</tr>
+<tr>
+<td>Intervalo de confianza de 95 %</td>
+<td>El rango donde está el valor real con alta probabilidad. Si no cruza el cero, el efecto no es casualidad</td>
+</tr>
+</tbody>
+</table>
+<p><em>Usamos los datos de la LMB sólo para esta competencia. Este documento presenta resultados, no datos.</em></p></body></html>

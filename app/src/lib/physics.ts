@@ -243,8 +243,8 @@ export function solveRelease(input: PitchInput): Release {
 /**
  * Suelta el mismo lanzamiento en otro aire.
  *
- * Es el corazon del contrafactual: el brazo no cambia , mismo estado inicial, mismo eje de
- * giro, misma velocidad,  y solo se reescalan las dos fuerzas que dependen del aire. Por
+ * Es el corazon del contrafactual: el brazo no cambia (mismo estado inicial, mismo eje de
+ * giro, misma velocidad) y solo se reescalan las dos fuerzas que dependen del aire. Por
  * eso la pelota termina en otro lugar, que es justamente lo que se quiere mostrar.
  */
 export function releaseAt(rel: Release, dragIndex: number, spinRate = 0): Trajectory {
