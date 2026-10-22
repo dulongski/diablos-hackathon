@@ -1,0 +1,960 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Stuff+ a 2,240 m · Documento técnico</title>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+@page { size: Letter; margin: 15mm 16mm 15mm; @bottom-right { content: counter(page); } }
+:root { --rojo:#D7362B; --azul:#2E6FA6; --tinta:#10201A; --texto:#24302A; --ceniza:#6E7A73; --linea:#E3DCCB; --fondo:#FBF9F4; }
+* { box-sizing: border-box; }
+body { font-family: Inter, system-ui, sans-serif; font-size: 9.1pt; line-height: 1.45; color: var(--texto); margin: 0; }
+h1, h2, h3 { font-family: 'Big Shoulders Display', sans-serif; text-transform: uppercase; color: var(--tinta); line-height: 1; letter-spacing: .005em; }
+h2 { font-size: 18pt; font-weight: 800; margin: 15pt 0 6pt; padding-top: 7pt; border-top: 2px solid var(--rojo); break-after: avoid; }
+h3 { font-size: 12.5pt; font-weight: 700; margin: 13pt 0 5pt; break-after: avoid; }
+p { margin: 0 0 6.5pt; orphans: 3; widows: 3; }
+strong { color: var(--tinta); }
+table { width: 100%; border-collapse: collapse; margin: 5pt 0 9pt; font-size: 8.4pt; break-inside: avoid; }
+th { text-align: left; font-weight: 600; color: var(--ceniza); font-size: 7.6pt; text-transform: uppercase; letter-spacing: .03em; border-bottom: 1.5px solid var(--tinta); padding: 4pt 5pt; }
+td { padding: 3.6pt 5pt; border-bottom: 1px solid var(--linea); font-variant-numeric: tabular-nums; }
+td.n, th.n { text-align: right; }
+pre { background: var(--fondo); border: 1px solid var(--linea); border-radius: 5pt; padding: 7pt 10pt; font-size: 8.2pt; break-inside: avoid; }
+code { font-family: 'JetBrains Mono', monospace; font-size: .92em; }
+ul, ol { margin: 0 0 8pt; padding-left: 16pt; } li { margin-bottom: 3pt; }
+hr { border: none; border-top: 1px solid var(--linea); margin: 14pt 0; }
+.portada { height: 245mm; display: flex; flex-direction: column; justify-content: space-between; break-after: page; }
+.portada .eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 8.5pt; letter-spacing: .16em; text-transform: uppercase; color: var(--ceniza); }
+.portada h1 { font-size: 54pt; font-weight: 900; margin: 14pt 0 10pt; }
+.portada h1 em { color: var(--rojo); font-style: normal; }
+.portada .sub { font-size: 14pt; color: var(--texto); max-width: 34em; }
+.cifras { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10pt; margin-top: 26pt; }
+.cifras div { border-top: 2px solid var(--rojo); padding-top: 7pt; }
+.cifras div:nth-child(2) { border-top-color: var(--azul); }
+.cifras b { display: block; font-family: 'JetBrains Mono', monospace; font-size: 20pt; color: var(--tinta); }
+.cifras span { font-size: 8.5pt; color: var(--ceniza); }
+.pie { font-size: 8pt; color: var(--ceniza); border-top: 1px solid var(--linea); padding-top: 8pt; }
+</style></head><body>
+<section class="portada">
+  <div>
+    <div class="eyebrow">Hackathon ISAC 2026 · Diablos Rojos del México · Documento técnico</div>
+    <h1>Stuff+ calibrado<br>a <em>2,240</em> metros</h1>
+    <p class="sub">Un modelo de calidad de lanzamiento ajustado por entorno para el Estadio Alfredo Harp Helú:
+    qué lanzadores sufren la altitud, cuáles aguantan y qué perfil conviene buscar.</p>
+    <div class="cifras">
+      <div><b>635,002</b><span>lanzamientos de la LMB, 2024–2026, con Trackman</span></div>
+      <div><b>561</b><span>lanzadores comparados entre el nivel del mar y el Harp Helú</span></div>
+      <div><b>−2.4</b><span>puntos de Stuff+ que pierde el lanzamiento promedio en altura</span></div>
+    </div>
+  </div>
+  <p class="pie">Los datos de la LMB se usaron únicamente para esta competencia: este documento presenta resultados, no datos.
+  Lanzadores anonimizados por la liga.</p>
+</section>
+
+<h2>1. Marco teórico</h2>
+<p>La sabermetría moderna evalúa el lanzamiento, no el resultado. Un <em>slider</em> que induce un
+swing fallido y uno que termina en jonrón pueden ser físicamente idénticos: la diferencia
+está en el bateador, el parque y el azar. Los modelos tipo Stuff+ separan la calidad del
+lanzamiento de su desenlace observado, estimando el valor esperado a partir de las
+propiedades físicas del envío.</p>
+<p>Esa separación depende de un supuesto que en la LMB no se sostiene: que la relación entre
+la física del lanzamiento y su resultado es la misma en todos los estadios. Los modelos
+Stuff+ de MLB se entrenaron casi enteramente con parques cercanos al nivel del mar. El
+Harp Helú está a 2,240 metros, más alto que Coors Field (1,609 m), el estadio más
+favorable al bateo de las Grandes Ligas.</p>
+<p>El mecanismo es directo. El movimiento de un lanzamiento lo produce el aire: la fuerza de
+Magnus, que desvía la pelota, es proporcional a la densidad del aire. Con menos aire hay
+menos fuerza y menos movimiento. Alan Nathan estima que en Coors Field un lanzamiento con
+18 pulgadas de quiebre puede moverse 14 o 15. La pregunta de este trabajo es cuánto, y
+para qué formas de lanzamiento, en las condiciones específicas de la LMB.</p>
+<h2>2. Datos</h2>
+<p>El conjunto entregado por ISAC contiene 635,002 lanzamientos rastreados con
+Trackman a lo largo de tres temporadas, con identificadores anonimizados de juego,
+lanzador, bateador y receptor.</p>
+<p>La limitación central para este reto es que <strong>el conjunto no identifica el estadio ni su
+altitud</strong>: sólo trae <code>altitude_category</code>, una variable de tres niveles. La sección 3
+explica cómo se recupera una medida continua de la densidad del aire a partir de la propia
+trayectoria.</p>
+<p>Otras limitaciones y su tratamiento:</p>
+<table>
+<thead>
+<tr>
+<th>Limitación</th>
+<th>Tratamiento</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sin estado de corredores (24 estados base-out)</td>
+<td>Valor de carrera sobre la cadena de 12 estados de conteo</td>
+</tr>
+<tr>
+<td>Sin fecha ni número de lanzamiento</td>
+<td>Orden reconstruido del archivo; las filas vienen cronológicas y contiguas por juego</td>
+</tr>
+<tr>
+<td><code>is_hit_by_pitch</code> viene en cero en las 635,002 filas</td>
+<td>Reconstruido de <code>PitchCall</code>; es el único de catorce flags derivados con este problema</td>
+</tr>
+<tr>
+<td><code>AutoPitchType</code> con clases residuales</td>
+<td>Colapsadas a un vocabulario estable de siete tipos</td>
+</tr>
+</tbody>
+</table>
+<h2>3. La densidad del aire, medida en la trayectoria</h2>
+<p>Restando la gravedad, la aceleración medida en el release se descompone en dos partes
+ortogonales: una paralela a la velocidad, que es el arrastre, y una perpendicular, que es
+Magnus.</p>
+<pre><code>a_aero  = a_medida − g
+a_drag  = (a_aero · v̂) v̂
+a_magnus = a_aero − a_drag
+</code></pre>
+<p>Como el arrastre va con ρ·C_d·v², el cociente <strong>k_drag = |a_drag| / v²</strong> es proporcional a
+la densidad del aire y se puede calcular para cada lanzamiento. Su mediana por juego da un
+índice estable, con variación día a día dentro de cada estadio:</p>
+<table>
+<thead>
+<tr>
+<th>Categoría</th>
+<th class="n">Índice de arrastre (mediana)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Nivel del mar</td>
+<td class="n">1.0003</td>
+</tr>
+<tr>
+<td>Altitud media</td>
+<td class="n">0.8981</td>
+</tr>
+<tr>
+<td>Altitud extrema</td>
+<td class="n">0.8534</td>
+</tr>
+</tbody>
+</table>
+<h3>3.1 El arrastre no es la densidad</h3>
+<p>El índice mide ρ·C_d, no ρ. A 2,240 metros la atmósfera estándar da una densidad de 0.802,
+pero el arrastre medido cae sólo a 0.8534. La diferencia es el
+coeficiente de arrastre: el número de Reynolds baja con la densidad y C_d sube.</p>
+<p>Ajustando un solo exponente que ancle el índice medido a la altitud del Harp Helú se
+obtiene <strong>0.7184</strong> (índice = densidad ISA^0.7184). La verificación es
+independiente: con ese exponente, un estadio a la altura de Coors Field (1,609 m) debería dar
+<strong>0.8931</strong>, y la cubeta intermedia de la LMB, que nunca entró al ajuste, mide <strong>0.8981</strong>.</p>
+<h3>3.2 El movimiento cae más que la densidad</h3>
+<p>Si arrastre y Magnus fueran ambos proporcionales a ρ, el movimiento caería en la misma
+proporción que el frenado. No ocurre. Midiendo la respuesta <strong>dentro de cada lanzador</strong>
+—1,187 combinaciones lanzador × tipo, siete cubetas de densidad, respuesta monótona—:</p>
+<pre><code>k_drag ~ ρ^0.96          k_magnus ~ ρ^1.39
+</code></pre>
+<p>El Magnus responde alrededor de 1.45 veces más fuerte que el arrastre. Verificado que <strong>no
+es el giro</strong>: entre nivel del mar y altitud extrema, dentro del mismo lanzador, la
+frecuencia de giro cambia +0.5 %, el <em>spin factor</em> +0.3 % y la velocidad de salida +0.1 %.
+Es el aire.</p>
+<h2>4. Arquitectura</h2>
+<p>La decisión central es que <strong>la altitud no entra al modelo Stuff+ como variable</strong>.
+Introducirla como indicador dejaría su efecto confundido con qué lanzadores tiran dónde, e
+impediría responder la pregunta operativa: ¿cuánto valdría este lanzamiento, que nunca se
+ha tirado en altura, en el Harp Helú? En su lugar, dos etapas donde la altitud queda
+identificada por física:</p>
+<p><strong>Etapa 1 — transferencia de forma.</strong> Con el punto de salida y el giro fijos, se reintegra
+la trayectoria escalando arrastre por el cociente de densidades y Magnus por ese cociente
+elevado a los exponentes calibrados (vertical 1.7,
+horizontal 2.2). El integrador es Runge-Kutta de cuarto orden
+anclado en el punto real de salida (y = 60.5 − extensión), con el eje de giro conservado y
+la fuerza de Magnus perpendicular a la velocidad en todo el vuelo.</p>
+<p>Se usa por diferencias: el integrador no predice la forma, sólo su <em>cambio</em> entre dos
+densidades, y ese cambio se suma a la medición real de Trackman. Así los niveles coinciden
+con Trackman por construcción y el único error que queda es el diferencial.</p>
+<p><strong>Etapa 2 — Stuff+ sobre forma pura.</strong> Un modelo de <em>gradient boosting</em> que ve únicamente
+la física del envío: velocidad, quiebres, giro, punto y ángulos de salida, extensión,
+ángulos de aproximación. Nunca ve ubicación, conteo, bateador ni estadio. Por eso es
+transferible: para saber qué vale el mismo lanzamiento en otro aire, se le pasa la forma
+transferida y se vuelve a puntuar.</p>
+<p>Sobre esa base, Location+ agrega ubicación y conteo, y Pitching+ agrega arsenal y
+secuencia.</p>
+<h3>4.1 Función de pérdida y escala</h3>
+<p>El objetivo es el valor de carrera del lanzamiento, construido sobre la cadena de conteos:</p>
+<pre><code>RV(lanzamiento) = valor(estado después) − valor(estado antes)
+</code></pre>
+<p>donde el valor de un conteo es el valor de carrera esperado de los turnos que pasan por él
+y el de un evento terminal es su peso lineal, recentrado con las frecuencias de la LMB. La
+escala sigue la convención sabermétrica:</p>
+<pre><code>Stuff+ = 100 + 10 × z(−xRV)
+</code></pre>
+<p>100 es el promedio de la liga y cada 10 puntos es una desviación estándar; el signo se
+invierte porque un valor de carrera bajo favorece al lanzador.</p>
+<h2>5. Validación fuera de muestra</h2>
+<h3>5.1 La transferencia de forma</h3>
+<p>La prueba decisiva: tomar los lanzamientos de un lanzador <strong>a nivel del mar</strong>, transferirlos
+al aire de altitud, y comparar contra lo que ese mismo lanzador realmente tiró allá.
+444 lanzadores tiraron en ambos entornos; la mitad se usó para calibrar
+los exponentes y la otra mitad <strong>nunca</strong>. Sobre esas 436 celdas de
+evaluación:</p>
+<table>
+<thead>
+<tr>
+<th>Magnitud</th>
+<th class="n">Sin transferir</th>
+<th class="n">Sólo densidad</th>
+<th class="n">Modelo calibrado</th>
+<th class="n">Reducción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Quiebre vertical (in)</td>
+<td class="n">2.573</td>
+<td class="n">1.119</td>
+<td class="n"><strong>0.802</strong></td>
+<td class="n">68.8 %</td>
+</tr>
+<tr>
+<td>Quiebre horizontal (in)</td>
+<td class="n">2.932</td>
+<td class="n">1.612</td>
+<td class="n"><strong>0.875</strong></td>
+<td class="n">70.2 %</td>
+</tr>
+<tr>
+<td>Velocidad al plato (mph)</td>
+<td class="n">1.323</td>
+<td class="n">0.578</td>
+<td class="n"><strong>0.574</strong></td>
+<td class="n">56.6 %</td>
+</tr>
+</tbody>
+</table>
+<p>La columna «sólo densidad» es un modelo que escala todo por la densidad del aire, sin la
+corrección de Reynolds. Subestima el castigo de la altitud en cerca de un tercio.</p>
+<h3>5.2 Delta de forma por tipo de lanzamiento</h3>
+<p>Medido dentro del mismo lanzador y el mismo tipo, en pulgadas de quiebre vertical:</p>
+<table>
+<thead>
+<tr>
+<th>Lanzamiento</th>
+<th class="n">Observado</th>
+<th class="n">Predicho</th>
+<th class="n">Celdas</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Four-Seam</td>
+<td class="n">-3.73</td>
+<td class="n">-3.94</td>
+<td class="n">328</td>
+</tr>
+<tr>
+<td>Cutter</td>
+<td class="n">-2.50</td>
+<td class="n">-2.49</td>
+<td class="n">25</td>
+</tr>
+<tr>
+<td>Changeup</td>
+<td class="n">-2.25</td>
+<td class="n">-1.84</td>
+<td class="n">104</td>
+</tr>
+<tr>
+<td>Sinker</td>
+<td class="n">-2.10</td>
+<td class="n">-2.40</td>
+<td class="n">159</td>
+</tr>
+<tr>
+<td>Splitter</td>
+<td class="n">-0.91</td>
+<td class="n">-0.96</td>
+<td class="n">3</td>
+</tr>
+<tr>
+<td>Slider</td>
+<td class="n">-0.74</td>
+<td class="n">-0.95</td>
+<td class="n">228</td>
+</tr>
+<tr>
+<td>Curveball</td>
+<td class="n">+1.82</td>
+<td class="n">+1.65</td>
+<td class="n">64</td>
+</tr>
+</tbody>
+</table>
+<h3>5.3 Las tres capas, holdout de lanzador</h3>
+<p>Validación cruzada agrupada: ningún lanzador aparece a la vez en entrenamiento y prueba.</p>
+<table>
+<thead>
+<tr>
+<th>Capa</th>
+<th>Variables</th>
+<th class="n">RMSE</th>
+<th class="n">R²</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Modelo nulo (promedio por conteo)</td>
+<td>—</td>
+<td class="n">0.26810</td>
+<td class="n">0.00003</td>
+</tr>
+<tr>
+<td>Stuff+</td>
+<td>20</td>
+<td class="n">0.26541</td>
+<td class="n">0.01996</td>
+</tr>
+<tr>
+<td>Location+</td>
+<td>27</td>
+<td class="n">0.26235</td>
+<td class="n">0.04245</td>
+</tr>
+<tr>
+<td>Pitching+</td>
+<td>37</td>
+<td class="n">0.26230</td>
+<td class="n">0.04282</td>
+</tr>
+</tbody>
+</table>
+<p>El R² a nivel de lanzamiento individual es bajo por construcción: el desenlace de un envío
+suelto lo domina el azar. Lo relevante es la comparación contra el modelo nulo que pide la
+rúbrica, y la estabilidad al agregar por lanzador.</p>
+<p><strong>Holdout de temporada</strong> (entrena 2024–2025, prueba 2026):
+RMSE 0.26359, R² 0.02083.</p>
+<p><strong>Holdout de parque</strong> (entrena sin altitud extrema, prueba en altitud extrema):
+RMSE 0.27504, R² 0.01414.
+La degradación frente al holdout de lanzador es exactamente el fenómeno que este trabajo
+mide: un modelo entrenado a nivel del mar no traslada limpio a la altura.</p>
+<h3>5.4 Modelos de componente</h3>
+<table>
+<thead>
+<tr>
+<th>Objetivo</th>
+<th class="n">n</th>
+<th class="n">Brier</th>
+<th class="n">Skill sobre tasa base</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>swing</code></td>
+<td class="n">635 002</td>
+<td class="n">0.14853</td>
+<td class="n">+0.4037</td>
+</tr>
+<tr>
+<td><code>whiff</code></td>
+<td class="n">298 029</td>
+<td class="n">0.14744</td>
+<td class="n">+0.1947</td>
+</tr>
+<tr>
+<td><code>called_strike</code></td>
+<td class="n">336 973</td>
+<td class="n">0.05621</td>
+<td class="n">+0.7265</td>
+</tr>
+<tr>
+<td><code>chase</code></td>
+<td class="n">411 912</td>
+<td class="n">0.14567</td>
+<td class="n">+0.3530</td>
+</tr>
+<tr>
+<td><code>groundball</code></td>
+<td class="n">115 948</td>
+<td class="n">0.22899</td>
+<td class="n">+0.0621</td>
+</tr>
+<tr>
+<td><code>barrel</code></td>
+<td class="n">115 948</td>
+<td class="n">0.02437</td>
+<td class="n">+0.0081</td>
+</tr>
+<tr>
+<td><code>hard_contact</code></td>
+<td class="n">115 948</td>
+<td class="n">0.16672</td>
+<td class="n">+0.0521</td>
+</tr>
+<tr>
+<td><code>weak_contact</code></td>
+<td class="n">115 948</td>
+<td class="n">0.19575</td>
+<td class="n">+0.1000</td>
+</tr>
+</tbody>
+</table>
+<p>El barril es el caso honesto de límite del modelo: con una tasa base de 2.5 %, la calidad
+del contacto depende mucho más del bateador que del lanzamiento, y la habilidad predictiva
+desde la física del envío es marginal.</p>
+<h3>5.5 Aporte del arsenal</h3>
+<p>Sobre el valor de carrera agregado el arsenal aporta poco, porque la varianza de un
+lanzamiento suelto la dominan la ubicación y el conteo. Donde sí se ve es en el swing
+fallido, que es el mecanismo que el arsenal explica —diferencial de velocidad y túnel—:</p>
+<table>
+<thead>
+<tr>
+<th>Capa</th>
+<th class="n">Brier</th>
+<th class="n">Skill</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>stuff</td>
+<td class="n">0.15400</td>
+<td class="n">+0.1588</td>
+</tr>
+<tr>
+<td>location</td>
+<td class="n">0.14852</td>
+<td class="n">+0.1887</td>
+</tr>
+<tr>
+<td>pitching</td>
+<td class="n">0.14744</td>
+<td class="n">+0.1947</td>
+</tr>
+</tbody>
+</table>
+<h3>5.6 Calibración: ¿la escala ordena carreras?</h3>
+<p>La prueba que entiende cualquier director deportivo: los lanzamientos con Stuff+ alto deben
+permitir menos carreras que los de Stuff+ bajo, <strong>con lanzadores que el modelo nunca vio</strong>.
+Cada lanzamiento se puntuó con el modelo del pliegue que excluía a su lanzador:</p>
+<table>
+<thead>
+<tr>
+<th>Stuff+ (fuera de muestra)</th>
+<th class="n">Lanzamientos</th>
+<th class="n">Carreras / 100 observadas</th>
+<th class="n">Carreras / 100 predichas</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&lt; 80</td>
+<td class="n">27,774</td>
+<td class="n">+9.7</td>
+<td class="n">+11.0</td>
+</tr>
+<tr>
+<td>80–90</td>
+<td class="n">76,646</td>
+<td class="n">+6.3</td>
+<td class="n">+6.2</td>
+</tr>
+<tr>
+<td>90–100</td>
+<td class="n">177,931</td>
+<td class="n">+1.4</td>
+<td class="n">+1.9</td>
+</tr>
+<tr>
+<td>100–110</td>
+<td class="n">266,476</td>
+<td class="n">-2.2</td>
+<td class="n">-2.0</td>
+</tr>
+<tr>
+<td>110–120</td>
+<td class="n">82,730</td>
+<td class="n">-4.2</td>
+<td class="n">-5.6</td>
+</tr>
+<tr>
+<td>120 +</td>
+<td class="n">3,445</td>
+<td class="n">-5.5</td>
+<td class="n">-9.4</td>
+</tr>
+</tbody>
+</table>
+<p>La relación es monótona en los seis tramos: de un extremo al otro hay unas 14 carreras por
+cada 100 lanzamientos. Entre 80 y 110, donde está el 82 % de los lanzamientos, lo predicho cae
+a menos de media carrera de lo observado. En los extremos el modelo es más optimista de lo
+que se observa (120+: -9.4 contra -5.5), consistente con la regresión a la media esperable
+en un tramo con sólo 3,445 lanzamientos.</p>
+<h2>6. Resultados</h2>
+<h3>6.0 Por lanzador: quién sufre la altitud y quién aguanta</h3>
+<p>Para cada uno de los <strong>561 lanzadores</strong> con al menos 300 lanzamientos se tomaron todos sus
+envíos reales, se transfirieron a los dos aires y se puntuaron con el mismo modelo. La
+diferencia es su delta de altitud.</p>
+<ul>
+<li><strong>58</strong> aguantan (pierden menos de 1.2 puntos); <strong>246</strong> pierden más de 2.5.</li>
+<li><strong>Los que más pierden</strong> son lanzadores de élite a nivel del mar cuyo valor es movimiento:
+  Lanzador 529 (cambio · recta) baja de 104.8 a 97.2; Lanzador 174 (recta · cambio), de 104.9
+  a 98.1; Lanzador 297 (recta · curva), de 103.0 a 96.7.</li>
+<li><strong>El perfil de fichaje</strong>: Lanzador 1099 (cutter · slider · curva) vale 104.5 a nivel del
+  mar y 104.1 en el Harp Helú, el mejor Stuff+ de la liga en altura, y es de los más
+  constantes entre juegos (± 1.6). Lo siguen Lanzador 1075 (slider · recta · cutter,
+  104.2 → 103.2) y Lanzador 386 (slider · sinker · recta, 103.4 → 102.3).</li>
+<li><strong>Comprobación contra lo observado.</strong> De los 561, 333 lanzaron al menos 120 veces en cada
+  entorno. Para ellos, el delta del modelo y la diferencia observada de carreras permitidas
+  (altura menos nivel del mar) correlacionan a <strong>0.23</strong>: misma dirección, moderada porque
+  120 lanzamientos son pocos para medir carreras. La decisión se toma con el Stuff+, que es
+  estable; lo observado sirve de verificación.</li>
+</ul>
+<p>La tabla completa, con Location+, Pitching+ y constancia, está en la pestaña <em>Lanzadores</em> del
+dashboard y en <code>artifacts/pitchers_jurado.csv</code>.</p>
+<h3>6.1 Efecto de la altitud por tipo de lanzamiento</h3>
+<p>Cada lanzamiento del conjunto se transfirió a las dos densidades y se puntuó con el mismo
+modelo. Como Stuff+ sólo ve forma, la diferencia es atribuible al aire.</p>
+<table>
+<thead>
+<tr>
+<th>Lanzamiento</th>
+<th class="n">n</th>
+<th class="n">Stuff+ nivel del mar</th>
+<th class="n">Stuff+ Harp Helú</th>
+<th class="n">Δ</th>
+<th class="n">Δ vs. recta</th>
+<th class="n">Whiff observado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cutter</td>
+<td class="n">26 468</td>
+<td class="n">100.5</td>
+<td class="n">99.6</td>
+<td class="n">-0.89</td>
+<td class="n">+2.44</td>
+<td class="n">10.9 %</td>
+</tr>
+<tr>
+<td>Splitter</td>
+<td class="n">7 289</td>
+<td class="n">102.0</td>
+<td class="n">100.5</td>
+<td class="n">-1.56</td>
+<td class="n">+1.76</td>
+<td class="n">16.8 %</td>
+</tr>
+<tr>
+<td>Slider</td>
+<td class="n">139 717</td>
+<td class="n">101.9</td>
+<td class="n">100.2</td>
+<td class="n">-1.65</td>
+<td class="n">+1.68</td>
+<td class="n">15.4 %</td>
+</tr>
+<tr>
+<td>Changeup</td>
+<td class="n">78 925</td>
+<td class="n">100.1</td>
+<td class="n">98.0</td>
+<td class="n">-2.17</td>
+<td class="n">+1.15</td>
+<td class="n">14.3 %</td>
+</tr>
+<tr>
+<td>Curveball</td>
+<td class="n">54 024</td>
+<td class="n">101.4</td>
+<td class="n">99.1</td>
+<td class="n">-2.26</td>
+<td class="n">+1.06</td>
+<td class="n">14.3 %</td>
+</tr>
+<tr>
+<td>Sinker</td>
+<td class="n">110 899</td>
+<td class="n">99.8</td>
+<td class="n">97.5</td>
+<td class="n">-2.28</td>
+<td class="n">+1.05</td>
+<td class="n">6.7 %</td>
+</tr>
+<tr>
+<td>Four-Seam</td>
+<td class="n">217 618</td>
+<td class="n">100.3</td>
+<td class="n">97.0</td>
+<td class="n">-3.33</td>
+<td class="n">+0.00</td>
+<td class="n">9.2 %</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Todo pierde.</strong> El promedio de la liga cae -2.42 puntos. Pero la
+pérdida está ordenada, y el orden tiene un mecanismo: <strong>la altitud es un impuesto sobre el
+efecto Magnus, y cada lanzamiento paga en proporción a cuánto de su valor viene de ahí.</strong></p>
+<p>En un extremo, el <em>cutter</em> casi no paga (-0.89): se mueve poco y su
+engaño está en salir igual que la recta. En el otro, la recta de cuatro costuras paga más
+que nadie (-3.33): vive de su elevación, y pierde 3.73 pulgadas de quiebre vertical, más que
+ningún otro tipo. Cambio, curva y sinker quedan en medio, alrededor de -2.2: tienen mucho
+movimiento, y el movimiento es justo lo que el aire delgado se lleva.</p>
+<h3>6.2 La composición del talento cambia</h3>
+<p>Si en vez de promediar se mira <strong>qué lanzamientos componen el 1 % mejor puntuado</strong> en cada
+entorno, el desplazamiento es más elocuente que cualquier delta:</p>
+<table>
+<thead>
+<tr>
+<th>Lanzamiento</th>
+<th class="n">Toda la liga</th>
+<th class="n">Top 1 % a nivel del mar</th>
+<th class="n">Top 1 % en el Harp Helú</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Slider</td>
+<td class="n">22.7 %</td>
+<td class="n">7.7 %</td>
+<td class="n">32.6 %</td>
+</tr>
+<tr>
+<td>Curveball</td>
+<td class="n">7.9 %</td>
+<td class="n">8.5 %</td>
+<td class="n">14.2 %</td>
+</tr>
+<tr>
+<td>Cutter</td>
+<td class="n">3.3 %</td>
+<td class="n">1.2 %</td>
+<td class="n">5.5 %</td>
+</tr>
+<tr>
+<td>Splitter</td>
+<td class="n">1.5 %</td>
+<td class="n">3.9 %</td>
+<td class="n">6.0 %</td>
+</tr>
+<tr>
+<td>Changeup</td>
+<td class="n">11.6 %</td>
+<td class="n">6.6 %</td>
+<td class="n">8.6 %</td>
+</tr>
+<tr>
+<td>Sinker</td>
+<td class="n">17.5 %</td>
+<td class="n">16.9 %</td>
+<td class="n">11.1 %</td>
+</tr>
+<tr>
+<td>Four-Seam</td>
+<td class="n">35.6 %</td>
+<td class="n">55.3 %</td>
+<td class="n">22.0 %</td>
+</tr>
+</tbody>
+</table>
+<p>El <em>slider</em> pasa de 7.7 % a
+32.6 % de la élite: casi se triplica. La recta cae de
+55.3 % a 22.0 % y
+el <em>sinker</em> se parte a la mitad, de 16.9 % a
+11.1 %.</p>
+<h3>6.3 El castigo es regresivo</h3>
+<p>El promedio esconde lo más importante. Partiendo los lanzamientos en quintiles según su
+Stuff+ <strong>a nivel del mar</strong>, el castigo de la altitud no se reparte parejo:</p>
+<table>
+<thead>
+<tr>
+<th>Quintil de calidad</th>
+<th class="n">Stuff+ nivel del mar</th>
+<th class="n">Stuff+ Harp Helú</th>
+<th class="n">Δ recta 4C</th>
+<th class="n">Δ todos</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td class="n">82.7</td>
+<td class="n">84.0</td>
+<td class="n"><strong>+1.26</strong></td>
+<td class="n">1.03</td>
+</tr>
+<tr>
+<td>2</td>
+<td class="n">95.2</td>
+<td class="n">94.3</td>
+<td class="n"><strong>-0.94</strong></td>
+<td class="n">-0.71</td>
+</tr>
+<tr>
+<td>3</td>
+<td class="n">102.5</td>
+<td class="n">99.4</td>
+<td class="n"><strong>-3.12</strong></td>
+<td class="n">-2.16</td>
+</tr>
+<tr>
+<td>4</td>
+<td class="n">107.5</td>
+<td class="n">102.1</td>
+<td class="n"><strong>-5.39</strong></td>
+<td class="n">-3.77</td>
+</tr>
+<tr>
+<td>5</td>
+<td class="n">113.6</td>
+<td class="n">105.2</td>
+<td class="n"><strong>-8.44</strong></td>
+<td class="n">-6.47</td>
+</tr>
+</tbody>
+</table>
+<p>La recta del quintil más bajo <strong>no pierde nada: gana +1.26</strong>. La del
+quintil más alto pierde -8.44, y pasa de
+113.6 —élite— a 105.2, apenas por encima del
+promedio de la liga.</p>
+<p><strong>La altitud no daña al lanzamiento malo. Borra la ventaja del bueno.</strong> Es un efecto de
+compresión: el aire delgado se lleva el movimiento, y el movimiento es precisamente aquello
+en lo que un lanzamiento de élite se distingue de uno mediocre. Quien no tenía nada
+excepcional que perder, no pierde nada.</p>
+<p>Esto reencuadra por completo la pregunta de reclutamiento, y es el resultado con más
+consecuencias prácticas de todo el trabajo (sección 7).</p>
+<h3>6.4 El riesgo al otro lado del bate</h3>
+<table>
+<thead>
+<tr>
+<th>Entorno</th>
+<th class="n">Velocidad de salida</th>
+<th class="n">Distancia</th>
+<th class="n">HR por bola en juego</th>
+<th class="n">Tasa de rodado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Nivel del mar</td>
+<td class="n">83.0 mph</td>
+<td class="n">157 ft</td>
+<td class="n">3.65 %</td>
+<td class="n">40.5 %</td>
+</tr>
+<tr>
+<td>Altitud extrema</td>
+<td class="n">84.0 mph</td>
+<td class="n">161 ft</td>
+<td class="n">4.26 %</td>
+<td class="n">44.8 %</td>
+</tr>
+</tbody>
+</table>
+<p>Restringido a elevados, que es donde la altitud cobra:</p>
+<table>
+<thead>
+<tr>
+<th>Entorno</th>
+<th class="n">Distancia media</th>
+<th class="n">HR por elevado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Nivel del mar</td>
+<td class="n">291.9 ft</td>
+<td class="n">12.4 %</td>
+</tr>
+<tr>
+<td>Altitud extrema</td>
+<td class="n">322.8 ft</td>
+<td class="n">16.3 %</td>
+</tr>
+</tbody>
+</table>
+<p>Un elevado viaja <strong>31.0 pies más</strong> y su
+probabilidad de salir del parque sube de 12.4 % a
+16.3 %.</p>
+<h3>6.5 Perfil físico ideal para el Harp Helú</h3>
+<p>Caracterización del 1 % de lanzamientos <strong>reales</strong> mejor puntuados en cada entorno,
+restringido a lanzadores derechos para que el quiebre horizontal no se cancele al promediar.</p>
+<p>Se buscó dentro de los envíos observados y no sobre una rejilla libre de los ejes físicos:
+una rejilla produce combinaciones que nunca ocurren —una recta de 100 mph con quiebre de
+curva— y ahí un modelo de árboles extrapola cualquier cosa. La respuesta tiene que quedarse
+sobre lo que un brazo humano puede realmente hacer.</p>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th class="n">Élite a nivel del mar</th>
+<th class="n">Élite en altitud</th>
+<th class="n">Diferencia</th>
+<th class="n">Mediana de la liga</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RelSpeed</td>
+<td class="n">90.63</td>
+<td class="n">87.25</td>
+<td class="n">-3.38</td>
+<td class="n">88.90</td>
+</tr>
+<tr>
+<td>InducedVertBreak</td>
+<td class="n">11.30</td>
+<td class="n">4.22</td>
+<td class="n">-7.08</td>
+<td class="n">9.16</td>
+</tr>
+<tr>
+<td>HorzBreak</td>
+<td class="n">8.36</td>
+<td class="n">1.87</td>
+<td class="n">-6.49</td>
+<td class="n">7.25</td>
+</tr>
+<tr>
+<td>SpinRate</td>
+<td class="n">2 334.11</td>
+<td class="n">2 352.39</td>
+<td class="n">+18.28</td>
+<td class="n">2 327.65</td>
+</tr>
+<tr>
+<td>SpinAxis</td>
+<td class="n">199.43</td>
+<td class="n">165.43</td>
+<td class="n">-34.00</td>
+<td class="n">210.92</td>
+</tr>
+<tr>
+<td>Extension</td>
+<td class="n">6.02</td>
+<td class="n">5.90</td>
+<td class="n">-0.12</td>
+<td class="n">5.88</td>
+</tr>
+<tr>
+<td>RelHeight</td>
+<td class="n">5.73</td>
+<td class="n">5.66</td>
+<td class="n">-0.07</td>
+<td class="n">5.79</td>
+</tr>
+<tr>
+<td>RelSide</td>
+<td class="n">1.91</td>
+<td class="n">1.99</td>
+<td class="n">+0.07</td>
+<td class="n">1.72</td>
+</tr>
+<tr>
+<td>spin_efficiency</td>
+<td class="n">1.02</td>
+<td class="n">0.69</td>
+<td class="n">-0.33</td>
+<td class="n">0.81</td>
+</tr>
+<tr>
+<td>movement_total</td>
+<td class="n">18.87</td>
+<td class="n">12.84</td>
+<td class="n">-6.03</td>
+<td class="n">14.68</td>
+</tr>
+</tbody>
+</table>
+<p>Dos renglones cargan el hallazgo. El <strong>movimiento total</strong> de la élite baja de
+18.9 a
+12.8 pulgadas, y la <strong>eficiencia de giro</strong> baja de
+1.02 a
+0.69.</p>
+<p>La eficiencia de giro es la fracción del giro que se convierte en movimiento. Que la élite
+de altura la tenga <em>más baja</em> significa que el giro de tipo giroscópico —el que no produce
+Magnus— gana valor relativo. Es coherente: si el aire delgado grava el Magnus, conviene no
+depender de él.</p>
+<h2>7. Recomendaciones operativas</h2>
+<p><strong>Lo primero, porque cambia el cálculo de cualquier contratación: no pague sobreprecio por
+una recta de élite para lanzar en el Harp Helú.</strong> No la va a recibir. Una recta del quintil
+superior llega a 2,240 metros valiendo 105.2 en vez de
+113.6, mientras que una del quintil inferior llega igual o levemente
+mejor. La prima que el mercado le cobra por esa recta se paga a nivel del mar y se cobra en
+un estadio donde no existe. El mismo dinero rinde más en un brazo cuyo valor no dependa del
+movimiento.</p>
+<p>La regla que resume el resto: <strong>en el Harp Helú, no apueste al Magnus.</strong></p>
+<p><strong>Qué gana valor relativo.</strong> El <em>cutter</em> y el <em>slider</em>. Pierden
+-0.89 y -1.65 puntos contra
+-3.33 de la recta, y entre los dos pasan de
+8.9 % a
+38.2 % de la élite. El
+mecanismo no es que se muevan más, sino que nunca dependieron de moverse mucho: su engaño
+está en salir indistinguibles de la recta y romper tarde y poco. El giro giroscópico no
+produce Magnus, así que el aire delgado no tiene qué quitarle.</p>
+<p><strong>Qué pierde.</strong> Sobre todo la recta de cuatro costuras, y en segundo plano la curva, el
+cambio y el sinker, por la razón opuesta: su valor es movimiento. La recta pierde 3.73 pulgadas de
+elevación, y una recta alta que llega con menos elevación de la que el bateador anticipa no
+produce el swing por debajo: produce el elevado. En el Harp Helú ese elevado viaja
+31.0 pies más y sale del parque
+16.3 % de las veces contra 12.4 % a
+nivel del mar. El <em>sinker</em> pierde parecido y su participación en la élite se parte a la mitad.</p>
+<p><strong>Sobre la hipótesis del cambio de velocidad.</strong> El planteamiento del reto (H2) propone que
+el cambio gane valor relativo porque engaña por diferencial de velocidad y no por Magnus.
+Los datos lo sostienen, pero <strong>débilmente</strong>: el cambio pierde
+-2.17 puntos, apenas +1.15
+mejor que la recta contra la que juega, muy por debajo del
++2.44 del <em>cutter</em>. La razón es que el cambio sí tiene
+mucho movimiento horizontal —2.2 pulgadas de las
+cuales pierde una parte importante— y ese componente sí paga el impuesto. El ganador de la
+altitud no es el que engaña por velocidad: es el que nunca dependió del movimiento.</p>
+<p><strong>Cómo perfilar un prospecto.</strong> Cuatro preguntas, en este orden:</p>
+<ol>
+<li>
+<p><em>¿Cuánto de su valor está en el percentil alto de movimiento?</em> Es la pregunta que más
+   dinero decide. Si su Stuff+ a nivel del mar está en el quintil superior y ese Stuff+
+   viene del quiebre, el diferencial que lo hace caro no viaja a la Ciudad de México.</p>
+</li>
+<li>
+<p><em>¿Cuánto de su valor viene del Magnus?</em> No es cuántas revoluciones, sino qué fracción
+   del giro se convierte en pulgadas. Eficiencia de giro alta es una virtud a nivel del
+   mar y una exposición en altura: la élite de altura la tiene en
+   0.69 contra
+   1.02 de la élite a nivel del mar.</p>
+</li>
+<li><em>¿Su arsenal se apoya en cortadas y sliders o en curvas y sinkers?</em> El primer perfil
+   llega al Harp Helú prácticamente intacto; el segundo llega devaluado.</li>
+<li><em>¿Induce rodados?</em> La tasa de rodado sube de 40.5 % a
+   44.8 % en altitud, y el rodado es el único batazo al que el
+   aire no le hace nada. Es la contrapartida: la altitud castiga al lanzador en el
+   movimiento, pero le devuelve algo en el tipo de contacto.</li>
+</ol>
+<p>El simulador incluido permite evaluar cualquier combinación física en los dos entornos sin
+necesidad de servidor.</p>
+<h2>8. Alcance y fronteras</h2>
+<p>Lo que este modelo <strong>no</strong> hace, dicho explícitamente:</p>
+<ul>
+<li><strong>No identifica estadios.</strong> La cubeta de «altitud extrema» agrupa varios parques. Los
+  resultados se leen como el contraste entre un entorno de altitud de la LMB y uno a nivel
+  del mar, con el Harp Helú como caso más extremo, no como una estimación específica de
+  ese estadio.</li>
+<li><strong>No separa aire de clima.</strong> El índice de arrastre recoge densidad, temperatura y
+  humedad juntas. Es lo correcto para predecir movimiento, pero no permite atribuir el
+  efecto sólo a la altitud.</li>
+<li><strong>No modela al bateador.</strong> Sin identidad de bateador como variable, la calidad del
+  contacto queda en el límite de lo predecible (sección 5.4).</li>
+<li><strong>No es causal.</strong> Stuff+ es un modelo de valoración. La pregunta contrafactual táctica
+  («¿qué habría pasado con un slider en vez del cambio?») requiere otro instrumento.</li>
+<li><strong>El exponente de Reynolds es empírico.</strong> Está calibrado fuera de muestra y corroborado
+  por una medición independiente dentro de lanzador, pero no derivado de primeros
+  principios.</li>
+</ul>
+<h2>9. Reproducción</h2>
+<pre><code class="language-bash">uv venv &amp;&amp; uv pip install -e .
+python scripts/01_physics.py       # densidad del aire y transferencia de forma
+python scripts/02_features.py      # secuencia, arsenal, objetivos
+python scripts/03_models.py        # las tres capas y sus holdouts
+python scripts/04_export.py        # modelo y tablas al simulador
+python scripts/05_deliverables.py  # entregables 1, 2 y 3
+python scripts/06_report.py        # este documento
+python scripts/07_jurado.py        # tabla por lanzador, calibración y mapa (dashboard)
+cd app &amp;&amp; npm install &amp;&amp; npm test &amp;&amp; npm run dev
+</code></pre>
+<h2>10. Referencias</h2>
+<ul>
+<li>Nathan, A. <em>The effect of altitude on baseball trajectories.</em> Physics of Baseball.</li>
+<li>SABR. <em>High altitude offense.</em> Baseball Research Journal.</li>
+<li>Tango, T., Lichtman, M. &amp; Dolphin, A. (2007). <em>The Book: Playing the Percentages in Baseball.</em></li>
+<li>Huang, G. &amp; Hsu, M. (2021). Big data analytics in baseball: a review. <em>SAGE Open</em>, 11(4).</li>
+<li>Deshpande, S. K. &amp; Wyner, A. J. (2017). A hierarchical Bayesian model of pitch framing. arXiv:1704.00823.</li>
+</ul>
+</body></html>

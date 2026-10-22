@@ -74,11 +74,9 @@ pero el arrastre medido cae sólo a 0.8534. La diferencia es el
 coeficiente de arrastre: el número de Reynolds baja con la densidad y C_d sube.
 
 Ajustando un solo exponente que ancle el índice medido a la altitud del Harp Helú se
-obtiene —. La verificación es
-independiente: con ese exponente, un estadio a la altura de Coors Field debería dar
-—,
-y la cubeta intermedia de la LMB mide
-—.
+obtiene **0.7184** (índice = densidad ISA^0.7184). La verificación es
+independiente: con ese exponente, un estadio a la altura de Coors Field (1,609 m) debería dar
+**0.8931**, y la cubeta intermedia de la LMB, que nunca entró al ajuste, mide **0.8981**.
 
 ### 3.2 El movimiento cae más que la densidad
 
@@ -221,7 +219,51 @@ fallido, que es el mecanismo que el arsenal explica —diferencial de velocidad 
 | location | 0.14852 | +0.1887 |
 | pitching | 0.14744 | +0.1947 |
 
+### 5.6 Calibración: ¿la escala ordena carreras?
+
+La prueba que entiende cualquier director deportivo: los lanzamientos con Stuff+ alto deben
+permitir menos carreras que los de Stuff+ bajo, **con lanzadores que el modelo nunca vio**.
+Cada lanzamiento se puntuó con el modelo del pliegue que excluía a su lanzador:
+
+| Stuff+ (fuera de muestra) | Lanzamientos | Carreras / 100 observadas | Carreras / 100 predichas |
+|---|---|---|---|
+| < 80 | 27,774 | +9.7 | +11.0 |
+| 80–90 | 76,646 | +6.3 | +6.2 |
+| 90–100 | 177,931 | +1.4 | +1.9 |
+| 100–110 | 266,476 | -2.2 | -2.0 |
+| 110–120 | 82,730 | -4.2 | -5.6 |
+| 120 + | 3,445 | -5.5 | -9.4 |
+
+La relación es monótona en los seis tramos: de un extremo al otro hay unas 14 carreras por
+cada 100 lanzamientos. Entre 80 y 110, donde está el 82 % de los lanzamientos, lo predicho cae
+a menos de media carrera de lo observado. En los extremos el modelo es más optimista de lo
+que se observa (120+: -9.4 contra -5.5), consistente con la regresión a la media esperable
+en un tramo con sólo 3,445 lanzamientos.
+
 ## 6. Resultados
+
+### 6.0 Por lanzador: quién sufre la altitud y quién aguanta
+
+Para cada uno de los **561 lanzadores** con al menos 300 lanzamientos se tomaron todos sus
+envíos reales, se transfirieron a los dos aires y se puntuaron con el mismo modelo. La
+diferencia es su delta de altitud.
+
+- **58** aguantan (pierden menos de 1.2 puntos); **246** pierden más de 2.5.
+- **Los que más pierden** son lanzadores de élite a nivel del mar cuyo valor es movimiento:
+  Lanzador 529 (cambio · recta) baja de 104.8 a 97.2; Lanzador 174 (recta · cambio), de 104.9
+  a 98.1; Lanzador 297 (recta · curva), de 103.0 a 96.7.
+- **El perfil de fichaje**: Lanzador 1099 (cutter · slider · curva) vale 104.5 a nivel del
+  mar y 104.1 en el Harp Helú, el mejor Stuff+ de la liga en altura, y es de los más
+  constantes entre juegos (± 1.6). Lo siguen Lanzador 1075 (slider · recta · cutter,
+  104.2 → 103.2) y Lanzador 386 (slider · sinker · recta, 103.4 → 102.3).
+- **Comprobación contra lo observado.** De los 561, 333 lanzaron al menos 120 veces en cada
+  entorno. Para ellos, el delta del modelo y la diferencia observada de carreras permitidas
+  (altura menos nivel del mar) correlacionan a **0.23**: misma dirección, moderada porque
+  120 lanzamientos son pocos para medir carreras. La decisión se toma con el Stuff+, que es
+  estable; lo observado sirve de verificación.
+
+La tabla completa, con Location+, Pitching+ y constancia, está en la pestaña *Lanzadores* del
+dashboard y en `artifacts/pitchers_jurado.csv`.
 
 ### 6.1 Efecto de la altitud por tipo de lanzamiento
 
@@ -243,11 +285,10 @@ pérdida está ordenada, y el orden tiene un mecanismo: **la altitud es un impue
 efecto Magnus, y cada lanzamiento paga en proporción a cuánto de su valor viene de ahí.**
 
 En un extremo, el *cutter* casi no paga (-0.89): se mueve poco y su
-engaño está en salir igual que la recta. En el otro, la curva paga más que nadie
-(-2.26): es movimiento puro, y el movimiento es justo lo que el
-aire delgado se lleva. La recta de cuatro costuras, que vive de su elevación, pierde
-3.73 pulgadas de quiebre vertical, más que ningún otro
-tipo.
+engaño está en salir igual que la recta. En el otro, la recta de cuatro costuras paga más
+que nadie (-3.33): vive de su elevación, y pierde 3.73 pulgadas de quiebre vertical, más que
+ningún otro tipo. Cambio, curva y sinker quedan en medio, alrededor de -2.2: tienen mucho
+movimiento, y el movimiento es justo lo que el aire delgado se lleva.
 
 ### 6.2 La composición del talento cambia
 
@@ -369,8 +410,8 @@ mecanismo no es que se muevan más, sino que nunca dependieron de moverse mucho:
 está en salir indistinguibles de la recta y romper tarde y poco. El giro giroscópico no
 produce Magnus, así que el aire delgado no tiene qué quitarle.
 
-**Qué pierde.** La curva y la recta de cuatro costuras, por la misma razón opuesta: son
-movimiento puro. La recta pierde 3.73 pulgadas de
+**Qué pierde.** Sobre todo la recta de cuatro costuras, y en segundo plano la curva, el
+cambio y el sinker, por la razón opuesta: su valor es movimiento. La recta pierde 3.73 pulgadas de
 elevación, y una recta alta que llega con menos elevación de la que el bateador anticipa no
 produce el swing por debajo: produce el elevado. En el Harp Helú ese elevado viaja
 31.0 pies más y sale del parque
@@ -437,6 +478,7 @@ python scripts/03_models.py        # las tres capas y sus holdouts
 python scripts/04_export.py        # modelo y tablas al simulador
 python scripts/05_deliverables.py  # entregables 1, 2 y 3
 python scripts/06_report.py        # este documento
+python scripts/07_jurado.py        # tabla por lanzador, calibración y mapa (dashboard)
 cd app && npm install && npm test && npm run dev
 ```
 
