@@ -35,7 +35,8 @@ function Calibracion({ c }: { c: Tramo[] }) {
               <rect x={sx(i) - bw * 0.3} y={top} width={bw * 0.6} height={Math.max(alto, 1)} rx={3}
                     className={malo ? 'barra-mala' : 'barra-buena'} />
               <circle cx={sx(i)} cy={sy(t.carreras_pred_100)} r={5} className="pred" />
-              <text x={sx(i)} y={malo ? sy(t.carreras_100) - 8 : sy(t.carreras_100) + 18} textAnchor="middle" className="valor-barra">
+              {/* la cifra al lado de la barra, para no tapar el punto de lo predicho */}
+              <text x={sx(i) + bw * 0.3 + 5} y={sy(t.carreras_100) + (malo ? 12 : -4)} className="valor-barra">
                 {sg(t.carreras_100, 1)}
               </text>
               <text x={sx(i)} y={H - PB + 20} textAnchor="middle" className="eje fuerte">{t.tramo}</text>
@@ -81,8 +82,8 @@ export function Confianza({ j }: { j: Jurado }) {
   const c = j.calibracion;
   const bajo = c[0], alto = c.find(t => t.tramo === '110–120') ?? c[c.length - 1];
   const hp = j.holdout.pitcher, nul = j.modelo_nulo;
-  // "Cuánto mejor que el modelo nulo": el nulo explica ~0 % de la varianza (r² ≈ 0).
-  const mejora = (r2: number) => sg(r2 * 100, 1) + ' %';
+  // r² fuera de muestra en %: qué parte de lo que pasa explica el modelo. El nulo explica ~0 %.
+  const mejora = (r2: number) => nf(r2 * 100, 1) + ' %';
   const comps = Object.entries(j.holdout.componentes).sort((a, b) => b[1].skill - a[1].skill);
 
   return (
@@ -105,7 +106,7 @@ export function Confianza({ j }: { j: Jurado }) {
             en cinco grupos de lanzadores). Los de menos de 80 permitieron <b>{sg(bajo.carreras_100, 1)}</b> carreras por cada 100
             lanzamientos; los de 110 a 120, <b>{sg(alto.carreras_100, 1)}</b>. La diferencia entre un extremo y el otro son
             unas <b>{nf(bajo.carreras_100 - alto.carreras_100, 0)} carreras cada 100 lanzamientos</b>, y lo predicho (puntos)
-            cae casi encima de lo observado (barras).
+            sigue a lo observado (barras) escalón por escalón; sólo se separa en los extremos, donde hay menos lanzamientos.
           </p>
           <Calibracion c={c} />
         </div>
@@ -114,15 +115,15 @@ export function Confianza({ j }: { j: Jurado }) {
         <div className="rejilla-3">
           <Prueba titulo="Lanzadores nuevos · pitcher holdout"
                   que="Se entrena sin un grupo de lanzadores y se prueba sólo con ellos."
-                  cifra={mejora(hp.stuff.r2)} unidad="mejor que el modelo nulo"
+                  cifra={mejora(hp.stuff.r2)} unidad={`de lo que pasa, explicado · el nulo: ${nf(nul.r2 * 100, 2)} %`}
                   nota={`Pitching+, con todo el contexto: ${mejora(hp.pitching.r2)}. El modelo nulo —promedio por conteo— explica ${nf(nul.r2 * 100, 2)} %.`} />
           <Prueba titulo="Temporada nueva · season holdout"
                   que="Se entrena con 2024 y 2025 y se prueba con 2026."
-                  cifra={mejora(j.holdout.temporada.stuff.r2)} unidad="mejor que el modelo nulo"
+                  cifra={mejora(j.holdout.temporada.stuff.r2)} unidad={`de lo que pasa, explicado · el nulo: ${nf(nul.r2 * 100, 2)} %`}
                   nota="Igual o mejor que con lanzadores nuevos: lo aprendido no se gasta con el tiempo." />
           <Prueba titulo="Estadio nuevo · park holdout"
                   que="Se entrena sin ningún estadio de altura y se prueba sólo en altura."
-                  cifra={mejora(j.holdout.parque.stuff.r2)} unidad="mejor que el modelo nulo"
+                  cifra={mejora(j.holdout.parque.stuff.r2)} unidad={`de lo que pasa, explicado · el nulo: ${nf(nul.r2 * 100, 2)} %`}
                   nota="Sigue funcionando en un aire que nunca vio, aunque rinde menos: justo el efecto que este trabajo mide." />
         </div>
         <p className="aclaracion">

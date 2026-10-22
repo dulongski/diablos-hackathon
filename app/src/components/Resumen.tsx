@@ -52,18 +52,18 @@ export function Resumen({ d, j, irA }: { d: DatosResumen; j: Jurado; irA: (v: 's
           </header>
           <div className="porque-tipos">
             <article className="tarjeta porque">
-              <span className="etiqueta d-mucho">Pierden más</span>
-              <h3>Recta ({sg(recta)}) y curva</h3>
-              <p>Su valor <b>es</b> el movimiento: la recta "sube" porque su giro la sostiene contra el aire; la curva cae
-                 por lo mismo al revés. Con 20 % menos aire, el giro empuja menos y la pelota hace menos de lo que el
-                 bateador espera.</p>
+              <span className="etiqueta d-mucho">Pierde más</span>
+              <h3>La recta ({sg(recta)})</h3>
+              <p>Su valor <b>es</b> el movimiento: "sube" porque su giro la sostiene contra el aire. Con 20 % menos aire,
+                 el giro empuja menos y la pelota hace menos de lo que el bateador espera. Curva, sinker y cambio quedan
+                 en medio, alrededor de −2.2.</p>
             </article>
             <article className="tarjeta porque">
               <span className="etiqueta d-aguanta">Aguantan</span>
-              <h3>Cutter ({sg(cutter)}), slider y sinker</h3>
-              <p>Engañan porque salen de la mano igual que la recta y rompen tarde y poco. Su giro es más de "bala"
-                 (gira sobre su eje de avance), que no depende del aire. Si casi no dependían del movimiento, el aire
-                 delgado casi no les quita nada.</p>
+              <h3>Cutter ({sg(cutter)}), slider y splitter</h3>
+              <p>Engañan porque salen de la mano igual que la recta y rompen tarde y poco. El cutter y el slider giran más
+                 como "bala" (sobre su eje de avance), y el splitter casi no gira: ninguno depende mucho de que el aire
+                 empuje el giro, así que el aire delgado les quita poco.</p>
             </article>
             <article className="tarjeta porque">
               <span className="etiqueta d-pierde">Lo bueno pierde más</span>
@@ -206,7 +206,7 @@ export function Resumen({ d, j, irA }: { d: DatosResumen; j: Jurado; irA: (v: 's
             <h3 className="titulo-tarjeta">Cómo perfilar un prospecto o agente libre para los Diablos</h3>
             <ol>
               <li><b>¿Cuánto de su valor es movimiento?</b> Si es de élite a nivel del mar <i>porque</i> su recta o su curva se mueven mucho, esa ventaja no viaja a la Ciudad de México. Revisar su cambio estimado en la pestaña Lanzadores.</li>
-              <li><b>¿Su arsenal se apoya en cutter, slider o sinker?</b> Llegan casi intactos. Uno que vive de recta y curva llega devaluado.</li>
+              <li><b>¿Su arsenal se apoya en cutter, slider o splitter?</b> Son los que menos pierden. Uno que vive de recta y curva llega devaluado.</li>
               <li><b>¿Induce rodados?</b> En altura los elevados viajan unos 30 pies más; el rodado es el único batazo al que el aire no ayuda.</li>
               <li><b>¿Es constante?</b> Entre dos candidatos parecidos, el que varía menos de un juego a otro es más fácil de planear.</li>
               <li><b>Probarlo en el simulador</b> con sus números: velocidad, giro y movimiento dan su Stuff+ en los dos estadios lado a lado.</li>

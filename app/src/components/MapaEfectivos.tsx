@@ -57,7 +57,7 @@ export function MapaEfectivos({ puntos }: { puntos: PuntoMapa[] }) {
 
         <aside className="mapa-efectivos-lectura">
           <div className="leyenda vertical">
-            <span className="clave"><i className="ef-mejor-k" /> El 10 % más efectivo en el Harp Helú</span>
+            <span className="clave"><i className="ef-mejor-k" style={tipo !== 'Todos' ? { background: COLOR_TIPO_ES[tipo] } : undefined} /> El 10 % más efectivo en el Harp Helú{tipo === 'Todos' && ' (color de su tipo)'}</span>
             <span className="clave"><i className="ef-peor-k" /> El 10 % menos efectivo</span>
           </div>
           {tipo !== 'Todos' && mejor.length > 0 && (

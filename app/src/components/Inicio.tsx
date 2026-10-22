@@ -137,7 +137,7 @@ export function Inicio({ j, irA, porQue }: { j: Jurado; irA: (v: Vista) => void;
               </article>
               <article className="respuesta">
                 <span className="respuesta-n">El perfil a buscar</span>
-                <h3>Cutter, slider y sinker aguantan</h3>
+                <h3>Cutter, slider y splitter aguantan</h3>
                 <p>Engañan por parecerse a la recta al salir de la mano, no por moverse mucho, así que el aire delgado les quita poco. Ejemplo: <b>{fichaje.nombre}</b> ({fichaje.arsenal.toLowerCase()}) vale {nf(fichaje.stuff_mar, 1)} a nivel del mar y {nf(fichaje.stuff_hh, 1)} en casa.</p>
               </article>
               <article className="respuesta">

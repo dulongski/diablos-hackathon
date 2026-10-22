@@ -549,6 +549,8 @@ footer { border-top: var(--borde-tenue); padding: var(--s3) 0 var(--s4); }
 /* --- gráficas SVG compartidas por las vistas nuevas --------------------------- */
 
 .mapa-fichajes, .calibracion { margin: 0; }
+.calibracion svg { max-width: 900px; margin: 0 auto; }
+.calibracion .leyenda { justify-content: center; }
 .mapa-fichajes svg, .calibracion svg, .mapa-efectivos svg { width: 100%; height: auto; display: block; overflow: visible; }
 svg .rejilla { stroke: var(--rejilla); stroke-width: 1; }
 svg .eje-cero { stroke: color-mix(in srgb, var(--ceniza) 70%, transparent); stroke-width: 1.2; }
@@ -558,7 +560,7 @@ svg .eje-cero { stroke: color-mix(in srgb, var(--ceniza) 70%, transparent); stro
 
 /* mapa del fichaje */
 .cuad-bueno { fill: color-mix(in srgb, var(--gana) 9%, transparent); }
-.cuad-txt { fill: var(--ceniza); font-family: var(--cuerpo); font-size: 12px; font-weight: 600; }
+.cuad-txt { fill: var(--ceniza); font-family: var(--cuerpo); font-size: 12px; font-weight: 600; paint-order: stroke; stroke: var(--basalto-alto); stroke-width: 5px; stroke-linejoin: round; }
 .cuad-txt.bueno { fill: var(--gana); }
 .cuad-txt.malo { fill: var(--diablo); }
 .pt { cursor: pointer; stroke: var(--basalto-alto); stroke-width: 0.8; fill-opacity: 0.8; transition: r .15s; }
@@ -632,7 +634,7 @@ svg .eje-cero { stroke: color-mix(in srgb, var(--ceniza) 70%, transparent); stro
 .tabla-datos tbody th { font-weight: 600; color: var(--tinta); }
 .tabla-datos .n { text-align: right; }
 .tabla-datos .destacado { color: var(--diablo); font-weight: 700; }
-.tabla-datos .mano { font-weight: 400; font-size: 0.8rem; }
+.tabla-datos .mano { display: inline; margin: 0; font-weight: 400; font-size: 0.8rem; }
 .tabla-datos .arsenal-celda { color: var(--enrarecido); white-space: normal; min-width: 180px; }
 .tabla-datos.compacta th, .tabla-datos.compacta td { padding: 7px 8px; }
 .tabla-datos.compacta tbody th { white-space: normal; font-weight: 500; }
@@ -670,7 +672,7 @@ svg .eje-cero { stroke: color-mix(in srgb, var(--ceniza) 70%, transparent); stro
 .mapa-efectivos svg { max-width: 640px; }
 .ef-peor { fill: var(--ceniza); fill-opacity: 0.35; }
 .ef-mejor { fill-opacity: 0.85; stroke: var(--basalto-alto); stroke-width: 0.5; }
-.clave i.ef-mejor-k { background: var(--diablo); }
+.clave i.ef-mejor-k { background: conic-gradient(#E8B54A 0 33%, #4FB59B 0 66%, #7C7FE8 0); }
 .clave i.ef-peor-k { background: color-mix(in srgb, var(--ceniza) 45%, transparent); }
 .lectura-titulo { font-family: var(--display); font-weight: 700; font-size: 1.25rem; text-transform: uppercase; line-height: 1.05; color: var(--tinta); margin: 0 0 10px; }
 .lectura-datos { margin: 0 0 12px; }
@@ -715,8 +717,8 @@ svg .eje-cero { stroke: color-mix(in srgb, var(--ceniza) 70%, transparent); stro
   .ficha-salto { grid-template-columns: 1fr auto 1fr; }
   .ficha-delta { grid-column: 1 / -1; padding: 8px 0 0; border-left: none; border-top: var(--borde-tenue); display: flex !important; justify-content: space-between; align-items: baseline; }
   .nota-leyenda { margin-left: 0; }
-  .mapa-fichajes .eje, .calibracion .eje, .mapa-efectivos .eje { font-size: 18px; }
-  .mapa-fichajes .eje-titulo, .calibracion .eje-titulo, .mapa-efectivos .eje-titulo, .calibracion .eje.fuerte { font-size: 18px; }
-  .cuad-txt, .pt-etiqueta { font-size: 17px; }
+  .mapa-fichajes .eje, .calibracion .eje, .mapa-efectivos .eje { font-size: 24px; }
+  .mapa-fichajes .eje-titulo, .calibracion .eje-titulo, .mapa-efectivos .eje-titulo, .calibracion .eje.fuerte { font-size: 22px; }
+  .cuad-txt, .pt-etiqueta { font-size: 22px; }
   .valor-barra { font-size: 18px; }
 }
