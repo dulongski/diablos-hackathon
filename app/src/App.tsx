@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import { AirField } from './components/AirField';
+import { Anexo } from './components/Anexo';
 import { Barra } from './components/Barra';
 import { Confianza } from './components/Confianza';
 import { ControlAltitud } from './components/ControlAltitud';
+import { Hipotesis } from './components/Hipotesis';
 import { Info } from './components/Info';
 import { Inicio } from './components/Inicio';
 import { Lanzadores } from './components/Lanzadores';
@@ -14,7 +16,8 @@ import { PitchFantasma } from './components/PitchFantasma';
 import { Resumen, type DatosResumen } from './components/Resumen';
 import { Simulador } from './components/Simulador';
 import type { TipoMigracion } from './components/MapaMigracion';
-import type { Jurado } from './jurado';
+import type { Hipotesis as DatosHipotesis, Jurado } from './jurado';
+import { Logos } from './components/Logos';
 import type { Model } from './lib/gbm';
 import { densityAtAltitude, dragIndexAtAltitude, type PitchInput } from './lib/physics';
 import type { Escala, Helpers } from './lib/scoring';
@@ -36,6 +39,7 @@ interface Datos {
   physics: Record<string, any>;
   models: Record<string, any>;
   jurado: Jurado;
+  hipotesis: DatosHipotesis;
 }
 
 export function App() {
@@ -54,9 +58,9 @@ export function App() {
       if (!r.ok) throw new Error(`No se pudo cargar ${n}.json`);
       return r.json();
     });
-    Promise.all([j('model_stuff'), j('helpers'), j('scale'), j('arsenal'), j('physics'), j('models'), j('compresion'), j('jurado')])
-      .then(([model, helpers, scale, arsenal, physics, models, compresion, jurado]) =>
-        setDatos({ model, helpers, escala: scale.stuff, arsenal, physics, models, compresion, jurado }))
+    Promise.all([j('model_stuff'), j('helpers'), j('scale'), j('arsenal'), j('physics'), j('models'), j('compresion'), j('jurado'), j('hipotesis')])
+      .then(([model, helpers, scale, arsenal, physics, models, compresion, jurado, hipotesis]) =>
+        setDatos({ model, helpers, escala: scale.stuff, arsenal, physics, models, compresion, jurado, hipotesis }))
       .catch(e => setError(String(e.message ?? e)));
   }, []);
 
@@ -158,6 +162,12 @@ export function App() {
           </section>
         )}
 
+        {datos && vista === 'hipotesis' && (
+          <LimiteError nombre="Las hipótesis"><Hipotesis h={datos.hipotesis} /></LimiteError>
+        )}
+
+        {datos && vista === 'anexo' && <Anexo j={datos.jurado} />}
+
         {datos && vista === 'confianza' && (
           <>
             <LimiteError nombre="La validación"><Confianza j={datos.jurado} /></LimiteError>
@@ -168,7 +178,10 @@ export function App() {
 
       <footer>
         <div className="envoltura">
-          <p className="pie">Hackathon ISAC 2026 · Diablos Rojos del México · Datos de la LMB usados sólo para esta competencia: se muestran resultados, nunca los datos.</p>
+          <div className="pie-fila">
+            <Logos />
+            <p className="pie">Proyecto para el Hackathon ISAC 2026, reto de los Diablos Rojos del México. Trabajo independiente de los participantes, no es un producto oficial de ISAC ni del club. Datos de la LMB usados sólo para esta competencia: se muestran resultados, nunca los datos.</p>
+          </div>
         </div>
       </footer>
     </>

@@ -722,3 +722,92 @@ svg .eje-cero { stroke: color-mix(in srgb, var(--ceniza) 70%, transparent); stro
   .cuad-txt, .pt-etiqueta { font-size: 22px; }
   .valor-barra { font-size: 18px; }
 }
+
+/* ===========================================================================
+   Marca, logos, Hipótesis y Anexo
+   ======================================================================== */
+
+.marca { display: inline-flex; align-items: center; gap: 8px; }
+.marca-logo { height: 30px; width: auto; }
+
+.logos { display: inline-flex; align-items: center; gap: 18px; flex: none; }
+.logos img { display: block; width: auto; }
+.logo-isac { height: 34px; }
+.logo-diablos { height: 44px; }
+.logos.compacto .logo-isac { height: 24px; }
+.logos.compacto .logo-diablos { height: 30px; }
+:root[data-theme='noche'] .logo-isac, :root[data-theme='estadio'] .logo-isac, :root[data-theme='pizarra'] .logo-isac { filter: brightness(0) invert(0.88); }
+.pie-fila { display: flex; align-items: center; gap: 24px; }
+.inicio-marca { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+.inicio-anexo { font-size: 0.95rem; color: var(--ceniza); margin-top: 6px; }
+.inicio-anexo .enlace { font-size: inherit; }
+
+/* pestañas: siete caben en una fila en escritorio */
+@media (max-width: 1500px) { .pestana-nota { display: none; } .pestana { padding: 8px 12px 8px 8px; } }
+@media (max-width: 1100px) { .pestanas-fila { overflow-x: auto; scrollbar-width: none; } .pestana { flex: none; } }
+.pestana.p-hipotesis { --acento: var(--nivel-mar); }
+.pestana.p-anexo { --acento: var(--ceniza); }
+
+/* --- Hipótesis ----------------------------------------------------------------- */
+.cifras-fila.cuatro { grid-template-columns: repeat(4, minmax(0, 1fr)); max-width: none; }
+.hips { display: grid; gap: 20px; }
+.hip { display: grid; gap: 18px; }
+.hip.cf { margin-top: 20px; border-top: 4px solid var(--gana); }
+.hip-cabeza { display: grid; grid-template-columns: auto 1fr auto; gap: 16px; align-items: start; }
+.hip-n { font-family: var(--dato); font-weight: 700; font-size: 1.6rem; color: var(--diablo); line-height: 1; padding-top: 2px; }
+.hip-cabeza h3 { font-size: 1.6rem; margin-bottom: 8px; }
+.hip-propone { font-size: 0.93rem; color: var(--ceniza); margin: 0; max-width: 84ch; }
+.hip-cuerpo { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 28px; align-items: start; }
+.hip-cuerpo > * { min-width: 0; }
+.hip-resumen { font-size: 1rem; color: var(--enrarecido); }
+.hip-resumen b { color: var(--tinta); }
+.hip-prueba { font-size: 0.88rem; color: var(--ceniza); border-left: 3px solid var(--rejilla); padding-left: 12px; }
+.hip-prueba .etiqueta { display: block; margin-bottom: 4px; }
+.fig-titulo { font-size: 0.82rem; font-weight: 600; color: var(--enrarecido); margin: 0 0 6px; }
+.sello-v-si { color: var(--gana); }
+.sello-v-parcial { color: var(--aviso); }
+.sello-v-no { color: var(--diablo); }
+.bosque { width: 100%; height: auto; display: block; overflow: visible; }
+.bosque .eje-titulo { font-size: 13px; font-weight: 500; }
+.bosque .eje-titulo.fuerte { font-weight: 800; }
+.hbarras { display: grid; gap: 8px; }
+.hbarra { display: grid; grid-template-columns: minmax(0, 210px) 1fr 52px; gap: 10px; align-items: center; font-size: 0.86rem; }
+.hbarra.fuerte span { font-weight: 700; color: var(--tinta); }
+.hbarra-pista { height: 12px; background: var(--superficie-2); border-radius: 6px; overflow: hidden; }
+.hbarra-pista i { display: block; height: 100%; border-radius: 6px; }
+.hbarra b { text-align: right; color: var(--tinta); }
+.pareja { margin-top: 14px; }
+.pareja tbody th { font-weight: 500; white-space: normal; }
+
+/* --- Anexo ---------------------------------------------------------------------- */
+.tipos-anexo { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.tipo-anexo { display: grid; grid-template-columns: 120px 1fr; gap: 16px; align-items: start; }
+.tipo-anexo h4 { margin: 0 0 6px; font-family: var(--display); font-size: 1.35rem; text-transform: uppercase; color: var(--tinta); display: flex; align-items: center; gap: 8px; }
+.tipo-anexo h4 i { width: 10px; height: 10px; border-radius: 50%; }
+.tipo-anexo p { font-size: 0.9rem; margin: 0 0 6px; }
+.tipo-datos { font-size: 0.78rem !important; color: var(--ceniza); }
+.tipo-alt b { color: var(--tinta); }
+.mini-mov { width: 120px; height: 120px; }
+.mini-fondo { fill: var(--basalto); }
+.mini-cero { fill: var(--ceniza); }
+.terminos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 28px; margin: 0; }
+.terminos > div { border-top: var(--borde-tenue); padding-top: 10px; }
+.terminos dt { font-family: var(--display); font-weight: 800; text-transform: uppercase; font-size: 1.15rem; color: var(--diablo); }
+.terminos dd { margin: 4px 0 0; font-size: 0.92rem; }
+.supuestos { margin: 0; padding-left: 22px; display: grid; gap: 8px; max-width: 92ch; }
+.supuestos li::marker { color: var(--diablo); font-family: var(--dato); }
+
+@media (max-width: 1040px) {
+  .hip-cuerpo, .tipos-anexo, .terminos { grid-template-columns: 1fr; }
+  .cifras-fila.cuatro { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 700px) {
+  .hip-cabeza { grid-template-columns: auto 1fr; }
+  .hip-cabeza .sello { grid-column: 1 / -1; justify-self: start; }
+  .hbarra { grid-template-columns: 1fr 48px; gap: 4px 10px; }
+  .hbarra > span { grid-column: 1 / -1; }
+  .tipo-anexo { grid-template-columns: 84px 1fr; }
+  .mini-mov { width: 84px; height: 84px; }
+  .pie-fila { flex-direction: column; align-items: flex-start; }
+  .bosque .eje-titulo, .bosque .eje, .bosque .valor-barra { font-size: 20px; }
+}

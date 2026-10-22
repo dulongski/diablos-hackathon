@@ -13,7 +13,8 @@ const js = html.match(/src="\.\/(assets\/[^"]+\.js)"/)?.[1];
 const css = html.match(/href="\.\/(assets\/[^"]+\.css)"/)?.[1];
 if (!js || !css) throw new Error('No se encontraron los bundles en dist/index.html');
 
-writeFileSync('dist/artifact.html', `<title>Stuff+ a 2,240 m</title>
+writeFileSync('dist/artifact.html', `<title>Diablos Stuff+</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;700;900&family=Inter:wght@400;500;600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=JetBrains+Mono:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="${css}">

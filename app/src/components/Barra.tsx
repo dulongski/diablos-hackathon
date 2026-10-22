@@ -11,7 +11,7 @@ export function Barra({ metros }: { metros: number }) {
   return (
     <header className="barra">
       <div className="envoltura barra-fila">
-        <span className="marca display">Diablos <b>Stuff+</b></span>
+        <span className="marca display"><img src="./logos/diablos.png" alt="" className="marca-logo" onError={e => { e.currentTarget.style.display = 'none'; }} />Diablos <b>Stuff+</b></span>
         <div className="barra-lecturas">
           <span className="lectura">
             <span className="lectura-lugar">{lugar}</span>

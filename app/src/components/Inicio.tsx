@@ -9,16 +9,8 @@
 import type { ReactNode } from 'react';
 import type { Jurado } from '../jurado';
 import { nf, sg } from '../settings';
+import { Logos } from './Logos';
 import type { Vista } from './Pestanas';
-
-const GLOSARIO: { t: string; d: ReactNode }[] = [
-  { t: 'Lanzamiento', d: <>Cada vez que el pitcher le tira la pelota al bateador. Un partido tiene unos 280. El pitcher gana si el bateador <b>no le pega</b>, le pega <b>mal</b>, o la deja pasar y es strike.</> },
-  { t: 'Movimiento', d: <>La pelota no viaja derecha: su giro la desvía unas pulgadas en el aire. Ese desvío es lo que engaña al bateador, y lo produce el aire.</> },
-  { t: 'Stuff+', d: <>Una calificación de qué tan difícil de batear es un lanzamiento <b>sólo por cómo sale de la mano</b>: velocidad, giro y movimiento. <b>100 es el promedio</b> de la liga; 110 es muy bueno; 90, malo.</> },
-  { t: 'Location+ y Pitching+', d: <>La misma escala, sumando más contexto. Location+ agrega <b>dónde</b> lo puso. Pitching+ agrega además el resto de su repertorio y el momento del juego.</> },
-  { t: 'Arsenal', d: <>Los tipos de lanzamiento que domina un pitcher: la <b>recta</b> (rápida), el <b>slider</b> y la <b>curva</b> (quiebran), el <b>cambio</b> (lento, disfrazado de rápido), el <b>sinker</b> y el <b>cutter</b>.</> },
-  { t: 'Altitud', d: <>El estadio de los Diablos está a 2,240 m. Ahí hay <b>20 % menos aire</b>: los lanzamientos se mueven menos y los batazos vuelan más lejos.</> },
-];
 
 export function Inicio({ j, irA, porQue }: { j: Jurado; irA: (v: Vista) => void; porQue: ReactNode }) {
   const p = j.pitchers;
@@ -35,13 +27,8 @@ export function Inicio({ j, irA, porQue }: { j: Jurado; irA: (v: Vista) => void;
   const PREGUNTAS: { q: string; a: ReactNode; ent: string; v: Vista }[] = [
     {
       q: '¿Qué lanzadores sufren más la altitud y cuáles aguantan?',
-      a: <>{nf(j.pitchers_n)} lanzadores comparados. El que más pierde baja <b>{sg(masPierde.delta_hh)}</b> puntos.</>,
+      a: <>{nf(j.pitchers_n)} lanzadores con Stuff+, Location+ y Pitching+ en los dos aires. El que más pierde baja <b>{sg(masPierde.delta_hh)}</b> puntos.</>,
       ent: 'La pregunta del club · Entregable 1', v: 'lanzadores',
-    },
-    {
-      q: '¿Qué tan bueno es cada lanzamiento, cada pitcher y cada arsenal?',
-      a: <>635,002 lanzamientos calificados con Stuff+, Location+ y Pitching+.</>,
-      ent: 'Entregable 1', v: 'lanzadores',
     },
     {
       q: '¿Qué arsenal y qué perfil físico rinden más en el Harp Helú?',
@@ -59,6 +46,11 @@ export function Inicio({ j, irA, porQue }: { j: Jurado; irA: (v: Vista) => void;
       ent: 'Entregable 4', v: 'simulador',
     },
     {
+      q: '¿Se cumplen las hipótesis que plantea el reto?',
+      a: <>H1 y H4 se confirman; H2 y H3, en parte. Un Causal Forest independiente señala a los mismos lanzadores.</>,
+      ent: 'Hipótesis H1 a H4 · Modelo secundario', v: 'hipotesis',
+    },
+    {
       q: '¿Se puede confiar en la calificación?',
       a: alto && bajo ? <>Con pitchers que el modelo nunca vio: Stuff+ de 110-120 permite <b>{sg(alto.carreras_100)}</b> carreras por cada 100 lanzamientos; menos de 80, <b>{sg(bajo.carreras_100)}</b>.</> : null,
       ent: 'Criterios 1 y 2', v: 'confianza',
@@ -69,7 +61,7 @@ export function Inicio({ j, irA, porQue }: { j: Jurado; irA: (v: Vista) => void;
     <>
       <section className="inicio-hero">
         <div className="envoltura">
-          <p className="eyebrow">Hackathon ISAC 2026 · Diablos Rojos del México</p>
+          <div className="inicio-marca"><Logos /><p className="eyebrow">Hackathon ISAC 2026 · Reto Diablos Rojos del México</p></div>
           <h1 className="inicio-titulo">¿Qué lanzadores le sirven a los Diablos a 2,240 metros?</h1>
           <p className="inicio-lede">
             Calificamos cada lanzamiento de la Liga Mexicana de Béisbol con <b>Stuff+</b> (una
@@ -77,6 +69,7 @@ export function Inicio({ j, irA, porQue }: { j: Jurado; irA: (v: Vista) => void;
             lanzamiento en el Estadio Alfredo Harp Helú, donde el aire es 20 % más delgado y la
             pelota se mueve menos.
           </p>
+          <p className="inicio-anexo">¿Nuevo en el béisbol? <button type="button" className="enlace" onClick={() => irA('anexo')}>Los términos y los siete tipos de lanzamiento, en el anexo →</button></p>
           <div className="para-quien">
             <div>
               <span className="etiqueta">Para el pitching coach</span>
@@ -90,20 +83,6 @@ export function Inicio({ j, irA, porQue }: { j: Jurado; irA: (v: Vista) => void;
               <span className="etiqueta">Con qué datos</span>
               <p>635,002 lanzamientos de la LMB, 2024-2026, medidos con Trackman. Nombres anonimizados por la liga.</p>
             </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="inicio-sec">
-        <div className="envoltura">
-          <h2 className="titulo-sec">Si no sabes béisbol, esto es lo que necesitas</h2>
-          <div className="glosario">
-            {GLOSARIO.map(g => (
-              <article key={g.t} className="glosa">
-                <h3>{g.t}</h3>
-                <p>{g.d}</p>
-              </article>
-            ))}
           </div>
         </div>
       </section>
