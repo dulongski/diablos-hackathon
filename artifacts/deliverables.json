@@ -1,0 +1,752 @@
+{
+  "pitchers_evaluados": 753,
+  "delta_promedio_liga": -2.418,
+  "por_tipo": {
+    "Cutter": {
+      "n": 26468,
+      "stuff_mar": 100.47,
+      "stuff_alt": 99.584,
+      "delta": -0.886,
+      "d_ivb": 9.461,
+      "whiff": 0.109,
+      "delta_vs_recta": 2.44
+    },
+    "Splitter": {
+      "n": 7289,
+      "stuff_mar": 102.041,
+      "stuff_alt": 100.477,
+      "delta": -1.564,
+      "d_ivb": 3.783,
+      "whiff": 0.168,
+      "delta_vs_recta": 1.762
+    },
+    "Slider": {
+      "n": 139717,
+      "stuff_mar": 101.856,
+      "stuff_alt": 100.208,
+      "delta": -1.649,
+      "d_ivb": 2.621,
+      "whiff": 0.154,
+      "delta_vs_recta": 1.677
+    },
+    "Changeup": {
+      "n": 78925,
+      "stuff_mar": 100.129,
+      "stuff_alt": 97.954,
+      "delta": -2.174,
+      "d_ivb": 6.475,
+      "whiff": 0.143,
+      "delta_vs_recta": 1.151
+    },
+    "Curveball": {
+      "n": 54024,
+      "stuff_mar": 101.409,
+      "stuff_alt": 99.146,
+      "delta": -2.263,
+      "d_ivb": -7.308,
+      "whiff": 0.143,
+      "delta_vs_recta": 1.063
+    },
+    "Sinker": {
+      "n": 110899,
+      "stuff_mar": 99.786,
+      "stuff_alt": 97.507,
+      "delta": -2.278,
+      "d_ivb": 9.182,
+      "whiff": 0.067,
+      "delta_vs_recta": 1.047
+    },
+    "Four-Seam": {
+      "n": 217618,
+      "stuff_mar": 100.319,
+      "stuff_alt": 96.993,
+      "delta": -3.326,
+      "d_ivb": 15.21,
+      "whiff": 0.092,
+      "delta_vs_recta": 0.0
+    },
+    "Other": {
+      "n": 62,
+      "stuff_mar": 92.543,
+      "stuff_alt": 88.637,
+      "delta": -3.905,
+      "d_ivb": -10.782,
+      "whiff": 0.194,
+      "delta_vs_recta": -0.58
+    }
+  },
+  "perfil_ideal": {
+    "RelSpeed": {
+      "optimo_nivel_mar": 90.63,
+      "optimo_altitud": 87.25,
+      "diferencia": -3.38,
+      "liga_mediana": 88.9
+    },
+    "InducedVertBreak": {
+      "optimo_nivel_mar": 11.3,
+      "optimo_altitud": 4.22,
+      "diferencia": -7.08,
+      "liga_mediana": 9.16
+    },
+    "HorzBreak": {
+      "optimo_nivel_mar": 8.36,
+      "optimo_altitud": 1.87,
+      "diferencia": -6.49,
+      "liga_mediana": 7.25
+    },
+    "SpinRate": {
+      "optimo_nivel_mar": 2334.11,
+      "optimo_altitud": 2352.39,
+      "diferencia": 18.28,
+      "liga_mediana": 2327.65
+    },
+    "SpinAxis": {
+      "optimo_nivel_mar": 199.43,
+      "optimo_altitud": 165.43,
+      "diferencia": -34.0,
+      "liga_mediana": 210.92
+    },
+    "Extension": {
+      "optimo_nivel_mar": 6.02,
+      "optimo_altitud": 5.9,
+      "diferencia": -0.12,
+      "liga_mediana": 5.88
+    },
+    "RelHeight": {
+      "optimo_nivel_mar": 5.73,
+      "optimo_altitud": 5.66,
+      "diferencia": -0.07,
+      "liga_mediana": 5.79
+    },
+    "RelSide": {
+      "optimo_nivel_mar": 1.91,
+      "optimo_altitud": 1.99,
+      "diferencia": 0.07,
+      "liga_mediana": 1.72
+    },
+    "spin_efficiency": {
+      "optimo_nivel_mar": 1.02,
+      "optimo_altitud": 0.69,
+      "diferencia": -0.33,
+      "liga_mediana": 0.81
+    },
+    "movement_total": {
+      "optimo_nivel_mar": 18.87,
+      "optimo_altitud": 12.84,
+      "diferencia": -6.03,
+      "liga_mediana": 14.68
+    }
+  },
+  "mezcla_top_1pct": {
+    "Changeup": {
+      "top_nivel_mar": 0.0656,
+      "top_altitud": 0.0858,
+      "liga": 0.1157
+    },
+    "Curveball": {
+      "top_nivel_mar": 0.0846,
+      "top_altitud": 0.1418,
+      "liga": 0.0787
+    },
+    "Cutter": {
+      "top_nivel_mar": 0.0117,
+      "top_altitud": 0.0555,
+      "liga": 0.0334
+    },
+    "Four-Seam": {
+      "top_nivel_mar": 0.5534,
+      "top_altitud": 0.2196,
+      "liga": 0.3558
+    },
+    "Other": {
+      "top_nivel_mar": 0.0,
+      "top_altitud": 0.0,
+      "liga": 0.0001
+    },
+    "Sinker": {
+      "top_nivel_mar": 0.1687,
+      "top_altitud": 0.1106,
+      "liga": 0.1746
+    },
+    "Slider": {
+      "top_nivel_mar": 0.0772,
+      "top_altitud": 0.3265,
+      "liga": 0.227
+    },
+    "Splitter": {
+      "top_nivel_mar": 0.0388,
+      "top_altitud": 0.0601,
+      "liga": 0.0147
+    }
+  },
+  "delta_por_quintil": {
+    "Four-Seam": {
+      "q1": {
+        "n": 43524,
+        "plus_mar": 82.74,
+        "plus_alt": 84.0,
+        "delta": 1.26
+      },
+      "q2": {
+        "n": 43523,
+        "plus_mar": 95.23,
+        "plus_alt": 94.29,
+        "delta": -0.94
+      },
+      "q3": {
+        "n": 43524,
+        "plus_mar": 102.5,
+        "plus_alt": 99.38,
+        "delta": -3.12
+      },
+      "q4": {
+        "n": 43523,
+        "plus_mar": 107.49,
+        "plus_alt": 102.1,
+        "delta": -5.39
+      },
+      "q5": {
+        "n": 43524,
+        "plus_mar": 113.63,
+        "plus_alt": 105.19,
+        "delta": -8.44
+      }
+    },
+    "Slider": {
+      "q1": {
+        "n": 27944,
+        "plus_mar": 88.14,
+        "plus_alt": 87.98,
+        "delta": -0.15
+      },
+      "q2": {
+        "n": 27943,
+        "plus_mar": 98.82,
+        "plus_alt": 98.1,
+        "delta": -0.72
+      },
+      "q3": {
+        "n": 27943,
+        "plus_mar": 103.43,
+        "plus_alt": 101.9,
+        "delta": -1.52
+      },
+      "q4": {
+        "n": 27943,
+        "plus_mar": 107.01,
+        "plus_alt": 104.68,
+        "delta": -2.33
+      },
+      "q5": {
+        "n": 27944,
+        "plus_mar": 111.89,
+        "plus_alt": 108.38,
+        "delta": -3.51
+      }
+    },
+    "Changeup": {
+      "q1": {
+        "n": 15785,
+        "plus_mar": 84.44,
+        "plus_alt": 85.66,
+        "delta": 1.23
+      },
+      "q2": {
+        "n": 15785,
+        "plus_mar": 96.31,
+        "plus_alt": 95.74,
+        "delta": -0.57
+      },
+      "q3": {
+        "n": 15785,
+        "plus_mar": 101.91,
+        "plus_alt": 99.9,
+        "delta": -2.01
+      },
+      "q4": {
+        "n": 15785,
+        "plus_mar": 106.14,
+        "plus_alt": 102.68,
+        "delta": -3.46
+      },
+      "q5": {
+        "n": 15785,
+        "plus_mar": 111.85,
+        "plus_alt": 105.79,
+        "delta": -6.06
+      }
+    },
+    "Curveball": {
+      "q1": {
+        "n": 10805,
+        "plus_mar": 87.65,
+        "plus_alt": 87.27,
+        "delta": -0.38
+      },
+      "q2": {
+        "n": 10805,
+        "plus_mar": 97.87,
+        "plus_alt": 96.94,
+        "delta": -0.93
+      },
+      "q3": {
+        "n": 10804,
+        "plus_mar": 102.46,
+        "plus_alt": 100.58,
+        "delta": -1.88
+      },
+      "q4": {
+        "n": 10805,
+        "plus_mar": 106.52,
+        "plus_alt": 103.45,
+        "delta": -3.08
+      },
+      "q5": {
+        "n": 10805,
+        "plus_mar": 112.54,
+        "plus_alt": 107.5,
+        "delta": -5.04
+      }
+    },
+    "Sinker": {
+      "q1": {
+        "n": 22180,
+        "plus_mar": 82.46,
+        "plus_alt": 84.78,
+        "delta": 2.32
+      },
+      "q2": {
+        "n": 22180,
+        "plus_mar": 95.41,
+        "plus_alt": 95.42,
+        "delta": 0.01
+      },
+      "q3": {
+        "n": 22179,
+        "plus_mar": 101.97,
+        "plus_alt": 99.93,
+        "delta": -2.05
+      },
+      "q4": {
+        "n": 22180,
+        "plus_mar": 106.59,
+        "plus_alt": 102.41,
+        "delta": -4.18
+      },
+      "q5": {
+        "n": 22180,
+        "plus_mar": 112.5,
+        "plus_alt": 105.0,
+        "delta": -7.5
+      }
+    },
+    "TODOS": {
+      "q1": {
+        "n": 127001,
+        "plus_mar": 84.41,
+        "plus_alt": 85.44,
+        "delta": 1.03
+      },
+      "q2": {
+        "n": 127000,
+        "plus_mar": 96.67,
+        "plus_alt": 95.96,
+        "delta": -0.71
+      },
+      "q3": {
+        "n": 127000,
+        "plus_mar": 102.59,
+        "plus_alt": 100.42,
+        "delta": -2.16
+      },
+      "q4": {
+        "n": 127000,
+        "plus_mar": 106.93,
+        "plus_alt": 103.16,
+        "delta": -3.77
+      },
+      "q5": {
+        "n": 127001,
+        "plus_mar": 112.7,
+        "plus_alt": 106.22,
+        "delta": -6.47
+      }
+    }
+  },
+  "riesgo_contacto": {
+    "Extreme Altitude": {
+      "n": 34705,
+      "exit_speed": 84.0339,
+      "distancia": 161.1134,
+      "hr_por_bip": 0.0426,
+      "gb_rate": 0.448
+    },
+    "Medium Altitude": {
+      "n": 28502,
+      "exit_speed": 84.5813,
+      "distancia": 163.7975,
+      "hr_por_bip": 0.0425,
+      "gb_rate": 0.4263
+    },
+    "No Altitude": {
+      "n": 52242,
+      "exit_speed": 83.0234,
+      "distancia": 157.0142,
+      "hr_por_bip": 0.0365,
+      "gb_rate": 0.4049
+    }
+  },
+  "riesgo_fly_balls": {
+    "Extreme Altitude": {
+      "n": 6947,
+      "distancia": 322.8084,
+      "hr_por_fb": 0.1629
+    },
+    "Medium Altitude": {
+      "n": 5938,
+      "distancia": 316.351,
+      "hr_por_fb": 0.1588
+    },
+    "No Altitude": {
+      "n": 10948,
+      "distancia": 291.8567,
+      "hr_por_fb": 0.1239
+    }
+  },
+  "top_10_altitud": [
+    {
+      "pitcher_anon_id": "pitcher_00469",
+      "n": 284,
+      "stuff_mar": 108.15,
+      "stuff_alt": 106.47,
+      "delta": -1.68,
+      "whiff": 0.19,
+      "gb": 0.54,
+      "velo": 90.72,
+      "ext": 5.32
+    },
+    {
+      "pitcher_anon_id": "pitcher_00456",
+      "n": 220,
+      "stuff_mar": 105.9,
+      "stuff_alt": 104.17,
+      "delta": -1.73,
+      "whiff": 0.18,
+      "gb": 0.44,
+      "velo": 94.17,
+      "ext": 5.78
+    },
+    {
+      "pitcher_anon_id": "pitcher_01099",
+      "n": 657,
+      "stuff_mar": 104.46,
+      "stuff_alt": 104.1,
+      "delta": -0.36,
+      "whiff": 0.15,
+      "gb": 0.54,
+      "velo": 85.48,
+      "ext": 4.87
+    },
+    {
+      "pitcher_anon_id": "pitcher_01075",
+      "n": 761,
+      "stuff_mar": 104.24,
+      "stuff_alt": 103.18,
+      "delta": -1.06,
+      "whiff": 0.17,
+      "gb": 0.52,
+      "velo": 87.76,
+      "ext": 5.96
+    },
+    {
+      "pitcher_anon_id": "pitcher_00772",
+      "n": 326,
+      "stuff_mar": 103.65,
+      "stuff_alt": 102.6,
+      "delta": -1.04,
+      "whiff": 0.14,
+      "gb": 0.56,
+      "velo": 86.92,
+      "ext": 5.32
+    },
+    {
+      "pitcher_anon_id": "pitcher_01060",
+      "n": 1522,
+      "stuff_mar": 105.5,
+      "stuff_alt": 102.5,
+      "delta": -3.0,
+      "whiff": 0.17,
+      "gb": 0.44,
+      "velo": 87.28,
+      "ext": 6.72
+    },
+    {
+      "pitcher_anon_id": "pitcher_00386",
+      "n": 733,
+      "stuff_mar": 103.43,
+      "stuff_alt": 102.3,
+      "delta": -1.13,
+      "whiff": 0.14,
+      "gb": 0.42,
+      "velo": 88.9,
+      "ext": 5.79
+    },
+    {
+      "pitcher_anon_id": "pitcher_01058",
+      "n": 775,
+      "stuff_mar": 104.87,
+      "stuff_alt": 102.29,
+      "delta": -2.58,
+      "whiff": 0.12,
+      "gb": 0.56,
+      "velo": 83.1,
+      "ext": 5.45
+    },
+    {
+      "pitcher_anon_id": "pitcher_01132",
+      "n": 350,
+      "stuff_mar": 104.0,
+      "stuff_alt": 102.28,
+      "delta": -1.72,
+      "whiff": 0.11,
+      "gb": 0.56,
+      "velo": 90.86,
+      "ext": 6.06
+    },
+    {
+      "pitcher_anon_id": "pitcher_00207",
+      "n": 220,
+      "stuff_mar": 102.74,
+      "stuff_alt": 102.1,
+      "delta": -0.64,
+      "whiff": 0.12,
+      "gb": 0.49,
+      "velo": 90.39,
+      "ext": 6.5
+    }
+  ],
+  "mas_castigados": [
+    {
+      "pitcher_anon_id": "pitcher_00529",
+      "n": 785,
+      "stuff_mar": 104.83,
+      "stuff_alt": 97.19,
+      "delta": -7.64,
+      "whiff": 0.16,
+      "gb": 0.31,
+      "velo": 79.25,
+      "ext": 5.46
+    },
+    {
+      "pitcher_anon_id": "pitcher_00174",
+      "n": 649,
+      "stuff_mar": 104.89,
+      "stuff_alt": 98.12,
+      "delta": -6.78,
+      "whiff": 0.13,
+      "gb": 0.4,
+      "velo": 91.83,
+      "ext": 6.07
+    },
+    {
+      "pitcher_anon_id": "pitcher_00297",
+      "n": 357,
+      "stuff_mar": 103.01,
+      "stuff_alt": 96.75,
+      "delta": -6.26,
+      "whiff": 0.18,
+      "gb": 0.3,
+      "velo": 89.29,
+      "ext": 5.79
+    },
+    {
+      "pitcher_anon_id": "pitcher_00743",
+      "n": 980,
+      "stuff_mar": 103.91,
+      "stuff_alt": 97.74,
+      "delta": -6.16,
+      "whiff": 0.11,
+      "gb": 0.35,
+      "velo": 80.93,
+      "ext": 6.07
+    },
+    {
+      "pitcher_anon_id": "pitcher_00332",
+      "n": 705,
+      "stuff_mar": 104.01,
+      "stuff_alt": 97.87,
+      "delta": -6.14,
+      "whiff": 0.12,
+      "gb": 0.32,
+      "velo": 86.72,
+      "ext": 6.13
+    },
+    {
+      "pitcher_anon_id": "pitcher_00602",
+      "n": 760,
+      "stuff_mar": 101.95,
+      "stuff_alt": 95.91,
+      "delta": -6.04,
+      "whiff": 0.09,
+      "gb": 0.33,
+      "velo": 83.55,
+      "ext": 5.94
+    },
+    {
+      "pitcher_anon_id": "pitcher_00878",
+      "n": 613,
+      "stuff_mar": 104.27,
+      "stuff_alt": 98.35,
+      "delta": -5.93,
+      "whiff": 0.15,
+      "gb": 0.29,
+      "velo": 86.88,
+      "ext": 6.13
+    },
+    {
+      "pitcher_anon_id": "pitcher_01103",
+      "n": 727,
+      "stuff_mar": 104.19,
+      "stuff_alt": 98.43,
+      "delta": -5.76,
+      "whiff": 0.18,
+      "gb": 0.46,
+      "velo": 93.53,
+      "ext": 6.51
+    },
+    {
+      "pitcher_anon_id": "pitcher_00840",
+      "n": 690,
+      "stuff_mar": 104.05,
+      "stuff_alt": 98.59,
+      "delta": -5.46,
+      "whiff": 0.13,
+      "gb": 0.38,
+      "velo": 90.57,
+      "ext": 5.98
+    },
+    {
+      "pitcher_anon_id": "pitcher_00609",
+      "n": 452,
+      "stuff_mar": 103.56,
+      "stuff_alt": 98.25,
+      "delta": -5.31,
+      "whiff": 0.17,
+      "gb": 0.25,
+      "velo": 90.31,
+      "ext": 6.08
+    }
+  ],
+  "mas_resistentes": [
+    {
+      "pitcher_anon_id": "pitcher_00331",
+      "n": 1153,
+      "stuff_mar": 98.52,
+      "stuff_alt": 99.85,
+      "delta": 1.32,
+      "whiff": 0.1,
+      "gb": 0.43,
+      "velo": 93.18,
+      "ext": 5.52
+    },
+    {
+      "pitcher_anon_id": "pitcher_00692",
+      "n": 162,
+      "stuff_mar": 100.0,
+      "stuff_alt": 100.66,
+      "delta": 0.67,
+      "whiff": 0.1,
+      "gb": 0.49,
+      "velo": 82.39,
+      "ext": 5.72
+    },
+    {
+      "pitcher_anon_id": "pitcher_00722",
+      "n": 456,
+      "stuff_mar": 99.74,
+      "stuff_alt": 100.03,
+      "delta": 0.29,
+      "whiff": 0.12,
+      "gb": 0.46,
+      "velo": 84.79,
+      "ext": 5.0
+    },
+    {
+      "pitcher_anon_id": "pitcher_00935",
+      "n": 414,
+      "stuff_mar": 95.94,
+      "stuff_alt": 96.12,
+      "delta": 0.18,
+      "whiff": 0.1,
+      "gb": 0.62,
+      "velo": 83.4,
+      "ext": 5.33
+    },
+    {
+      "pitcher_anon_id": "pitcher_00916",
+      "n": 507,
+      "stuff_mar": 98.11,
+      "stuff_alt": 98.15,
+      "delta": 0.05,
+      "whiff": 0.09,
+      "gb": 0.39,
+      "velo": 84.52,
+      "ext": 6.5
+    },
+    {
+      "pitcher_anon_id": "pitcher_00531",
+      "n": 215,
+      "stuff_mar": 98.41,
+      "stuff_alt": 98.39,
+      "delta": -0.02,
+      "whiff": 0.1,
+      "gb": 0.53,
+      "velo": 87.38,
+      "ext": 5.58
+    },
+    {
+      "pitcher_anon_id": "pitcher_00286",
+      "n": 177,
+      "stuff_mar": 96.78,
+      "stuff_alt": 96.75,
+      "delta": -0.03,
+      "whiff": 0.12,
+      "gb": 0.33,
+      "velo": 87.36,
+      "ext": 5.38
+    },
+    {
+      "pitcher_anon_id": "pitcher_00172",
+      "n": 325,
+      "stuff_mar": 101.77,
+      "stuff_alt": 101.71,
+      "delta": -0.06,
+      "whiff": 0.17,
+      "gb": 0.7,
+      "velo": 91.75,
+      "ext": 6.1
+    },
+    {
+      "pitcher_anon_id": "pitcher_00804",
+      "n": 321,
+      "stuff_mar": 95.45,
+      "stuff_alt": 95.37,
+      "delta": -0.08,
+      "whiff": 0.13,
+      "gb": 0.52,
+      "velo": 90.42,
+      "ext": 5.51
+    },
+    {
+      "pitcher_anon_id": "pitcher_00171",
+      "n": 160,
+      "stuff_mar": 100.9,
+      "stuff_alt": 100.69,
+      "delta": -0.22,
+      "whiff": 0.12,
+      "gb": 0.43,
+      "velo": 86.17,
+      "ext": 4.49
+    }
+  ]
+}

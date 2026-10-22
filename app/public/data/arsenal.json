@@ -1,0 +1,109 @@
+{
+  "tipos": [
+    {
+      "tipo": "Four-Seam",
+      "n": 217618,
+      "mar": {
+        "ivb": 17.04,
+        "hb": 5.61,
+        "plus": 100.3
+      },
+      "alt": {
+        "ivb": 13.09,
+        "hb": 4.02,
+        "plus": 97.0
+      },
+      "delta_plus": -3.33
+    },
+    {
+      "tipo": "Sinker",
+      "n": 110899,
+      "mar": {
+        "ivb": 10.3,
+        "hb": 8.41,
+        "plus": 99.8
+      },
+      "alt": {
+        "ivb": 7.83,
+        "hb": 6.06,
+        "plus": 97.5
+      },
+      "delta_plus": -2.28
+    },
+    {
+      "tipo": "Cutter",
+      "n": 26468,
+      "mar": {
+        "ivb": 11.04,
+        "hb": -0.8,
+        "plus": 100.5
+      },
+      "alt": {
+        "ivb": 8.38,
+        "hb": -0.61,
+        "plus": 99.6
+      },
+      "delta_plus": -0.89
+    },
+    {
+      "tipo": "Slider",
+      "n": 139717,
+      "mar": {
+        "ivb": 3.09,
+        "hb": -2.31,
+        "plus": 101.9
+      },
+      "alt": {
+        "ivb": 2.17,
+        "hb": -1.76,
+        "plus": 100.2
+      },
+      "delta_plus": -1.65
+    },
+    {
+      "tipo": "Curveball",
+      "n": 54024,
+      "mar": {
+        "ivb": -8.0,
+        "hb": -3.64,
+        "plus": 101.4
+      },
+      "alt": {
+        "ivb": -6.49,
+        "hb": -2.7,
+        "plus": 99.1
+      },
+      "delta_plus": -2.26
+    },
+    {
+      "tipo": "Changeup",
+      "n": 78925,
+      "mar": {
+        "ivb": 7.2,
+        "hb": 5.26,
+        "plus": 100.1
+      },
+      "alt": {
+        "ivb": 5.37,
+        "hb": 3.79,
+        "plus": 98.0
+      },
+      "delta_plus": -2.17
+    },
+    {
+      "tipo": "Splitter",
+      "n": 7289,
+      "mar": {
+        "ivb": 4.29,
+        "hb": 6.32,
+        "plus": 102.0
+      },
+      "alt": {
+        "ivb": 3.09,
+        "hb": 4.48,
+        "plus": 100.5
+      },
+      "delta_plus": -1.56
+    }
+  ]
+}

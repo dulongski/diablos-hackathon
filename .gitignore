@@ -1,0 +1,16 @@
+# --- Datos del hackathon: NO se versionan (términos ISAC/LMB: se presentan resultados, no datos) ---
+/data/
+*.pkl
+*.parquet
+*.rds
+*.npy
+stuff_plus_data_dictionary.csv
+
+# --- entornos y builds ---
+.venv/
+__pycache__/
+*.pyc
+node_modules/
+app/dist/
+app/node_modules/.cache/
+.DS_Store

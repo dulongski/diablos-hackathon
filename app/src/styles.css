@@ -1,0 +1,171 @@
+/* ============================================================================
+   AIRE ENRARECIDO — sistema de diseno
+   El tema no es el beisbol, es el aire: la ausencia de un 15% de algo invisible.
+   La paleta sale del tezontle, la roca volcanica porosa sobre la que esta
+   construida la Ciudad de Mexico. Piedra de baja densidad, valle de aire de
+   baja densidad.
+   ========================================================================= */
+
+/* --- paletas ------------------------------------------------------------
+   Rojo = Harp Helú (2,240 m). Azul = nivel del mar. En todas las paletas y en toda la página:
+   es el único vocabulario que el lector tiene que aprender. "Noche" es la de siempre; las demás
+   se eligen en Ajustes (settings.ts pone data-theme en <html>). */
+:root, :root[data-theme='noche'] {
+  color-scheme: dark;
+  --basalto:      #0F0D0C;  /* fondo */
+  --basalto-alto: #171312;  /* tarjetas */
+  --superficie-2: #1F1917;
+  --tezontle:     #6E241C;  /* reglas y bordes */
+  --diablo:       #E23B2E;  /* Harp Helú */
+  --nivel-mar:    #5B9DBF;  /* nivel del mar */
+  --enrarecido:   #D6DCD8;  /* texto */
+  --tinta:        #F2EEEA;  /* texto fuerte */
+  --ceniza:       #8A8F8B;  /* secundarios */
+  --rejilla:      #241E1C;
+  --gana:         #7FBF8F;
+  --aviso:        #E8B54A;
+  --escena:       #0F0D0C;  /* fondo de la escena 3D */
+}
+:root[data-theme='crema'] {
+  color-scheme: light;
+  --basalto: #F4F0E6; --basalto-alto: #FFFFFF; --superficie-2: #ECE6D8;
+  --tezontle: #CDBFA6; --diablo: #D7362B; --nivel-mar: #2E6FA6;
+  --enrarecido: #24302A; --tinta: #10201A; --ceniza: #6E7A73;
+  --rejilla: #E6DFD0; --gana: #1A9A6E; --aviso: #B7800A; --escena: #16201B;
+}
+:root[data-theme='estadio'] {
+  color-scheme: dark;
+  --basalto: #0B1226; --basalto-alto: #121B36; --superficie-2: #1B2647;
+  --tezontle: #2E3B66; --diablo: #FF5A4E; --nivel-mar: #4CC9F0;
+  --enrarecido: #D9DFF2; --tinta: #F2F5FF; --ceniza: #8790B2;
+  --rejilla: #18223F; --gana: #6EE7A8; --aviso: #FFD23F; --escena: #0B1226;
+}
+:root[data-theme='pizarra'] {
+  color-scheme: dark;
+  --basalto: #1F2A27; --basalto-alto: #263330; --superficie-2: #2F3E3A;
+  --tezontle: #44554F; --diablo: #FF8A7A; --nivel-mar: #8EC5FF;
+  --enrarecido: #E6E3DA; --tinta: #F6F3EA; --ceniza: #A1A69C;
+  --rejilla: #2C3935; --gana: #9EE6B8; --aviso: #FFE38A; --escena: #1B2522;
+}
+:root {
+  --altitud: var(--diablo);
+  --mar:     var(--nivel-mar);
+  --densidad: 0.80;         /* 1.0 = nivel del mar, 0.80 = Harp Helú */
+
+  /* --- tipografía: la misma familia que Coach DNA ------------------------ */
+  --display: 'Big Shoulders Display', 'Arial Narrow', sans-serif;
+  --cuerpo:  'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --dato:    'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  /* --- escala ----------------------------------------------------------- */
+  --s1: 0.5rem;  --s2: 0.875rem; --s3: 1.5rem;
+  --s4: 2.5rem;  --s5: 4rem;     --s6: 5.5rem;
+
+  --borde: 1px solid color-mix(in srgb, var(--tezontle) 70%, transparent);
+  --borde-tenue: 1px solid color-mix(in srgb, var(--ceniza) 18%, transparent);
+  --radio: 12px;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  overflow-x: clip;
+  background: var(--basalto);
+  color: var(--enrarecido);
+  font-family: var(--cuerpo);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* La atmosfera: se aclara y se adelgaza cuando el aire se enrarece.
+   Es la unica decoracion de la pagina y esta atada al control de altitud. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(120% 80% at 50% 110%,
+      color-mix(in srgb, var(--tezontle) calc(var(--densidad) * 18%), transparent) 0%,
+      transparent 60%),
+    linear-gradient(180deg,
+      color-mix(in srgb, #2A3038 calc(var(--densidad) * 9%), transparent) 0%,
+      transparent 45%);
+  transition: background 400ms ease-out;
+}
+
+#root { position: relative; z-index: 1; }
+
+/* --- tipografia -------------------------------------------------------- */
+
+h1, h2, h3, .display {
+  font-family: var(--display);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.005em;
+  line-height: 0.9;
+  color: var(--tinta);
+  margin: 0;
+  text-wrap: balance;
+  overflow-wrap: break-word;
+}
+
+h1 { font-size: clamp(2.6rem, 5.4vw, 4.8rem); }
+h2 { font-size: clamp(1.9rem, 3.4vw, 2.6rem); font-weight: 800; }
+h3 { font-size: clamp(1.15rem, 1.8vw, 1.4rem); font-weight: 700; }
+
+p { margin: 0 0 var(--s2); max-width: 62ch; }
+
+/* Todo numero de la pagina es mono y lleva unidad. Es un instrumento de medicion. */
+.dato, .num {
+  font-family: var(--dato);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+.etiqueta {
+  font-family: var(--dato);
+  font-size: 0.66rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ceniza);
+}
+
+.unidad { color: var(--ceniza); font-size: 0.72em; margin-left: 0.15em; }
+
+/* --- estructura -------------------------------------------------------- */
+
+.envoltura { max-width: 1340px; margin: 0 auto; padding: 0 var(--s3); }
+
+section { padding: var(--s5) 0; border-top: var(--borde-tenue); }
+section:first-of-type { border-top: none; }
+
+/* --- accesibilidad ----------------------------------------------------- */
+
+:focus-visible {
+  outline: 2px solid var(--diablo);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.solo-lectores {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

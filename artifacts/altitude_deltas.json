@@ -1,0 +1,113 @@
+{
+  "ivb": {
+    "Changeup": {
+      "observado": -2.253,
+      "predicho": -1.836,
+      "n": 104
+    },
+    "Curveball": {
+      "observado": 1.822,
+      "predicho": 1.651,
+      "n": 64
+    },
+    "Cutter": {
+      "observado": -2.502,
+      "predicho": -2.493,
+      "n": 25
+    },
+    "Four-Seam": {
+      "observado": -3.728,
+      "predicho": -3.939,
+      "n": 328
+    },
+    "Sinker": {
+      "observado": -2.102,
+      "predicho": -2.399,
+      "n": 159
+    },
+    "Slider": {
+      "observado": -0.737,
+      "predicho": -0.947,
+      "n": 228
+    },
+    "Splitter": {
+      "observado": -0.911,
+      "predicho": -0.962,
+      "n": 3
+    }
+  },
+  "hb": {
+    "Changeup": {
+      "observado": -2.179,
+      "predicho": -1.645,
+      "n": 104
+    },
+    "Curveball": {
+      "observado": 0.966,
+      "predicho": 1.006,
+      "n": 64
+    },
+    "Cutter": {
+      "observado": -0.022,
+      "predicho": 0.155,
+      "n": 25
+    },
+    "Four-Seam": {
+      "observado": -1.921,
+      "predicho": -1.74,
+      "n": 328
+    },
+    "Sinker": {
+      "observado": -2.47,
+      "predicho": -2.412,
+      "n": 159
+    },
+    "Slider": {
+      "observado": 0.487,
+      "predicho": 0.62,
+      "n": 228
+    },
+    "Splitter": {
+      "observado": -2.876,
+      "predicho": -2.177,
+      "n": 3
+    }
+  },
+  "zone_speed": {
+    "Changeup": {
+      "observado": 0.716,
+      "predicho": 0.965,
+      "n": 104
+    },
+    "Curveball": {
+      "observado": 1.02,
+      "predicho": 0.894,
+      "n": 64
+    },
+    "Cutter": {
+      "observado": 1.246,
+      "predicho": 0.951,
+      "n": 25
+    },
+    "Four-Seam": {
+      "observado": 1.455,
+      "predicho": 1.131,
+      "n": 328
+    },
+    "Sinker": {
+      "observado": 1.392,
+      "predicho": 1.1,
+      "n": 159
+    },
+    "Slider": {
+      "observado": 1.155,
+      "predicho": 0.94,
+      "n": 228
+    },
+    "Splitter": {
+      "observado": 0.373,
+      "predicho": 0.967,
+      "n": 3
+    }
+  }
+}
