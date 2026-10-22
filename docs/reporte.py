@@ -222,9 +222,15 @@ CF = json.loads((D / "causal.json").read_text())
 _ex = D / "extras.json"
 EX = json.loads(_ex.read_text()) if _ex.exists() else {}
 TACT = (EX.get("cf_tactico") or {}).get("contrastes") or {}
-# La lámina táctica es opcional, así que las que siguen se numeran a partir de ella.
+_rb = D / "robustez.json"
+RB = json.loads(_rb.read_text()) if _rb.exists() else {}
+ok = lambda x: x if isinstance(x, dict) and "error" not in x else None
+RB_PQ, RB_DI, RB_CO, RB_FU, RB_CB, RB_ES = (ok(RB.get(k)) for k in ("parque", "discriminacion", "confiabilidad", "futuro", "combinacion", "especificaciones"))
+ROB = bool(RB_PQ or RB_DI or RB_CO or RB_FU)
+# La lámina táctica y la de robustez son opcionales, así que las que siguen se numeran a partir de ellas.
 L_CF = 21
-L_HACER = L_CF + (2 if TACT else 1)
+L_ROB = L_CF + (2 if TACT else 1)
+L_HACER = L_ROB + (1 if ROB else 0)
 L_REFS = L_HACER + 1
 nat = h1["nathan"]
 cam = next(r for r in h2["pares"] if r["tipo"] == "Cambio")
@@ -249,7 +255,7 @@ lamina("Qué responde este reporte", "Ocho preguntas del club, cada una con su n
        "En esta lámina están las preguntas del reto y la lámina donde respondemos cada una.", f"""
 <table class="mapa-preguntas">
 <tr><td>¿Cómo calificamos un lanzamiento y por qué la altitud cambia todo?</td><td>Método en lenguaje simple</td><td>3 a 9</td></tr>
-<tr><td>¿Se puede confiar en la calificación?</td><td>Ordena carreras con lanzadores nuevos</td><td>10 a 12</td></tr>
+<tr><td>¿Se puede confiar en la calificación?</td><td>Ordena carreras con lanzadores nuevos</td><td>{"10 a 12" if not ROB else f"10 a 12 y {L_ROB}"}</td></tr>
 <tr><td>¿Se cumplen las hipótesis del reto?</td><td>H1 y H4 sí, H2 y H3 en parte</td><td>13 a 17</td></tr>
 <tr><td>¿Qué hubiera pasado con otra decisión?</td><td>La altura cuesta {CF['ate']:.1f} carreras por cada 100</td><td>{L_CF if not TACT else f"{L_CF} y {L_CF + 1}"}</td></tr>
 <tr><td>¿Qué perfil físico rinde en el Harp Helú?</td><td>Menos movimiento, menos dependencia del giro</td><td>18</td></tr>
@@ -514,6 +520,42 @@ if TACT:
   <div><p class="tag" style="color:{ROJO}">Altitud extrema · promedio {s(a['efecto'], 2)}</p>{rejilla(c0, 1)}</div>
 </div>
 <p class="nota centro">Verde quiere decir que {c0['a'].lower()} es mejor para el pitcher y rojo que {c0['b'].lower()} es mejor. {n(c0['filas'])} lanzamientos, controlando por la calidad del lanzador, su uso de cada tipo, la vuelta al orden y las manos. Más parejas en la pestaña Causal Forest del dashboard.</p>""")
+
+# robustez (opcional, sale de scripts/11_robustez.py) -----------------------------------------
+if ROB:
+    def fx(v, d=2, signo=False):
+        """Cifra de robustez, o "sin dato" si la prueba no tuvo suficientes lanzadores."""
+        return "sin dato" if v is None else (s(v, d) if signo else f"{v:.{d}f}")
+    filas_rb = ""
+    if RB_DI:
+        d_ = RB_DI["stuff"]
+        filas_rb += f"<tr><td>¿Cuánto separa?</td><td>El 10 % mejor de Stuff+ permite {fx(abs(d_['brecha_100']), 1)} carreras menos por cada 100 lanzamientos que el 10 % peor (IC {fx(d_['brecha_ic95'][0], 1)} a {fx(d_['brecha_ic95'][1], 1)}).</td></tr>"
+    if RB_CO:
+        filas_rb += f"<tr><td>¿Es calidad o mezcla?</td><td>Comparado contra el promedio de su tipo, Stuff+ correlaciona {fx(RB_CO['sin_mezcla']['r'])} entre mitades. Sólo con rectas, {fx(RB_CO['solo_rectas']['r'])}. Las carreras, {fx(RB_CO['carreras']['r'])}.</td></tr>"
+    if RB_FU:
+        f_ = RB_FU["carreras"]
+        filas_rb += f"<tr><td>¿Anticipa el año siguiente?</td><td>Stuff+ {fx(f_['stuff']['r'], 2, True)} contra {fx(f_['carreras_pasadas']['r'], 2, True)} de las carreras pasadas, en {n(RB_FU['pares'])} pares de temporadas.</td></tr>"
+    if RB_CB:
+        filas_rb += f"<tr><td>¿Y la combinación del reto?</td><td>La combinación ponderada de {len(RB_CB['componentes'])} componentes da R² {fx(RB_CB['combinado']['r2'], 4)} contra {fx(RB_CB['directo']['r2'], 4)} del modelo directo.</td></tr>"
+    if RB_ES:
+        filas_rb += f"<tr><td>¿Depende de la caída de velocidad?</td><td>Sin las tres variables de frenado, el orden de los tipos coincide con correlación de rangos {fx(RB_ES['orden_igual']['sin_frenado'])}.</td></tr>"
+    izq = ""
+    if RB_PQ:
+        p_ = RB_PQ["por_100"]
+        frac = "sin dato" if p_["fraccion"] is None else f"{p_['fraccion'] * 100:.0f} %"
+        izq = (f'<div class="cifras col">{cifra(fx(p_["total"], 2, True), "carreras más por cada 100 lanzamientos en altura de las que espera un modelo de nivel del mar", ROJO)}'
+               f'{cifra(fx(p_["fisica"], 2, True), "las explica el cambio en el vuelo del lanzamiento", AZUL)}'
+               f'{cifra(frac, "del exceso es física del lanzamiento, el resto sobre todo el batazo")}</div>')
+    fr = (RB_PQ or {}).get("por_100", {}).get("fraccion")
+    titular = (f"Entrenado sólo a nivel del mar, el modelo explica con física el {fr * 100:.0f} % de las carreras de más en altura"
+               if fr is not None and fr > 0.05 else "Las pruebas que pediría un jurado técnico, con lanzadores que el modelo no vio")
+    lamina("Validación · robustez", titular,
+           "En esta lámina están las pruebas que un jurado técnico pediría, todas con lanzadores que el modelo no vio.", f"""
+<div class="dos">
+  <div>{izq}</div>
+  <div><table class="perfil">{filas_rb}</table></div>
+</div>
+<p class="nota centro">Intervalos de 95 % por bootstrap de lanzadores. El detalle completo está en la pestaña Validación del dashboard.</p>""")
 
 # 22 · qué hacer -------------------------------------------------------------------------------
 aguantan_top = sorted([x for x in P if x["stuff_hh"] >= 100], key=lambda x: -x["delta_hh"])[:5]

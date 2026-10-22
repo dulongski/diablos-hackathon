@@ -196,6 +196,14 @@ export function Metodologia({ physics, models, extras, j, irA }: {
               punto de salida de la pelota funciona casi como una huella de cada lanzador y un modelo flexible aprendería a
               reconocer lanzadores en lugar de aprender física. Eso es sobreajuste, y lo detectamos porque el modelo poco
               regularizado predecía peor que el promedio con lanzadores que no había visto.</p>
+            {models.stuff_entrena === 'mar' && (
+              <p>Hay una tercera decisión. Stuff+ aprende sólo de juegos a nivel del mar. Su variable más pesada es cuánta
+                velocidad pierde la pelota en el camino, y en altura la pelota frena menos, así que un modelo que viera juegos de
+                altura aprendería que frenar poco anuncia un juego de altura, donde se anotan más carreras. Parte de lo que
+                llamaríamos pérdida de calidad sería el entorno de bateo y no el lanzamiento. A nivel del mar el aire es uno solo,
+                esa variable sólo cambia por la pelota y el lanzamiento, y la pérdida que medimos al volar la pelota en otro aire
+                sale entera de la física. La escala sigue midiendo contra todos los lanzamientos de la liga.</p>
+            )}
             <p className="nota">La tabla siguiente es para quien quiera revisar que usamos cada variable que pide el reto. La columna
               del medio trae los nombres de las columnas de Trackman.</p>
             <div className="tabla-scroll">

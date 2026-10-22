@@ -17,7 +17,7 @@ import { Diamante3D } from './components/Diamante3D';
 import { Resumen, type DatosResumen } from './components/Resumen';
 import { Simulador } from './components/Simulador';
 import type { TipoMigracion } from './components/MapaMigracion';
-import type { Causal, Extras, Hipotesis as DatosHipotesis, Jurado } from './jurado';
+import type { Causal, Extras, Hipotesis as DatosHipotesis, Jurado, Robustez } from './jurado';
 import { Logos } from './components/Logos';
 import type { Model } from './lib/gbm';
 import { densityAtAltitude, dragIndexAtAltitude, releaseAt, solveRelease, type PitchInput } from './lib/physics';
@@ -43,6 +43,7 @@ interface Datos {
   hipotesis: DatosHipotesis;
   causal: Causal;
   extras: Extras | null;
+  robustez: Robustez | null;
 }
 
 export function App() {
@@ -63,9 +64,9 @@ export function App() {
     });
     Promise.all([j('model_stuff'), j('helpers'), j('scale'), j('arsenal'), j('physics'), j('models'), j('compresion'), j('jurado'), j('hipotesis'), j('causal'),
                  // extras.json sale de la máquina con los datos crudos; si no está, la app sigue sin él
-                 j('extras').catch(() => null)])
-      .then(([model, helpers, scale, arsenal, physics, models, compresion, jurado, hipotesis, causal, extras]) =>
-        setDatos({ model, helpers, escala: scale.stuff, arsenal, physics, models, compresion, jurado, hipotesis, causal, extras }))
+                 j('extras').catch(() => null), j('robustez').catch(() => null)])
+      .then(([model, helpers, scale, arsenal, physics, models, compresion, jurado, hipotesis, causal, extras, robustez]) =>
+        setDatos({ model, helpers, escala: scale.stuff, arsenal, physics, models, compresion, jurado, hipotesis, causal, extras, robustez }))
       .catch(e => setError(String(e.message ?? e)));
   }, []);
 
@@ -148,7 +149,7 @@ export function App() {
 
               <div className="tarjeta bloque-separado">
                 <h3 className="titulo-tarjeta">Mapa de movimiento de los lanzamientos más y menos efectivos en el Harp Helú
-                  <Info ancho>Cada punto es un lanzamiento real de un derecho, colocado según cuánto se movió hacia los lados y hacia arriba o abajo. Los de color son el 10 % con mejor Stuff+ en el aire del Harp Helú y los grises el 10 % peor. La distancia entre las dos nubes es la forma que conviene pedir en casa.</Info>
+                  <Info ancho>Cada círculo junta los lanzamientos reales de derechos que cayeron en una celda de 2 pulgadas de movimiento lateral y vertical, y crece con cuántos lanzamientos tiene. Sólo mostramos celdas con al menos 10, nunca lanzamientos sueltos. Los de color son el 10 % con mejor Stuff+ en el aire del Harp Helú y los grises el 10 % peor. La distancia entre las dos nubes es la forma que conviene pedir en casa.</Info>
                 </h3>
                 <LimiteError nombre="El mapa de movimiento">
                   <MapaEfectivos puntos={datos.jurado.mapa} />
@@ -173,7 +174,7 @@ export function App() {
         )}
 
         {datos && vista === 'confianza' && (
-          <LimiteError nombre="La validación"><Confianza j={datos.jurado} /></LimiteError>
+          <LimiteError nombre="La validación"><Confianza j={datos.jurado} r={datos.robustez} /></LimiteError>
         )}
       </main>
 

@@ -41,6 +41,60 @@ método con literatura → validación con baseline al azar → ejemplo completo
 
 **Audiencia: alguien que no sabe nada de béisbol.** Todo término se explica la primera vez que aparece.
 
+## ▶ SIGUIENTE PASO EN LA MAC (desde la nube, 2026-10-22, "tapar todos los huecos")
+
+En la nube se preparó todo lo que no necesita datos. Falta correr en la Mac, en este orden. Todo está probado con
+datos sintéticos; si algo truena, arreglarlo contra las columnas reales.
+
+```bash
+git pull origin claude/confident-ptolemy-sz210m
+source ~/.venvs/diablos/bin/activate                 # el venv rápido
+python scripts/03_models.py        # Stuff+ ahora entrena SOLO con nivel del mar (STUFF_ENTRENA=mar, default)
+python scripts/04_export.py        # exporta modelo, helpers (con arrastre.log_sd medido) y tablas
+python scripts/05_deliverables.py
+python scripts/07_jurado.py        # el mapa de movimiento ya sale agregado en celdas (regla de datos)
+cd app && npx esbuild scripts/experimentos.ts --bundle --platform=node --outfile=scripts/.exp.mjs --format=esm \
+  && node scripts/.exp.mjs > ../artifacts/experimentos.json && rm scripts/.exp.mjs && cd ..
+python scripts/08_hipotesis.py
+python scripts/09_causal_forest.py
+python scripts/10_local_extras.py
+python scripts/11_robustez.py      # NUEVO, 40 a 90 min. Escribe robustez.json
+cd app && npm run consistencia && cd ..   # simulador contra pipeline por tipo
+```
+
+**Qué hace cada cosa nueva.**
+- `03_models.py` con `STUFF_ENTRENA=mar` (default). Stuff+ aprende sólo de juegos a nivel del mar, porque SpeedDrop
+  (variable 1) delata el aire y el modelo aprendía "altura = más carreras". La escala se recalcula sobre toda la liga
+  (`models.reescalar`). `STUFF_ENTRENA=todo` reproduce el modelo anterior. `models.json` guarda `stuff_entrena`.
+- `11_robustez.py`, seis pruebas, cada una en su try. **parque** (entrena a nivel del mar, predice altura con la forma
+  real y con la pelota volada a nivel del mar; qué fracción del exceso de carreras explica la física, y por tipo),
+  **discriminacion** (10 % mejor contra 10 % peor en carreras, IC), **confiabilidad** (mitades crudo, contra el promedio
+  del tipo, sólo rectas, sólo mezcla), **futuro** (pares de años, carreras y whiff, IC, R² incremental),
+  **especificaciones** (pérdida por tipo con producción, sin frenado y con todos los juegos), **combinacion** (9
+  componentes con variables de Stuff+, incluido out en el turno, pesos por regresión fuera de muestra).
+- El dashboard (Validación), el reporte (lámina "Validación · robustez") y el documento (Anexo C) leen
+  `robustez.json` solos. El documento tiene bloques `<!-- si stuff_entrena=mar -->` que `tecnico.py` activa solo según
+  `models.json`.
+
+**Decidir antes de escribir.** Mirar `robustez.json`. Si con `mar` la calibración sigue monótona y Stuff+ le gana al
+nulo con lanzadores nuevos, quedarse con `mar` (es la versión defendible). Si se cae mucho, volver a `todo` y decirlo
+en límites. En ambos casos la lámina y el anexo de robustez se generan solos.
+
+**Lo que hay que escribir a mano después de correr.**
+1. Casi todas las cifras del cuerpo del documento cambian. Correr `python3 docs/verifica_cifras.py`, que lista cada
+   número de `docs/documento_tecnico.md` que ya no sale de los JSON, y corregirlos uno por uno. El cuerpo debe seguir
+   en 10 páginas (portada + 10 + anexos).
+2. Actualizar "Las cifras que cuentan la historia" aquí abajo, el README ("La respuesta corta") y `entrega/correo.txt`.
+3. Llenar los corchetes de `entrega/entrevista.md` con `robustez.json`.
+4. Si cambió `log_sd`, `experimentos.ts` ya se corrió arriba; revisar que H4 en el documento (5.4) coincida.
+5. Regenerar y revisar (`docs/tecnico.py`, `docs/reporte.py`, `docs/pdf.mjs`, `docs/estilo.py` en 0 problemas,
+   `npx tsc --noEmit && npm test && npm run build`), republicar el dashboard incluyendo `data/robustez.json`,
+   `data/jurado.json`, `data/helpers.json`, `data/model_stuff.json`, `data/models.json` y lo demás que cambió, y push.
+
+**Reglas del reto que pueden descalificar.** Equipos de **2 a 4** integrantes inscritos en licenciatura o maestría, y el
+correo debe llevar los correos de todos. Los datos sólo se presentan como resultados: el mapa del dashboard ya sale en
+celdas de al menos 10 lanzamientos, sin lanzamientos sueltos.
+
 ## Estado (2026-10-22, sesión local)
 
 Pipeline completo corrido en local con el modelo limpio (01 a 10). Documento, reporte y dashboard
@@ -117,9 +171,8 @@ Dashboard publicado: https://claude.ai/artifact/1HXhuyBtkDd6szvLv9M7xo (se actua
   constancia y efecto del Causal Forest), Arsenal y perfil, Hipótesis (H1 a H4), Causal Forest, Simulador,
   Anexo (glosario y los siete tipos dibujados). Logos de ISAC y Diablos en `app/public/logos/`.
 - **Simulador nuevo** (`Simulador.tsx`, `Diamante3D.tsx`): una pelota con costuras en un campo de día,
-  trayectoria en vivo, todos los controles visibles, siete tipos. Su Stuff+ es el promedio de 25
-  variaciones fijas (Halton) porque un solo punto hace saltar el número del árbol. Se borraron la nube
-  de puntos y la escena oscura.
+  trayectoria en vivo, todos los controles visibles, siete tipos. Su Stuff+ sale de `stuffEstable` (49
+  variaciones Halton con arrastre real). Se borraron la nube de puntos y la escena oscura.
 - **Hipótesis** (`scripts/08_hipotesis.py` + `app/scripts/experimentos.ts` → `hipotesis.json`,
   `artifacts/experimentos.json`). Bootstrap por lanzador. H1 sí (física reproduce a Nathan, 18 → 14.9 in en
   Coors), H2 en parte (cambio +1.27 contra su recta, pero cuarto de seis), H3 en parte (p = 0.07 una cola),

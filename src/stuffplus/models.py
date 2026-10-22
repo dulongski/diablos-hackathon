@@ -61,6 +61,18 @@ CAPA_PARAMS: dict[str, tuple[dict, int]] = {
 }
 
 
+def reescalar(fit: "Fitted", df: pd.DataFrame) -> "Fitted":
+    """Recalcula centro y escala sobre todas las filas de `df`.
+
+    Cuando un modelo se entrena con un subconjunto (Stuff+ solo con juegos a nivel del mar), su
+    escala tiene que seguir midiendo contra la liga completa: 100 es el promedio de todos los
+    lanzamientos de la LMB, no solo de los de nivel del mar.
+    """
+    s = -fit.raw(df)
+    fit.center, fit.scale = float(np.nanmean(s)), float(np.nanstd(s))
+    return fit
+
+
 def capa(nombre: str) -> tuple[dict, int]:
     """Parametros y numero de arboles de una capa (stuff, location, pitching)."""
     extra, n = CAPA_PARAMS.get(nombre, ({}, N_ROUNDS))
@@ -121,8 +133,12 @@ def cross_val(
     n_splits: int = 5,
     params: dict | None = None,
     n_rounds: int = N_ROUNDS,
+    train_mask: np.ndarray | None = None,
 ) -> tuple[np.ndarray, dict]:
     """Validacion cruzada agrupada: ningun pitcher aparece en entrenamiento y prueba a la vez.
+
+    `train_mask` limita las filas que pueden entrenar (por ejemplo, solo juegos a nivel del mar).
+    La prediccion fuera de muestra se hace igual sobre todas las filas de los lanzadores de prueba.
 
     Es la prueba que importa para Stuff+. Sin agrupar por pitcher, el modelo puede memorizar
     firmas de release y reportar metricas que no sobreviven a un lanzador nuevo, que es
@@ -137,7 +153,9 @@ def cross_val(
 
     oof = np.full(len(df), np.nan)
     idx = np.flatnonzero(m)
+    puede = np.ones(len(idx), dtype=bool) if train_mask is None else np.asarray(train_mask)[idx]
     for tr, te in GroupKFold(n_splits=n_splits).split(X, y, g):
+        tr = tr[puede[tr]]
         b = lgb.train(p, lgb.Dataset(X.iloc[tr], y[tr]), num_boost_round=n_rounds)
         oof[idx[te]] = b.predict(X.iloc[te])
 

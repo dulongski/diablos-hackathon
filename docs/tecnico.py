@@ -4,6 +4,99 @@ import json, pathlib, re, subprocess, markdown
 AQUI = pathlib.Path(__file__).parent
 md = (AQUI / "documento_tecnico.md").read_text()
 
+# Bloques condicionales. "<!-- si stuff_entrena=mar -->" ... "<!-- fin -->" sólo queda si los modelos se entrenaron
+# así (artifacts/models.json). Así el texto nunca describe un modelo distinto del que produjo las cifras.
+_mj = AQUI.parent / "artifacts" / "models.json"
+_entrena = json.loads(_mj.read_text()).get("stuff_entrena", "todo") if _mj.exists() else "todo"
+md = re.sub(r"<!-- si stuff_entrena=(\w+) -->\n(.*?)<!-- fin -->\n?",
+            lambda m: m.group(2) if m.group(1) == _entrena else "", md, flags=re.S)
+
+
+def anexo_robustez() -> str:
+    """Anexo C, escrito desde app/public/data/robustez.json (sale de scripts/11_robustez.py). Si no existe, nada."""
+    f = AQUI.parent / "app" / "public" / "data" / "robustez.json"
+    if not f.exists():
+        return ""
+    R = json.loads(f.read_text())
+    ok = lambda k: R.get(k) if isinstance(R.get(k), dict) and "error" not in R[k] else None
+
+    def x(v, d=2, signo=False):
+        if v is None:
+            return "sin dato"
+        t = f"{abs(v):,.{d}f}" if signo else f"{v:,.{d}f}"
+        return (("+" if v > 0 else "−" if v < 0 else "") + t) if signo else t.replace("-", "−")
+
+    def ic(i, d=2, signo=False, k=1.0):
+        return "sin intervalo" if i is None or i[0] is None or i[1] is None else f"{x(i[0] * k, d, signo)} a {x(i[1] * k, d, signo)}"
+
+    o = ["## Anexo C · Pruebas de robustez", "",
+         "Estas pruebas responden las dudas que un jurado técnico tendría al ver un $R^2$ bajo o un efecto de la altura "
+         "grande. Todas usan predicciones fuera de muestra y los intervalos de 95 % salen de un bootstrap por lanzador. "
+         + ("Stuff+ se entrenó sólo con juegos a nivel del mar, para que la caída de velocidad de la pelota no le enseñe al "
+            "modelo que un juego en altura da más carreras." if R.get("stuff_entrena") == "mar" else ""), ""]
+    pq = ok("parque")
+    if pq:
+        p, i = pq["por_100"], pq["ic95_por_100"]
+        o += ["**Holdout de parque con física.** Entrenamos con nivel del mar y predijimos los "
+              f"{pq['n']:,} lanzamientos de altitud extrema de {pq['lanzadores']} lanzadores que el modelo no vio, cada uno con "
+              "su forma real y con la misma pelota volada a nivel del mar.", "",
+              "| Por cada 100 lanzamientos en altura | Carreras | IC 95 % |", "|---|---|---|",
+              f"| Exceso observado sobre lo que espera un modelo de nivel del mar | {x(p['total'], 2, True)} | {ic(i['total'], 2, True)} |",
+              f"| Parte que explica el vuelo del lanzamiento | {x(p['fisica'], 2, True)} | {ic(i['fisica'], 2, True)} |",
+              f"| Resto, sobre todo el batazo | {x(p['resto'], 2, True)} | {ic(i['resto'], 2, True)} |", "",
+              f"La física del lanzamiento explica {x((p['fraccion'] or 0) * 100, 0)} % del exceso (IC {ic(i['fraccion'], 0, k=100)} %). "
+              f"Dentro de la altura el modelo ordena con correlación {x(pq['corr'], 3, True)} (IC {ic(pq['corr_ic95'], 3, True)}), "
+              f"y su $R^2$ con el nivel corregido es {x(pq['r2_nivel_corregido'], 5)}."
+              + (f" Por tipo de lanzamiento, la pérdida que predice la física y el exceso observado dentro del mismo lanzador "
+                 f"coinciden en orden con correlación de rangos {x(pq['por_tipo_spearman']['rho'], 2, True)} "
+                 f"({pq['por_tipo_spearman']['tipos']} tipos)." if pq.get("por_tipo_spearman") else ""), ""]
+    di = ok("discriminacion")
+    if di:
+        o += ["**Discriminación en carreras.** Diferencia en carreras por cada 100 lanzamientos entre el 10 % peor y el 10 % mejor "
+              "calificado, fuera de muestra.", "", "| Capa | Diferencia | IC 95 % |", "|---|---|---|"]
+        o += [f"| {n} | {x(di[k]['brecha_100'], 2)} | {ic(di[k]['brecha_ic95'], 2)} |"
+              for k, n in (("stuff", "Stuff+"), ("location", "Location+"), ("pitching", "Pitching+"))] + [""]
+    co = ok("confiabilidad")
+    if co:
+        o += ["**Calidad contra mezcla de lanzamientos.** Correlación entre dos mitades al azar de los lanzamientos de cada "
+              f"lanzador. Stuff+ tal cual {x(co['crudo']['r'], 3)}, contra el promedio de su tipo {x(co['sin_mezcla']['r'], 3)} "
+              f"(IC {ic(co['sin_mezcla']['ic95'], 3)}), sólo rectas {x(co['solo_rectas']['r'], 3)}, sólo la mezcla de tipos "
+              f"{x(co['solo_mezcla']['r'], 3)} y carreras reales {x(co['carreras']['r'], 3)}.", ""]
+    fu = ok("futuro")
+    if fu:
+        c, w = fu["carreras"], fu["whiff"]
+        o += [f"**Año siguiente.** {fu['pares']} pares de temporadas seguidas de {fu['lanzadores']} lanzadores.", "",
+              "| Lo que mides este año | Carreras del siguiente | Swing fallido del siguiente |", "|---|---|---|"]
+        o += [f"| {n} | {x(c[k]['r'], 3, True)} ({ic(c[k]['ic95'], 2, True)}) | {x(w[k]['r'], 3, True)} ({ic(w[k]['ic95'], 2, True)}) |"
+              for k, n in (("stuff", "Stuff+"), ("carreras_pasadas", "Sus carreras"), ("whiff_pasado", "Su swing fallido"))]
+        o += ["", f"Sumar Stuff+ a las carreras pasadas sube el $R^2$ de las carreras futuras en "
+                  f"{x(c['r2_incremental_stuff']['d'] * 100, 1)} puntos porcentuales (IC {ic(c['r2_incremental_stuff']['ic95'], 1, k=100)}).", ""]
+    cb = ok("combinacion")
+    if cb:
+        o += [f"**La combinación ponderada que sugiere el reto.** {len(cb['componentes'])} modelos de componente con las variables "
+              "de Stuff+, incluida la probabilidad de out en el turno, combinados con pesos aprendidos por regresión fuera de muestra.", "",
+              "| Versión | $R^2$ | RMSE | Diferencia 10 % | Mitades |", "|---|---|---|---|---|"]
+        o += [f"| {n} | {x(cb[k]['r2'], 5)} | {x(cb[k]['rmse'], 5)} | {x(cb[k]['brecha_100'], 2)} | {x(cb[k]['mitades'], 3)} |"
+              for k, n in (("directo", "Directo en carreras"), ("combinado", "Combinación ponderada"))]
+        o += ["", f"Las dos versiones correlacionan {x(cb['corr_entre_ellos'], 2)} entre sí.", ""]
+    es = ok("especificaciones")
+    if es:
+        v = es["variantes"]
+        tipos = list(v["produccion"]["por_tipo"])
+        o += ["**Sensibilidad a la caída de velocidad.** Pérdida de Stuff+ al pasar a altitud extrema con tres versiones del modelo.", "",
+              "| Tipo | La que usamos | Sin frenado | Con todos los juegos |", "|---|---|---|---|"]
+        o += [f"| {t} | {x(v['produccion']['por_tipo'].get(t), 1, True)} | {x(v['sin_frenado']['por_tipo'].get(t), 1, True)} | "
+              f"{x(v['todos_los_juegos']['por_tipo'].get(t), 1, True)} |" for t in tipos]
+        o += ["", f"El orden de los tipos coincide con correlación de rangos {x(es['orden_igual']['sin_frenado'], 2)} sin frenado y "
+                  f"{x(es['orden_igual']['todos_los_juegos'], 2)} con todos los juegos.", ""]
+    return "\n".join(o) + "\n"
+
+
+_anexo_c = anexo_robustez()
+if _anexo_c:
+    _cierre = md.rfind("\n*Usamos los datos")
+    md = md[:_cierre] + "\n" + _anexo_c + md[_cierre:] if _cierre > 0 else md + "\n" + _anexo_c
+
 # Las fórmulas se sacan antes del Markdown (que se comería los _ y los *) y se componen con KaTeX.
 FORMULAS = []
 def guardar(m, display):

@@ -100,7 +100,9 @@ export function Anexo({ j }: { j: Jurado }) {
   // El dibujo usa sólo derechos (los lanzamientos del mapa): promediar las dos manos cancela el movimiento lateral.
   const forma = (t: string) => {
     const p = j.mapa.filter(x => x.t === t);
-    return p.length ? { hb: p.reduce((a, x) => a + x.hb, 0) / p.length, ivb: p.reduce((a, x) => a + x.ivb, 0) / p.length, v: p.reduce((a, x) => a + x.v, 0) / p.length } : null;
+    const n = p.reduce((a, x) => a + (x.n ?? 1), 0);
+    const m = (k: 'hb' | 'ivb' | 'v') => p.reduce((a, x) => a + x[k] * (x.n ?? 1), 0) / n;
+    return p.length ? { hb: m('hb'), ivb: m('ivb'), v: m('v') } : null;
   };
   return (
     <section className="vista-sec">

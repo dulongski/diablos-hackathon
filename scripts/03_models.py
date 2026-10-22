@@ -6,10 +6,20 @@ Valida en las tres direcciones que pide la rubrica:
   - holdout de parque   : entrena sin altitud extrema, prueba en altitud extrema
 
 y contra el modelo nulo explicito de la rubrica: el run value promedio por conteo.
+
+Stuff+ se entrena por defecto SOLO con juegos a nivel del mar (STUFF_ENTRENA=mar). La razon: la
+variable mas pesada de Stuff+ es SpeedDrop, cuanta velocidad pierde la pelota en el camino, y en
+altura la pelota frena menos. Si el modelo ve juegos de altura, aprende que "frena poco" significa
+"juego de altura" y que los juegos de altura dan mas carreras, y parte de lo que llamariamos perdida
+de Stuff+ seria el entorno de bateo y no el lanzamiento. A nivel del mar el aire es uno solo, asi
+que SpeedDrop solo varia por la pelota y el lanzamiento, y la diferencia de Stuff+ al volar la pelota
+en otro aire sale entera de la fisica. Location+ y Pitching+ no se transfieren y usan todo.
+Con STUFF_ENTRENA=todo se reproduce el modelo anterior, para comparar.
 """
 from __future__ import annotations
 
 import json
+import os
 import sys
 import time
 from pathlib import Path
@@ -28,10 +38,18 @@ COMPONENTS = [
 ]
 
 
+ENTRENA = os.environ.get("STUFF_ENTRENA", "mar")
+
+
 def main() -> None:
     df = pd.read_pickle(ART / "model_frame.pkl")
     sets = F.feature_sets()
-    out: dict = {"n_pitches": int(len(df))}
+    out: dict = {"n_pitches": int(len(df)), "stuff_entrena": ENTRENA}
+    mar = (df.altitude_category == "No Altitude").to_numpy()
+    # Filas con las que puede entrenar cada capa.
+    puede = {name: (mar if (name == "stuff" and ENTRENA == "mar") else np.ones(len(df), dtype=bool)) for name in sets}
+    print(f"Stuff+ entrena con {'juegos a nivel del mar' if ENTRENA == 'mar' else 'todos los juegos'} "
+          f"({int(puede['stuff'].sum()):,} de {len(df):,} lanzamientos)")
 
     # --- modelo nulo de la rubrica: run value promedio por conteo ---
     cv = df.groupby("count")["rv"].mean()
@@ -46,7 +64,8 @@ def main() -> None:
     for name, feats in sets.items():
         t0 = time.time()
         p_c, n_c = models.capa(name)
-        oof, sc = models.cross_val(df, feats, target="rv", n_splits=4, params=p_c, n_rounds=n_c)
+        oof, sc = models.cross_val(df, feats, target="rv", n_splits=4, params=p_c, n_rounds=n_c,
+                                   train_mask=puede[name])
         oof_store[name] = oof
         sc["n_features"] = len(feats)
         sc["segundos"] = round(time.time() - t0, 1)
@@ -57,7 +76,7 @@ def main() -> None:
 
     # --- holdout de temporada y de parque, sobre la capa Stuff+ ---
     out["holdout_temporada"] = {}
-    tr = df[df.year < 2026]
+    tr = df[(df.year < 2026).to_numpy() & puede["stuff"]]
     te = df[df.year == 2026]
     p_s, n_s = models.capa("stuff")
     fit = models.train(tr, sets["stuff"], params=p_s, n_rounds=n_s)
@@ -66,7 +85,8 @@ def main() -> None:
           % (out["holdout_temporada"]["stuff"]["rmse"], out["holdout_temporada"]["stuff"]["r2"]))
 
     out["holdout_parque"] = {}
-    tr = df[df.altitude_category != "Extreme Altitude"]
+    # Entrena sin altitud extrema (con STUFF_ENTRENA=mar, solo nivel del mar) y prueba en altitud extrema.
+    tr = df[(df.altitude_category != "Extreme Altitude").to_numpy() & puede["stuff"]]
     te = df[df.altitude_category == "Extreme Altitude"]
     fit_park = models.train(tr, sets["stuff"], params=p_s, n_rounds=n_s)
     out["holdout_parque"]["stuff"] = models.score(te["rv"].to_numpy(), fit_park.raw(te))
@@ -104,7 +124,8 @@ def main() -> None:
         print(f"  ablacion whiff {name:9s} brier {b['brier']:.5f}  skill {b['skill']:+.4f}")
 
     # --- modelos finales sobre todos los datos + escala plus ---
-    final = {name: models.train(df, feats, params=models.capa(name)[0], n_rounds=models.capa(name)[1])
+    final = {name: models.reescalar(models.train(df[puede[name]], feats, params=models.capa(name)[0],
+                                                 n_rounds=models.capa(name)[1]), df)
              for name, feats in sets.items()}
     for name, fit in final.items():
         df[f"{name}_plus"] = fit.plus(df)

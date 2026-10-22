@@ -6,7 +6,8 @@
  * el modelo nunca vio. Se muestra eso primero, en carreras por cada 100 lanzamientos. Las métricas
  * técnicas van después, con su traducción.
  */
-import type { Jurado, Tramo } from '../jurado';
+import type { Jurado, Robustez as DatosRobustez, Tramo } from '../jurado';
+import { Robustez } from './Robustez';
 import { nf, sg } from '../settings';
 
 const W = 760, H = 330, PL = 60, PR = 20, PT = 26, PB = 58;
@@ -78,7 +79,7 @@ const COMP: Record<string, string> = {
   y_barrel: 'Si le pega perfecto (barril)',
 };
 
-export function Confianza({ j }: { j: Jurado }) {
+export function Confianza({ j, r }: { j: Jurado; r: DatosRobustez | null }) {
   const c = j.calibracion;
   const bajo = c[0], alto = c[c.length - 1];
   const hp = j.holdout.pitcher, nul = j.modelo_nulo;
@@ -161,7 +162,9 @@ export function Confianza({ j }: { j: Jurado }) {
           <Prueba titulo="Estadio nuevo · park holdout"
                   que="Se entrena sin ningún estadio de altura y se prueba sólo en altura."
                   cifra={ordena(j.holdout.parque.stuff)} unidad="correlación con las carreras en altura"
-                  nota={`Sigue ordenando de mejor a peor en un aire que nunca vio. Lo que falla es el nivel (R² ${nf(j.holdout.parque.stuff.r2, 5)}). Entrenado a nivel del mar, espera menos carreras de las que pasan en altura. Ese desfase es el efecto que este trabajo mide y corrige con la física.`} />
+                  nota={r?.stuff_entrena === 'mar'
+                    ? `Sigue ordenando de mejor a peor en un aire que nunca vio, pero espera menos carreras de las que pasan en altura (R² ${nf(j.holdout.parque.stuff.r2, 5)}). Abajo, en las pruebas de robustez, medimos cuánto de ese desfase explica la física del lanzamiento.`
+                    : `Sigue ordenando de mejor a peor en un aire que nunca vio. Lo que falla es el nivel (R² ${nf(j.holdout.parque.stuff.r2, 5)}). Entrenado a nivel del mar, espera menos carreras de las que pasan en altura. Ese desfase es el efecto que este trabajo mide y corrige con la física.`} />
         </div>
         <div className="tarjeta metricas">
           <h3 className="titulo-tarjeta">Las métricas, como las pide la rúbrica</h3>
@@ -189,6 +192,8 @@ export function Confianza({ j }: { j: Jurado }) {
           y en que anticipa las carreras futuras de un lanzador, las dos tarjetas de arriba. Contra el modelo nulo, gana con
           lanzadores nuevos, y con temporada nueva ordena igual. En un estadio nuevo ordena, pero falla el nivel, y por eso hace falta la física.
         </p>
+
+        {r && <Robustez r={r} />}
 
         <div className="tarjeta">
           <h3 className="titulo-tarjeta">Qué tan bien predice cada pieza</h3>

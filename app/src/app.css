@@ -985,3 +985,10 @@ main ol > li::marker { color: var(--seccion); }
 .vuelo-zona { fill: var(--rejilla); }
 .vuelo-sin { fill: none; stroke: var(--ceniza); stroke-width: 1.6; stroke-dasharray: 4 3; }
 .vuelo-real { fill: none; stroke-width: 2.6; stroke-linecap: round; }
+
+/* --- Validación: pruebas de robustez -------------------------------------------------- */
+.robustez { display: grid; gap: 18px; margin: 28px 0; }
+.robustez .tarjeta { display: grid; gap: 12px; }
+.cifras-robustez > div { display: grid; gap: 6px; padding: 12px 14px; border: var(--borde-tenue); border-radius: var(--radio); background: var(--basalto-alto); }
+.cifras-robustez b { font-size: 1.7rem; }
+.cifras-robustez span { font-size: 0.86rem; color: var(--enrarecido); }

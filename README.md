@@ -41,6 +41,7 @@ validado con lanzadores, temporada y estadio fuera de muestra.
 | Hipótesis H1 a H4 | Pestaña Hipótesis, documento técnico 5 |
 | Causal Forest táctico (opcional) | Pestaña Causal Forest, `scripts/09` y `scripts/10` |
 | Calibración y modelo nulo | Pestaña Validación |
+| Pruebas de robustez (parque con física, discriminación, futuro, combinación ponderada) | Pestaña Validación, documento Anexo C, `scripts/11_robustez.py` |
 | Pitcher, season y park holdout | Pestaña Validación |
 | Variables de arsenal e interpretación con SHAP | Pestaña Metodología |
 
@@ -59,6 +60,7 @@ python scripts/07_jurado.py         # tabla por lanzador, calibración y mapa
 python scripts/08_hipotesis.py      # H1 a H4
 python scripts/09_causal_forest.py  # Causal Forest de entorno
 python scripts/10_local_extras.py   # Causal Forest táctico, SHAP y tres entornos
+python scripts/11_robustez.py       # pruebas de robustez (parque con física, discriminación, futuro, combinación)
 ```
 
 El dashboard corre completo en el navegador, sin servidor.
@@ -76,6 +78,7 @@ Los documentos se regeneran desde los datos exportados.
 python3 docs/tecnico.py && node docs/pdf.mjs entrega/documento_tecnico.html entrega/documento_tecnico.pdf
 python3 docs/reporte.py && node docs/pdf.mjs entrega/reporte.html entrega/reporte.pdf lamina
 python3 docs/estilo.py entrega/documento_tecnico.html entrega/reporte.html
+python3 docs/verifica_cifras.py     # cifras del documento que ya no salen de los datos
 ```
 
 ## Estructura

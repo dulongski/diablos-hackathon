@@ -179,6 +179,15 @@ y regularización $L_2 = 5$. **Stuff+ va mucho más regularizado** (400 árboles
 física, y el punto de salida es casi una firma de cada lanzador. Con hojas chicas el modelo memoriza lanzadores
 y, con lanzadores nuevos, queda peor que el promedio.
 
+<!-- si stuff_entrena=mar -->
+**Stuff+ aprende sólo de juegos a nivel del mar.** Su variable más pesada es cuánta velocidad pierde la pelota en
+el camino, y en altura la pelota frena menos. Si el modelo viera juegos de altura, aprendería que frenar poco
+anuncia un juego de altura y que esos juegos dan más carreras, y parte de lo que llamamos pérdida de Stuff+ sería
+el entorno de bateo y no el lanzamiento. A nivel del mar el aire es uno solo, así que esa variable sólo cambia por
+la pelota y el lanzamiento, y la pérdida al volar la pelota en otro aire sale entera de la física. La escala sigue
+midiendo contra todos los lanzamientos de la liga.
+<!-- fin -->
+
 **De dónde sale cada calificación.** Medimos con SHAP cuánto aporta cada grupo de variables a la predicción.
 Stuff+ es 100 % física, y sus variables más pesadas son cuánta velocidad pierde la pelota en el vuelo, el
 quiebre vertical, la elevación y el giro. En Location+ la ubicación y el conteo explican el 62 % y la física
@@ -309,11 +318,20 @@ es bajo por construcción, porque su desenlace lo dominan el azar y la ubicació
 ubicación, así que su $R^2$ es el más bajo de los tres, y así debe ser. Location+ y Pitching+ suben
 porque suman dónde llegó la pelota y el conteo.
 
+<!-- si stuff_entrena=todo -->
 **El holdout de parque no falla en el orden, falla en el nivel.** Un modelo entrenado sin altura
 ordena bien los lanzamientos en altura (correlación positiva), pero espera las carreras de nivel del
 mar. En altura todo cuesta más, y por eso su $R^2$ queda apenas bajo cero. Esa diferencia de nivel es
 justo el efecto que medimos, y por eso transferimos la forma en lugar de confiar en un modelo entrenado
 en otro aire.
+<!-- fin -->
+<!-- si stuff_entrena=mar -->
+**El holdout de parque, convertido en prueba de la física.** Un modelo entrenado sólo a nivel del mar ordena
+bien los lanzamientos en altura, pero espera las carreras de nivel del mar, y por eso su $R^2$ sin corregir el
+nivel queda cerca de cero. En lugar de quedarnos con esa explicación, la medimos. Predijimos cada lanzamiento de
+altura dos veces, con su forma real y con la misma pelota volada a nivel del mar, y la diferencia es la parte del
+exceso de carreras que explica el vuelo del lanzamiento. El resultado está en el Anexo C.
+<!-- fin -->
 
 **Stuff+ es un rasgo del lanzador, no suerte.** Partimos los lanzamientos de cada lanzador en dos
 mitades al azar (602 lanzadores con al menos 150 por mitad). Su Stuff+ en una mitad correlaciona 0.988

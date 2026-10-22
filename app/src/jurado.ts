@@ -27,7 +27,8 @@ export interface Riesgo {
   dist_fb: number; hr_fb: number;
 }
 
-export interface PuntoMapa { t: string; c: 'mejor' | 'peor'; hb: number; ivb: number; v: number; s: number }
+/** Una celda de 2 pulgadas del mapa de movimiento: nunca un lanzamiento suelto, sólo promedios de al menos 10. */
+export interface PuntoMapa { t: string; c: 'mejor' | 'peor'; hb: number; ivb: number; v: number; s: number; n: number }
 
 export interface Metrica { n: number; rmse: number; r2: number; corr?: number; n_features?: number }
 export interface Componente { n: number; brier: number; brier_base: number; skill: number }
@@ -124,3 +125,41 @@ export interface Extras {
   shap?: Record<'stuff' | 'location' | 'pitching', { top: { variable: string; peso: number }[]; grupos: Record<string, number> }> | { error: string };
   tres_entornos?: { por_tipo: { tipo: string; n: number; mar: number; media: number; extrema: number }[]; liga: Record<'mar' | 'media' | 'extrema', number> } | { error: string };
 }
+
+/* ------------------------------------------------------------------ robustez (scripts/11_robustez.py, opcional) */
+type IC = [number | null, number | null];
+type Err = { error: string };
+export interface Robustez {
+  stuff_entrena?: 'mar' | 'todo';
+  parque?: {
+    n: number; lanzadores: number;
+    por_100: Record<'obs' | 'alt' | 'mar' | 'total' | 'fisica' | 'resto' | 'fraccion', number>;
+    ic95_por_100: Record<'obs' | 'alt' | 'mar' | 'total' | 'fisica' | 'resto' | 'fraccion', IC>;
+    r2_forma_altura: number; r2_forma_mar: number; r2_nivel_corregido: number; corr: number; corr_ic95: IC;
+    por_tipo?: { tipo: string; lanzadores: number; fisica_100: number; observado_100: number }[];
+    por_tipo_spearman?: { rho: number; p: number; tipos: number };
+  } | Err;
+  discriminacion?: Record<'stuff' | 'location' | 'pitching', {
+    carreras_100_mejor10: number; carreras_100_peor10: number; brecha_100: number; brecha_ic95: IC;
+    whiff_mejor10: number; whiff_peor10: number;
+  }> | Err;
+  confiabilidad?: Record<'crudo' | 'sin_mezcla' | 'solo_mezcla' | 'solo_rectas' | 'carreras', { r: number | null; lanzadores: number; ic95: IC }> | Err;
+  futuro?: {
+    pares: number; lanzadores: number;
+    carreras: FuturoObjetivo; whiff: FuturoObjetivo;
+  } | Err;
+  combinacion?: {
+    componentes: string[]; pesos: Record<string, number>; corr_entre_ellos: number;
+    combinado: Metrica & { brecha_100: number; mitades: number };
+    directo: Metrica & { brecha_100: number; mitades: number };
+  } | Err;
+  especificaciones?: {
+    variantes: Record<'produccion' | 'sin_frenado' | 'todos_los_juegos', { variables: number; liga: number; por_tipo: Record<string, number> }>;
+    orden_igual: Record<'sin_frenado' | 'todos_los_juegos', number>;
+  } | Err;
+}
+export interface FuturoObjetivo {
+  stuff: { r: number; ic95: IC }; carreras_pasadas: { r: number; ic95: IC }; whiff_pasado: { r: number; ic95: IC };
+  stuff_menos_carreras_pasadas: { d: number; ic95: IC }; r2_incremental_stuff: { d: number; ic95: IC };
+}
+export const sinError = <T,>(x: T | Err | undefined): T | null => (x && !('error' in (x as object)) ? (x as T) : null);

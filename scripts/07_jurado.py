@@ -30,6 +30,10 @@ NOMBRES = {"Four-Seam": "Recta", "Sinker": "Sinker", "Cutter": "Cutter", "Slider
            "Curveball": "Curva", "Changeup": "Cambio", "Splitter": "Splitter"}
 
 
+CELDA = 2.0        # pulgadas por lado de cada celda del mapa de movimiento
+MIN_CELDA = 10     # lanzamientos mínimos para publicar una celda
+
+
 def etiqueta(pid: str) -> str:
     """Los IDs vienen anonimizados; se muestran como 'Lanzador 469'."""
     return "Lanzador " + str(int(pid.split("_")[1]))
@@ -191,21 +195,22 @@ def main() -> None:
     out["riesgo"] = json.loads(r_ent.join(fb).round(4).reset_index().to_json(orient="records"))
 
     # ------------------------------------------------------------------ E4 mapa de movimiento
-    # Una muestra de lanzamientos reales de diestros (el quiebre horizontal de un zurdo es el
-    # espejo), con su Stuff+ en el Harp Helú: el 10% mejor y el 10% peor de cada tipo.
+    # Lanzamientos reales de diestros (el quiebre horizontal de un zurdo es el espejo), con su Stuff+ en el
+    # Harp Helú: el 10 % mejor y el 10 % peor de cada tipo. Las reglas del reto permiten presentar resultados
+    # pero no datos, así que no se exporta ningún lanzamiento suelto. Se agregan en celdas de 2 pulgadas y
+    # sólo salen las celdas con al menos MIN_CELDA lanzamientos, con su promedio de velocidad y de Stuff+.
     print("E4 mapa…", flush=True)
     rhp = df[(df.PitcherThrows == "Right") & df.tipo.notna() & df.plus_alt.notna()
              & df.HorzBreak.notna() & df.InducedVertBreak.notna()]   # NaN no es JSON válido
     puntos = []
-    rng = np.random.default_rng(7)
     for t, gt in rhp.groupby("tipo"):
         lo, hi = gt.plus_alt.quantile([0.10, 0.90])
         for clase, sel in (("mejor", gt[gt.plus_alt >= hi]), ("peor", gt[gt.plus_alt <= lo])):
-            m = sel.sample(min(len(sel), 220), random_state=int(rng.integers(1e9)))
-            for _, rr in m.iterrows():
-                puntos.append({"t": t, "c": clase, "hb": round(float(rr.HorzBreak), 1),
-                               "ivb": round(float(rr.InducedVertBreak), 1),
-                               "v": round(float(rr.RelSpeed), 1), "s": round(float(rr.plus_alt), 1)})
+            c = sel.assign(bx=(sel.HorzBreak / CELDA).round() * CELDA, by=(sel.InducedVertBreak / CELDA).round() * CELDA)
+            agg = c.groupby(["bx", "by"]).agg(n=("plus_alt", "size"), v=("RelSpeed", "mean"), s=("plus_alt", "mean"))
+            for (bx, by), rr in agg[agg.n >= MIN_CELDA].iterrows():
+                puntos.append({"t": t, "c": clase, "hb": float(bx), "ivb": float(by), "n": int(rr.n),
+                               "v": round(float(rr.v), 1), "s": round(float(rr.s), 1)})
     out["mapa"] = puntos
 
     (OUT / "jurado.json").write_text(json.dumps(out, ensure_ascii=False, separators=(",", ":"), allow_nan=False))
