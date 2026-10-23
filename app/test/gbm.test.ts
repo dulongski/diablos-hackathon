@@ -7,6 +7,7 @@ import fixtures from './fixtures/gbm.json';
 const m = model as unknown as Model;
 const esc = (scale as any).stuff;
 let peor = 0;
+let peorPlus = 0;
 console.log('  #   raw TS        raw LightGBM   dif        plus TS   plus LightGBM');
 fixtures.casos.forEach((c: any, i: number) => {
   const feats: Record<string, number> = {};
@@ -15,9 +16,10 @@ fixtures.casos.forEach((c: any, i: number) => {
   const plus = toPlus(raw, esc.center, esc.scale);
   const d = Math.abs(raw - c.raw);
   peor = Math.max(peor, d);
+  peorPlus = Math.max(peorPlus, Math.abs(plus - c.plus));
   console.log(`  ${String(i).padStart(2)}  ${raw.toFixed(6).padStart(11)}  ${c.raw.toFixed(6).padStart(12)}  ${d.toExponential(2).padStart(9)}  ${plus.toFixed(2).padStart(8)}  ${c.plus.toFixed(2).padStart(12)}`);
 });
 console.log(`\nmayor diferencia absoluta en raw: ${peor.toExponential(3)}`);
-const ok = peor < 1e-9;
+const ok = fixtures.casos.length > 0 && Number.isFinite(peor) && Number.isFinite(peorPlus) && peor < 1e-9 && peorPlus < 1e-8;
 console.log(ok ? 'OK: el evaluador coincide con LightGBM' : 'FALLA: el evaluador NO coincide');
 process.exit(ok ? 0 : 1);

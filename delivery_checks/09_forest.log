@@ -1,0 +1,156 @@
+bosque completo…
+efecto fuera de muestra…
+GATES…
+dependencias…
+{
+ "interpretacion": {
+  "tipo": "exploratorio observacional",
+  "identifica_efecto_causal": false,
+  "limites": "Covariables agregadas sobre ambos entornos, sin controles completos de rivales, temporada o estadio. Las diferencias individuales requieren validación externa."
+ },
+ "pitchers_n": 333,
+ "ate": 1.563,
+ "ate_ic90": [
+  1.302,
+  1.823
+ ],
+ "tau_rango": [
+  1.3,
+  1.788
+ ],
+ "importancia": [
+  {
+   "variable": "Swings fallidos",
+   "clave": "whiff",
+   "peso": 0.1521
+  },
+  {
+   "variable": "Uso de slider",
+   "clave": "uso_Slider",
+   "peso": 0.1311
+  },
+  {
+   "variable": "Rodados",
+   "clave": "gb",
+   "peso": 0.1176
+  },
+  {
+   "variable": "Stuff+ a nivel del mar",
+   "clave": "stuff_mar",
+   "peso": 0.1098
+  },
+  {
+   "variable": "Uso de recta",
+   "clave": "uso_Four-Seam",
+   "peso": 0.0936
+  },
+  {
+   "variable": "Velocidad",
+   "clave": "velo",
+   "peso": 0.0825
+  },
+  {
+   "variable": "Extensión",
+   "clave": "ext",
+   "peso": 0.08
+  },
+  {
+   "variable": "Uso de cambio",
+   "clave": "uso_Changeup",
+   "peso": 0.0754
+  },
+  {
+   "variable": "Uso de sinker",
+   "clave": "uso_Sinker",
+   "peso": 0.0669
+  },
+  {
+   "variable": "Uso de curva",
+   "clave": "uso_Curveball",
+   "peso": 0.0603
+  },
+  {
+   "variable": "Uso de cutter",
+   "clave": "uso_Cutter",
+   "peso": 0.0276
+  },
+  {
+   "variable": "Zurdo",
+   "clave": "zurdo",
+   "peso": 0.0032
+  }
+ ],
+ "gates": [
+  {
+   "grupo": "Q1",
+   "etiqueta": "Aguantan más",
+   "pitchers": 84,
+   "predicho": 1.442,
+   "observado": 1.735,
+   "ic": [
+    1.326,
+    2.168
+   ]
+  },
+  {
+   "grupo": "Q2",
+   "etiqueta": "Segundo grupo",
+   "pitchers": 83,
+   "predicho": 1.53,
+   "observado": 1.737,
+   "ic": [
+    1.23,
+    2.219
+   ]
+  },
+  {
+   "grupo": "Q3",
+   "etiqueta": "Tercer grupo",
+   "pitchers": 83,
+   "predicho": 1.604,
+   "observado": 1.31,
+   "ic": [
+    0.861,
+    1.753
+   ]
+  },
+  {
+   "grupo": "Q4",
+   "etiqueta": "Sufren más",
+   "pitchers": 83,
+   "predicho": 1.725,
+   "observado": 1.358,
+   "ic": [
+    0.93,
+    1.78
+   ]
+  }
+ ],
+ "pendiente": {
+  "valor": -2.05,
+  "ic": [
+   -4.016,
+   -0.035
+  ],
+  "p_una_cola": 0.978
+ },
+ "q4_menos_q1": {
+  "valor": -0.377,
+  "ic": [
+   -0.976,
+   0.227
+  ]
+ },
+ "politica": {
+  "carreras_100_ahorradas": -0.377,
+  "lanzamientos_casa_temporada": 800,
+  "carreras_temporada": -3.0
+ },
+ "acuerdo_stuff": {
+  "pearson": 0.21,
+  "p": 0.00011,
+  "spearman": 0.153
+ },
+ "unidad": "carreras extra por cada 100 lanzamientos al pasar de nivel del mar a altitud extrema (positivo = sufre)"
+}
+[{"variable": "Swings fallidos", "clave": "whiff", "quintiles": [{"x": 0.184, "tau": 1.582, "observado": 1.416}, {"x": 0.217, "tau": 1.613, "observado": 1.653}, {"x": 0.238, "tau": 1.583, "observado": 1.454}, {"x": 0.261, "tau": 1.574, "observado": 1.819}, {"x": 0.308, "tau": 1.524, "observado": 1.301}]}, {"variable": "Uso de slider", "clave": "uso_Slider", "quintiles": [{"x": 0.058, "tau": 1.605, "observado": 1.669}, {"x": 0.159, "tau": 1.597, "observado": 1.654}, {"x": 0.227, "tau": 1.573, "observado": 1.558}, {"x": 0.286, "tau": 1.57, "observado": 1.821}, {"x": 0.407, "tau": 1.531, "observado": 0.954}]}, {"variable": "Rodados", "clave": "gb", "quintiles": [{"x": 0.315, "tau": 1.625, "observado": 1.866}, {"x": 0.377, "tau": 1.573, "observado": 1.58}, {"x": 0.414, "tau": 1.57, "observado": 1.661}, {"x": 0.452, "tau": 1.574, "observado": 1.263}, {"x": 0.527, "tau": 1.534, "observado": 1.319}]}, {"variable": "Stuff+ a nivel del mar", "clave": "stuff_mar", "quintiles": [{"x": 99.623, "tau": 1.566, "observado": 1.423}, {"x": 102.468, "tau": 1.579, "observado": 1.581}, {"x": 104.458, "tau": 1.595, "observado": 1.382}, {"x": 106.345, "tau": 1.575, "observado": 1.92}, {"x": 110.493, "tau": 1.561, "observado": 1.345}]}, {"variable": "Uso de recta", "clave": "uso_Four-Seam", "quintiles": [{"x": 0.067, "tau": 1.6, "observado": 1.476}, {"x": 0.231, "tau": 1.568, "observado": 1.815}, {"x": 0.353, "tau": 1.544, "observado": 1.001}, {"x": 0.48, "tau": 1.561, "observado": 1.49}, {"x": 0.621, "tau": 1.603, "observado": 1.92}]}, {"variable": "Velocidad", "clave": "velo", "quintiles": [{"x": 83.508, "tau": 1.593, "observado": 1.405}, {"x": 85.996, "tau": 1.588, "observado": 1.82}, {"x": 87.524, "tau": 1.559, "observado": 1.443}, {"x": 88.899, "tau": 1.582, "observado": 1.289}, {"x": 91.186, "tau": 1.556, "observado": 1.751}]}]

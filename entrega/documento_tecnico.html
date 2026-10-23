@@ -1,19 +1,19 @@
 <!doctype html><html lang="es"><head><meta charset="utf-8"><title>Diablos Stuff+ · Documento técnico</title>
 <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="file:///Users/sdulongsalazar/Desktop/Hackathons/hackathon-diablos/app/node_modules/katex/dist/katex.min.css">
+<link rel="stylesheet" href="file:///private/tmp/diablos-entrega-20261022/app/node_modules/katex/dist/katex.min.css">
 <style>
 @page { size: Letter; margin: 15mm 16mm 15mm; @bottom-right { content: counter(page); } }
 :root { --rojo:#D7362B; --azul:#2E6FA6; --tinta:#10201A; --texto:#24302A; --ceniza:#6E7A73; --linea:#E3DCCB; --fondo:#FBF9F4; }
 * { box-sizing: border-box; }
-body { font-family: Inter, system-ui, sans-serif; font-size: 9pt; line-height: 1.37; color: var(--texto); margin: 0; }
+body { font-family: Inter, system-ui, sans-serif; font-size: 9.25pt; line-height: 1.43; color: var(--texto); margin: 0; }
 h1, h2, h3 { font-family: 'Big Shoulders Display', sans-serif; text-transform: uppercase; color: var(--tinta); line-height: 1; letter-spacing: .005em; }
-h2 { font-size: 18pt; font-weight: 800; margin: 12pt 0 5pt; padding-top: 7pt; border-top: 2px solid var(--rojo); break-after: avoid; }
-h3 { font-size: 12.5pt; font-weight: 700; margin: 13pt 0 5pt; break-after: avoid; }
-p { margin: 0 0 5.5pt; orphans: 3; widows: 3; }
+h2 { font-size: 18pt; font-weight: 800; line-height: 1.08; margin: 15pt 0 7pt; padding-top: 9pt; border-top: 2px solid var(--rojo); break-after: avoid; }
+h3 { font-size: 12.5pt; font-weight: 700; line-height: 1.1; margin: 15pt 0 6pt; break-after: avoid; }
+p { margin: 0 0 6.5pt; orphans: 3; widows: 3; }
 strong { color: var(--tinta); }
-table { width: 100%; border-collapse: collapse; margin: 5pt 0 9pt; font-size: 8.4pt; break-inside: avoid; }
+table { width: 100%; border-collapse: collapse; margin: 8pt 0 11pt; font-size: 8.4pt; break-inside: avoid; }
 th { text-align: left; font-weight: 600; color: var(--ceniza); font-size: 7.6pt; text-transform: uppercase; letter-spacing: .03em; border-bottom: 1.5px solid var(--tinta); padding: 4pt 5pt; }
-td { padding: 3.6pt 5pt; border-bottom: 1px solid var(--linea); font-variant-numeric: tabular-nums; }
+td { padding: 4pt 5pt; border-bottom: 1px solid var(--linea); font-variant-numeric: tabular-nums; }
 td.n, th.n { text-align: right; }
 pre { background: var(--fondo); border: 1px solid var(--linea); border-radius: 5pt; padding: 7pt 10pt; font-size: 8.2pt; break-inside: avoid; }
 code { font-family: 'JetBrains Mono', monospace; font-size: .92em; }
@@ -34,15 +34,19 @@ hr { border: none; border-top: 1px solid var(--linea); margin: 14pt 0; }
 .ecuacion { margin: 8pt 0 10pt; overflow-x: auto; }
 .katex { font-size: 1.06em; } .katex-display { margin: 0; }
 h2.anexo { break-before: page; }
-.dos-col { column-count: 2; column-gap: 7mm; column-fill: auto; }
+.dos-col { column-count: 2; column-gap: 8mm; column-fill: auto; }
 .dos-col h2 { column-span: all; }
 .dos-col table, .dos-col pre { column-span: all; }
-.dos-col .ecuacion { column-span: none; font-size: 7.4pt; margin: 5pt 0 7pt; overflow: hidden; break-inside: avoid; }
+.dos-col .ecuacion { column-span: none; font-size: 7.8pt; margin: 7pt 0 9pt; overflow: hidden; break-inside: avoid; }
 .dos-col .ecuacion .katex-display { text-align: left; }
 .dos-col .ecuacion .katex-display > .katex { text-align: left; white-space: normal; }
 .dos-col table.angosta { column-span: none; }
-.g-fig { margin: 4pt 0 9pt; break-inside: avoid; }
-.g-fig figcaption { font-size: 7.6pt; color: var(--ceniza); margin-top: 3pt; line-height: 1.3; }
+.bloque-ancho { column-span: all; break-inside: avoid; }
+.bloque-ancho h3 { margin-top: 10pt; }
+.bloque-local { break-inside: avoid; }
+p code, li code { overflow-wrap: anywhere; }
+.g-fig { margin: 6pt 0 12pt; break-inside: avoid; }
+.g-fig figcaption { font-size: 8pt; color: var(--ceniza); margin-top: 5pt; line-height: 1.4; }
 .g { width: 100%; height: auto; display: block; overflow: visible; }
 .g .et { font-family: Inter, sans-serif; font-size: 16px; font-weight: 600; fill: var(--tinta); }
 .g .et.halo { paint-order: stroke; stroke: #fff; stroke-width: 5px; }
@@ -52,7 +56,7 @@ h2.anexo { break-before: page; }
 </style></head><body>
 <section class="portada">
   <div>
-    <div class="logos-portada"><img src="file:///Users/sdulongsalazar/Desktop/Hackathons/hackathon-diablos/app/public/logos/isac.svg" alt="ISAC" class="l-isac"><img src="file:///Users/sdulongsalazar/Desktop/Hackathons/hackathon-diablos/app/public/logos/diablos.png" alt="Diablos Rojos del México" class="l-diablos"></div>
+    <div class="logos-portada"><img src="file:///private/tmp/diablos-entrega-20261022/app/public/logos/isac.svg" alt="ISAC" class="l-isac"><img src="file:///private/tmp/diablos-entrega-20261022/app/public/logos/diablos.png" alt="Diablos Rojos del México" class="l-diablos"></div>
     <div class="eyebrow">Hackathon ISAC 2026 · Reto Diablos Rojos del México · Documento técnico</div>
     <h1>Diablos <em>Stuff+</em></h1>
     <p class="sub">Calidad de lanzamiento ajustada por la altitud del Estadio Alfredo Harp Helú. Qué lanzadores
@@ -60,7 +64,7 @@ h2.anexo { break-before: page; }
     <div class="cifras">
       <div><b>635,002</b><span>lanzamientos de la LMB, 2024 a 2026, medidos con Trackman</span></div>
       <div><b>561</b><span>lanzadores comparados entre el nivel del mar y el Harp Helú</span></div>
-      <div><b>21</b><span>lanzadores aguantan la altura, pierden menos de media carrera por cada 100 lanzamientos</span></div>
+      <div><b>7</b><span>lanzadores aguantan la altura, pierden menos de media carrera por cada 100 lanzamientos</span></div>
     </div>
   </div>
   <p class="pie">Trabajo independiente de los participantes. No es un producto oficial de ISAC ni del club. Usamos los datos de la
@@ -87,18 +91,12 @@ altitud no es una variable del modelo sino una transformación física</strong>.
    frenado de la pelota, simulamos cómo habría volado cada lanzamiento con el aire del Harp Helú y lo
    calificamos otra vez. La diferencia entre las dos calificaciones es el efecto de la altitud.</li>
 </ol>
-<p>Encontramos cuatro cosas que cambian tus decisiones.</p>
+<p>Encontramos diferencias útiles para orientar el scouting.</p>
 <ul>
-<li><strong>Todo lanzamiento pierde en altura, pero no lo mismo.</strong> La recta pierde 11.7 puntos de Stuff+
-   (1.6 carreras más por cada 100 lanzamientos) y el cutter 3.0. Las mejores rectas pierden 19.</li>
-<li><strong>De 561 lanzadores, sólo 21 aguantan la altura</strong>, es decir, pierden menos de media carrera por cada
-   100 lanzamientos. Todos tiran slider, más de la mitad tira cutter (contra 18 % de la liga) y
-   provocan más rodados.</li>
-<li><strong>Probamos las cuatro hipótesis del reto.</strong> H1 y H4 se confirman. H2 y H3 se confirman en parte.</li>
-<li><strong>Un Causal Forest sobre carreras reales confirma el costo de la altura</strong>, 1.52 carreras más por cada
-   100 lanzamientos, sin usar Stuff+. La física del lanzamiento explica cerca del 40 % y el resto es el
-   batazo, que en altura vuela más. Las carreras solas no alcanzan para separar a un lanzador de otro, y
-   por eso necesitas la física.</li>
+<li>En la población completa por tipo, la recta pierde 13.7 puntos de Stuff+ y el cutter 3.2. Son estimaciones del modelo, bajo el supuesto de la misma salida de la mano.</li>
+<li>De 561 lanzadores con muestra suficiente, 7 pierden menos de media carrera estimada por cada 100 lanzamientos.</li>
+<li>H1 tiene respaldo físico. H2 y H3 tienen respaldo parcial. H4 no demuestra que el giro sea irrelevante.</li>
+<li>El bosque de entorno estima una diferencia promedio de 1.56 carreras por cada 100 lanzamientos. La interpretación causal exige controles suficientes y no se confirma la heterogeneidad individual.</li>
 </ul>
 <h2>1. Planteamiento</h2>
 <h3>1.1 La pregunta del club</h3>
@@ -110,7 +108,7 @@ Magnus. Ese empuje produce el movimiento que engaña al bateador, y crece con la
 Con menos aire hay menos empuje, menos movimiento y menos engaño. A la vez, el aire frena menos y los
 batazos llegan más lejos. Alan Nathan estima que en Coors Field, a 1,609 metros, un lanzamiento con 18
 pulgadas de quiebre se mueve 14 o 15. El Harp Helú está 631 metros más arriba.</p>
-<h3>1.3 Las hipótesis del reto</h3>
+<section class="bloque-ancho"><h3>1.3 Las hipótesis del reto</h3>
 <table>
 <thead>
 <tr>
@@ -141,7 +139,7 @@ pulgadas de quiebre se mueve 14 o 15. El Harp Helú está 631 metros más arriba
 <td>Peso en el modelo y experimento controlado</td>
 </tr>
 </tbody>
-</table>
+</table></section>
 <h2>2. Datos y supuestos</h2>
 <p>ISAC entregó 635,002 lanzamientos medidos con Trackman en tres temporadas, con identificadores
 anónimos de juego, lanzador, bateador y receptor. El conjunto <strong>no dice en qué estadio se lanzó</strong>. Sólo
@@ -201,7 +199,7 @@ aerodinámica. La separamos en una componente paralela a la velocidad (el arrast
 <p>El arrastre vale <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.1901em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8451em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mord mathnormal">ρ</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">d</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathnormal">A</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mord">/</span><span class="mord mathnormal">m</span></span></span></span>. Por eso el cociente <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9805em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03148em;">k</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0315em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">drag</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.1002em;vertical-align:-0.2861em;"></span><span class="mopen">∥</span><span class="mord"><span class="mord mathbf">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">drag</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mclose">∥</span><span class="mord">/</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span>
 es proporcional a <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">ρ</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">d</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>, y lo calculamos para cada lanzamiento. Su mediana por juego, normalizada
 al nivel del mar, es el <strong>índice de arrastre</strong> <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span></span></span></span> de ese juego.</p>
-<figure class="g-fig"><svg viewBox="0 0 460 120" class="g"><text x="138" y="26.0" text-anchor="end" class="et">Nivel del mar</text><rect x="150" y="9" width="228.6" height="22" rx="4" fill="#2E6FA6"/><text x="388.6" y="26.0" class="val" fill="#2E6FA6">1.000</text><text x="138" y="66.0" text-anchor="end" class="et">Altitud media</text><rect x="150" y="49" width="205.3" height="22" rx="4" fill="#B7800A"/><text x="365.3" y="66.0" class="val" fill="#B7800A">0.898</text><text x="138" y="106.0" text-anchor="end" class="et">Altitud extrema</text><rect x="150" y="89" width="195.1" height="22" rx="4" fill="#D7362B"/><text x="355.1" y="106.0" class="val" fill="#D7362B">0.853</text></svg><figcaption>Índice de arrastre por categoría (mediana por juego). 1.000 es el nivel del mar.</figcaption></figure>
+<figure class="g-fig"><svg viewBox="0 0 460 120" class="g"><text x="138" y="26.0" text-anchor="end" class="et">Nivel del mar</text><rect x="150" y="9" width="205.8" height="22" rx="4" fill="#2E6FA6"/><text x="365.8" y="26.0" class="val" fill="#2E6FA6">1.000</text><text x="138" y="66.0" text-anchor="end" class="et">Altitud media</text><rect x="150" y="49" width="184.8" height="22" rx="4" fill="#B7800A"/><text x="344.8" y="66.0" class="val" fill="#B7800A">0.898</text><text x="138" y="106.0" text-anchor="end" class="et">Altitud extrema</text><rect x="150" y="89" width="175.6" height="22" rx="4" fill="#D7362B"/><text x="335.6" y="106.0" class="val" fill="#D7362B">0.853</text></svg><figcaption>Índice de arrastre por categoría (mediana por juego). 1.000 es el nivel del mar.</figcaption></figure>
 
 <p><strong>El arrastre no es la densidad.</strong> A 2,240 metros la atmósfera estándar da <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">ρ</span><span class="mord">/</span><span class="mord"><span class="mord mathnormal">ρ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0.802</span></span></span></span>, pero
 medimos un índice de 0.853. La causa es aerodinámica. Con menos aire baja el número de Reynolds y sube
@@ -297,26 +295,27 @@ predecir directo el valor esperado en carreras porque ya es esa combinación, po
 resultado vale en el marcador, y así no tienes que inventar pesos. Los ocho modelos de componente sí los
 entrenamos, y explican de dónde sale cada calificación, pero no entran en el cálculo de Stuff+.</p>
 <h3>3.6 Validación fuera de muestra</h3>
-<p>Calculamos todas las métricas con datos que el modelo no vio.
-<strong>Holdout de lanzador.</strong> Validación cruzada de 4 pliegues agrupada por lanzador. Ningún lanzador está en
-entrenamiento y prueba a la vez.
-<strong>Holdout de temporada.</strong> Entrenamos con 2024 y 2025 y probamos con 2026.
-<strong>Holdout de parque.</strong> Entrenamos sin altitud extrema y probamos sólo en altitud extrema.
-<strong>Modelo nulo.</strong> El promedio del valor en carreras por conteo, lo mínimo que sabes sin mirar el
-lanzamiento.
-<strong>Calibración.</strong> Agrupamos los lanzamientos por su Stuff+ fuera de muestra y comparamos lo predicho con
+<p>Las predicciones de validación excluyen del ajuste las filas evaluadas. Las tablas del objetivo y del modelo nulo, y la calibración física, se prepararon globalmente antes de esos cortes. Por eso la validación de producción no aísla todo el pipeline. La auditoría independiente del repositorio reajusta objetivo y baseline dentro del entrenamiento y obtiene una mejora pequeña, no un salto de calidad.</p>
+<p><strong>Holdout de lanzador.</strong> Validación cruzada de 4 pliegues agrupada por lanzador. Ningún lanzador está en
+entrenamiento y prueba a la vez.</p>
+<p><strong>Holdout de temporada.</strong> Entrenamos con 2024 y 2025 y probamos con 2026.</p>
+<p><strong>Holdout de categoría de altitud.</strong> Entrenamos sin altitud extrema y probamos sólo en esa categoría. No es un holdout de estadio, porque no tenemos su identificador.</p>
+<p><strong>Modelo nulo.</strong> El promedio del valor en carreras por conteo, lo mínimo que sabes sin mirar el
+lanzamiento.</p>
+<p><strong>Calibración.</strong> Agrupamos los lanzamientos por su Stuff+ fuera de muestra y comparamos lo predicho con
 las carreras que pasaron.</p>
 <h3>3.7 Pruebas de hipótesis</h3>
-<p>Medimos toda la incertidumbre con <strong>bootstrap por lanzador</strong> de 2,000 remuestreos. Remuestreamos
+<p>Los intervalos de las comparaciones agregadas usan <strong>bootstrap por lanzador</strong> de 2,000 remuestreos. Remuestreamos
 lanzadores completos y no lanzamientos sueltos, porque los lanzamientos de un mismo lanzador se
 parecen entre sí y no cuentan como pruebas independientes.</p>
 <p><strong>H1.</strong> Para cada tipo de lanzamiento <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6151em;"></span><span class="mord mathnormal">t</span></span></span></span> calculamos la pérdida media, ponderada por número de
-lanzamientos, sobre 2,808 combinaciones de lanzador y tipo.</p>
+lanzamientos, sobre las combinaciones de lanzador y tipo con al menos 40 lanzamientos.</p>
 <div class="ecuacion"><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9701em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8201em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord">Δ</span></span><span style="top:-3.2523em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;"><span class="mord">ˉ</span></span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.4254em;vertical-align:-0.9857em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.4397em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mop"><span class="mop op-symbol small-op" style="position:relative;top:0em;">∑</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.162em;"><span style="top:-2.4003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2997em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">n</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">t</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.6897em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mop"><span class="mop op-symbol small-op" style="position:relative;top:0em;">∑</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.162em;"><span style="top:-2.4003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2997em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">n</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">t</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord">Δ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">t</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.9857em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:2em;"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord">Δ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">t</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.1727em;vertical-align:-0.247em;"></span><span class="mord"><span class="mord text"><span class="mord">Stuff+</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.9257em;"><span style="top:-2.453em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">t</span></span></span></span><span style="top:-3.1473em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mspace mtight" style="margin-right:0.1952em;"></span><span class="mord text mtight"><span class="mord mtight">HH</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.9957em;vertical-align:-0.247em;"></span><span class="mord"><span class="mord text"><span class="mord">Stuff+</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.7487em;"><span style="top:-2.453em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">t</span></span></span></span><span style="top:-3.1473em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mspace mtight" style="margin-right:0.1952em;"></span><span class="mord text mtight"><span class="mord mtight">mar</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span></span></span></span></span></div>
 <p>Además comparamos el integrador con la cifra de Nathan.</p>
-<p><strong>H2.</strong> Usamos un diseño pareado dentro del lanzador. Para quien tira cambio y recta,
-<span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord">Δ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mpunct mtight">,</span><span class="mord text mtight"><span class="mord mtight">cambio</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord">Δ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mpunct mtight">,</span><span class="mord text mtight"><span class="mord mtight">recta</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span>. Al comparar contra la recta del mismo lanzador se
-cancela todo lo que es del lanzador y queda sólo el efecto del aire sobre cada forma. Si <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7224em;vertical-align:-0.0391em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&gt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0</span></span></span></span>, el
+<div class="bloque-local"><p><strong>H2.</strong> Usamos un diseño pareado dentro del lanzador. Para quien tira cambio y recta calculamos</p>
+<div class="ecuacion"><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord">Δ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mpunct mtight">,</span><span class="mord text mtight"><span class="mord mtight">cambio</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord">Δ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mpunct mtight">,</span><span class="mord text mtight"><span class="mord mtight">recta</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span></span></div></div>
+<p>Al comparar contra la recta del mismo lanzador se
+controlan diferencias fijas del lanzador. El contraste sigue dependiendo de la transferencia física y del modelo de calificación. Si <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7224em;vertical-align:-0.0391em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&gt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0</span></span></span></span>, el
 cambio pierde menos que la recta.</p>
 <p><strong>H3.</strong> Tomamos los 333 lanzadores que tiraron al menos 120 veces en cada entorno. Estimamos por mínimos
 cuadrados ponderados la pendiente de carreras contra rodados en cada entorno <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">e</span></span></span></span>.</p>
@@ -340,8 +339,7 @@ cambio en este conteo, contra este bateador? Cada lanzamiento de dos tipos (por 
 una observación. <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span></span></span></span> es elegir el primero, <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">Y</span></span></span></span> es su valor en carreras, <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span></span></span></span> es el conteo, si el bateador es del
 mismo lado, el entorno (nivel del mar o altitud extrema) y si el lanzamiento anterior fue recta. <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span></span></span></span> controla
 lo que confunde la elección, la calidad del lanzador, cuánto usa cada tipo, la vuelta al orden, las manos y
-la velocidad de su recta. El resultado es una tabla por conteo, lado del bateador y entorno que dice qué
-lanzamiento conviene, en casa y de visitante. Contrastamos slider contra cambio, slider contra recta, cambio
+la velocidad de su recta. El resultado es una tabla por conteo, lado del bateador y entorno que orienta qué lanzamiento probar, sujeta a los controles y al soporte de los datos. Contrastamos slider contra cambio, slider contra recta, cambio
 contra recta y curva contra slider.</p>
 <p><strong>La pregunta de entorno.</strong> ¿Cuánto cuesta la altura en carreras reales, y le cuesta distinto a cada
 lanzador? Cada lanzador con al menos 120 lanzamientos en cada entorno aparece dos veces y se compara consigo
@@ -354,17 +352,12 @@ Agrupamos por efecto predicho y comprobamos si el castigo observado sube de grup
 <p>444 lanzadores tiraron en ambos entornos. Calibramos los exponentes con la mitad y dejamos la otra mitad
 <strong>sin tocar</strong>. En esas 436 combinaciones predecimos lo que el lanzador tiró en altura a partir de lo que
 tiró a nivel del mar.</p>
-<figure class="g-fig"><svg viewBox="0 0 460 120" class="g"><text x="138" y="26.0" text-anchor="end" class="et">Sin transferir</text><rect x="150" y="9" width="240.0" height="22" rx="4" fill="#6E7A73"/><text x="400.0" y="26.0" class="val" fill="#6E7A73">2.57 in</text><text x="138" y="66.0" text-anchor="end" class="et">Sólo densidad</text><rect x="150" y="49" width="104.3" height="22" rx="4" fill="#B7800A"/><text x="264.3" y="66.0" class="val" fill="#B7800A">1.12 in</text><text x="138" y="106.0" text-anchor="end" class="et">Nuestro modelo</text><rect x="150" y="89" width="74.8" height="22" rx="4" fill="#1A9A6E"/><text x="234.8" y="106.0" class="val" fill="#1A9A6E">0.80 in</text></svg><figcaption>Error medio en elevación, en combinaciones de lanzador y tipo que no usamos para calibrar. En movimiento lateral baja de 2.93 a 0.88 pulgadas, y en velocidad al plato de 1.32 a 0.57 mph.</figcaption></figure>
+<figure class="g-fig"><svg viewBox="0 0 460 120" class="g"><text x="138" y="26.0" text-anchor="end" class="et">Sin transferir</text><rect x="150" y="9" width="216.0" height="22" rx="4" fill="#6E7A73"/><text x="376.0" y="26.0" class="val" fill="#6E7A73">2.57 in</text><text x="138" y="66.0" text-anchor="end" class="et">Sólo densidad</text><rect x="150" y="49" width="93.9" height="22" rx="4" fill="#B7800A"/><text x="253.9" y="66.0" class="val" fill="#B7800A">1.12 in</text><text x="138" y="106.0" text-anchor="end" class="et">Nuestro modelo</text><rect x="150" y="89" width="67.3" height="22" rx="4" fill="#1A9A6E"/><text x="227.3" y="106.0" class="val" fill="#1A9A6E">0.80 in</text></svg><figcaption>Error medio en elevación, en combinaciones de lanzador y tipo que no usamos para calibrar. En movimiento lateral baja de 2.93 a 0.88 pulgadas, y en velocidad al plato de 1.32 a 0.57 mph.</figcaption></figure>
 
 <p>Si escalas todo sólo por la densidad del aire, sin la corrección de Reynolds, subestimas el efecto en
 cerca de un tercio.</p>
 <h3>4.2 Calidad y robustez</h3>
-<p><strong>Antes de ver el <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span>.</strong> El <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span> de un lanzamiento suelto es bajo en cualquier Stuff+, porque su desenlace es casi
-azar y Stuff+ no sabe dónde cayó la pelota. Nuestro modelo está en el techo de lo que la física sola puede predecir.
-Probamos ocho variantes con las mejoras usuales (calidad de contacto del batazo, arsenal, frenado relativo al aire y
-variables de física) y ninguna se separa del ruido (Anexo C). Lo que falta para un <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span> alto es dónde cayó la pelota,
-y por definición eso no entra en Stuff+. Por eso lo juzgamos como se juzga en Grandes Ligas, por si ordena carreras,
-si es estable y si anticipa el año siguiente.</p>
+<p><strong>Qué demuestra el <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span>.</strong> Stuff+ explica una fracción pequeña de la variación del resultado por lanzamiento. La ubicación añade capacidad predictiva en Location+ y Pitching+. Las variantes ensayadas no establecen un techo teórico. Evaluamos también calibración, separación entre grupos y repetibilidad, sin sustituir con ellas la validación predictiva.</p>
 <table>
 <thead>
 <tr>
@@ -418,7 +411,7 @@ si es estable y si anticipa el año siguiente.</p>
 <td class="n">0.035</td>
 </tr>
 <tr>
-<td>Holdout de parque</td>
+<td>Holdout de altitud</td>
 <td>Stuff+</td>
 <td>16</td>
 <td class="n">0.27707</td>
@@ -427,22 +420,12 @@ si es estable y si anticipa el año siguiente.</p>
 </tr>
 </tbody>
 </table>
-<p>Las tres capas vencen al modelo nulo con lanzadores que nunca vieron. Stuff+ tiene el <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span> más bajo de las tres
+<p>Como comprobación separada, reajustamos la especificación actual en cuatro pliegues de lanzador con tablas del objetivo y baseline aprendidas sólo en entrenamiento. RMSE de 0.26800 frente a 0.26811 del baseline, y R² de 0.00090. La reducción de MSE frente al baseline es 0.085 %. Esta prueba evalúa nuevos ajustes de la especificación, no el booster exacto servido. La preparación física permanece global. Los cortes 2025 y 2026 son retrospectivos.</p>
+<p>Las tres capas de la evaluación original vencen al modelo nulo con lanzadores que nunca vieron. Stuff+ tiene el <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span> más bajo de las tres
 porque no ve la ubicación, y así debe ser. Location+ y Pitching+ suben porque suman dónde llegó la pelota y el conteo.</p>
-<p><strong>El holdout de parque no falla en el orden, falla en el nivel.</strong> Un modelo entrenado sin altura
-ordena bien los lanzamientos en altura (correlación positiva), pero espera las carreras de nivel del
-mar. En altura todo cuesta más, y por eso su <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span> queda apenas bajo cero. Esa diferencia de nivel es
-justo el efecto que medimos, y por eso transferimos la forma en lugar de confiar en un modelo entrenado
-en otro aire.</p>
-<p><strong>Stuff+ es un rasgo del lanzador, no suerte.</strong> Partimos los lanzamientos de cada lanzador en dos
-mitades al azar (602 lanzadores con al menos 150 por mitad). Su Stuff+ en una mitad correlaciona 0.988
-con el de la otra. Sus carreras, sólo 0.293. Las carreras de unos cientos de lanzamientos son casi
-ruido, y la forma no.</p>
-<p><strong>Anticipa el año siguiente sin necesitar historial.</strong> En 336 pares de temporadas seguidas (2024 a 2025
-y 2025 a 2026, 250 lanzadores), el Stuff+ de un año correlaciona 0.22 con las carreras del siguiente. Las
-carreras del año anterior, 0.18. Esa diferencia no es concluyente, pero sumar Stuff+ a las carreras pasadas
-sí mejora la predicción (0.027 de <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span>, IC 0.004 a 0.071). Stuff+ lo logra con la sola física, así que a un
-prospecto lo puedes calificar desde su primera sesión de Trackman (Anexo C).</p>
+<p><strong>Transferencia entre entornos.</strong> El <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span> de altitud es negativo y la correlación positiva es pequeña. El desfase puede contener aire, composición de bateadores, conteos y calibración. La descomposición del Anexo C depende del modelo y no identifica qué fracción del costo de la altura es causal.</p>
+<p><strong>Repetibilidad dentro del historial.</strong> Entre dos mitades intercaladas de cada lanzador, Stuff+ correlaciona 0.988 y sus carreras 0.293. Las mitades comparten periodo y mezcla de lanzamientos. Esto mide consistencia de la calificación, no estabilidad temporal prospectiva ni certeza sobre carreras futuras.</p>
+<p><strong>Año siguiente, análisis retrospectivo.</strong> Las correlaciones entre temporadas y la comparación incremental aparecen en el Anexo C. La regresión incremental se evalúa fuera de muestra por lanzador. Sin embargo, las puntuaciones históricas originales se aprendieron con resultados de otros lanzadores de todos los años. Además 2026 ya se usó en el desarrollo. La prueba no demuestra que una evaluación anterior a la temporada anticipe mejor el rendimiento de un prospecto.</p>
 <p><strong>Calibración.</strong> La escala ordena carreras cuando agregas lanzamientos, que es donde importa.</p>
 <figure class="g-fig"><svg viewBox="0 0 760 380" class="g"><line x1="56" x2="740" y1="297.5" y2="297.5" stroke="#E3DCCB" stroke-width="1"/><text x="48" y="302.5" text-anchor="end" class="eje">−4</text><line x1="56" x2="740" y1="234.6" y2="234.6" stroke="#E3DCCB" stroke-width="1"/><text x="48" y="239.6" text-anchor="end" class="eje">−2</text><line x1="56" x2="740" y1="171.6" y2="171.6" stroke="#6E7A73" stroke-width="1.4"/><text x="48" y="176.6" text-anchor="end" class="eje">0</text><line x1="56" x2="740" y1="108.7" y2="108.7" stroke="#E3DCCB" stroke-width="1"/><text x="48" y="113.7" text-anchor="end" class="eje">+2</text><line x1="56" x2="740" y1="45.7" y2="45.7" stroke="#E3DCCB" stroke-width="1"/><text x="48" y="50.7" text-anchor="end" class="eje">+4</text><rect x="78.8" y="113.2" width="68.4" height="58.4" rx="4" fill="#D7362B" opacity=".85"/><circle cx="113.0" cy="67.2" r="6" fill="#10201A" stroke="#fff" stroke-width="2"/><text x="152.2" y="125.2" class="val sm" fill="#10201A">+1.9</text><text x="113.0" y="340" text-anchor="middle" class="et">< 80</text><text x="113.0" y="360" text-anchor="middle" class="eje">16,663</text><rect x="192.8" y="131.1" width="68.4" height="40.5" rx="4" fill="#D7362B" opacity=".85"/><circle cx="227.0" cy="109.7" r="6" fill="#10201A" stroke="#fff" stroke-width="2"/><text x="266.2" y="143.1" class="val sm" fill="#10201A">+1.3</text><text x="227.0" y="340" text-anchor="middle" class="et">80-90</text><text x="227.0" y="360" text-anchor="middle" class="eje">98,683</text><rect x="306.8" y="154.8" width="68.4" height="16.8" rx="4" fill="#D7362B" opacity=".85"/><circle cx="341.0" cy="149.1" r="6" fill="#10201A" stroke="#fff" stroke-width="2"/><text x="380.2" y="166.8" class="val sm" fill="#10201A">+0.5</text><text x="341.0" y="340" text-anchor="middle" class="et">90-100</text><text x="341.0" y="360" text-anchor="middle" class="eje">212,677</text><rect x="420.8" y="171.6" width="68.4" height="10.6" rx="4" fill="#1A9A6E" opacity=".85"/><circle cx="455.0" cy="188.8" r="6" fill="#10201A" stroke="#fff" stroke-width="2"/><text x="494.2" y="178.2" class="val sm" fill="#10201A">−0.3</text><text x="455.0" y="340" text-anchor="middle" class="et">100-110</text><text x="455.0" y="360" text-anchor="middle" class="eje">203,208</text><rect x="534.8" y="171.6" width="68.4" height="40.1" rx="4" fill="#1A9A6E" opacity=".85"/><circle cx="569.0" cy="228.6" r="6" fill="#10201A" stroke="#fff" stroke-width="2"/><text x="608.2" y="207.7" class="val sm" fill="#10201A">−1.3</text><text x="569.0" y="340" text-anchor="middle" class="et">110-120</text><text x="569.0" y="360" text-anchor="middle" class="eje">87,256</text><rect x="648.8" y="171.6" width="68.4" height="78.3" rx="4" fill="#1A9A6E" opacity=".85"/><circle cx="683.0" cy="268.8" r="6" fill="#10201A" stroke="#fff" stroke-width="2"/><text x="722.2" y="245.9" class="val sm" fill="#10201A">−2.5</text><text x="683.0" y="340" text-anchor="middle" class="et">120 +</text><text x="683.0" y="360" text-anchor="middle" class="eje">16,515</text></svg><figcaption>Carreras por cada 100 lanzamientos según el Stuff+ fuera de muestra. Barras, lo observado. Puntos, lo predicho.</figcaption></figure>
 
@@ -454,50 +437,34 @@ la dirección correcta.</p>
 <h3>5.1 H1 · La baja densidad reduce el movimiento. Se confirma</h3>
 <p><strong>La física reproduce a Nathan.</strong> Tomamos una recta con 18.0 pulgadas de quiebre a nivel del mar y la
 volamos en otros aires con el integrador, calibrado sólo con datos de la LMB.</p>
-<figure class="g-fig"><svg viewBox="0 0 460 160" class="g"><text x="158" y="26.0" text-anchor="end" class="et">Nivel del mar</text><rect x="170" y="9" width="208.4" height="22" rx="4" fill="#2E6FA6"/><text x="388.4" y="26.0" class="val" fill="#2E6FA6">18.0 in</text><text x="158" y="66.0" text-anchor="end" class="et">Coors Field</text><rect x="170" y="49" width="172.5" height="22" rx="4" fill="#B7800A"/><text x="352.5" y="66.0" class="val" fill="#B7800A">14.9 in</text><text x="158" y="106.0" text-anchor="end" class="et">Harp Helú</text><rect x="170" y="89" width="159.8" height="22" rx="4" fill="#D7362B"/><text x="339.8" y="106.0" class="val" fill="#D7362B">13.8 in</text><text x="158" y="146.0" text-anchor="end" class="et">Coors, sólo densidad</text><rect x="170" y="129" width="178.3" height="22" rx="4" fill="#6E7A73"/><text x="358.3" y="146.0" class="val" fill="#6E7A73">15.4 in</text></svg><figcaption>Quiebre total de una recta de 18 pulgadas a nivel del mar, volada en otros aires. Nathan estima 14 a 15 en Coors.</figcaption></figure>
+<figure class="g-fig"><svg viewBox="0 0 460 160" class="g"><text x="158" y="26.0" text-anchor="end" class="et">Nivel del mar</text><rect x="170" y="9" width="185.7" height="22" rx="4" fill="#2E6FA6"/><text x="365.7" y="26.0" class="val" fill="#2E6FA6">18.0 in</text><text x="158" y="66.0" text-anchor="end" class="et">Coors Field</text><rect x="170" y="49" width="153.7" height="22" rx="4" fill="#B7800A"/><text x="333.7" y="66.0" class="val" fill="#B7800A">14.9 in</text><text x="158" y="106.0" text-anchor="end" class="et">Harp Helú</text><rect x="170" y="89" width="142.4" height="22" rx="4" fill="#D7362B"/><text x="322.4" y="106.0" class="val" fill="#D7362B">13.8 in</text><text x="158" y="146.0" text-anchor="end" class="et">Coors, sólo densidad</text><rect x="170" y="129" width="158.9" height="22" rx="4" fill="#6E7A73"/><text x="338.9" y="146.0" class="val" fill="#6E7A73">15.4 in</text></svg><figcaption>Quiebre total de una recta de 18 pulgadas a nivel del mar, volada en otros aires. Nathan estima 14 a 15 en Coors.</figcaption></figure>
 
 <p>Una curva típica de 78 mph y 12.4 pulgadas de quiebre total cae 1.4 pulgadas menos en Coors y 2.0 menos
 en el Harp Helú. Su quiebre total baja 2.5 y 3.4 pulgadas.</p>
-<p><strong>Todos los tipos pierden Stuff+.</strong> En los siete el intervalo de 95 % queda bajo cero.</p>
-<figure class="g-fig"><svg viewBox="0 0 480 274" class="g"><line x1="120.0" x2="120.0" y1="4" y2="246" stroke="#E3DCCB" stroke-width="1"/><text x="120.0" y="266" text-anchor="middle" class="eje">−14</text><line x1="160.0" x2="160.0" y1="4" y2="246" stroke="#E3DCCB" stroke-width="1"/><text x="160.0" y="266" text-anchor="middle" class="eje">−12</text><line x1="200.0" x2="200.0" y1="4" y2="246" stroke="#E3DCCB" stroke-width="1"/><text x="200.0" y="266" text-anchor="middle" class="eje">−10</text><line x1="240.0" x2="240.0" y1="4" y2="246" stroke="#E3DCCB" stroke-width="1"/><text x="240.0" y="266" text-anchor="middle" class="eje">−8</text><line x1="280.0" x2="280.0" y1="4" y2="246" stroke="#E3DCCB" stroke-width="1"/><text x="280.0" y="266" text-anchor="middle" class="eje">−6</text><line x1="320.0" x2="320.0" y1="4" y2="246" stroke="#E3DCCB" stroke-width="1"/><text x="320.0" y="266" text-anchor="middle" class="eje">−4</text><line x1="360.0" x2="360.0" y1="4" y2="246" stroke="#E3DCCB" stroke-width="1"/><text x="360.0" y="266" text-anchor="middle" class="eje">−2</text><line x1="400.0" x2="400.0" y1="4" y2="246" stroke="#6E7A73" stroke-width="1.5"/><text x="400.0" y="266" text-anchor="middle" class="eje">0</text><text x="108" y="28" text-anchor="end" class="et">Cutter</text><line x1="330.8" x2="349.4" y1="22" y2="22" stroke="#4FB89A" stroke-width="5" stroke-linecap="round"/><circle cx="340.6" cy="22" r="7" fill="#4FB89A" stroke="#fff" stroke-width="2.5"/><text x="414" y="28" class="val" fill="#10201A">−2.97</text><text x="108" y="62" text-anchor="end" class="et">Splitter</text><line x1="294.8" x2="331.3" y1="56" y2="56" stroke="#8FA3B0" stroke-width="5" stroke-linecap="round"/><circle cx="311.3" cy="56" r="7" fill="#8FA3B0" stroke="#fff" stroke-width="2.5"/><text x="414" y="62" class="val" fill="#10201A">−4.43</text><text x="108" y="96" text-anchor="end" class="et">Slider</text><line x1="290.0" x2="297.1" y1="90" y2="90" stroke="#7C83F0" stroke-width="5" stroke-linecap="round"/><circle cx="293.6" cy="90" r="7" fill="#7C83F0" stroke="#fff" stroke-width="2.5"/><text x="414" y="96" class="val" fill="#10201A">−5.32</text><text x="108" y="130" text-anchor="end" class="et">Curva</text><line x1="265.7" x2="280.6" y1="124" y2="124" stroke="#A77BE0" stroke-width="5" stroke-linecap="round"/><circle cx="273.4" cy="124" r="7" fill="#A77BE0" stroke="#fff" stroke-width="2.5"/><text x="414" y="130" class="val" fill="#10201A">−6.33</text><text x="108" y="164" text-anchor="end" class="et">Cambio</text><line x1="244.4" x2="258.6" y1="158" y2="158" stroke="#E0679A" stroke-width="5" stroke-linecap="round"/><circle cx="251.7" cy="158" r="7" fill="#E0679A" stroke="#fff" stroke-width="2.5"/><text x="414" y="164" class="val" fill="#10201A">−7.42</text><text x="108" y="198" text-anchor="end" class="et">Sinker</text><line x1="215.0" x2="232.3" y1="192" y2="192" stroke="#D9822B" stroke-width="5" stroke-linecap="round"/><circle cx="223.6" cy="192" r="7" fill="#D9822B" stroke="#fff" stroke-width="2.5"/><text x="414" y="198" class="val" fill="#10201A">−8.82</text><text x="108" y="232" text-anchor="end" class="et">Recta</text><line x1="158.8" x2="174.0" y1="226" y2="226" stroke="#E8B54A" stroke-width="5" stroke-linecap="round"/><circle cx="166.2" cy="226" r="7" fill="#E8B54A" stroke="#fff" stroke-width="2.5"/><text x="414" y="232" class="val" fill="#10201A">−11.69</text></svg><figcaption>Cambio medio de Stuff+ por tipo al pasar al Harp Helú, con su intervalo de 95 % (bootstrap por lanzador).</figcaption></figure>
+<p><strong>Todos los tipos pierden Stuff+.</strong> En H1 sólo entran combinaciones de lanzador y tipo con al menos 40 lanzamientos. En los siete tipos el intervalo de 95 % queda bajo cero. La población difiere de la tabla general de Arsenal y del resumen.</p>
+<figure class="g-fig"><svg viewBox="0 0 480 274" class="g"><line x1="133.7" x2="133.7" y1="4" y2="246" stroke="#E3DCCB" stroke-width="1"/><text x="133.7" y="266" text-anchor="middle" class="eje">−15</text><line x1="169.2" x2="169.2" y1="4" y2="246" stroke="#E3DCCB" stroke-width="1"/><text x="169.2" y="266" text-anchor="middle" class="eje">−13</text><line x1="204.7" x2="204.7" y1="4" y2="246" stroke="#E3DCCB" stroke-width="1"/><text x="204.7" y="266" text-anchor="middle" class="eje">−11</text><line x1="240.2" x2="240.2" y1="4" y2="246" stroke="#E3DCCB" stroke-width="1"/><text x="240.2" y="266" text-anchor="middle" class="eje">−9</text><line x1="275.7" x2="275.7" y1="4" y2="246" stroke="#E3DCCB" stroke-width="1"/><text x="275.7" y="266" text-anchor="middle" class="eje">−7</text><line x1="311.2" x2="311.2" y1="4" y2="246" stroke="#E3DCCB" stroke-width="1"/><text x="311.2" y="266" text-anchor="middle" class="eje">−5</text><line x1="346.7" x2="346.7" y1="4" y2="246" stroke="#E3DCCB" stroke-width="1"/><text x="346.7" y="266" text-anchor="middle" class="eje">−3</text><line x1="382.2" x2="382.2" y1="4" y2="246" stroke="#E3DCCB" stroke-width="1"/><text x="382.2" y="266" text-anchor="middle" class="eje">−1</text><text x="108" y="28" text-anchor="end" class="et">Cutter</text><line x1="335.0" x2="353.5" y1="22" y2="22" stroke="#4FB89A" stroke-width="5" stroke-linecap="round"/><circle cx="344.6" cy="22" r="7" fill="#4FB89A" stroke="#fff" stroke-width="2.5"/><text x="414" y="28" class="val" fill="#10201A">−3.12</text><text x="108" y="62" text-anchor="end" class="et">Splitter</text><line x1="303.5" x2="337.3" y1="56" y2="56" stroke="#8FA3B0" stroke-width="5" stroke-linecap="round"/><circle cx="318.4" cy="56" r="7" fill="#8FA3B0" stroke="#fff" stroke-width="2.5"/><text x="414" y="62" class="val" fill="#10201A">−4.60</text><text x="108" y="96" text-anchor="end" class="et">Slider</text><line x1="301.6" x2="308.0" y1="90" y2="90" stroke="#7C83F0" stroke-width="5" stroke-linecap="round"/><circle cx="304.9" cy="90" r="7" fill="#7C83F0" stroke="#fff" stroke-width="2.5"/><text x="414" y="96" class="val" fill="#10201A">−5.36</text><text x="108" y="130" text-anchor="end" class="et">Curva</text><line x1="279.2" x2="291.8" y1="124" y2="124" stroke="#A77BE0" stroke-width="5" stroke-linecap="round"/><circle cx="285.7" cy="124" r="7" fill="#A77BE0" stroke="#fff" stroke-width="2.5"/><text x="414" y="130" class="val" fill="#10201A">−6.44</text><text x="108" y="164" text-anchor="end" class="et">Cambio</text><line x1="248.3" x2="261.3" y1="158" y2="158" stroke="#E0679A" stroke-width="5" stroke-linecap="round"/><circle cx="255.0" cy="158" r="7" fill="#E0679A" stroke="#fff" stroke-width="2.5"/><text x="414" y="164" class="val" fill="#10201A">−8.17</text><text x="108" y="198" text-anchor="end" class="et">Sinker</text><line x1="216.2" x2="231.7" y1="192" y2="192" stroke="#D9822B" stroke-width="5" stroke-linecap="round"/><circle cx="224.0" cy="192" r="7" fill="#D9822B" stroke="#fff" stroke-width="2.5"/><text x="414" y="198" class="val" fill="#10201A">−9.91</text><text x="108" y="232" text-anchor="end" class="et">Recta</text><line x1="149.2" x2="162.0" y1="226" y2="226" stroke="#E8B54A" stroke-width="5" stroke-linecap="round"/><circle cx="155.5" cy="226" r="7" fill="#E8B54A" stroke="#fff" stroke-width="2.5"/><text x="414" y="232" class="val" fill="#10201A">−13.77</text></svg><figcaption>Cambio medio por tipo en combinaciones de lanzador y tipo con al menos 40 lanzamientos. Intervalo de 95 % por bootstrap de lanzadores. Esta muestra difiere de la población completa de Arsenal.</figcaption></figure>
 
-<p>La recta pierde casi cuatro veces lo que pierde el cutter. En carreras, su pérdida equivale a 1.6
-carreras más por cada 100 rectas. La curva gana elevación, o sea que cae menos, y por eso pierde. Su
-valor es caer. Entre los seis tipos con mediciones suficientes, el que más movimiento pierde en la
-cancha es el que más Stuff+ pierde (correlación de rangos <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">0.83</span></span></span></span>, <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">p</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0.04</span></span></span></span>).</p>
+<p>Entre los arsenales elegibles de H1, la recta pierde 1.9 carreras estimadas por cada 100 lanzamientos. La curva cae menos al reducirse su quiebre. El contraste físico y la pérdida del modelo apuntan al mismo mecanismo, sin convertir la simulación en un experimento de campo.</p>
 <h3>5.2 H2 · El cambio gana valor relativo. Se confirma en parte</h3>
-<figure class="g-fig"><svg viewBox="0 0 480 240" class="g"><line x1="120.0" x2="120.0" y1="4" y2="212" stroke="#6E7A73" stroke-width="1.5"/><text x="120.0" y="232" text-anchor="middle" class="eje">0</text><line x1="176.0" x2="176.0" y1="4" y2="212" stroke="#E3DCCB" stroke-width="1"/><text x="176.0" y="232" text-anchor="middle" class="eje">+2</text><line x1="232.0" x2="232.0" y1="4" y2="212" stroke="#E3DCCB" stroke-width="1"/><text x="232.0" y="232" text-anchor="middle" class="eje">+4</text><line x1="288.0" x2="288.0" y1="4" y2="212" stroke="#E3DCCB" stroke-width="1"/><text x="288.0" y="232" text-anchor="middle" class="eje">+6</text><line x1="344.0" x2="344.0" y1="4" y2="212" stroke="#E3DCCB" stroke-width="1"/><text x="344.0" y="232" text-anchor="middle" class="eje">+8</text><line x1="400.0" x2="400.0" y1="4" y2="212" stroke="#E3DCCB" stroke-width="1"/><text x="400.0" y="232" text-anchor="middle" class="eje">+10</text><text x="108" y="28" text-anchor="end" class="et">Splitter</text><line x1="292.5" x2="388.2" y1="22" y2="22" stroke="#8FA3B0" stroke-width="5" stroke-linecap="round"/><circle cx="337.0" cy="22" r="7" fill="#8FA3B0" stroke="#fff" stroke-width="2.5"/><text x="414" y="28" class="val" fill="#10201A">+7.75</text><text x="108" y="62" text-anchor="end" class="et">Cutter</text><line x1="258.2" x2="311.2" y1="56" y2="56" stroke="#4FB89A" stroke-width="5" stroke-linecap="round"/><circle cx="282.3" cy="56" r="7" fill="#4FB89A" stroke="#fff" stroke-width="2.5"/><text x="414" y="62" class="val" fill="#10201A">+5.80</text><text x="108" y="96" text-anchor="end" class="et">Slider</text><line x1="260.5" x2="287.2" y1="90" y2="90" stroke="#7C83F0" stroke-width="5" stroke-linecap="round"/><circle cx="273.9" cy="90" r="7" fill="#7C83F0" stroke="#fff" stroke-width="2.5"/><text x="414" y="96" class="val" fill="#10201A">+5.50</text><text x="108" y="130" text-anchor="end" class="et" style="font-weight:800">Cambio</text><line x1="217.6" x2="251.4" y1="124" y2="124" stroke="#E0679A" stroke-width="5" stroke-linecap="round"/><circle cx="234.7" cy="124" r="9" fill="#E0679A" stroke="#fff" stroke-width="2.5"/><text x="414" y="130" class="val" fill="#10201A">+4.10</text><text x="108" y="164" text-anchor="end" class="et">Curva</text><line x1="213.0" x2="255.4" y1="158" y2="158" stroke="#A77BE0" stroke-width="5" stroke-linecap="round"/><circle cx="233.7" cy="158" r="7" fill="#A77BE0" stroke="#fff" stroke-width="2.5"/><text x="414" y="164" class="val" fill="#10201A">+4.06</text><text x="108" y="198" text-anchor="end" class="et">Sinker</text><line x1="164.5" x2="183.2" y1="192" y2="192" stroke="#D9822B" stroke-width="5" stroke-linecap="round"/><circle cx="173.7" cy="192" r="7" fill="#D9822B" stroke="#fff" stroke-width="2.5"/><text x="414" y="198" class="val" fill="#10201A">+1.92</text></svg><figcaption>Cuántos puntos menos pierde cada tipo que la recta del mismo lanzador, con su intervalo de 95 %.</figcaption></figure>
+<figure class="g-fig"><svg viewBox="0 0 480 240" class="g"><line x1="120.0" x2="120.0" y1="4" y2="212" stroke="#6E7A73" stroke-width="1.5"/><text x="120.0" y="232" text-anchor="middle" class="eje">0</text><line x1="176.0" x2="176.0" y1="4" y2="212" stroke="#E3DCCB" stroke-width="1"/><text x="176.0" y="232" text-anchor="middle" class="eje">+2</text><line x1="232.0" x2="232.0" y1="4" y2="212" stroke="#E3DCCB" stroke-width="1"/><text x="232.0" y="232" text-anchor="middle" class="eje">+4</text><line x1="288.0" x2="288.0" y1="4" y2="212" stroke="#E3DCCB" stroke-width="1"/><text x="288.0" y="232" text-anchor="middle" class="eje">+6</text><line x1="344.0" x2="344.0" y1="4" y2="212" stroke="#E3DCCB" stroke-width="1"/><text x="344.0" y="232" text-anchor="middle" class="eje">+8</text><line x1="400.0" x2="400.0" y1="4" y2="212" stroke="#E3DCCB" stroke-width="1"/><text x="400.0" y="232" text-anchor="middle" class="eje">+10</text><text x="108" y="28" text-anchor="end" class="et">Splitter</text><line x1="346.7" x2="430.6" y1="22" y2="22" stroke="#8FA3B0" stroke-width="5" stroke-linecap="round"/><circle cx="385.8" cy="22" r="7" fill="#8FA3B0" stroke="#fff" stroke-width="2.5"/><text x="414" y="28" class="val" fill="#10201A">+9.49</text><text x="108" y="62" text-anchor="end" class="et">Cutter</text><line x1="314.6" x2="367.3" y1="56" y2="56" stroke="#4FB89A" stroke-width="5" stroke-linecap="round"/><circle cx="339.4" cy="56" r="7" fill="#4FB89A" stroke="#fff" stroke-width="2.5"/><text x="414" y="62" class="val" fill="#10201A">+7.83</text><text x="108" y="96" text-anchor="end" class="et">Slider</text><line x1="322.3" x2="348.6" y1="90" y2="90" stroke="#7C83F0" stroke-width="5" stroke-linecap="round"/><circle cx="335.7" cy="90" r="7" fill="#7C83F0" stroke="#fff" stroke-width="2.5"/><text x="414" y="96" class="val" fill="#10201A">+7.70</text><text x="108" y="130" text-anchor="end" class="et">Curva</text><line x1="272.9" x2="315.8" y1="124" y2="124" stroke="#A77BE0" stroke-width="5" stroke-linecap="round"/><circle cx="294.4" cy="124" r="7" fill="#A77BE0" stroke="#fff" stroke-width="2.5"/><text x="414" y="130" class="val" fill="#10201A">+6.23</text><text x="108" y="164" text-anchor="end" class="et" style="font-weight:800">Cambio</text><line x1="258.1" x2="291.0" y1="158" y2="158" stroke="#E0679A" stroke-width="5" stroke-linecap="round"/><circle cx="275.0" cy="158" r="9" fill="#E0679A" stroke="#fff" stroke-width="2.5"/><text x="414" y="164" class="val" fill="#10201A">+5.53</text><text x="108" y="198" text-anchor="end" class="et">Sinker</text><line x1="194.8" x2="213.9" y1="192" y2="192" stroke="#D9822B" stroke-width="5" stroke-linecap="round"/><circle cx="204.3" cy="192" r="7" fill="#D9822B" stroke="#fff" stroke-width="2.5"/><text x="414" y="198" class="val" fill="#10201A">+3.01</text></svg><figcaption>Cuántos puntos menos pierde cada tipo que la recta del mismo lanzador, con su intervalo de 95 %.</figcaption></figure>
 
-<p>El cambio sí gana valor contra la recta, 4.1 puntos, y no es casualidad. Pero queda cuarto de seis,
-empatado con la curva y detrás del splitter, el cutter y el slider. La razón está en su forma. Un cambio
-de derecho se mueve unas 12 pulgadas hacia el lado del brazo, y ese movimiento también lo paga. En
-altura no gana el que engaña por velocidad. Gana <strong>el que nunca dependió del movimiento</strong>. Por eso el
-splitter, que engaña por velocidad y además casi no gira, gana más que todos.</p>
+<p>El cambio pierde 5.5 puntos menos que la recta del mismo lanzador y ocupa el lugar 5 entre seis alternativas. Ganar valor relativo no significa mejorar en términos absolutos. La ventaja depende del movimiento y del repertorio del lanzador.</p>
 <h3>5.3 H3 · Los lanzadores de rodados valen más en altura. Se confirma en parte</h3>
-<figure class="g-fig"><svg viewBox="0 0 480 138" class="g"><line x1="120.0" x2="120.0" y1="4" y2="110" stroke="#E3DCCB" stroke-width="1"/><text x="120.0" y="130" text-anchor="middle" class="eje">−1</text><line x1="260.0" x2="260.0" y1="4" y2="110" stroke="#6E7A73" stroke-width="1.5"/><text x="260.0" y="130" text-anchor="middle" class="eje">0</text><line x1="400.0" x2="400.0" y1="4" y2="110" stroke="#E3DCCB" stroke-width="1"/><text x="400.0" y="130" text-anchor="middle" class="eje">+1</text><text x="108" y="28" text-anchor="end" class="et">En altura</text><line x1="170.8" x2="241.9" y1="22" y2="22" stroke="#10201A" stroke-width="5" stroke-linecap="round"/><circle cx="206.8" cy="22" r="7" fill="#10201A" stroke="#fff" stroke-width="2.5"/><text x="414" y="28" class="val" fill="#10201A">−0.38</text><text x="108" y="62" text-anchor="end" class="et">A nivel del mar</text><line x1="208.3" x2="268.4" y1="56" y2="56" stroke="#10201A" stroke-width="5" stroke-linecap="round"/><circle cx="237.3" cy="56" r="7" fill="#10201A" stroke="#fff" stroke-width="2.5"/><text x="414" y="62" class="val" fill="#10201A">−0.16</text><text x="108" y="96" text-anchor="end" class="et">Diferencia</text><line x1="183.7" x2="272.0" y1="90" y2="90" stroke="#10201A" stroke-width="5" stroke-linecap="round"/><circle cx="229.5" cy="90" r="7" fill="#10201A" stroke="#fff" stroke-width="2.5"/><text x="414" y="96" class="val" fill="#10201A">−0.22</text></svg><figcaption>Carreras por cada 100 lanzamientos por cada 10 puntos más de rodados, con su intervalo de 95 %. Negativo previene carreras.</figcaption></figure>
+<figure class="g-fig"><svg viewBox="0 0 480 138" class="g"><line x1="120.0" x2="120.0" y1="4" y2="110" stroke="#E3DCCB" stroke-width="1"/><text x="120.0" y="130" text-anchor="middle" class="eje">−1</text><line x1="260.0" x2="260.0" y1="4" y2="110" stroke="#6E7A73" stroke-width="1.5"/><text x="260.0" y="130" text-anchor="middle" class="eje">0</text><line x1="400.0" x2="400.0" y1="4" y2="110" stroke="#E3DCCB" stroke-width="1"/><text x="400.0" y="130" text-anchor="middle" class="eje">+1</text><text x="108" y="28" text-anchor="end" class="et">En altura</text><line x1="172.6" x2="242.4" y1="22" y2="22" stroke="#10201A" stroke-width="5" stroke-linecap="round"/><circle cx="206.8" cy="22" r="7" fill="#10201A" stroke="#fff" stroke-width="2.5"/><text x="414" y="28" class="val" fill="#10201A">−0.38</text><text x="108" y="62" text-anchor="end" class="et">A nivel del mar</text><line x1="210.0" x2="266.2" y1="56" y2="56" stroke="#10201A" stroke-width="5" stroke-linecap="round"/><circle cx="237.3" cy="56" r="7" fill="#10201A" stroke="#fff" stroke-width="2.5"/><text x="414" y="62" class="val" fill="#10201A">−0.16</text><text x="108" y="96" text-anchor="end" class="et">Diferencia</text><line x1="186.2" x2="270.1" y1="90" y2="90" stroke="#10201A" stroke-width="5" stroke-linecap="round"/><circle cx="229.5" cy="90" r="7" fill="#10201A" stroke="#fff" stroke-width="2.5"/><text x="414" y="96" class="val" fill="#10201A">−0.22</text></svg><figcaption>Carreras por cada 100 lanzamientos por cada 10 puntos más de rodados, con su intervalo de 95 %. Negativo indica asociación con menos carreras.</figcaption></figure>
 
-<p>En altura los rodados previenen carreras con claridad. A nivel del mar el efecto no se distingue de
+<p>En altura, una mayor tasa de rodados se asocia con menos carreras. A nivel del mar el efecto no se distingue de
 cero. La diferencia va en la dirección de la hipótesis (<span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">p</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0.08</span></span></span></span>, una cola), pero no llega al 95 %. Por tercios, los lanzadores con pocos rodados (34 %) permiten 1.76 carreras más por
 cada 100 lanzamientos en altura, y los de muchos rodados (50 %) sólo 1.37. En los batazos de la liga, el
 rodado sube de 40.5 % a 44.8 % en altitud extrema y el jonrón por elevado sube de 12.4 % a 16.3 %.</p>
-<h3>5.4 H4 · Importa cuánto se mueve, no cuánto gira. Se confirma</h3>
-<figure class="g-fig"><svg viewBox="0 0 460 204" class="g"><text x="178" y="23.0" text-anchor="end" class="et">Movimiento (quiebres)</text><rect x="190" y="9" width="200.0" height="16" rx="4" fill="#1A9A6E"/><text x="400.0" y="23.0" class="val" fill="#1A9A6E">30 %</text><text x="178" y="57.0" text-anchor="end" class="et">Velocidad</text><rect x="190" y="43" width="165.2" height="16" rx="4" fill="#D7362B"/><text x="365.2" y="57.0" class="val" fill="#D7362B">25 %</text><text x="178" y="91.0" text-anchor="end" class="et">Punto de salida</text><rect x="190" y="77" width="157.3" height="16" rx="4" fill="#D7362B"/><text x="357.3" y="91.0" class="val" fill="#D7362B">24 %</text><text x="178" y="125.0" text-anchor="end" class="et">Giro (rpm)</text><rect x="190" y="111" width="56.2" height="16" rx="4" fill="#D7362B"/><text x="256.2" y="125.0" class="val" fill="#D7362B">8 %</text><text x="178" y="159.0" text-anchor="end" class="et">Eficiencia de giro</text><rect x="190" y="145" width="44.5" height="16" rx="4" fill="#D7362B"/><text x="244.5" y="159.0" class="val" fill="#D7362B">7 %</text><text x="178" y="193.0" text-anchor="end" class="et">Eje de giro</text><rect x="190" y="179" width="38.1" height="16" rx="4" fill="#D7362B"/><text x="238.1" y="193.0" class="val" fill="#D7362B">6 %</text></svg><figcaption>Peso de cada grupo de variables dentro de Stuff+ (ganancia total de los árboles).</figcaption></figure>
+<h3>5.4 H4 · El giro solo no basta. Evidencia parcial</h3>
+<figure class="g-fig"><svg viewBox="0 0 460 204" class="g"><text x="178" y="23.0" text-anchor="end" class="et">Movimiento (quiebres)</text><rect x="190" y="9" width="176.0" height="16" rx="4" fill="#1A9A6E"/><text x="376.0" y="23.0" class="val" fill="#1A9A6E">30 %</text><text x="178" y="57.0" text-anchor="end" class="et">Velocidad</text><rect x="190" y="43" width="145.4" height="16" rx="4" fill="#D7362B"/><text x="345.4" y="57.0" class="val" fill="#D7362B">25 %</text><text x="178" y="91.0" text-anchor="end" class="et">Punto de salida</text><rect x="190" y="77" width="138.4" height="16" rx="4" fill="#D7362B"/><text x="338.4" y="91.0" class="val" fill="#D7362B">24 %</text><text x="178" y="125.0" text-anchor="end" class="et">Giro (rpm)</text><rect x="190" y="111" width="49.5" height="16" rx="4" fill="#D7362B"/><text x="249.5" y="125.0" class="val" fill="#D7362B">8 %</text><text x="178" y="159.0" text-anchor="end" class="et">Eficiencia de giro</text><rect x="190" y="145" width="39.1" height="16" rx="4" fill="#D7362B"/><text x="239.1" y="159.0" class="val" fill="#D7362B">7 %</text><text x="178" y="193.0" text-anchor="end" class="et">Eje de giro</text><rect x="190" y="179" width="33.5" height="16" rx="4" fill="#D7362B"/><text x="233.5" y="193.0" class="val" fill="#D7362B">6 %</text></svg><figcaption>Peso de cada grupo de variables dentro de Stuff+ (ganancia total de los árboles).</figcaption></figure>
 
-<p>El modelo sí usa el giro. Es la tercera de 16 variables, pero sobre todo para distinguir un tipo de
-lanzamiento de otro. En el experimento controlado, 100 revoluciones más <strong>con el mismo movimiento</strong>
-no cambian Stuff+ (0.01 puntos). Una pulgada más de elevación <strong>con el mismo giro</strong> suma 2.59.
-Y la ventaja del movimiento es la que el aire se lleva. Una recta B con 2,150 rpm y 18.0 pulgadas de
-elevación vale 107.7 a nivel del mar, 19.2 puntos más que una recta A que gira más pero a la que ese giro
-casi no mueve (2,650 rpm y 13.5 pulgadas, 88.5). En el Harp Helú B vale 86.1 y A 80.0. La ventaja se reduce a un
-tercio.</p>
+<p>El giro representa 8.5 % de la ganancia de los árboles. Esa importancia no mide causalidad y se reparte entre variables correlacionadas. En el barrido controlado del simulador, la curva de Stuff+ recorre 98.1 a 104.0 puntos a nivel del mar. El cambio absoluto medio entre pasos contiguos de 100 rpm es 1.74 puntos. La diferencia entre extremos casi se cancela, pero eso no prueba insensibilidad local.</p>
+<p>Las rectas de ejemplo conservan su orden en ambos entornos. B aventaja a A en 19.2 puntos a nivel del mar y 6.1 en altura. Son formas reconstruidas bajo los supuestos del simulador, no una identificación independiente del efecto del giro.</p>
 <h2>6. Lo que significa para el club</h2>
 <h3>6.1 La altitud borra la ventaja del bueno</h3>
-<p>Partimos las rectas en quintiles por su Stuff+ a nivel del mar. El castigo no es parejo. El quintil más
-bajo pierde 3.8 puntos (de 89.6 a 85.8). El más alto pierde 19.4 (de 116.4 a 97.1) y queda bajo el
-promedio. Lo que separa a una recta de élite de una mediocre es el movimiento, y el movimiento es lo que
-el aire se lleva. Entre el 1 % mejor calificado, el slider pasa de 24 % a 52 % y la recta cae de 41 % a
-1 %.</p>
-<p><strong>Tres estadios, no dos.</strong> El mismo lanzamiento, volado con el aire de cada categoría.</p>
+<p>Partimos las rectas en quintiles por su Stuff+ a nivel del mar. El quintil inferior pasa de 91.1 a 85.7, una pérdida de 5.4 puntos. El superior pasa de 120.7 a 99.9, una pérdida de 20.8. La mayor calidad inicial viene acompañada de mayor sensibilidad estimada al aire.</p>
+<p><strong>Tres entornos, no tres estadios identificados.</strong> El mismo lanzamiento vuela con el aire representativo de cada categoría.</p>
 <table>
 <thead>
 <tr>
@@ -516,26 +483,25 @@ el aire se lleva. Entre el 1 % mejor calificado, el slider pasa de 24 % a 52 % y
 </tr>
 <tr>
 <td>Stuff+ de la liga</td>
-<td class="n">103.1</td>
-<td class="n">97.1</td>
-<td class="n">94.8</td>
-</tr>
-<tr>
-<td>Recta</td>
-<td class="n">102.5</td>
-<td class="n">93.9</td>
-<td class="n">90.9</td>
+<td class="n">104.5</td>
+<td class="n">97.8</td>
+<td class="n">95.2</td>
 </tr>
 <tr>
 <td>Cutter</td>
-<td class="n">102.1</td>
-<td class="n">100.6</td>
-<td class="n">99.2</td>
+<td class="n">101.7</td>
+<td class="n">99.8</td>
+<td class="n">98.5</td>
+</tr>
+<tr>
+<td>Recta</td>
+<td class="n">105.6</td>
+<td class="n">95.7</td>
+<td class="n">91.9</td>
 </tr>
 </tbody>
 </table>
-<p>La altitud media ya cobra el 73 % del castigo. Un lanzador que viene de un parque de altura media llega
-al Harp Helú con la mayor parte del ajuste hecho.</p>
+<p>La categoría extrema aproxima el entorno del Harp Helú. No identifica por separado todos sus efectos de parque ni los del clima.</p>
 <h3>6.2 El perfil físico ideal</h3>
 <p>Promediamos el 1 % mejor calificado en cada aire, sólo lanzadores derechos y sólo lanzamientos reales.
 Una rejilla libre produciría combinaciones que ningún lanzador hace.</p>
@@ -544,45 +510,45 @@ Una rejilla libre produciría combinaciones que ningún lanzador hace.</p>
 <tr>
 <th>Variable</th>
 <th class="n">Élite a nivel del mar</th>
-<th>Élite en altura</th>
+<th class="n">Élite en altura</th>
 <th class="n">Mediana de la liga</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>Velocidad (mph)</td>
-<td class="n">88.3</td>
-<td>85.1</td>
+<td class="n">91.1</td>
+<td class="n">85.4</td>
 <td class="n">88.9</td>
 </tr>
 <tr>
 <td>Elevación (in)</td>
-<td class="n">4.4</td>
-<td><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">3.3</span></span></span></span></td>
+<td class="n">8.9</td>
+<td class="n">−2.6</td>
 <td class="n">9.2</td>
 </tr>
 <tr>
 <td>Movimiento lateral (in)</td>
-<td class="n">0.7</td>
-<td><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">4.4</span></span></span></span></td>
-<td class="n">7.3</td>
+<td class="n">4.5</td>
+<td class="n">−4.3</td>
+<td class="n">7.2</td>
 </tr>
 <tr>
 <td>Movimiento total (in)</td>
-<td class="n">17.3</td>
-<td>11.3</td>
+<td class="n">17.5</td>
+<td class="n">11.7</td>
 <td class="n">14.7</td>
 </tr>
 <tr>
 <td>Eficiencia de giro</td>
-<td class="n">0.84</td>
-<td>0.55</td>
+<td class="n">0.88</td>
+<td class="n">0.57</td>
 <td class="n">0.81</td>
 </tr>
 <tr>
 <td>Giro (rpm)</td>
-<td class="n">2,554</td>
-<td>2,504</td>
+<td class="n">2,526</td>
+<td class="n">2,524</td>
 <td class="n">2,328</td>
 </tr>
 </tbody>
@@ -591,50 +557,26 @@ Una rejilla libre produciría combinaciones que ningún lanzador hace.</p>
 lo mismo que la otra, pero convierte mucho menos de ese giro en movimiento. No depende del empuje del aire,
 que es justo lo que la altura le quita.</p>
 <h3>6.3 Por lanzador</h3>
-<p>Analizamos 561 lanzadores con al menos 300 lanzamientos. <strong>21 aguantan</strong>, es decir, pierden menos de
-3.7 puntos (media carrera por cada 100 lanzamientos), y 354 pierden más de 7.4 (una carrera). Los que más
-pierden son buenos a nivel del mar porque se mueven mucho. Lanzador 174 (recta y cambio) baja de 111.3 a
-92.8. Tu perfil de fichaje es Lanzador 1099 (cutter, slider y curva). Vale 110.2 a nivel del mar y 109.8
-en el Harp Helú, pierde 0.4 puntos, el segundo mejor Stuff+ de la liga en altura, y es de los más
-constantes entre juegos (<span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">±</span><span class="mord">2.6</span></span></span></span> contra <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">±</span><span class="mord">4.5</span></span></span></span> de la mediana).</p>
+<p>Analizamos 561 lanzadores con al menos 300 lanzamientos. 7 pierden menos de 3.7 puntos, equivalente a media carrera estimada por cada 100. 422 pierden más de 7.4, equivalente a una carrera.</p>
+<p>Lanzador 602 presenta la mayor pérdida estimada y pasa de 108.2 a 89.7. Como candidato de scouting, Lanzador 1099 pasa de 109.6 a 109.6, con repertorio Cutter · Slider · Curva y dispersión entre juegos de 2.6 puntos. La selección combina calidad en altura, pérdida y constancia. No sustituye evaluación médica, comando ni oposición enfrentada.</p>
 <h3>6.4 Lo que dice el Causal Forest</h3>
-<p><strong>El costo promedio es firme.</strong> Lanzar en altura cuesta <strong>1.52 carreras más por cada 100 lanzamientos</strong> (IC 90 %
-de 1.27 a 1.78), medido en el marcador y sin usar Stuff+. Es la misma dirección que predice la física. ¿Cuánto de ese
-costo es el lanzamiento? Un modelo entrenado sólo a nivel del mar atribuye al vuelo del lanzamiento 0.57 de
-las 1.49 carreras de más que hay en altura, el 39 % (IC 34 a 44 %, Anexo C). El resto lo pone sobre todo el
-batazo, que en altura viaja 31 pies más. La pérdida de Stuff+ de la liga (8.3 puntos, 1.12 carreras) sale
-mayor, porque la caída de velocidad también recoge parte del entorno (sección 8).</p>
-<p><strong>Las diferencias entre lanzadores no se sostienen.</strong> El bosque estima efectos entre 1.27 y 1.76, y para 331
-de 333 lanzadores el intervalo incluye el promedio. En la prueba fuera de muestra, el castigo observado no
-sube con el efecto predicho (pendiente de <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">1.95</span></span></span></span>, IC 95 % de <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">4.0</span></span></span></span> a <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">+</span><span class="mord">0.2</span></span></span></span>). El bosque sí aprende la misma
-dirección que Stuff+ (correlación de 0.17 fuera de muestra, <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">p</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0.002</span></span></span></span>), pero las carreras de unos cientos
-de lanzamientos tienen demasiado azar para confirmarlo lanzador por lanzador.</p>
-<p>Ese resultado justifica el diseño del trabajo. Para separar a un lanzador de otro necesitas algo estable, y
-eso es su forma, medida con física. Las carreras confirman el tamaño del castigo promedio.</p>
-<p><strong>La pregunta táctica, en casa sí cambia la respuesta.</strong> Comparamos cuatro pares de lanzamientos con
-150,000 lanzamientos cada uno y medimos el efecto en 48 celdas (12 conteos, dos lados del bateador y dos
-entornos). Slider en vez de cambio ahorra 0.31 carreras por cada 100 lanzamientos a nivel del mar y 1.01 en
-altura. De las 10 celdas donde el intervalo de 90 % no cruza el cero, 9 están en altura y todas favorecen
-al slider, sobre todo contra el bateador del lado contrario y con el conteo en contra (2 bolas o más). Es
-lo que predice H1, porque el cambio pierde más movimiento que el slider. A nivel del mar, con 3 bolas y
-bateador del mismo lado, la recta le gana al cambio por 3 a 5 carreras por cada 100. Con 48 celdas por par
-esperarías unas 5 falsas por azar, así que lee las celdas sueltas como pistas y el patrón como el
-resultado. Las tablas completas están en la pestaña Causal Forest del dashboard.</p>
+<p><strong>Diferencia promedio de entorno.</strong> El bosque estima 1.56 carreras adicionales por cada 100 lanzamientos, con intervalo de 90 % de 1.30 a 1.82. Es una estimación observacional. Sus covariables incluyen tasas de rodados y swings fallidos agregadas sobre los dos entornos, que pueden ser posteriores al tratamiento. Por ello no la presentamos como confirmación causal independiente.</p>
+<p>La prueba de altitud del Anexo C compara resultados observados con predicciones de un modelo de nivel del mar. La razón entre la transformación física y el exceso total es una descomposición dependiente del modelo. El resto incluye bateo, selección y error de calibración. No puede atribuirse íntegramente al batazo.</p>
+<p><strong>Las diferencias entre lanzadores no se sostienen.</strong> El bosque no supera la prueba GATES de heterogeneidad fuera de muestra. La incertidumbre de sus diferencias individuales impide usarlas como política de rotación. El bosque secundario se recalculó con los insumos físicos corregidos. Su diagnóstico no valida por sí solo el nuevo ranking físico.</p>
+<p>La física permite construir escenarios comparables. La evidencia disponible no confirma el tamaño del castigo causal individual de cada lanzador.</p>
+<p><strong>La pregunta táctica, señales exploratorias.</strong> Contrastamos slider contra cambio, slider contra recta, cambio contra recta y curva contra slider. Las tablas del dashboard separan conteo, lado del bateador y entorno, y muestran el contraste y su intervalo. La señal de slider frente a cambio orienta una prueba de repertorio. No identifica por sí sola una política óptima. Al evaluar 48 celdas por par con intervalos de 90 %, se esperan alrededor de cinco intervalos que excluyan cero bajo una hipótesis nula global. No aplicamos corrección por multiplicidad. Las diferencias entre entornos pueden contener selección de lanzamientos y confusión residual.</p>
 <h2>7. Recomendaciones</h2>
-<p><strong>Fichajes.</strong> No pagues de más por movimiento. Una recta del quintil más alto llega a 2,240 metros
-valiendo 97.1 en lugar de 116.4. El mercado cobra esa prima a nivel del mar, y tú la pagarías por algo
-que en tu estadio no existe.</p>
+<p><strong>Fichajes.</strong> Revisa la sensibilidad al aire antes de pagar una prima por movimiento. El quintil superior de rectas pasa de 120.7 a 99.9 en el escenario de altura. Úsalo para priorizar observaciones y pruebas del lanzador.</p>
 <p><strong>Perfil.</strong> Busca arsenales de cutter, slider y splitter, y lanzadores que provoquen rodados. En altura un
 elevado viaja 31 pies más (de 292 a 323) y sale del parque 16.3 % de las veces contra 12.4 %.</p>
-<p><strong>Rotación.</strong> Abre en casa con los lanzadores que aguantan (pestaña Lanzadores del dashboard). Los que
-pierden mucho rinden más de visitante.</p>
+<p><strong>Rotación.</strong> Usa la pestaña Lanzadores para evaluar candidatos de casa y visitante junto con comando, salud, descanso y rival. La pérdida simulada no garantiza resultados individuales.</p>
 <p><strong>En el juego.</strong> En casa, cuando el pitcher va atrás en el conteo contra un bateador del lado contrario,
-pide slider antes que cambio. El Causal Forest táctico encuentra 10 celdas firmes en ese par, y 9 están en altura y favorecen al slider.</p>
+considera probar el slider frente al cambio. Las celdas del bosque son exploratorias y no tienen corrección por comparaciones múltiples.</p>
 <p><strong>Prospectos.</strong> Hazte cinco preguntas, en este orden.
 1. ¿Cuánto de su valor es movimiento? Si su Stuff+ está en el quintil más alto por su quiebre, esa
    ventaja no viaja a la Ciudad de México.
 2. ¿Cuánto de su giro se vuelve movimiento? La eficiencia alta ayuda a nivel del mar y te expone en
-   altura (élite de altura 0.55 contra 0.84).
+   altura. Consulta el perfil actualizado de la sección 6.2.
 3. ¿Su arsenal se apoya en cutter, slider o splitter, o en recta y curva? El primero pierde poco y el
    segundo llega devaluado.
 4. ¿Provoca rodados? Es el único batazo que el aire no ayuda.
@@ -646,19 +588,17 @@ pide slider antes que cambio. El Causal Forest táctico encuentra 10 celdas firm
   predecir movimiento, no para atribuirlo sólo a la altitud.</li>
 <li><strong>No modelamos al bateador.</strong> Desde la física, el barril casi no se puede predecir (1 % de habilidad).</li>
 <li><strong>Stuff+ no es causal.</strong> Es un modelo de valoración. Para las preguntas de qué hubiera pasado usamos el
-  Causal Forest, que confirma el costo promedio pero no separa a un lanzador de otro.</li>
+  Causal Forest como análisis observacional con supuestos de ausencia de confusión y soporte común, que no confirma diferencias individuales.</li>
 <li><strong>El exponente de Reynolds es empírico.</strong> Lo calibramos y verificamos fuera de muestra, pero no sale de
   primeros principios.</li>
-<li><strong>Stuff+ ve la caída de velocidad, que también refleja el aire.</strong> Lo probamos sin las tres variables de
-  frenado y entrenando sólo con juegos a nivel del mar. El orden de los tipos se mantiene en los dos casos
-  (correlación de rangos 0.96), pero la pérdida de la liga baja de 8.3 a 6.2 y 5.1 puntos. La versión de nivel
-  del mar ya no le ganaba al modelo nulo con lanzadores nuevos, y por eso no es la principal (Anexo C).</li>
-<li><strong>El simulador exagera la pérdida.</strong> Califica una forma típica y no la población, y sus pérdidas salen unos
-  4 puntos mayores que las de la tabla por tipo. Sirve para comparar lanzamientos entre sí.</li>
+<li><strong>Stuff+ ve la caída de velocidad, que también refleja el aire.</strong> El Anexo C muestra la sensibilidad al retirar las tres variables de frenado y al entrenar sólo a nivel del mar. Las pérdidas absolutas dependen de esa especificación.</li>
+<li><strong>La validación no es anidada de todo el pipeline.</strong> Objetivos y baseline de producción usan tablas globales. Hay 6,346 turnos reconstruidos sin evento terminal entre 171,020, cuyo tratamiento puede afectar esas tablas. No se completó una sensibilidad por turnos íntegros.</li>
+<li><strong>Producción y evaluación son distintos.</strong> Las tablas descriptivas y el simulador usan el modelo final ajustado con todos los datos. Las métricas de validación usan predicciones fuera de muestra. Un ranking de producción no es validación independiente.</li>
+<li><strong>El simulador representa una forma típica.</strong> Sus 49 variaciones no equivalen a la población completa de un tipo. Las diferencias con las medias exportadas se deben revisar como discrepancias de representación, sin ajustar la dispersión para forzar coincidencia.</li>
 </ul>
-<h2>9. Reproducción</h2>
+<section class="bloque-ancho"><h2>9. Reproducción</h2>
 <p>El código, los modelos entrenados y los pasos para correr todo están en
-<code>github.com/dulongski/diablos-hackathon</code>. El dashboard corre completo en el navegador.</p>
+<a href="https://github.com/dulongski/diablos-hackathon/tree/claude/confident-ptolemy-sz210m">la rama de entrega del repositorio</a>. El dashboard corre completo en el navegador.</p></section>
 <h2>Referencias</h2>
 <ul>
 <li>Athey, S., Tibshirani, J. y Wager, S. (2019). Generalized random forests. <em>Annals of Statistics</em>, 47(2).</li>
@@ -675,7 +615,7 @@ pide slider antes que cambio. El Causal Forest táctico encuentra 10 celdas firm
 <h2 class="anexo">Anexo A · Modelos de componente</h2>
 <p>Estos modelos explican de dónde sale el valor y no entran en Stuff+. La habilidad mide cuánto mejoran
 sobre la tasa base, con holdout de lanzador.</p>
-<figure class="g-fig"><svg viewBox="0 0 460 256" class="g"><text x="138" y="22.0" text-anchor="end" class="et">Strike cantado</text><rect x="150" y="9" width="240.0" height="14" rx="4" fill="#2E6FA6"/><text x="400.0" y="22.0" class="val" fill="#2E6FA6">+72.7 %</text><text x="138" y="54.0" text-anchor="end" class="et">Swing</text><rect x="150" y="41" width="133.3" height="14" rx="4" fill="#2E6FA6"/><text x="293.3" y="54.0" class="val" fill="#2E6FA6">+40.4 %</text><text x="138" y="86.0" text-anchor="end" class="et">Persecución</text><rect x="150" y="73" width="116.5" height="14" rx="4" fill="#2E6FA6"/><text x="276.5" y="86.0" class="val" fill="#2E6FA6">+35.3 %</text><text x="138" y="118.0" text-anchor="end" class="et">Swing fallido</text><rect x="150" y="105" width="64.1" height="14" rx="4" fill="#2E6FA6"/><text x="224.1" y="118.0" class="val" fill="#2E6FA6">+19.4 %</text><text x="138" y="150.0" text-anchor="end" class="et">Contacto débil</text><rect x="150" y="137" width="33.2" height="14" rx="4" fill="#2E6FA6"/><text x="193.2" y="150.0" class="val" fill="#2E6FA6">+10.1 %</text><text x="138" y="182.0" text-anchor="end" class="et">Rodado</text><rect x="150" y="169" width="20.8" height="14" rx="4" fill="#2E6FA6"/><text x="180.8" y="182.0" class="val" fill="#2E6FA6">+6.3 %</text><text x="138" y="214.0" text-anchor="end" class="et">Contacto duro</text><rect x="150" y="201" width="17.1" height="14" rx="4" fill="#2E6FA6"/><text x="177.1" y="214.0" class="val" fill="#2E6FA6">+5.2 %</text><text x="138" y="246.0" text-anchor="end" class="et">Barril</text><rect x="150" y="233" width="2.7" height="14" rx="4" fill="#2E6FA6"/><text x="162.7" y="246.0" class="val" fill="#2E6FA6">+0.8 %</text></svg><figcaption>Habilidad de cada modelo de componente, cuánto mejora su Brier sobre la tasa base, con lanzadores que no vio.</figcaption></figure>
+<figure class="g-fig"><svg viewBox="0 0 460 256" class="g"><text x="138" y="22.0" text-anchor="end" class="et">Strike cantado</text><rect x="150" y="9" width="216.0" height="14" rx="4" fill="#2E6FA6"/><text x="376.0" y="22.0" class="val" fill="#2E6FA6">+72.7 %</text><text x="138" y="54.0" text-anchor="end" class="et">Swing</text><rect x="150" y="41" width="120.0" height="14" rx="4" fill="#2E6FA6"/><text x="280.0" y="54.0" class="val" fill="#2E6FA6">+40.4 %</text><text x="138" y="86.0" text-anchor="end" class="et">Persecución</text><rect x="150" y="73" width="104.9" height="14" rx="4" fill="#2E6FA6"/><text x="264.9" y="86.0" class="val" fill="#2E6FA6">+35.3 %</text><text x="138" y="118.0" text-anchor="end" class="et">Swing fallido</text><rect x="150" y="105" width="57.7" height="14" rx="4" fill="#2E6FA6"/><text x="217.7" y="118.0" class="val" fill="#2E6FA6">+19.4 %</text><text x="138" y="150.0" text-anchor="end" class="et">Contacto débil</text><rect x="150" y="137" width="29.9" height="14" rx="4" fill="#2E6FA6"/><text x="189.9" y="150.0" class="val" fill="#2E6FA6">+10.1 %</text><text x="138" y="182.0" text-anchor="end" class="et">Rodado</text><rect x="150" y="169" width="18.7" height="14" rx="4" fill="#2E6FA6"/><text x="178.7" y="182.0" class="val" fill="#2E6FA6">+6.3 %</text><text x="138" y="214.0" text-anchor="end" class="et">Contacto duro</text><rect x="150" y="201" width="15.4" height="14" rx="4" fill="#2E6FA6"/><text x="175.4" y="214.0" class="val" fill="#2E6FA6">+5.2 %</text><text x="138" y="246.0" text-anchor="end" class="et">Barril</text><rect x="150" y="233" width="2.4" height="14" rx="4" fill="#2E6FA6"/><text x="162.4" y="246.0" class="val" fill="#2E6FA6">+0.8 %</text></svg><figcaption>Habilidad de cada modelo de componente, cuánto mejora su Brier sobre la tasa base, con lanzadores que no vio.</figcaption></figure>
 
 <p>El arsenal se nota donde actúa su mecanismo, en el swing fallido. Ahí la habilidad sube de 4.5 % con
 sólo la física a 18.9 % con ubicación y a 19.4 % con arsenal y secuencia.</p>
@@ -718,13 +658,13 @@ sólo la física a 18.9 % con ubicación y a 19.4 % con arsenal y secuencia.</p>
 </tr>
 <tr>
 <td>Intervalo de confianza de 95 %</td>
-<td>El rango donde está el valor real con alta probabilidad. Si no cruza el cero, el efecto no es casualidad</td>
+<td>Rango de incertidumbre de un procedimiento de remuestreo. No incorpora sesgos de medición, selección o especificación</td>
 </tr>
 </tbody>
 </table>
 <h2>Anexo C · Pruebas de robustez</h2>
-<p>Estas pruebas responden las dudas que un jurado técnico tendría al ver un <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span> bajo o un efecto de la altura grande. Todas usan predicciones fuera de muestra y los intervalos de 95 % salen de un bootstrap por lanzador. </p>
-<p><strong>Holdout de parque con física.</strong> Entrenamos con nivel del mar y predijimos los 183,267 lanzamientos de altitud extrema de 897 lanzadores que el modelo no vio, cada uno con su forma real y con la misma pelota volada a nivel del mar.</p>
+<p>Estas pruebas responden las dudas que un jurado técnico tendría al ver un <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span> bajo o un efecto de la altura grande. Las predicciones excluyen las filas evaluadas del ajuste del calificador. Las tablas globales del objetivo y la preparación física limitan el aislamiento estadístico. Los intervalos de 95 % usan remuestreo por lanzador. </p>
+<p><strong>Holdout de categoría de altitud con física.</strong> Entrenamos con nivel del mar y predijimos los 183,267 lanzamientos de altitud extrema de 897 lanzadores que el modelo no vio, cada uno con su forma real y con la misma pelota volada a nivel del mar.</p>
 <table>
 <thead>
 <tr>
@@ -736,22 +676,22 @@ sólo la física a 18.9 % con ubicación y a 19.4 % con arsenal y secuencia.</p>
 <tbody>
 <tr>
 <td>Exceso observado sobre lo que espera un modelo de nivel del mar</td>
-<td class="n">+1.49</td>
-<td>+1.34 a +1.66</td>
+<td class="n">+1.82</td>
+<td>+1.68 a +2.00</td>
 </tr>
 <tr>
-<td>Parte que explica el vuelo del lanzamiento</td>
-<td class="n">+0.57</td>
-<td>+0.54 a +0.61</td>
+<td>Cambio predicho al transformar el vuelo</td>
+<td class="n">+0.91</td>
+<td>+0.86 a +0.96</td>
 </tr>
 <tr>
-<td>Resto, sobre todo el batazo</td>
+<td>Residuo sin atribución causal</td>
 <td class="n">+0.92</td>
 <td>+0.76 a +1.10</td>
 </tr>
 </tbody>
 </table>
-<p>La física del lanzamiento explica 39 % del exceso (IC 34 a 44 %). Dentro de la altura el modelo ordena con correlación +0.017 (IC +0.012 a +0.022), y su <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span> con el nivel corregido es −0.00094. Por tipo de lanzamiento, el exceso observado no sigue el orden de la pérdida física (correlación de rangos −0.57, 7 tipos). El exceso por tipo lo domina el batazo y en varios tipos hay pocos lanzadores, así que la física se lee en el total, no tipo por tipo.</p>
+<p>La razón entre el cambio físico predicho y el exceso total es 50 % (IC 45 a 55 %). Es una descomposición dependiente del modelo, no una fracción causal identificada. Dentro de la altura la correlación es +0.017 (IC +0.012 a +0.022), y su <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span> con el nivel corregido es −0.00094. Por tipo de lanzamiento, el exceso observado no sigue el orden de la pérdida física (correlación de rangos −0.25, 7 tipos). El exceso por tipo también puede reflejar selección y calibración. En varios tipos hay pocos lanzadores.</p>
 <p><strong>Discriminación en carreras.</strong> Diferencia en carreras por cada 100 lanzamientos entre el 10 % peor y el 10 % mejor calificado, fuera de muestra.</p>
 <table>
 <thead>
@@ -779,8 +719,8 @@ sólo la física a 18.9 % con ubicación y a 19.4 % con arsenal y secuencia.</p>
 </tr>
 </tbody>
 </table>
-<p><strong>Calidad contra mezcla de lanzamientos.</strong> Correlación entre dos mitades al azar de los lanzamientos de cada lanzador. Stuff+ tal cual 0.988, contra el promedio de su tipo 0.989 (IC 0.987 a 0.990), sólo rectas 0.990, sólo la mezcla de tipos 0.967 y carreras reales 0.293.</p>
-<p><strong>Año siguiente.</strong> 336 pares de temporadas seguidas de 250 lanzadores.</p>
+<p><strong>Calidad contra mezcla de lanzamientos.</strong> Repetibilidad entre dos mitades intercaladas del mismo historial, sin separación temporal. Correlación de los lanzamientos de cada lanzador. Stuff+ tal cual 0.988, contra el promedio de su tipo 0.989 (IC 0.987 a 0.990), sólo rectas 0.990, sólo la mezcla de tipos 0.967 y carreras reales 0.293.</p>
+<p><strong>Año siguiente, análisis retrospectivo.</strong> 336 pares de temporadas seguidas de 250 lanzadores.</p>
 <table>
 <thead>
 <tr>
@@ -792,22 +732,22 @@ sólo la física a 18.9 % con ubicación y a 19.4 % con arsenal y secuencia.</p>
 <tbody>
 <tr>
 <td>Stuff+</td>
-<td>+0.219 (+0.11 a +0.32)</td>
+<td>+0.219 (+0.12 a +0.32)</td>
 <td>+0.165 (+0.05 a +0.27)</td>
 </tr>
 <tr>
 <td>Sus carreras</td>
 <td>+0.184 (+0.09 a +0.28)</td>
-<td>+0.164 (+0.08 a +0.24)</td>
+<td>+0.164 (+0.08 a +0.25)</td>
 </tr>
 <tr>
 <td>Su swing fallido</td>
 <td>+0.214 (+0.11 a +0.31)</td>
-<td>+0.555 (+0.45 a +0.64)</td>
+<td>+0.555 (+0.46 a +0.64)</td>
 </tr>
 </tbody>
 </table>
-<p>Sumar Stuff+ a las carreras pasadas sube el <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span> de las carreras futuras en 2.7 puntos porcentuales (IC 0.4 a 7.1).</p>
+<p>Evaluada con regresiones fuera de muestra agrupadas por lanzador, sumar Stuff+ cambia el <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span> en 2.7 puntos porcentuales (IC −0.6 a 5.8). Las puntuaciones históricas originales usan modelos entrenados con otros lanzadores de todos los años. No es validación prospectiva del pipeline completo.</p>
 <p><strong>La combinación ponderada que sugiere el reto.</strong> 9 modelos de componente con las variables de Stuff+, incluida la probabilidad de out en el turno, combinados con pesos aprendidos por regresión fuera de muestra.</p>
 <table>
 <thead>
@@ -850,49 +790,49 @@ sólo la física a 18.9 % con ubicación y a 19.4 % con arsenal y secuencia.</p>
 <tbody>
 <tr>
 <td>Recta</td>
-<td class="n">−11.6</td>
-<td class="n">−10.6</td>
-<td class="n">−7.7</td>
+<td class="n">−13.7</td>
+<td class="n">−12.5</td>
+<td class="n">−9.6</td>
 </tr>
 <tr>
 <td>Slider</td>
 <td class="n">−5.3</td>
 <td class="n">−1.4</td>
-<td class="n">−3.3</td>
+<td class="n">−3.5</td>
 </tr>
 <tr>
 <td>Curva</td>
-<td class="n">−6.2</td>
+<td class="n">−6.3</td>
 <td class="n">−4.4</td>
 <td class="n">−4.0</td>
 </tr>
 <tr>
 <td>Cambio</td>
-<td class="n">−7.3</td>
+<td class="n">−8.1</td>
+<td class="n">−5.5</td>
 <td class="n">−4.5</td>
-<td class="n">−3.9</td>
 </tr>
 <tr>
 <td>Sinker</td>
-<td class="n">−8.7</td>
-<td class="n">−7.5</td>
-<td class="n">−5.0</td>
+<td class="n">−9.9</td>
+<td class="n">−8.5</td>
+<td class="n">−5.7</td>
 </tr>
 <tr>
 <td>Cutter</td>
-<td class="n">−3.0</td>
-<td class="n">+0.5</td>
-<td class="n">−0.8</td>
+<td class="n">−3.2</td>
+<td class="n">+0.3</td>
+<td class="n">−1.3</td>
 </tr>
 <tr>
 <td>Splitter</td>
-<td class="n">−4.5</td>
-<td class="n">−1.6</td>
-<td class="n">−2.7</td>
+<td class="n">−4.7</td>
+<td class="n">−2.0</td>
+<td class="n">−3.1</td>
 </tr>
 </tbody>
 </table>
-<p>El orden de los tipos coincide con correlación de rangos 0.96 sin frenado y 0.96 entrenando sólo a nivel del mar.</p>
+<p>El orden de los tipos coincide con correlación de rangos 0.96 sin frenado y 1.00 entrenando sólo a nivel del mar.</p>
 <p><strong>Mejoras que probamos y no cambian el resultado.</strong> Calificamos cada batazo por lo que se espera de su velocidad de salida y su ángulo, no por si fue hit, metimos dentro de Stuff+ las diferencias contra la recta del mismo lanzador, dividimos el frenado entre el aire del juego y sumamos variables de física (movimiento en dirección del brazo, desfase entre el eje de giro y el movimiento, consistencia del punto de salida). Misma validación por lanzador, todo medido contra las carreras reales.</p>
 <table>
 <thead>
@@ -970,5 +910,5 @@ sólo la física a 18.9 % con ubicación y a 19.4 % con arsenal y secuencia.</p>
 </tr>
 </tbody>
 </table>
-<p>Ninguna se separa de la que usamos más allá del ruido. La mejor diferencia del 10 % (dirección del brazo) queda dentro del intervalo de la nuestra y empeora el año siguiente. Stuff+ ya está en el techo de lo que la física del lanzamiento sola predice de un lanzamiento suelto. Lo que falta para un <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span> alto es dónde cayó la pelota, y eso por definición no entra en Stuff+.</p>
+<p>Estas pruebas exploratorias no justifican sustituir el modelo servido. La diferencia del 10 % (dirección del brazo) queda dentro del intervalo de producción. La comparación no identifica un techo de capacidad predictiva. Sus métricas temporales son retrospectivas y comparten los límites de preparación de objetivos.</p>
 <p><em>Usamos los datos de la LMB sólo para esta competencia. Este documento presenta resultados, no datos.</em></p></div></body></html>

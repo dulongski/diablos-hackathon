@@ -1,5 +1,6 @@
 /* Vocabulario compartido: nombres de lanzamientos y cómo se lee un Stuff+ en palabras. */
 import { L } from './settings';
+import scale from '../public/data/scale.json';
 
 const NOMBRES: Record<string, [string, string]> = {
   'Four-Seam': ['Recta', 'Four-seam'],
@@ -36,7 +37,7 @@ export function plusEnPalabras(v: number) {
  * carrera y una carrera por cada 100 lanzamientos. Si el modelo se reentrena y cambia su escala, se
  * recalculan aquí y nada más.
  */
-export const CARRERAS_POR_PUNTO = 0.1353;
+export const CARRERAS_POR_PUNTO = scale.stuff.scale * 10;
 export const CORTE_AGUANTA = -0.5 / CARRERAS_POR_PUNTO;   // ≈ −3.7 puntos
 export const CORTE_MUCHO = -1.0 / CARRERAS_POR_PUNTO;     // ≈ −7.4 puntos
 

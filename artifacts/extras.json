@@ -9,57 +9,57 @@
    {
     "tipo": "Cutter",
     "n": 26468,
-    "mar": 102.1227,
-    "media": 100.5665,
-    "extrema": 99.1587
+    "mar": 101.7038,
+    "media": 99.7754,
+    "extrema": 98.4882
    },
    {
     "tipo": "Splitter",
     "n": 7289,
-    "mar": 106.1625,
-    "media": 103.6144,
-    "extrema": 101.7262
+    "mar": 106.989,
+    "media": 104.2478,
+    "extrema": 102.2507
    },
    {
     "tipo": "Slider",
     "n": 139717,
-    "mar": 105.9878,
-    "media": 102.5364,
-    "extrema": 100.6863
+    "mar": 106.1602,
+    "media": 102.6887,
+    "extrema": 100.8164
    },
    {
     "tipo": "Curva",
     "n": 54024,
-    "mar": 104.0332,
-    "media": 99.759,
-    "extrema": 97.8374
+    "mar": 104.4288,
+    "media": 100.1476,
+    "extrema": 98.1195
    },
    {
     "tipo": "Cambio",
     "n": 78925,
-    "mar": 101.491,
-    "media": 96.2101,
-    "extrema": 94.178
+    "mar": 102.2589,
+    "media": 96.3931,
+    "extrema": 94.1641
    },
    {
     "tipo": "Sinker",
     "n": 110899,
-    "mar": 101.3305,
-    "media": 94.4528,
-    "extrema": 92.5618
+    "mar": 102.4668,
+    "media": 94.9874,
+    "extrema": 92.5833
    },
    {
     "tipo": "Recta",
     "n": 217618,
-    "mar": 102.5139,
-    "media": 93.8992,
-    "extrema": 90.9213
+    "mar": 105.605,
+    "media": 95.6764,
+    "extrema": 91.9159
    }
   ],
   "liga": {
-   "mar": 103.0986,
-   "media": 97.0711,
-   "extrema": 94.8166
+   "mar": 104.5155,
+   "media": 97.8371,
+   "extrema": 95.1902
   }
  },
  "shap": {

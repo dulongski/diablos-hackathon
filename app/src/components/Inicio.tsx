@@ -48,12 +48,12 @@ export function Inicio({ j, c, irA, escena }: { j: Jurado; c: Causal; irA: (v: V
     },
     {
       q: '¿Se cumplen las hipótesis que plantea el reto?',
-      a: <>H1 y H4 se confirman, y H2 y H3 en parte. Cada una con su intervalo de confianza.</>,
+      a: <>H1 concuerda con el modelo físico; H2, H3 y H4 tienen matices. Revisamos sensibilidad, intervalos y límites de cada prueba.</>,
       ent: 'Hipótesis H1 a H4', v: 'hipotesis',
     },
     {
-      q: '¿Qué hubiera pasado con otra decisión?',
-      a: <>Un Causal Forest mide en carreras reales el costo de la altura, <b>{sg(c.ate, 2)}</b> por cada 100 lanzamientos, y qué lanzamiento conviene en cada conteo.</>,
+      q: '¿Qué asociaciones aparecen entre decisiones y resultados?',
+      a: <>Un Causal Forest explora la asociación ajustada con la altura, <b>{sg(c.ate, 2)}</b> por cada 100 lanzamientos, sin identificar una política causal por conteo.</>,
       ent: 'Modelo secundario · Causal Forest', v: 'causal',
     },
     {
@@ -85,12 +85,11 @@ export function Inicio({ j, c, irA, escena }: { j: Jurado; c: Causal; irA: (v: V
           </div>
           <div className="respuesta-corta">
             <p className="rc-frase"><span className="etiqueta">La respuesta corta</span>
-              La altitud apenas toca al lanzamiento malo y <b>borra la ventaja del bueno</b>. En casa conviene el lanzador que
-              engaña sin depender del movimiento, con cutter, slider y splitter, y que provoca rodados.</p>
+              El modelo estima que la altura <b>reduce la ventaja de algunas formas de lanzamiento</b>. Cutter, slider y splitter aparecen como perfiles para explorar, junto con la capacidad de provocar rodados. Son hipótesis para evaluación deportiva, condicionadas al modelo y a su incertidumbre.</p>
             <div className="rc-cifras">
               <div><b className="num d-mucho">{sg(promedioLiga, 1)}</b><span>puntos de Stuff+ pierde el lanzamiento promedio en el Harp Helú</span></div>
-              <div><b className="num d-aguanta">{nf(aguantan)} de {nf(j.pitchers_n)}</b><span>lanzadores aguantan la altura, pierden menos de media carrera cada 100 lanzamientos</span></div>
-              <div><b className="num d-mucho">{sg(c.ate, 2)}</b><span>carreras más por cada 100 lanzamientos, medido en el marcador</span></div>
+              <div><b className="num d-aguanta">{nf(aguantan)} de {nf(j.pitchers_n)}</b><span>lanzadores con pérdida estimada menor a media carrera cada 100 lanzamientos según Stuff+</span></div>
+              <div><b className="num d-mucho">{sg(c.ate, 2)}</b><span>carreras por cada 100 lanzamientos: asociación observacional ajustada, no efecto causal identificado</span></div>
             </div>
           </div>
           <p className="inicio-anexo">Si tienes cinco minutos, recorre <button type="button" className="enlace" onClick={() => irA('lanzadores')}>Lanzadores</button>, <button type="button" className="enlace" onClick={() => irA('simulador')}>Simulador</button> y <button type="button" className="enlace" onClick={() => irA('metodologia')}>Metodología</button>.
@@ -141,8 +140,8 @@ export function Inicio({ j, c, irA, escena }: { j: Jurado; c: Causal; irA: (v: V
               </article>
               <article className="respuesta">
                 <span className="respuesta-n">El perfil a buscar</span>
-                <h3>Cutter, slider y splitter aguantan</h3>
-                <p>Engañan por parecerse a la recta al salir de la mano, no por moverse mucho, así que el aire delgado les quita poco. Por ejemplo, <b>{fichaje.nombre}</b> ({fichaje.arsenal.toLowerCase()}) vale {nf(fichaje.stuff_mar, 1)} a nivel del mar y {nf(fichaje.stuff_hh, 1)} en casa.</p>
+                <h3>Perfiles para contrastar con el club</h3>
+                <p>El modelo estima pérdidas distintas según la forma y el repertorio; estos resultados no prueban un mecanismo universal de engaño. Como ejemplo de la selección por Stuff+, pérdida estimada y constancia, <b>{fichaje.nombre}</b> ({fichaje.arsenal.toLowerCase()}) vale {nf(fichaje.stuff_mar, 1)} a nivel del mar y {nf(fichaje.stuff_hh, 1)} en casa.</p>
               </article>
               <article className="respuesta">
                 <span className="respuesta-n">En casa</span>

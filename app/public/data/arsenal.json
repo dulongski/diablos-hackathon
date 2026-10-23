@@ -6,14 +6,14 @@
       "mar": {
         "ivb": 17.04,
         "hb": 5.61,
-        "plus": 102.5
+        "plus": 105.6
       },
       "alt": {
         "ivb": 13.09,
         "hb": 4.02,
-        "plus": 90.9
+        "plus": 91.9
       },
-      "delta_plus": -11.59
+      "delta_plus": -13.69
     },
     {
       "tipo": "Sinker",
@@ -21,14 +21,14 @@
       "mar": {
         "ivb": 10.3,
         "hb": 8.41,
-        "plus": 101.3
+        "plus": 102.5
       },
       "alt": {
         "ivb": 7.83,
         "hb": 6.06,
         "plus": 92.6
       },
-      "delta_plus": -8.77
+      "delta_plus": -9.88
     },
     {
       "tipo": "Cutter",
@@ -36,14 +36,14 @@
       "mar": {
         "ivb": 11.04,
         "hb": -0.8,
-        "plus": 102.1
+        "plus": 101.7
       },
       "alt": {
         "ivb": 8.38,
         "hb": -0.61,
-        "plus": 99.2
+        "plus": 98.5
       },
-      "delta_plus": -2.96
+      "delta_plus": -3.22
     },
     {
       "tipo": "Slider",
@@ -51,14 +51,14 @@
       "mar": {
         "ivb": 3.09,
         "hb": -2.31,
-        "plus": 106.0
+        "plus": 106.2
       },
       "alt": {
         "ivb": 2.17,
         "hb": -1.76,
-        "plus": 100.7
+        "plus": 100.8
       },
-      "delta_plus": -5.3
+      "delta_plus": -5.34
     },
     {
       "tipo": "Curveball",
@@ -66,14 +66,14 @@
       "mar": {
         "ivb": -8.0,
         "hb": -3.64,
-        "plus": 104.0
+        "plus": 104.4
       },
       "alt": {
         "ivb": -6.49,
         "hb": -2.7,
-        "plus": 97.8
+        "plus": 98.1
       },
-      "delta_plus": -6.2
+      "delta_plus": -6.31
     },
     {
       "tipo": "Changeup",
@@ -81,14 +81,14 @@
       "mar": {
         "ivb": 7.2,
         "hb": 5.26,
-        "plus": 101.5
+        "plus": 102.3
       },
       "alt": {
         "ivb": 5.37,
         "hb": 3.79,
         "plus": 94.2
       },
-      "delta_plus": -7.31
+      "delta_plus": -8.09
     },
     {
       "tipo": "Splitter",
@@ -96,14 +96,14 @@
       "mar": {
         "ivb": 4.29,
         "hb": 6.32,
-        "plus": 106.2
+        "plus": 107.0
       },
       "alt": {
         "ivb": 3.09,
         "hb": 4.48,
-        "plus": 101.7
+        "plus": 102.3
       },
-      "delta_plus": -4.44
+      "delta_plus": -4.74
     }
   ]
 }

@@ -89,6 +89,8 @@ export interface Hipotesis {
     importancia: { grupo: string; peso: number }[]; rango_spinrate: number; n_features: number;
     experimento: {
       stuff_por_100rpm: number; stuff_por_pulgada: number;
+      giro?: { rpm: number; mar: number; hh: number }[];
+      sensibilidad_giro?: { meanAbsolutePer100: number; minPer100: number; maxPer100: number; endpointPer100: number } | null;
       parejas: Record<'A' | 'B', { rpm: number; ivb: number; mar: number; hh: number }>;
     };
   };

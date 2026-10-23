@@ -1,0 +1,82 @@
+{
+  "status": "passed_with_documented_limits",
+  "checks": [
+    {
+      "check": "json_finito",
+      "passed": true,
+      "detail": 13
+    },
+    {
+      "check": "copias_canonicas",
+      "passed": true,
+      "detail": 8
+    },
+    {
+      "check": "fisica_exportada",
+      "passed": true,
+      "detail": "Todos los parámetros canónicos se conservan"
+    },
+    {
+      "check": "build_con_datos_finales",
+      "passed": true,
+      "detail": 13
+    },
+    {
+      "check": "modelo_escala_oof_sin_cambios",
+      "passed": true,
+      "detail": 14
+    },
+    {
+      "check": "seleccion_lanzadores",
+      "passed": true,
+      "detail": {
+        "total": 561,
+        "aguantan": 7,
+        "pierden_mas_de_una_carrera": 422
+      }
+    },
+    {
+      "check": "arsenal_vs_tabla_general",
+      "passed": true,
+      "detail": "Siete tipos, misma población y transferencia"
+    },
+    {
+      "check": "tres_entornos_vs_tabla_general",
+      "passed": true,
+      "detail": "Mismas medias por tipo"
+    },
+    {
+      "check": "documentos_generados",
+      "passed": true,
+      "detail": "Sin tokens de cifras pendientes y PDF presentes"
+    },
+    {
+      "check": "html_autonomo_estructura",
+      "passed": true,
+      "detail": "13 JSON idénticos al build; ejecución file no verificada por política del navegador"
+    }
+  ],
+  "browser_qa": {
+    "home": "−9.3, 7 de 561, +1.56 observacional",
+    "validation": "Auditoría visible, RMSE 0.267997 vs 0.268111",
+    "simulator": "A nivel del mar ambos scores99.9 y cambio0.0; render 3D visible",
+    "section_smoke": [
+      "Inicio",
+      "Metodología",
+      "Validación",
+      "Lanzadores",
+      "Arsenal y perfil",
+      "Hipótesis",
+      "Causal Forest",
+      "Simulador",
+      "Anexo"
+    ],
+    "invalid_number_or_console_error_observed": false,
+    "coverage_limits": "Inspección de escritorio y controles representativos; no todas las combinaciones, no responsive móvil, no ejecución directa file del HTML autónomo."
+  },
+  "publication": {
+    "existing_url": "https://claude.ai/artifact/1HXhuyBtkDd6szvLv9M7xo",
+    "updated": false,
+    "reason": "Usuario solicitó preparar archivos para el enlace existente. No hay carga directa en los controles de propietario y la sesión Claude está al límite."
+  }
+}

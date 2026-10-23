@@ -167,10 +167,10 @@ def tres_entornos(df: pd.DataFrame) -> dict:
     aero = physics.decompose(df)
     kw = dict(rho_observed=df.rho_game.to_numpy(), aero=aero,
               magnus_gamma=phys["magnus_gamma_vertical"], magnus_gamma_h=phys["magnus_gamma_horizontal"])
-    ref = physics.transfer_shape(df, 1.0, **kw)
+    ref = physics.observed_shape(df)
 
     def puntuar(rho):
-        X = physics.transfer_features(df[feats], ref, physics.transfer_shape(df, rho, **kw) if rho != 1.0 else ref)
+        X = physics.transfer_features(df[feats], ref, physics.transfer_shape(df, rho, **kw))
         return 100.0 + 10.0 * (-bst.predict(X) - scale["center"]) / scale["scale"]
 
     cub = phys["rho_por_cubeta"]

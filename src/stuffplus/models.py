@@ -125,6 +125,23 @@ def train(
     return fit
 
 
+def group_ids(values: pd.Series) -> np.ndarray:
+    """Preserva un único grupo desconocido también con StringDtype de pandas 3."""
+    return values.astype("string").fillna("__desconocido__").to_numpy(dtype=str)
+
+
+def fold_run_values(train_df: pd.DataFrame, test_df: pd.DataFrame):
+    """Targets y baseline por conteo ajustados solo con filas de entrenamiento."""
+    from . import sequence, targets
+    train_events = sequence.pa_outcome(train_df)
+    reference = targets.fit_reference(train_df, train_events)
+    tr, _ = targets.run_values(train_df, train_events, reference=reference)
+    te, _ = targets.run_values(test_df, sequence.pa_outcome(test_df), reference=reference)
+    means = tr.groupby("count").rv.mean()
+    baseline = te["count"].map(means).fillna(tr.rv.mean()).to_numpy(float)
+    return tr, te, baseline
+
+
 def cross_val(
     df: pd.DataFrame,
     features: list[str],
@@ -134,6 +151,7 @@ def cross_val(
     params: dict | None = None,
     n_rounds: int = N_ROUNDS,
     train_mask: np.ndarray | None = None,
+    rebuild_rv: bool = False,
 ) -> tuple[np.ndarray, dict]:
     """Validacion cruzada agrupada: ningun pitcher aparece en entrenamiento y prueba a la vez.
 
@@ -149,17 +167,31 @@ def cross_val(
     X, y = df.loc[m, features], df.loc[m, target].to_numpy()
     # Los pitches sin pitcher identificado (0.2% del dataset) forman su propio grupo, para
     # que no se repartan entre pliegues y contaminen el holdout.
-    g = df.loc[m, groups].astype(str).fillna("__desconocido__").to_numpy()
+    g = group_ids(df.loc[m, groups])
 
     oof = np.full(len(df), np.nan)
+    eval_y, baseline = y.copy(), np.full(len(y), np.nan)
     idx = np.flatnonzero(m)
     puede = np.ones(len(idx), dtype=bool) if train_mask is None else np.asarray(train_mask)[idx]
     for tr, te in GroupKFold(n_splits=n_splits).split(X, y, g):
         tr = tr[puede[tr]]
-        b = lgb.train(p, lgb.Dataset(X.iloc[tr], y[tr]), num_boost_round=n_rounds)
+        if rebuild_rv:
+            if target != "rv":
+                raise ValueError("rebuild_rv only applies to rv")
+            dtr, dte, base = fold_run_values(df.iloc[idx[tr]], df.iloc[idx[te]])
+            train_y = dtr.rv.to_numpy()
+            eval_y[te], baseline[te] = dte.rv.to_numpy(), base
+        else:
+            train_y = y[tr]
+        b = lgb.train(p, lgb.Dataset(X.iloc[tr], train_y), num_boost_round=n_rounds)
         oof[idx[te]] = b.predict(X.iloc[te])
 
-    return oof, score(y, oof[idx])
+    metrics = score(eval_y, oof[idx])
+    if rebuild_rv:
+        metrics["baseline_nulo_por_conteo"] = score(eval_y, baseline)
+        metrics["target_reference"] = "training_fold_only"
+        metrics["limits"] = "Arsenal features and physics calibration remain global; not fully nested preprocessing."
+    return oof, metrics
 
 
 def score(y: np.ndarray, pred: np.ndarray) -> dict:
@@ -193,3 +225,29 @@ def calibration_table(y: np.ndarray, p: np.ndarray, bins: int = 10) -> pd.DataFr
     return d.groupby("bin", observed=True).agg(
         predicha=("p", "mean"), observada=("y", "mean"), n=("y", "size")
     ).reset_index(drop=True)
+
+
+def incremental_oof(
+    y: np.ndarray, baseline_x: np.ndarray, extra_x: np.ndarray,
+    groups: np.ndarray, n_splits: int = 4,
+) -> tuple[np.ndarray, np.ndarray]:
+    """Predicciones OLS anidadas, con cada pitcher fuera de ambos ajustes.
+
+    Las filas incompletas conservan NaN. Es validación de la regresión agregada,
+    no vuelve prospectivo un score de entrada entrenado retrospectivamente.
+    """
+    y, base, extra = (np.asarray(a, dtype=float) for a in (y, baseline_x, extra_x))
+    groups = group_ids(pd.Series(groups))
+    ok = np.isfinite(y) & np.isfinite(base) & np.isfinite(extra)
+    pos = np.flatnonzero(ok)
+    p1, p2 = np.full(len(y), np.nan), np.full(len(y), np.nan)
+    folds = min(n_splits, len(np.unique(groups[ok])))
+    if folds < 2:
+        raise ValueError("At least two independent pitcher groups are required")
+    X1 = np.c_[np.ones(len(y)), base]
+    X2 = np.c_[X1, extra]
+    for tr, te in GroupKFold(folds).split(pos, groups=groups[ok]):
+        tri, tei = pos[tr], pos[te]
+        p1[tei] = X1[tei] @ np.linalg.lstsq(X1[tri], y[tri], rcond=None)[0]
+        p2[tei] = X2[tei] @ np.linalg.lstsq(X2[tri], y[tri], rcond=None)[0]
+    return p1, p2

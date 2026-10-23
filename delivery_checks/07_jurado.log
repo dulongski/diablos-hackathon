@@ -1,0 +1,68 @@
+cargando…
+C1 calibración…
+C1 estabilidad y futuro…
+  estabilidad entre mitades stuff 0.988, location 0.818, pitching 0.836, rv 0.293 (602 lanzadores)
+  predice carreras 2026 stuff +0.218, location +0.185, pitching +0.247, carreras_pasadas +0.196 (114 lanzadores)
+E1 pitchers…
+★ casa contra fuera…
+E1 arsenales…
+E4 mapa…
+
+=== C1: ¿distingue buenos de malos? (fuera de muestra) ===
+  tramo      n  carreras_100  carreras_pred_100  whiff_swing  hard_bip  hr_bip
+   < 80  16663         1.855              3.316        0.166     0.272   0.045
+  80-90  98683         1.285              1.967        0.185     0.253   0.043
+ 90-100 212677         0.534              0.714        0.221     0.239   0.041
+100-110 203208        -0.337             -0.545        0.255     0.213   0.038
+110-120  87256        -1.274             -1.810        0.304     0.196   0.036
+  120 +  16515        -2.486             -3.086        0.379     0.172   0.029
+
+pitchers en tabla: 561 | con ≥120 lanzamientos en ambos entornos: 333
+correlación delta del modelo vs delta observado de carreras: 0.1350368709720391
+
+=== los que más pierden en el Harp Helú (modelo) ===
+       nombre                         arsenal  stuff_mar  stuff_hh  delta_hh  sd_juego
+ Lanzador 602 Recta · Cambio · Sinker · Curva     108.22     89.70    -18.52      9.38
+ Lanzador 174                  Recta · Cambio     113.76     95.26    -18.50      5.60
+Lanzador 1133         Recta · Sinker · Slider     115.58     97.95    -17.64      6.75
+ Lanzador 297                   Recta · Curva     112.49     94.88    -17.61      8.82
+ Lanzador 332          Recta · Slider · Curva     110.91     94.10    -16.81      7.73
+ Lanzador 529                  Cambio · Recta     109.75     93.13    -16.63      8.83
+ Lanzador 840                  Recta · Slider     113.03     96.85    -16.18      7.13
+  Lanzador 56         Recta · Slider · Cambio     107.12     91.33    -15.79      8.62
+
+=== los que menos pierden ===
+       nombre                                   arsenal  stuff_mar  stuff_hh  delta_hh  sd_juego
+Lanzador 1099                   Cutter · Slider · Curva     109.60    109.62      0.02      2.58
+ Lanzador 722           Slider · Sinker · Recta · Curva     102.38    101.31     -1.06      2.79
+ Lanzador 430                   Cutter · Slider · Recta     100.19     98.08     -2.11      3.50
+ Lanzador 458                   Slider · Cambio · Curva     100.82     98.69     -2.13      1.90
+ Lanzador 539 Recta · Slider · Cambio · Sinker · Cutter      95.88     93.60     -2.28      2.44
+ Lanzador 586          Slider · Cutter · Recta · Sinker     104.01    100.94     -3.06      3.67
+ Lanzador 969          Slider · Cutter · Curva · Cambio      96.91     93.72     -3.19      2.55
+ Lanzador 695                   Slider · Cutter · Recta     108.33    104.61     -3.72      2.68
+
+=== más constantes (menor variación entre juegos) ===
+       nombre                                  arsenal  stuff_hh  sd_juego  juegos
+Lanzador 1132          Recta · Slider · Sinker · Curva     99.82      1.60    11.0
+ Lanzador 211 Slider · Recta · Cambio · Sinker · Curva     95.45      1.63    14.0
+  Lanzador 81 Recta · Slider · Sinker · Curva · Cutter     98.23      1.80    19.0
+ Lanzador 458                  Slider · Cambio · Curva     98.69      1.90    15.0
+ Lanzador 778         Slider · Cambio · Curva · Cutter     93.91      1.97    35.0
+Lanzador 1113         Slider · Recta · Cambio · Sinker     95.52      2.00     8.0
+ Lanzador 530                  Slider · Recta · Cutter     98.05      2.28    18.0
+ Lanzador 617         Sinker · Slider · Recta · Cambio    100.12      2.33    45.0
+
+=== arsenales con mejor Stuff+ en el Harp Helú ===
+                          pitchers  stuff_hh  stuff_mar  delta
+arsenal                                                       
+Slider · Sinker · Recta          7     99.95     107.36  -7.41
+Sinker · Slider                 12     98.61     106.47  -7.86
+Sinker · Recta · Slider          8     98.41     107.80  -9.38
+Sinker · Slider · Cambio         9     97.87     105.48  -7.61
+Slider · Recta · Sinker          6     97.30     105.28  -7.98
+Recta · Slider                  35     96.86     108.55 -11.69
+Recta · Slider · Sinker         17     96.77     106.93 -10.16
+Recta · Sinker · Slider          7     96.18     108.57 -12.39
+Sinker · Slider · Recta         17     96.03     104.30  -8.27
+Recta · Curva                    7     95.68     108.34 -12.66

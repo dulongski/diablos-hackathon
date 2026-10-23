@@ -28,18 +28,12 @@ altitud no es una variable del modelo sino una transformación física**. Lo hic
    frenado de la pelota, simulamos cómo habría volado cada lanzamiento con el aire del Harp Helú y lo
    calificamos otra vez. La diferencia entre las dos calificaciones es el efecto de la altitud.
 
-Encontramos cuatro cosas que cambian tus decisiones.
+Encontramos diferencias útiles para orientar el scouting.
 
-- **Todo lanzamiento pierde en altura, pero no lo mismo.** La recta pierde 11.7 puntos de Stuff+
-   (1.6 carreras más por cada 100 lanzamientos) y el cutter 3.0. Las mejores rectas pierden 19.
-- **De 561 lanzadores, sólo 21 aguantan la altura**, es decir, pierden menos de media carrera por cada
-   100 lanzamientos. Todos tiran slider, más de la mitad tira cutter (contra 18 % de la liga) y
-   provocan más rodados.
-- **Probamos las cuatro hipótesis del reto.** H1 y H4 se confirman. H2 y H3 se confirman en parte.
-- **Un Causal Forest sobre carreras reales confirma el costo de la altura**, 1.52 carreras más por cada
-   100 lanzamientos, sin usar Stuff+. La física del lanzamiento explica cerca del 40 % y el resto es el
-   batazo, que en altura vuela más. Las carreras solas no alcanzan para separar a un lanzador de otro, y
-   por eso necesitas la física.
+- En la población completa por tipo, la recta pierde {{recta_delta}} puntos de Stuff+ y el cutter {{cutter_delta}}. Son estimaciones del modelo, bajo el supuesto de la misma salida de la mano.
+- De {{pitchers_n}} lanzadores con muestra suficiente, {{aguantan}} pierden menos de media carrera estimada por cada 100 lanzamientos.
+- H1 tiene respaldo físico. H2 y H3 tienen respaldo parcial. H4 no demuestra que el giro sea irrelevante.
+- El bosque de entorno estima una diferencia promedio de {{cf_ate}} carreras por cada 100 lanzamientos. La interpretación causal exige controles suficientes y no se confirma la heterogeneidad individual.
 
 ## 1. Planteamiento
 
@@ -221,32 +215,40 @@ entrenamos, y explican de dónde sale cada calificación, pero no entran en el c
 
 ### 3.6 Validación fuera de muestra
 
-Calculamos todas las métricas con datos que el modelo no vio.
+Las predicciones de validación excluyen del ajuste las filas evaluadas. Las tablas del objetivo y del modelo nulo, y la calibración física, se prepararon globalmente antes de esos cortes. Por eso la validación de producción no aísla todo el pipeline. La auditoría independiente del repositorio reajusta objetivo y baseline dentro del entrenamiento y obtiene una mejora pequeña, no un salto de calidad.
+
 **Holdout de lanzador.** Validación cruzada de 4 pliegues agrupada por lanzador. Ningún lanzador está en
 entrenamiento y prueba a la vez.
+
 **Holdout de temporada.** Entrenamos con 2024 y 2025 y probamos con 2026.
-**Holdout de parque.** Entrenamos sin altitud extrema y probamos sólo en altitud extrema.
+
+**Holdout de categoría de altitud.** Entrenamos sin altitud extrema y probamos sólo en esa categoría. No es un holdout de estadio, porque no tenemos su identificador.
+
 **Modelo nulo.** El promedio del valor en carreras por conteo, lo mínimo que sabes sin mirar el
 lanzamiento.
+
 **Calibración.** Agrupamos los lanzamientos por su Stuff+ fuera de muestra y comparamos lo predicho con
 las carreras que pasaron.
 
 ### 3.7 Pruebas de hipótesis
 
-Medimos toda la incertidumbre con **bootstrap por lanzador** de 2,000 remuestreos. Remuestreamos
+Los intervalos de las comparaciones agregadas usan **bootstrap por lanzador** de 2,000 remuestreos. Remuestreamos
 lanzadores completos y no lanzamientos sueltos, porque los lanzamientos de un mismo lanzador se
 parecen entre sí y no cuentan como pruebas independientes.
 
 **H1.** Para cada tipo de lanzamiento $t$ calculamos la pérdida media, ponderada por número de
-lanzamientos, sobre 2,808 combinaciones de lanzador y tipo.
+lanzamientos, sobre las combinaciones de lanzador y tipo con al menos 40 lanzamientos.
 
 $$\bar\Delta_t = \frac{\sum_i n_{it}\,\Delta_{it}}{\sum_i n_{it}}, \qquad \Delta_{it} = \text{Stuff+}_{it}^{\,\text{HH}} - \text{Stuff+}_{it}^{\,\text{mar}}$$
 
 Además comparamos el integrador con la cifra de Nathan.
 
-**H2.** Usamos un diseño pareado dentro del lanzador. Para quien tira cambio y recta,
-$D_i = \Delta_{i,\text{cambio}} - \Delta_{i,\text{recta}}$. Al comparar contra la recta del mismo lanzador se
-cancela todo lo que es del lanzador y queda sólo el efecto del aire sobre cada forma. Si $D > 0$, el
+**H2.** Usamos un diseño pareado dentro del lanzador. Para quien tira cambio y recta calculamos
+
+$$D_i = \Delta_{i,\text{cambio}} - \Delta_{i,\text{recta}}$$
+
+Al comparar contra la recta del mismo lanzador se
+controlan diferencias fijas del lanzador. El contraste sigue dependiendo de la transferencia física y del modelo de calificación. Si $D > 0$, el
 cambio pierde menos que la recta.
 
 **H3.** Tomamos los 333 lanzadores que tiraron al menos 120 veces en cada entorno. Estimamos por mínimos
@@ -279,8 +281,7 @@ cambio en este conteo, contra este bateador? Cada lanzamiento de dos tipos (por 
 una observación. $T$ es elegir el primero, $Y$ es su valor en carreras, $X$ es el conteo, si el bateador es del
 mismo lado, el entorno (nivel del mar o altitud extrema) y si el lanzamiento anterior fue recta. $W$ controla
 lo que confunde la elección, la calidad del lanzador, cuánto usa cada tipo, la vuelta al orden, las manos y
-la velocidad de su recta. El resultado es una tabla por conteo, lado del bateador y entorno que dice qué
-lanzamiento conviene, en casa y de visitante. Contrastamos slider contra cambio, slider contra recta, cambio
+la velocidad de su recta. El resultado es una tabla por conteo, lado del bateador y entorno que orienta qué lanzamiento probar, sujeta a los controles y al soporte de los datos. Contrastamos slider contra cambio, slider contra recta, cambio
 contra recta y curva contra slider.
 
 **La pregunta de entorno.** ¿Cuánto cuesta la altura en carreras reales, y le cuesta distinto a cada
@@ -305,12 +306,7 @@ cerca de un tercio.
 
 ### 4.2 Calidad y robustez
 
-**Antes de ver el $R^2$.** El $R^2$ de un lanzamiento suelto es bajo en cualquier Stuff+, porque su desenlace es casi
-azar y Stuff+ no sabe dónde cayó la pelota. Nuestro modelo está en el techo de lo que la física sola puede predecir.
-Probamos ocho variantes con las mejoras usuales (calidad de contacto del batazo, arsenal, frenado relativo al aire y
-variables de física) y ninguna se separa del ruido (Anexo C). Lo que falta para un $R^2$ alto es dónde cayó la pelota,
-y por definición eso no entra en Stuff+. Por eso lo juzgamos como se juzga en Grandes Ligas, por si ordena carreras,
-si es estable y si anticipa el año siguiente.
+**Qué demuestra el $R^2$.** Stuff+ explica una fracción pequeña de la variación del resultado por lanzamiento. La ubicación añade capacidad predictiva en Location+ y Pitching+. Las variantes ensayadas no establecen un techo teórico. Evaluamos también calibración, separación entre grupos y repetibilidad, sin sustituir con ellas la validación predictiva.
 
 | Prueba | Capa | Variables | RMSE | $R^2$ | Correlación |
 |---|---|---|---|---|---|
@@ -319,36 +315,19 @@ si es estable y si anticipa el año siguiente.
 | Holdout de lanzador | Location+ | 23 | 0.26235 | 0.0425 | 0.207 |
 | Holdout de lanzador | Pitching+ | 33 | 0.26225 | 0.0432 | 0.208 |
 | Holdout de temporada | Stuff+ | 16 | 0.26626 | 0.0009 | 0.035 |
-| Holdout de parque | Stuff+ | 16 | 0.27707 | $-0.0005$ | 0.022 |
+| Holdout de altitud | Stuff+ | 16 | 0.27707 | $-0.0005$ | 0.022 |
 
-Las tres capas vencen al modelo nulo con lanzadores que nunca vieron. Stuff+ tiene el $R^2$ más bajo de las tres
+{{auditoria}}
+
+Las tres capas de la evaluación original vencen al modelo nulo con lanzadores que nunca vieron. Stuff+ tiene el $R^2$ más bajo de las tres
 porque no ve la ubicación, y así debe ser. Location+ y Pitching+ suben porque suman dónde llegó la pelota y el conteo.
 
-<!-- si stuff_entrena=todo -->
-**El holdout de parque no falla en el orden, falla en el nivel.** Un modelo entrenado sin altura
-ordena bien los lanzamientos en altura (correlación positiva), pero espera las carreras de nivel del
-mar. En altura todo cuesta más, y por eso su $R^2$ queda apenas bajo cero. Esa diferencia de nivel es
-justo el efecto que medimos, y por eso transferimos la forma en lugar de confiar en un modelo entrenado
-en otro aire.
-<!-- fin -->
-<!-- si stuff_entrena=mar -->
-**El holdout de parque, convertido en prueba de la física.** Un modelo entrenado sólo a nivel del mar ordena
-bien los lanzamientos en altura, pero espera las carreras de nivel del mar, y por eso su $R^2$ sin corregir el
-nivel queda cerca de cero. En lugar de quedarnos con esa explicación, la medimos. Predijimos cada lanzamiento de
-altura dos veces, con su forma real y con la misma pelota volada a nivel del mar, y la diferencia es la parte del
-exceso de carreras que explica el vuelo del lanzamiento. El resultado está en el Anexo C.
-<!-- fin -->
+**Transferencia entre entornos.** El $R^2$ de altitud es negativo y la correlación positiva es pequeña. El desfase puede contener aire, composición de bateadores, conteos y calibración. La descomposición del Anexo C depende del modelo y no identifica qué fracción del costo de la altura es causal.
 
-**Stuff+ es un rasgo del lanzador, no suerte.** Partimos los lanzamientos de cada lanzador en dos
-mitades al azar (602 lanzadores con al menos 150 por mitad). Su Stuff+ en una mitad correlaciona 0.988
-con el de la otra. Sus carreras, sólo 0.293. Las carreras de unos cientos de lanzamientos son casi
-ruido, y la forma no.
+**Repetibilidad dentro del historial.** Entre dos mitades intercaladas de cada lanzador, Stuff+ correlaciona 0.988 y sus carreras 0.293. Las mitades comparten periodo y mezcla de lanzamientos. Esto mide consistencia de la calificación, no estabilidad temporal prospectiva ni certeza sobre carreras futuras.
 
-**Anticipa el año siguiente sin necesitar historial.** En 336 pares de temporadas seguidas (2024 a 2025
-y 2025 a 2026, 250 lanzadores), el Stuff+ de un año correlaciona 0.22 con las carreras del siguiente. Las
-carreras del año anterior, 0.18. Esa diferencia no es concluyente, pero sumar Stuff+ a las carreras pasadas
-sí mejora la predicción (0.027 de $R^2$, IC 0.004 a 0.071). Stuff+ lo logra con la sola física, así que a un
-prospecto lo puedes calificar desde su primera sesión de Trackman (Anexo C).
+**Año siguiente, análisis retrospectivo.** Las correlaciones entre temporadas y la comparación incremental aparecen en el Anexo C. La regresión incremental se evalúa fuera de muestra por lanzador. Sin embargo, las puntuaciones históricas originales se aprendieron con resultados de otros lanzadores de todos los años. Además 2026 ya se usó en el desarrollo. La prueba no demuestra que una evaluación anterior a la temporada anticipe mejor el rendimiento de un prospecto.
+
 
 **Calibración.** La escala ordena carreras cuando agregas lanzamientos, que es donde importa.
 
@@ -371,81 +350,53 @@ volamos en otros aires con el integrador, calibrado sólo con datos de la LMB.
 Una curva típica de 78 mph y 12.4 pulgadas de quiebre total cae 1.4 pulgadas menos en Coors y 2.0 menos
 en el Harp Helú. Su quiebre total baja 2.5 y 3.4 pulgadas.
 
-**Todos los tipos pierden Stuff+.** En los siete el intervalo de 95 % queda bajo cero.
+**Todos los tipos pierden Stuff+.** En H1 sólo entran combinaciones de lanzador y tipo con al menos 40 lanzamientos. En los siete tipos el intervalo de 95 % queda bajo cero. La población difiere de la tabla general de Arsenal y del resumen.
 
 <!-- g:h1 -->
 
-La recta pierde casi cuatro veces lo que pierde el cutter. En carreras, su pérdida equivale a 1.6
-carreras más por cada 100 rectas. La curva gana elevación, o sea que cae menos, y por eso pierde. Su
-valor es caer. Entre los seis tipos con mediciones suficientes, el que más movimiento pierde en la
-cancha es el que más Stuff+ pierde (correlación de rangos $-0.83$, $p = 0.04$).
+Entre los arsenales elegibles de H1, la recta pierde {{recta_rv}} carreras estimadas por cada 100 lanzamientos. La curva cae menos al reducirse su quiebre. El contraste físico y la pérdida del modelo apuntan al mismo mecanismo, sin convertir la simulación en un experimento de campo.
 
 ### 5.2 H2 · El cambio gana valor relativo. Se confirma en parte
 
 <!-- g:h2 -->
 
-El cambio sí gana valor contra la recta, 4.1 puntos, y no es casualidad. Pero queda cuarto de seis,
-empatado con la curva y detrás del splitter, el cutter y el slider. La razón está en su forma. Un cambio
-de derecho se mueve unas 12 pulgadas hacia el lado del brazo, y ese movimiento también lo paga. En
-altura no gana el que engaña por velocidad. Gana **el que nunca dependió del movimiento**. Por eso el
-splitter, que engaña por velocidad y además casi no gira, gana más que todos.
+El cambio pierde {{cambio_ventaja}} puntos menos que la recta del mismo lanzador y ocupa el lugar {{cambio_rango}} entre seis alternativas. Ganar valor relativo no significa mejorar en términos absolutos. La ventaja depende del movimiento y del repertorio del lanzador.
 
 ### 5.3 H3 · Los lanzadores de rodados valen más en altura. Se confirma en parte
 
 <!-- g:h3 -->
 
-En altura los rodados previenen carreras con claridad. A nivel del mar el efecto no se distingue de
+En altura, una mayor tasa de rodados se asocia con menos carreras. A nivel del mar el efecto no se distingue de
 cero. La diferencia va en la dirección de la hipótesis ($p = 0.08$, una cola), pero no llega al 95 %. Por tercios, los lanzadores con pocos rodados (34 %) permiten 1.76 carreras más por
 cada 100 lanzamientos en altura, y los de muchos rodados (50 %) sólo 1.37. En los batazos de la liga, el
 rodado sube de 40.5 % a 44.8 % en altitud extrema y el jonrón por elevado sube de 12.4 % a 16.3 %.
 
-### 5.4 H4 · Importa cuánto se mueve, no cuánto gira. Se confirma
+### 5.4 H4 · El giro solo no basta. Evidencia parcial
 
 <!-- g:h4 -->
 
-El modelo sí usa el giro. Es la tercera de 16 variables, pero sobre todo para distinguir un tipo de
-lanzamiento de otro. En el experimento controlado, 100 revoluciones más **con el mismo movimiento**
-no cambian Stuff+ (0.01 puntos). Una pulgada más de elevación **con el mismo giro** suma 2.59.
-Y la ventaja del movimiento es la que el aire se lleva. Una recta B con 2,150 rpm y 18.0 pulgadas de
-elevación vale 107.7 a nivel del mar, 19.2 puntos más que una recta A que gira más pero a la que ese giro
-casi no mueve (2,650 rpm y 13.5 pulgadas, 88.5). En el Harp Helú B vale 86.1 y A 80.0. La ventaja se reduce a un
-tercio.
+El giro representa {{giro_peso}} % de la ganancia de los árboles. Esa importancia no mide causalidad y se reparte entre variables correlacionadas. En el barrido controlado del simulador, la curva de Stuff+ recorre {{giro_min}} a {{giro_max}} puntos a nivel del mar. El cambio absoluto medio entre pasos contiguos de 100 rpm es {{giro_local}} puntos. La diferencia entre extremos casi se cancela, pero eso no prueba insensibilidad local.
+
+Las rectas de ejemplo conservan su orden en ambos entornos. B aventaja a A en {{pareja_mar}} puntos a nivel del mar y {{pareja_hh}} en altura. Son formas reconstruidas bajo los supuestos del simulador, no una identificación independiente del efecto del giro.
 
 ## 6. Lo que significa para el club
 
 ### 6.1 La altitud borra la ventaja del bueno
 
-Partimos las rectas en quintiles por su Stuff+ a nivel del mar. El castigo no es parejo. El quintil más
-bajo pierde 3.8 puntos (de 89.6 a 85.8). El más alto pierde 19.4 (de 116.4 a 97.1) y queda bajo el
-promedio. Lo que separa a una recta de élite de una mediocre es el movimiento, y el movimiento es lo que
-el aire se lleva. Entre el 1 % mejor calificado, el slider pasa de 24 % a 52 % y la recta cae de 41 % a
-1 %.
+Partimos las rectas en quintiles por su Stuff+ a nivel del mar. El quintil inferior pasa de {{q1_mar}} a {{q1_alt}}, una pérdida de {{q1_delta}} puntos. El superior pasa de {{q5_mar}} a {{q5_alt}}, una pérdida de {{q5_delta}}. La mayor calidad inicial viene acompañada de mayor sensibilidad estimada al aire.
 
-**Tres estadios, no dos.** El mismo lanzamiento, volado con el aire de cada categoría.
+**Tres entornos, no tres estadios identificados.** El mismo lanzamiento vuela con el aire representativo de cada categoría.
 
-| | Nivel del mar | Altitud media | Altitud extrema |
-|---|---|---|---|
-| Índice de aire | 1.000 | 0.898 | 0.853 |
-| Stuff+ de la liga | 103.1 | 97.1 | 94.8 |
-| Recta | 102.5 | 93.9 | 90.9 |
-| Cutter | 102.1 | 100.6 | 99.2 |
+{{tabla_entornos}}
 
-La altitud media ya cobra el 73 % del castigo. Un lanzador que viene de un parque de altura media llega
-al Harp Helú con la mayor parte del ajuste hecho.
+La categoría extrema aproxima el entorno del Harp Helú. No identifica por separado todos sus efectos de parque ni los del clima.
 
 ### 6.2 El perfil físico ideal
 
 Promediamos el 1 % mejor calificado en cada aire, sólo lanzadores derechos y sólo lanzamientos reales.
 Una rejilla libre produciría combinaciones que ningún lanzador hace.
 
-| Variable | Élite a nivel del mar | Élite en altura | Mediana de la liga |
-|---|---|---|---|
-| Velocidad (mph) | 88.3 | 85.1 | 88.9 |
-| Elevación (in) | 4.4 | $-3.3$ | 9.2 |
-| Movimiento lateral (in) | 0.7 | $-4.4$ | 7.3 |
-| Movimiento total (in) | 17.3 | 11.3 | 14.7 |
-| Eficiencia de giro | 0.84 | 0.55 | 0.81 |
-| Giro (rpm) | 2,554 | 2,504 | 2,328 |
+{{tabla_perfil}}
 
 La élite de altura es de rompientes que caen y cortan hacia el guante, no de rectas que suben. Gira casi
 lo mismo que la otra, pero convierte mucho menos de ese giro en movimiento. No depende del empuje del aire,
@@ -453,61 +404,39 @@ que es justo lo que la altura le quita.
 
 ### 6.3 Por lanzador
 
-Analizamos 561 lanzadores con al menos 300 lanzamientos. **21 aguantan**, es decir, pierden menos de
-3.7 puntos (media carrera por cada 100 lanzamientos), y 354 pierden más de 7.4 (una carrera). Los que más
-pierden son buenos a nivel del mar porque se mueven mucho. Lanzador 174 (recta y cambio) baja de 111.3 a
-92.8. Tu perfil de fichaje es Lanzador 1099 (cutter, slider y curva). Vale 110.2 a nivel del mar y 109.8
-en el Harp Helú, pierde 0.4 puntos, el segundo mejor Stuff+ de la liga en altura, y es de los más
-constantes entre juegos ($\pm 2.6$ contra $\pm 4.5$ de la mediana).
+Analizamos {{pitchers_n}} lanzadores con al menos 300 lanzamientos. {{aguantan}} pierden menos de {{corte_aguanta}} puntos, equivalente a media carrera estimada por cada 100. {{mucho}} pierden más de {{corte_mucho}}, equivalente a una carrera.
+
+{{peor_nombre}} presenta la mayor pérdida estimada y pasa de {{peor_mar}} a {{peor_hh}}. Como candidato de scouting, {{fichaje_nombre}} pasa de {{fichaje_mar}} a {{fichaje_hh}}, con repertorio {{fichaje_arsenal}} y dispersión entre juegos de {{fichaje_sd}} puntos. La selección combina calidad en altura, pérdida y constancia. No sustituye evaluación médica, comando ni oposición enfrentada.
 
 ### 6.4 Lo que dice el Causal Forest
 
-**El costo promedio es firme.** Lanzar en altura cuesta **1.52 carreras más por cada 100 lanzamientos** (IC 90 %
-de 1.27 a 1.78), medido en el marcador y sin usar Stuff+. Es la misma dirección que predice la física. ¿Cuánto de ese
-costo es el lanzamiento? Un modelo entrenado sólo a nivel del mar atribuye al vuelo del lanzamiento 0.57 de
-las 1.49 carreras de más que hay en altura, el 39 % (IC 34 a 44 %, Anexo C). El resto lo pone sobre todo el
-batazo, que en altura viaja 31 pies más. La pérdida de Stuff+ de la liga (8.3 puntos, 1.12 carreras) sale
-mayor, porque la caída de velocidad también recoge parte del entorno (sección 8).
+**Diferencia promedio de entorno.** El bosque estima {{cf_ate}} carreras adicionales por cada 100 lanzamientos, con intervalo de 90 % de {{cf_lo}} a {{cf_hi}}. Es una estimación observacional. Sus covariables incluyen tasas de rodados y swings fallidos agregadas sobre los dos entornos, que pueden ser posteriores al tratamiento. Por ello no la presentamos como confirmación causal independiente.
 
-**Las diferencias entre lanzadores no se sostienen.** El bosque estima efectos entre 1.27 y 1.76, y para 331
-de 333 lanzadores el intervalo incluye el promedio. En la prueba fuera de muestra, el castigo observado no
-sube con el efecto predicho (pendiente de $-1.95$, IC 95 % de $-4.0$ a $+0.2$). El bosque sí aprende la misma
-dirección que Stuff+ (correlación de 0.17 fuera de muestra, $p = 0.002$), pero las carreras de unos cientos
-de lanzamientos tienen demasiado azar para confirmarlo lanzador por lanzador.
+La prueba de altitud del Anexo C compara resultados observados con predicciones de un modelo de nivel del mar. La razón entre la transformación física y el exceso total es una descomposición dependiente del modelo. El resto incluye bateo, selección y error de calibración. No puede atribuirse íntegramente al batazo.
 
-Ese resultado justifica el diseño del trabajo. Para separar a un lanzador de otro necesitas algo estable, y
-eso es su forma, medida con física. Las carreras confirman el tamaño del castigo promedio.
+**Las diferencias entre lanzadores no se sostienen.** El bosque no supera la prueba GATES de heterogeneidad fuera de muestra. La incertidumbre de sus diferencias individuales impide usarlas como política de rotación. El bosque secundario se recalculó con los insumos físicos corregidos. Su diagnóstico no valida por sí solo el nuevo ranking físico.
 
-**La pregunta táctica, en casa sí cambia la respuesta.** Comparamos cuatro pares de lanzamientos con
-150,000 lanzamientos cada uno y medimos el efecto en 48 celdas (12 conteos, dos lados del bateador y dos
-entornos). Slider en vez de cambio ahorra 0.31 carreras por cada 100 lanzamientos a nivel del mar y 1.01 en
-altura. De las 10 celdas donde el intervalo de 90 % no cruza el cero, 9 están en altura y todas favorecen
-al slider, sobre todo contra el bateador del lado contrario y con el conteo en contra (2 bolas o más). Es
-lo que predice H1, porque el cambio pierde más movimiento que el slider. A nivel del mar, con 3 bolas y
-bateador del mismo lado, la recta le gana al cambio por 3 a 5 carreras por cada 100. Con 48 celdas por par
-esperarías unas 5 falsas por azar, así que lee las celdas sueltas como pistas y el patrón como el
-resultado. Las tablas completas están en la pestaña Causal Forest del dashboard.
+La física permite construir escenarios comparables. La evidencia disponible no confirma el tamaño del castigo causal individual de cada lanzador.
+
+**La pregunta táctica, señales exploratorias.** Contrastamos slider contra cambio, slider contra recta, cambio contra recta y curva contra slider. Las tablas del dashboard separan conteo, lado del bateador y entorno, y muestran el contraste y su intervalo. La señal de slider frente a cambio orienta una prueba de repertorio. No identifica por sí sola una política óptima. Al evaluar 48 celdas por par con intervalos de 90 %, se esperan alrededor de cinco intervalos que excluyan cero bajo una hipótesis nula global. No aplicamos corrección por multiplicidad. Las diferencias entre entornos pueden contener selección de lanzamientos y confusión residual.
 
 ## 7. Recomendaciones
 
-**Fichajes.** No pagues de más por movimiento. Una recta del quintil más alto llega a 2,240 metros
-valiendo 97.1 en lugar de 116.4. El mercado cobra esa prima a nivel del mar, y tú la pagarías por algo
-que en tu estadio no existe.
+**Fichajes.** Revisa la sensibilidad al aire antes de pagar una prima por movimiento. El quintil superior de rectas pasa de {{q5_mar}} a {{q5_alt}} en el escenario de altura. Úsalo para priorizar observaciones y pruebas del lanzador.
 
 **Perfil.** Busca arsenales de cutter, slider y splitter, y lanzadores que provoquen rodados. En altura un
 elevado viaja 31 pies más (de 292 a 323) y sale del parque 16.3 % de las veces contra 12.4 %.
 
-**Rotación.** Abre en casa con los lanzadores que aguantan (pestaña Lanzadores del dashboard). Los que
-pierden mucho rinden más de visitante.
+**Rotación.** Usa la pestaña Lanzadores para evaluar candidatos de casa y visitante junto con comando, salud, descanso y rival. La pérdida simulada no garantiza resultados individuales.
 
 **En el juego.** En casa, cuando el pitcher va atrás en el conteo contra un bateador del lado contrario,
-pide slider antes que cambio. El Causal Forest táctico encuentra 10 celdas firmes en ese par, y 9 están en altura y favorecen al slider.
+considera probar el slider frente al cambio. Las celdas del bosque son exploratorias y no tienen corrección por comparaciones múltiples.
 
 **Prospectos.** Hazte cinco preguntas, en este orden.
 1. ¿Cuánto de su valor es movimiento? Si su Stuff+ está en el quintil más alto por su quiebre, esa
    ventaja no viaja a la Ciudad de México.
 2. ¿Cuánto de su giro se vuelve movimiento? La eficiencia alta ayuda a nivel del mar y te expone en
-   altura (élite de altura 0.55 contra 0.84).
+   altura. Consulta el perfil actualizado de la sección 6.2.
 3. ¿Su arsenal se apoya en cutter, slider o splitter, o en recta y curva? El primero pierde poco y el
    segundo llega devaluado.
 4. ¿Provoca rodados? Es el único batazo que el aire no ayuda.
@@ -520,20 +449,18 @@ pide slider antes que cambio. El Causal Forest táctico encuentra 10 celdas firm
   predecir movimiento, no para atribuirlo sólo a la altitud.
 - **No modelamos al bateador.** Desde la física, el barril casi no se puede predecir (1 % de habilidad).
 - **Stuff+ no es causal.** Es un modelo de valoración. Para las preguntas de qué hubiera pasado usamos el
-  Causal Forest, que confirma el costo promedio pero no separa a un lanzador de otro.
+  Causal Forest como análisis observacional con supuestos de ausencia de confusión y soporte común, que no confirma diferencias individuales.
 - **El exponente de Reynolds es empírico.** Lo calibramos y verificamos fuera de muestra, pero no sale de
   primeros principios.
-- **Stuff+ ve la caída de velocidad, que también refleja el aire.** Lo probamos sin las tres variables de
-  frenado y entrenando sólo con juegos a nivel del mar. El orden de los tipos se mantiene en los dos casos
-  (correlación de rangos 0.96), pero la pérdida de la liga baja de 8.3 a 6.2 y 5.1 puntos. La versión de nivel
-  del mar ya no le ganaba al modelo nulo con lanzadores nuevos, y por eso no es la principal (Anexo C).
-- **El simulador exagera la pérdida.** Califica una forma típica y no la población, y sus pérdidas salen unos
-  4 puntos mayores que las de la tabla por tipo. Sirve para comparar lanzamientos entre sí.
+- **Stuff+ ve la caída de velocidad, que también refleja el aire.** El Anexo C muestra la sensibilidad al retirar las tres variables de frenado y al entrenar sólo a nivel del mar. Las pérdidas absolutas dependen de esa especificación.
+- **La validación no es anidada de todo el pipeline.** Objetivos y baseline de producción usan tablas globales. Hay 6,346 turnos reconstruidos sin evento terminal entre 171,020, cuyo tratamiento puede afectar esas tablas. No se completó una sensibilidad por turnos íntegros.
+- **Producción y evaluación son distintos.** Las tablas descriptivas y el simulador usan el modelo final ajustado con todos los datos. Las métricas de validación usan predicciones fuera de muestra. Un ranking de producción no es validación independiente.
+- **El simulador representa una forma típica.** Sus 49 variaciones no equivalen a la población completa de un tipo. Las diferencias con las medias exportadas se deben revisar como discrepancias de representación, sin ajustar la dispersión para forzar coincidencia.
 
 ## 9. Reproducción
 
 El código, los modelos entrenados y los pasos para correr todo están en
-`github.com/dulongski/diablos-hackathon`. El dashboard corre completo en el navegador.
+[la rama de entrega del repositorio](https://github.com/dulongski/diablos-hackathon/tree/claude/confident-ptolemy-sz210m). El dashboard corre completo en el navegador.
 
 ## Referencias
 
@@ -569,6 +496,6 @@ sólo la física a 18.9 % con ubicación y a 19.4 % con arsenal y secuencia.
 | Rodado y elevado | Batazo por el suelo y batazo por el aire |
 | Arsenal | Los tipos que un lanzador usa al menos 8 % de las veces |
 | Tipos de lanzamiento | Recta, sinker, cutter, slider, curva, cambio y splitter. El anexo del dashboard dibuja el vuelo de cada uno, de la mano al plato |
-| Intervalo de confianza de 95 % | El rango donde está el valor real con alta probabilidad. Si no cruza el cero, el efecto no es casualidad |
+| Intervalo de confianza de 95 % | Rango de incertidumbre de un procedimiento de remuestreo. No incorpora sesgos de medición, selección o especificación |
 
 *Usamos los datos de la LMB sólo para esta competencia. Este documento presenta resultados, no datos.*

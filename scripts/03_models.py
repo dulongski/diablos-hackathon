@@ -7,14 +7,11 @@ Valida en las tres direcciones que pide la rubrica:
 
 y contra el modelo nulo explicito de la rubrica: el run value promedio por conteo.
 
-Stuff+ se entrena por defecto SOLO con juegos a nivel del mar (STUFF_ENTRENA=mar). La razon: la
-variable mas pesada de Stuff+ es SpeedDrop, cuanta velocidad pierde la pelota en el camino, y en
-altura la pelota frena menos. Si el modelo ve juegos de altura, aprende que "frena poco" significa
-"juego de altura" y que los juegos de altura dan mas carreras, y parte de lo que llamariamos perdida
-de Stuff+ seria el entorno de bateo y no el lanzamiento. A nivel del mar el aire es uno solo, asi
-que SpeedDrop solo varia por la pelota y el lanzamiento, y la diferencia de Stuff+ al volar la pelota
-en otro aire sale entera de la fisica. Location+ y Pitching+ no se transfieren y usan todo.
-Con STUFF_ENTRENA=todo se reproduce el modelo anterior, para comparar.
+Stuff+ usa todos los juegos por defecto (STUFF_ENTRENA=todo), la configuración
+seleccionada. STUFF_ENTRENA=mar conserva la sensibilidad de entrenamiento solo a
+nivel del mar. La evaluación rv reconstruye centro, valores por conteo y baseline
+con cada entrenamiento. La física y las features de arsenal siguen precalculadas.
+Los modelos finales conservan el target global de producción.
 """
 from __future__ import annotations
 
@@ -38,25 +35,23 @@ COMPONENTS = [
 ]
 
 
-ENTRENA = os.environ.get("STUFF_ENTRENA", "mar")
+ENTRENA = os.environ.get("STUFF_ENTRENA", "todo")
+if ENTRENA not in {"todo", "mar"}:
+    raise ValueError("STUFF_ENTRENA must be todo or mar")
 
 
 def main() -> None:
     df = pd.read_pickle(ART / "model_frame.pkl")
     sets = F.feature_sets()
-    out: dict = {"n_pitches": int(len(df)), "stuff_entrena": ENTRENA}
+    out: dict = {"n_pitches": int(len(df)), "stuff_entrena": ENTRENA,
+                 "target_reference": {"validation": "training_split_only",
+                                      "final_training": "full_dataset_production_target",
+                                      "limits": "Physics and arsenal preprocessing remain global; not fully nested."}}
     mar = (df.altitude_category == "No Altitude").to_numpy()
     # Filas con las que puede entrenar cada capa.
     puede = {name: (mar if (name == "stuff" and ENTRENA == "mar") else np.ones(len(df), dtype=bool)) for name in sets}
     print(f"Stuff+ entrena con {'juegos a nivel del mar' if ENTRENA == 'mar' else 'todos los juegos'} "
           f"({int(puede['stuff'].sum()):,} de {len(df):,} lanzamientos)")
-
-    # --- modelo nulo de la rubrica: run value promedio por conteo ---
-    cv = df.groupby("count")["rv"].mean()
-    null_pred = df["count"].map(cv).to_numpy()
-    out["baseline_nulo_por_conteo"] = models.score(df["rv"].to_numpy(), null_pred)
-    print("modelo nulo (promedio por conteo): rmse %.5f  r2 %.5f"
-          % (out["baseline_nulo_por_conteo"]["rmse"], out["baseline_nulo_por_conteo"]["r2"]))
 
     # --- holdout de pitcher sobre las tres capas ---
     out["holdout_pitcher"] = {}
@@ -65,11 +60,13 @@ def main() -> None:
         t0 = time.time()
         p_c, n_c = models.capa(name)
         oof, sc = models.cross_val(df, feats, target="rv", n_splits=4, params=p_c, n_rounds=n_c,
-                                   train_mask=puede[name])
+                                   train_mask=puede[name], rebuild_rv=True)
         oof_store[name] = oof
         sc["n_features"] = len(feats)
         sc["segundos"] = round(time.time() - t0, 1)
         out["holdout_pitcher"][name] = sc
+        if name == "stuff":
+            out["baseline_nulo_por_conteo"] = sc["baseline_nulo_por_conteo"]
         print(f"  {name:9s} rmse {sc['rmse']:.5f}  r2 {sc['r2']:.5f}  corr {sc['corr']:.4f}"
               f"  ({len(feats)} features, {sc['segundos']}s)")
     np.save(ART / "oof_rv.npy", np.vstack([oof_store[k] for k in sets]))
@@ -78,9 +75,11 @@ def main() -> None:
     out["holdout_temporada"] = {}
     tr = df[(df.year < 2026).to_numpy() & puede["stuff"]]
     te = df[df.year == 2026]
+    tr, te, baseline = models.fold_run_values(tr, te)
     p_s, n_s = models.capa("stuff")
     fit = models.train(tr, sets["stuff"], params=p_s, n_rounds=n_s)
     out["holdout_temporada"]["stuff"] = models.score(te["rv"].to_numpy(), fit.raw(te))
+    out["holdout_temporada"]["baseline"] = models.score(te.rv.to_numpy(), baseline)
     print("  temporada (entrena 24-25, prueba 26): rmse %.5f r2 %.5f"
           % (out["holdout_temporada"]["stuff"]["rmse"], out["holdout_temporada"]["stuff"]["r2"]))
 
@@ -88,8 +87,11 @@ def main() -> None:
     # Entrena sin altitud extrema (con STUFF_ENTRENA=mar, solo nivel del mar) y prueba en altitud extrema.
     tr = df[(df.altitude_category != "Extreme Altitude").to_numpy() & puede["stuff"]]
     te = df[df.altitude_category == "Extreme Altitude"]
+    tr, te, baseline = models.fold_run_values(tr, te)
     fit_park = models.train(tr, sets["stuff"], params=p_s, n_rounds=n_s)
     out["holdout_parque"]["stuff"] = models.score(te["rv"].to_numpy(), fit_park.raw(te))
+    out["holdout_parque"]["baseline"] = models.score(te.rv.to_numpy(), baseline)
+    out["holdout_parque"]["scope"] = "altitude_bucket_holdout_not_stadium_holdout"
     print("  parque (entrena sin altitud, prueba en altitud): rmse %.5f r2 %.5f"
           % (out["holdout_parque"]["stuff"]["rmse"], out["holdout_parque"]["stuff"]["r2"]))
 

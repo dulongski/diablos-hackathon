@@ -1,0 +1,17 @@
+scored.pkl: 635,002 lanzamientos · bootstrap 1000
+parque…
+  pliegue 1/4
+  pliegue 2/4
+  pliegue 3/4
+  pliegue 4/4
+  parque en 36s
+futuro…
+  carreras: stuff +0.219, carreras pasadas +0.184
+  whiff: stuff +0.165, carreras pasadas +0.164
+  futuro en 1s
+especificaciones…
+  produccion: liga -9.31 (20s)
+  sin_frenado: liga -7.13 (16s)
+  solo_mar: liga -6.04 (19s)
+  especificaciones en 74s
+listo en 111s → app/public/data/robustez.json

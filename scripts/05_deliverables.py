@@ -41,8 +41,9 @@ def main() -> None:
     rho_obs = df.rho_game.to_numpy()
     kw = dict(rho_observed=rho_obs, aero=aero, magnus_gamma=gv, magnus_gamma_h=gh)
 
-    shape_ref = physics.transfer_shape(df, 1.0, **kw)
-    df["plus_mar"] = score_at(booster, df, feats, shape_ref, shape_ref,
+    shape_ref = physics.observed_shape(df)
+    shape_mar = physics.transfer_shape(df, 1.0, **kw)
+    df["plus_mar"] = score_at(booster, df, feats, shape_mar, shape_ref,
                               scale["center"], scale["scale"])
     df["plus_alt"] = score_at(booster, df, feats, physics.transfer_shape(df, rho_ext, **kw),
                               shape_ref, scale["center"], scale["scale"])

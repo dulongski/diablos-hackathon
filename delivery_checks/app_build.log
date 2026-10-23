@@ -1,0 +1,13 @@
+
+> diablos-stuff-plus-app@0.1.0 build
+> tsc -b && vite build
+
+vite v5.4.21 building for production...
+transforming...
+✓ 652 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                     1.03 kB │ gzip:   0.55 kB
+dist/assets/index-Cu88hxdW.css     57.57 kB │ gzip:  12.40 kB
+dist/assets/index-BJUd7Sxp.js   1,183.92 kB │ gzip: 332.63 kB
+✓ built in 3.02s

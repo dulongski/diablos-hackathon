@@ -68,22 +68,20 @@ function Tactica({ extras }: { extras: Extras | null }) {
   }
   const c = datos[clave ?? claves[0]];
   const m = c.por_entorno.mar, a = c.por_entorno.altura;
-  const mejor = (v: number) => (v < 0 ? c.a : c.b);
+
   return (
     <div className="tarjeta">
-      <h3 className="titulo-tarjeta">Qué lanzamiento conviene en cada conteo, en casa y de visitante</h3>
+      <h3 className="titulo-tarjeta">Contrastes tácticos exploratorios por conteo y entorno</h3>
       <p className="nota-tarjeta">
-        Elige una pareja de lanzamientos. Cada número dice cuántas carreras por cada 100 lanzamientos cambian si el pitcher
-        tira <b>{c.a}</b> en vez de <b>{c.b}</b>. Verde quiere decir que {c.a.toLowerCase()} es mejor para el pitcher y rojo
-        que {c.b.toLowerCase()} es mejor. Las celdas con borde punteado son dudosas, su intervalo cruza el cero.
+        Elige una pareja de lanzamientos. Cada número es una asociación ajustada en carreras por cada 100 lanzamientos entre <b>{c.a}</b> y <b>{c.b}</b>. Verde indica una estimación menor para {c.a.toLowerCase()}, rojo para {c.b.toLowerCase()}. No es una recomendación de lanzamiento ni una intervención aleatoria. Las celdas punteadas tienen un intervalo que cruza cero; las demás tampoco eliminan la confusión no medida.
       </p>
       <div className="chips">
         {claves.map(k => <button key={k} type="button" className={`chip${(clave ?? claves[0]) === k ? ' activo' : ''}`}
                                  aria-pressed={(clave ?? claves[0]) === k} onClick={() => setClave(k)}>{k}</button>)}
       </div>
       <div className="cifras-fila tres">
-        <div><b className="num t-mar">{sg(m.efecto, 2)}</b><span>a nivel del mar. Conviene {mejor(m.efecto).toLowerCase()}.</span></div>
-        <div><b className="num t-alt">{sg(a.efecto, 2)}</b><span>en altitud extrema. Conviene {mejor(a.efecto).toLowerCase()}.</span></div>
+        <div><b className="num t-mar">{sg(m.efecto, 2)}</b><span>asociación ajustada a nivel del mar.</span></div>
+        <div><b className="num t-alt">{sg(a.efecto, 2)}</b><span>asociación ajustada en altitud extrema.</span></div>
         <div><b className="num">{sg(c.cambio_por_altura, 2)}</b><span>cuánto cambia la ventaja al subir a la altura</span></div>
       </div>
       <div className="segmentado pequeno" role="group" aria-label="Lado del bateador">
@@ -135,7 +133,7 @@ function Entorno({ c }: { c: Causal }) {
   return (
     <>
       <div className="cifras-fila cuatro">
-        <div><b className="num d-mucho">{sg(c.ate, 2)}</b><span>carreras más por cada 100 lanzamientos cuesta lanzar en altura (IC 90 % de {nf(c.ate_ic90[0], 2)} a {nf(c.ate_ic90[1], 2)})</span></div>
+        <div><b className="num d-mucho">{sg(c.ate, 2)}</b><span>carreras por cada 100 lanzamientos de asociación ajustada con la altura (IC 90 % de {nf(c.ate_ic90[0], 2)} a {nf(c.ate_ic90[1], 2)})</span></div>
         <div><b className="num">{nf(c.pitchers_n)}</b><span>lanzadores que tiraron al menos 120 veces en cada entorno, comparados consigo mismos</span></div>
         <div><b className="num">{nf(c.tau_rango[0], 2)} a {nf(c.tau_rango[1], 2)}</b><span>rango del efecto entre lanzadores. Es angosto.</span></div>
         <div><b className="num">{nf(dentro)} de {nf(c.pitchers_n)}</b><span>lanzadores cuyo intervalo incluye el promedio</span></div>
@@ -155,18 +153,17 @@ function Entorno({ c }: { c: Causal }) {
         <div className="tarjeta">
           <h3 className="titulo-tarjeta">Qué nos dice</h3>
           <p>
-            <b>El promedio es firme.</b> En carreras reales, la altura cuesta {sg(c.ate, 2)} por cada 100 lanzamientos. Es la
-            misma dirección que predice Stuff+ con física, ahora medida en el marcador.
+            <b>La asociación promedio.</b> La diferencia ajustada con la altura es {sg(c.ate, 2)} por cada 100 lanzamientos. Es la
+            misma dirección que predice Stuff+ con física, pero los datos observacionales no identifican por sí solos causalidad.
           </p>
           <p>
-            <b>Las diferencias entre lanzadores no se sostienen.</b> Las barras no suben. Con 333 lanzadores y unos cientos de
+            <b>Las diferencias entre lanzadores no se sostienen.</b> Las barras no suben. Con los lanzadores incluidos y unos cientos de
             lanzamientos cada uno, las carreras tienen demasiado azar para separar a un lanzador de otro. El bosque sí aprende la
-            misma dirección que Stuff+ (correlación de {nf(c.acuerdo_stuff.pearson, 2)} fuera de muestra, p {'<'} 0.001), pero el
+            misma dirección que Stuff+ (correlación de {nf(c.acuerdo_stuff.pearson, 2)} fuera de muestra; la magnitud es pequeña), pero el
             marcador no alcanza a confirmarlo.
           </p>
           <p>
-            <b>Por eso decides con Stuff+.</b> La física separa a los lanzadores con lo que es estable, su forma. Las carreras
-            confirman el tamaño del castigo promedio. Este resultado es la razón por la que construimos el modelo así.
+            <b>Úsalo como evidencia complementaria.</b> El promedio y la clasificación individual requieren conclusiones distintas. El bosque no confirma qué lanzadores son más resistentes; las decisiones individuales deben incorporar incertidumbre y evidencia adicional.
           </p>
         </div>
       </div>
@@ -174,7 +171,7 @@ function Entorno({ c }: { c: Causal }) {
       <div className="tarjeta">
         <h3 className="titulo-tarjeta">El efecto estimado para cada lanzador</h3>
         <div className="tabla-cabeza">
-          <p className="nota-tarjeta">Ordenados del que menos sufre al que más. El intervalo es de 90 %.</p>
+          <p className="nota-tarjeta">Ordenados por la estimación exploratoria, sin validar diferencias individuales. El intervalo es de 90 % y no incluye confusión no medida.</p>
           <label className="buscar"><span className="solo-lectores">Buscar</span>
             <input type="search" placeholder="Busca 1099 o slider" value={buscar} onChange={e => setBuscar(e.target.value)} /></label>
         </div>
@@ -210,14 +207,12 @@ export function CausalForest({ c, extras }: { c: Causal; extras: Extras | null }
       <div className="envoltura">
         <header className="cabeza-pregunta">
           <p className="eyebrow">Modelo secundario del reto · Causal Forest</p>
-          <h2>¿Qué hubiera pasado si…?</h2>
+          <h2>Contrastes observacionales exploratorios</h2>
           <p className="entrada ancha">
-            Stuff+ califica lanzamientos. Un Causal Forest responde otra cosa, preguntas de qué hubiera pasado. Compara
-            situaciones casi idénticas que sólo difieren en una decisión, por ejemplo slider o cambio, y mide la diferencia en
-            carreras. Lo usamos para dos preguntas.
+            El Causal Forest compara situaciones con variables observadas parecidas. Aquí sus contrastes se interpretan como exploratorios: la selección de lanzamientos, los resúmenes de resultados y la confusión no medida impiden presentarlos como efectos causales identificados. Los intervalos no corrigen esos sesgos.
           </p>
           <ol className="dos-preguntas">
-            <li><b>Táctica.</b> En cada conteo y contra cada tipo de bateador, ¿qué lanzamiento conviene, y cambia la respuesta en casa?</li>
+            <li><b>Táctica.</b> En cada conteo y contra cada tipo de bateador, ¿cómo difieren las asociaciones entre tipos y entornos?</li>
             <li><b>Entorno.</b> ¿Cuánto cuesta la altura en carreras reales, y le cuesta distinto a cada lanzador?</li>
           </ol>
         </header>
@@ -225,20 +220,20 @@ export function CausalForest({ c, extras }: { c: Causal; extras: Extras | null }
         <div className="como-cf tarjeta">
           <h3 className="titulo-tarjeta">Cómo funciona, en tres pasos</h3>
           <ol className="pasos-cf">
-            <li><b>Quitamos lo que confunde.</b> Un lanzador con buen slider lo usa más y además es mejor. Dos modelos de árboles
+            <li><b>Ajustamos por variables medidas.</b> Un lanzador con buen slider lo usa más y además es mejor. Dos modelos de árboles
               predicen el resultado y la decisión a partir de todo lo demás (calidad del lanzador, uso de cada tipo, conteo), y
               nos quedamos con lo que no explican. Es Double Machine Learning.</li>
             <li><b>Agrupamos situaciones parecidas.</b> Un bosque de árboles honestos parte los datos en grupos de situaciones
               parecidas y, dentro de cada grupo, compara la decisión contra la alternativa.</li>
             <li><b>Medimos con intervalos.</b> Cada efecto trae su intervalo de confianza, y separamos entrenamiento y prueba por
-              lanzador para no engañarnos.</li>
+              lanzador para separar esos lanzadores; esto no elimina confusión no medida ni garantiza una política útil.</li>
           </ol>
         </div>
 
         <h3 className="titulo-sec sub">A · La pregunta táctica</h3>
         <Tactica extras={extras} />
 
-        <h3 className="titulo-sec sub">B · El costo de la altura en carreras reales</h3>
+        <h3 className="titulo-sec sub">B · Asociación entre altura y carreras</h3>
         <Entorno c={c} />
       </div>
     </section>

@@ -1,7 +1,9 @@
-"""Modelo secundario del reto: Causal Forest sobre carreras observadas.
+"""Modelo secundario exploratorio: Causal Forest sobre carreras observadas.
 
 Pregunta táctica. ¿A qué lanzador le cuesta más lanzar en el Harp Helú, medido en carreras que de verdad
-permitió y no en Stuff+? La respuesta decide a quién abrir en casa y a quién de visitante.
+permitió y no en Stuff+? El diseño es observacional y no identifica por sí solo un efecto causal.
+Las tasas de whiff y rodados provienen de ambos entornos y pueden ser posteriores al tratamiento.
+No se usa el bosque para recomendar una asignación individual de abridores.
 
 Diseño
   Cada lanzador con al menos 120 lanzamientos en altitud extrema y 120 a nivel del mar aparece dos veces,
@@ -156,6 +158,11 @@ por = por.sort_values("tau")
 pitchers = json.loads(por.round(3).to_json(orient="records"))
 
 salida = {
+    "interpretacion": {
+        "tipo": "exploratorio observacional",
+        "identifica_efecto_causal": False,
+        "limites": "Covariables agregadas sobre ambos entornos, sin controles completos de rivales, temporada o estadio. Las diferencias individuales requieren validación externa.",
+    },
     "pitchers_n": int(len(cf)),
     "ate": round(float(ate.mean_point), 3),
     "ate_ic90": [round(float(v), 3) for v in ate.conf_int_mean(alpha=0.1)],

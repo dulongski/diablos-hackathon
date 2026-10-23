@@ -10,12 +10,12 @@ Integrantes
 [nombre y correo de cada integrante]
 
 Adjuntos
-1. documento_tecnico.pdf. El documento técnico tiene 10 páginas de cuerpo con referencias, más portada y tres anexos, uno de ellos con las pruebas de robustez. Trae la metodología completa, la validación fuera de muestra (lanzador, temporada y parque), la prueba de las hipótesis H1 a H4, el Causal Forest como modelo secundario y nuestras recomendaciones.
+1. documento_tecnico.pdf. El documento técnico tiene 10 páginas de cuerpo con referencias, más portada y tres anexos, uno de ellos con las pruebas de robustez. Trae la metodología completa, la validación fuera de muestra (lanzador, temporada y categoría de altitud), la prueba de las hipótesis H1 a H4, el Causal Forest como modelo secundario y nuestras recomendaciones.
 2. reporte.pdf. Es el reporte ejecutivo de 15 láminas para el cuerpo técnico y la dirección deportiva.
 
 Dashboard y código
 https://claude.ai/artifact/1HXhuyBtkDd6szvLv9M7xo
-https://github.com/dulongski/diablos-hackathon
+https://github.com/dulongski/diablos-hackathon/tree/claude/confident-ptolemy-sz210m
 El simulador corre completo en el navegador, sin servidor. Le das un lanzamiento y te devuelve su Stuff+ en el Harp Helú y a nivel del mar, con el mapa de movimiento de los lanzamientos más y menos efectivos.
 
 En una frase
@@ -25,3 +25,6 @@ Usamos los datos de la LMB sólo para esta competencia y no los incluimos en la 
 
 Saludos,
 [nombre]
+
+Nota interna antes de enviar
+El enlace del dashboard todavía debe actualizarse con el paquete preparado. El enlace de código apunta a la rama de entrega corregida; comprobar el push antes de enviar. No enviar esta nota interna al jurado.

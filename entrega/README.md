@@ -1,12 +1,18 @@
 # Entrega · Hackathon ISAC 2026 · Diablos Rojos
 
-| Archivo | Qué es | Cómo se regenera |
-|---|---|---|
-| `documento_tecnico.pdf` | Documento técnico (portada, 10 páginas de cuerpo y tres anexos) | `python3 docs/tecnico.py && node docs/pdf.mjs entrega/documento_tecnico.html entrega/documento_tecnico.pdf` |
-| `reporte.pdf` | Reporte de 15 láminas con el patrón de Coach DNA | `python3 docs/reporte.py && node docs/pdf.mjs entrega/reporte.html entrega/reporte.pdf lamina` |
-| `correo.txt` | Borrador del correo, en texto plano para pegar (faltan integrantes y links) | |
+Los dos PDF se generan desde los JSON que alimentan el dashboard. El modelo entrenado se conserva y la transferencia física usa la forma observada como referencia. Lee `../CLAUDE.md` para conocer los pasos y los límites de validación.
 
-Antes de regenerar, corre `python3 scripts/08_hipotesis.py` si cambió el modelo. `docs/tecnico.py` usa
-`pip install markdown` y KaTeX (`app/node_modules`, viene con `npm install`). `docs/pdf.mjs` usa
-Playwright con Chromium. Para revisar el estilo del texto corre
-`python3 docs/estilo.py entrega/documento_tecnico.html entrega/reporte.html`.
+| Archivo | Contenido | Generación |
+|---|---|---|
+| `documento_tecnico.pdf` | Documento técnico con cuerpo de 6 a 10 páginas y anexos identificados aparte | `python docs/tecnico.py` y `node docs/pdf.mjs entrega/documento_tecnico.html entrega/documento_tecnico.pdf` |
+| `reporte.pdf` | Reporte ejecutivo en láminas de 16 a 9 | `python docs/reporte.py` y `node docs/pdf.mjs entrega/reporte.html entrega/reporte.pdf lamina` |
+| `entrevista.md` | Guion y respuestas metodológicas | Revisar contra el dashboard final |
+| `actualizacion_artifact.zip` | Paquete para actualizar el Artifact existente | Leer `actualizar_artifact.md` |
+| `dashboard.html` | Copia autónoma de respaldo | `node app/scripts/standalone.mjs` después del build |
+| `correo.txt` | Borrador del correo para completar por el equipo | Confirmar integrantes y enlaces antes de enviar |
+
+Antes de generar, deben terminar las exportaciones y pruebas afectadas por la transferencia. El paso 04 debe repetirse después de 05 para actualizar `compresion.json`. No reentrenar para generar los documentos.
+
+El renderer usa `markdown`, KaTeX y Playwright con Chromium. La revisión de estilo se ejecuta con `python docs/estilo.py entrega/documento_tecnico.html entrega/reporte.html`. La revisión final debe confirmar cifras iguales entre dashboard y documentos, cuerpo técnico dentro del límite y ausencia de contenido cortado en cada lámina.
+
+El enlace público anterior puede tener una versión previa. Revisa la compilación local de la entrega antes de compartir. No publicar ni enviar datos crudos de la LMB.

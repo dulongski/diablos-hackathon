@@ -3,6 +3,8 @@ import json, pathlib, re, subprocess, markdown
 
 AQUI = pathlib.Path(__file__).parent
 md = (AQUI / "documento_tecnico.md").read_text()
+from cifras import renderizar
+md = renderizar(md, AQUI.parent)
 
 # Bloques condicionales. "<!-- si stuff_entrena=mar -->" ... "<!-- fin -->" sólo queda si los modelos se entrenaron
 # así (artifacts/models.json). Así el texto nunca describe un modelo distinto del que produjo las cifras.
@@ -31,28 +33,28 @@ def anexo_robustez() -> str:
 
     o = ["## Anexo C · Pruebas de robustez", "",
          "Estas pruebas responden las dudas que un jurado técnico tendría al ver un $R^2$ bajo o un efecto de la altura "
-         "grande. Todas usan predicciones fuera de muestra y los intervalos de 95 % salen de un bootstrap por lanzador. "
+         "grande. Las predicciones excluyen las filas evaluadas del ajuste del calificador. Las tablas globales del objetivo y la preparación física limitan el aislamiento estadístico. Los intervalos de 95 % usan remuestreo por lanzador. "
          + ("Stuff+ se entrenó sólo con juegos a nivel del mar, para que la caída de velocidad de la pelota no le enseñe al "
             "modelo que un juego en altura da más carreras." if R.get("stuff_entrena") == "mar" else ""), ""]
     pq = ok("parque")
     if pq:
         p, i = pq["por_100"], pq["ic95_por_100"]
-        o += ["**Holdout de parque con física.** Entrenamos con nivel del mar y predijimos los "
+        o += ["**Holdout de categoría de altitud con física.** Entrenamos con nivel del mar y predijimos los "
               f"{pq['n']:,} lanzamientos de altitud extrema de {pq['lanzadores']} lanzadores que el modelo no vio, cada uno con "
               "su forma real y con la misma pelota volada a nivel del mar.", "",
               "| Por cada 100 lanzamientos en altura | Carreras | IC 95 % |", "|---|---|---|",
               f"| Exceso observado sobre lo que espera un modelo de nivel del mar | {x(p['total'], 2, True)} | {ic(i['total'], 2, True)} |",
-              f"| Parte que explica el vuelo del lanzamiento | {x(p['fisica'], 2, True)} | {ic(i['fisica'], 2, True)} |",
-              f"| Resto, sobre todo el batazo | {x(p['resto'], 2, True)} | {ic(i['resto'], 2, True)} |", "",
-              f"La física del lanzamiento explica {x((p['fraccion'] or 0) * 100, 0)} % del exceso (IC {ic(i['fraccion'], 0, k=100)} %). "
-              f"Dentro de la altura el modelo ordena con correlación {x(pq['corr'], 3, True)} (IC {ic(pq['corr_ic95'], 3, True)}), "
+              f"| Cambio predicho al transformar el vuelo | {x(p['fisica'], 2, True)} | {ic(i['fisica'], 2, True)} |",
+              f"| Residuo sin atribución causal | {x(p['resto'], 2, True)} | {ic(i['resto'], 2, True)} |", "",
+              f"La razón entre el cambio físico predicho y el exceso total es {x((p['fraccion'] or 0) * 100, 0)} % (IC {ic(i['fraccion'], 0, k=100)} %). "
+              f"Es una descomposición dependiente del modelo, no una fracción causal identificada. Dentro de la altura la correlación es {x(pq['corr'], 3, True)} (IC {ic(pq['corr_ic95'], 3, True)}), "
               f"y su $R^2$ con el nivel corregido es {x(pq['r2_nivel_corregido'], 5)}."
               + ((f" Por tipo de lanzamiento, la pérdida que predice la física y el exceso observado dentro del mismo lanzador "
                   f"coinciden en orden con correlación de rangos {x(pq['por_tipo_spearman']['rho'], 2, True)} "
                   f"({pq['por_tipo_spearman']['tipos']} tipos)." if pq['por_tipo_spearman']['rho'] > 0.3 else
                   f" Por tipo de lanzamiento, el exceso observado no sigue el orden de la pérdida física (correlación de rangos "
                   f"{x(pq['por_tipo_spearman']['rho'], 2, True)}, {pq['por_tipo_spearman']['tipos']} tipos). El exceso por tipo "
-                  f"lo domina el batazo y en varios tipos hay pocos lanzadores, así que la física se lee en el total, no tipo por tipo.")
+                  f"también puede reflejar selección y calibración. En varios tipos hay pocos lanzadores.")
                  if pq.get("por_tipo_spearman") else ""), ""]
     di = ok("discriminacion")
     if di:
@@ -62,19 +64,19 @@ def anexo_robustez() -> str:
               for k, n in (("stuff", "Stuff+"), ("location", "Location+"), ("pitching", "Pitching+"))] + [""]
     co = ok("confiabilidad")
     if co:
-        o += ["**Calidad contra mezcla de lanzamientos.** Correlación entre dos mitades al azar de los lanzamientos de cada "
+        o += ["**Calidad contra mezcla de lanzamientos.** Repetibilidad entre dos mitades intercaladas del mismo historial, sin separación temporal. Correlación de los lanzamientos de cada "
               f"lanzador. Stuff+ tal cual {x(co['crudo']['r'], 3)}, contra el promedio de su tipo {x(co['sin_mezcla']['r'], 3)} "
               f"(IC {ic(co['sin_mezcla']['ic95'], 3)}), sólo rectas {x(co['solo_rectas']['r'], 3)}, sólo la mezcla de tipos "
               f"{x(co['solo_mezcla']['r'], 3)} y carreras reales {x(co['carreras']['r'], 3)}.", ""]
     fu = ok("futuro")
     if fu:
         c, w = fu["carreras"], fu["whiff"]
-        o += [f"**Año siguiente.** {fu['pares']} pares de temporadas seguidas de {fu['lanzadores']} lanzadores.", "",
+        o += [f"**Año siguiente, análisis retrospectivo.** {fu['pares']} pares de temporadas seguidas de {fu['lanzadores']} lanzadores.", "",
               "| Lo que mides este año | Carreras del siguiente | Swing fallido del siguiente |", "|---|---|---|"]
         o += [f"| {n} | {x(c[k]['r'], 3, True)} ({ic(c[k]['ic95'], 2, True)}) | {x(w[k]['r'], 3, True)} ({ic(w[k]['ic95'], 2, True)}) |"
               for k, n in (("stuff", "Stuff+"), ("carreras_pasadas", "Sus carreras"), ("whiff_pasado", "Su swing fallido"))]
-        o += ["", f"Sumar Stuff+ a las carreras pasadas sube el $R^2$ de las carreras futuras en "
-                  f"{x(c['r2_incremental_stuff']['d'] * 100, 1)} puntos porcentuales (IC {ic(c['r2_incremental_stuff']['ic95'], 1, k=100)}).", ""]
+        o += ["", f"Evaluada con regresiones fuera de muestra agrupadas por lanzador, sumar Stuff+ cambia el $R^2$ en "
+                  f"{x(c['r2_incremental_stuff']['d'] * 100, 1)} puntos porcentuales (IC {ic(c['r2_incremental_stuff']['ic95'], 1, k=100)}). Las puntuaciones históricas originales usan modelos entrenados con otros lanzadores de todos los años. No es validación prospectiva del pipeline completo.", ""]
     cb = ok("combinacion")
     if cb:
         o += [f"**La combinación ponderada que sugiere el reto.** {len(cb['componentes'])} modelos de componente con las variables "
@@ -110,10 +112,8 @@ def anexo_robustez() -> str:
               "| Versión | $R^2$ | Diferencia 10 % | Mitades | Año siguiente |", "|---|---|---|---|---|"]
         o += [f"| {nom} | {x(mj[k]['r2_vs_rv'], 5)} | {x(mj[k]['brecha_100'], 2)} | {x(mj[k]['mitades'], 3)} | {x(mj[k]['futuro_stuff'], 3)} |"
               for k, nom in nombres if k in mj]
-        o += ["", "Ninguna se separa de la que usamos más allá del ruido. La mejor diferencia del 10 % (dirección del brazo) "
-              "queda dentro del intervalo de la nuestra y empeora el año siguiente. Stuff+ ya está en el techo de lo que la física del "
-              "lanzamiento sola predice de un lanzamiento suelto. Lo que falta para un $R^2$ alto es dónde cayó la pelota, y eso "
-              "por definición no entra en Stuff+.", ""]
+        o += ["", "Estas pruebas exploratorias no justifican sustituir el modelo servido. La diferencia del 10 % (dirección del brazo) "
+              "queda dentro del intervalo de producción. La comparación no identifica un techo de capacidad predictiva. Sus métricas temporales son retrospectivas y comparten los límites de preparación de objetivos.", ""]
     return "\n".join(o) + "\n"
 
 
@@ -156,13 +156,23 @@ def alinear(t):
         out.append(fila)
     return "".join(out)
 cuerpo = re.sub(r"<table>.*?</table>", lambda m: alinear(m.group(0)), cuerpo, flags=re.S)
+# Mantener el título con su tabla y evitar un párrafo breve partido entre columnas.
+cuerpo = re.sub(r"(<h3>1\.3.*?</h3>\s*<table.*?</table>)",
+                r'<section class="bloque-ancho">\1</section>', cuerpo, count=1, flags=re.S)
+cuerpo = re.sub(r"(<h2>9\. Reproducción</h2>\s*<p>.*?</p>)",
+                r'<section class="bloque-ancho">\1</section>', cuerpo, count=1, flags=re.S)
+cuerpo = re.sub(r"(<p><strong>H2\.</strong>.*?</p>\s*<div class=\"ecuacion\">.*?</div>)",
+                r'<div class="bloque-local">\1</div>', cuerpo, count=1, flags=re.S)
 # Gráficas en lugar de tablas. Se reusan las funciones SVG del reporte, así las dos piezas dibujan igual.
 import runpy
 R_ = runpy.run_path(str(AQUI / "reporte.py"))
 _h1, _h2, _h3, _h4 = R_["h1"], R_["h2"], R_["h3"], R_["h4"]
 _mae, _nat, _PH = R_["mae"], R_["nat"], R_["PH"]
 _AZ, _RO, _AM, _VE, _CE = R_["AZUL"], R_["ROJO"], R_["AMBAR"], R_["VERDE"], R_["CENIZA"]
-_barras, _bosque = R_["barras_h"], R_["bosque_svg"]
+_barras_original, _bosque = R_["barras_h"], R_["bosque_svg"]
+def _barras(*args, **kwargs):
+    # Más aire para la cifra y su unidad en las columnas estrechas del documento.
+    return _barras_original(*args, valor_w=94, **kwargs)
 _comp = R_["J"]["holdout"]["componentes"]
 _NOMC = {"y_called_strike": "Strike cantado", "y_swing": "Swing", "y_chase": "Persecución", "y_whiff": "Swing fallido",
          "y_weak_contact": "Contacto débil", "y_groundball": "Rodado", "y_hard_contact": "Contacto duro", "y_barrel": "Barril"}
@@ -187,13 +197,13 @@ GRAF = {
                            fmt=lambda v: f"{v:.1f} in", etiqueta_w=170,
                            colores={"Nivel del mar": _AZ, "Coors Field": _AM, "Harp Helú": _RO, "Coors, sólo densidad": _CE}),
                    "Quiebre total de una recta de 18 pulgadas a nivel del mar, volada en otros aires. Nathan estima 14 a 15 en Coors."),
-    "h1": _fig(_bosque([(t["tipo"], t["delta"], t["ic"]) for t in _h1["por_tipo"]], -14, 0, ancho=480, fila=34),
-               "Cambio medio de Stuff+ por tipo al pasar al Harp Helú, con su intervalo de 95 % (bootstrap por lanzador)."),
+    "h1": _fig(_bosque([(t["tipo"], t["delta"], t["ic"]) for t in _h1["por_tipo"]], min(t["delta"] for t in _h1["por_tipo"]) - 2, 0, ancho=480, fila=34),
+               "Cambio medio por tipo en combinaciones de lanzador y tipo con al menos 40 lanzamientos. Intervalo de 95 % por bootstrap de lanzadores. Esta muestra difiere de la población completa de Arsenal."),
     "h2": _fig(_bosque([(t["tipo"], t["ventaja_vs_recta"], t["ic"]) for t in _h2["pares"]], 0, 10, ancho=480, fila=34, fuerte="Cambio"),
                "Cuántos puntos menos pierde cada tipo que la recta del mismo lanzador, con su intervalo de 95 %."),
     "h3": _fig(_bosque([("En altura", _h3["pendiente_alt"], _h3["ic_alt"]), ("A nivel del mar", _h3["pendiente_mar"], _h3["ic_mar"]),
                         ("Diferencia", _h3["diferencia"], _h3["ic_dif"])], -1, 1, ancho=480, fila=34),
-               "Carreras por cada 100 lanzamientos por cada 10 puntos más de rodados, con su intervalo de 95 %. Negativo previene carreras."),
+               "Carreras por cada 100 lanzamientos por cada 10 puntos más de rodados, con su intervalo de 95 %. Negativo indica asociación con menos carreras."),
     "h4": _fig(_barras([(i["grupo"].replace(" (eficiencia)", "").replace("Giro que se vuelve movimiento", "Eficiencia de giro"), i["peso"] * 100)
                         for i in _h4["importancia"] if i["peso"] > 0.01], ancho=460, alto_fila=34, fmt=lambda v: f"{v:.0f} %", etiqueta_w=190,
                        colores={"Giro (rpm)": _RO, "Movimiento (quiebres)": _VE}),
@@ -213,15 +223,15 @@ CSS = """
 @page { size: Letter; margin: 15mm 16mm 15mm; @bottom-right { content: counter(page); } }
 :root { --rojo:#D7362B; --azul:#2E6FA6; --tinta:#10201A; --texto:#24302A; --ceniza:#6E7A73; --linea:#E3DCCB; --fondo:#FBF9F4; }
 * { box-sizing: border-box; }
-body { font-family: Inter, system-ui, sans-serif; font-size: 9pt; line-height: 1.37; color: var(--texto); margin: 0; }
+body { font-family: Inter, system-ui, sans-serif; font-size: 9.25pt; line-height: 1.43; color: var(--texto); margin: 0; }
 h1, h2, h3 { font-family: 'Big Shoulders Display', sans-serif; text-transform: uppercase; color: var(--tinta); line-height: 1; letter-spacing: .005em; }
-h2 { font-size: 18pt; font-weight: 800; margin: 12pt 0 5pt; padding-top: 7pt; border-top: 2px solid var(--rojo); break-after: avoid; }
-h3 { font-size: 12.5pt; font-weight: 700; margin: 13pt 0 5pt; break-after: avoid; }
-p { margin: 0 0 5.5pt; orphans: 3; widows: 3; }
+h2 { font-size: 18pt; font-weight: 800; line-height: 1.08; margin: 15pt 0 7pt; padding-top: 9pt; border-top: 2px solid var(--rojo); break-after: avoid; }
+h3 { font-size: 12.5pt; font-weight: 700; line-height: 1.1; margin: 15pt 0 6pt; break-after: avoid; }
+p { margin: 0 0 6.5pt; orphans: 3; widows: 3; }
 strong { color: var(--tinta); }
-table { width: 100%; border-collapse: collapse; margin: 5pt 0 9pt; font-size: 8.4pt; break-inside: avoid; }
+table { width: 100%; border-collapse: collapse; margin: 8pt 0 11pt; font-size: 8.4pt; break-inside: avoid; }
 th { text-align: left; font-weight: 600; color: var(--ceniza); font-size: 7.6pt; text-transform: uppercase; letter-spacing: .03em; border-bottom: 1.5px solid var(--tinta); padding: 4pt 5pt; }
-td { padding: 3.6pt 5pt; border-bottom: 1px solid var(--linea); font-variant-numeric: tabular-nums; }
+td { padding: 4pt 5pt; border-bottom: 1px solid var(--linea); font-variant-numeric: tabular-nums; }
 td.n, th.n { text-align: right; }
 pre { background: var(--fondo); border: 1px solid var(--linea); border-radius: 5pt; padding: 7pt 10pt; font-size: 8.2pt; break-inside: avoid; }
 code { font-family: 'JetBrains Mono', monospace; font-size: .92em; }
@@ -242,15 +252,19 @@ hr { border: none; border-top: 1px solid var(--linea); margin: 14pt 0; }
 .ecuacion { margin: 8pt 0 10pt; overflow-x: auto; }
 .katex { font-size: 1.06em; } .katex-display { margin: 0; }
 h2.anexo { break-before: page; }
-.dos-col { column-count: 2; column-gap: 7mm; column-fill: auto; }
+.dos-col { column-count: 2; column-gap: 8mm; column-fill: auto; }
 .dos-col h2 { column-span: all; }
 .dos-col table, .dos-col pre { column-span: all; }
-.dos-col .ecuacion { column-span: none; font-size: 7.4pt; margin: 5pt 0 7pt; overflow: hidden; break-inside: avoid; }
+.dos-col .ecuacion { column-span: none; font-size: 7.8pt; margin: 7pt 0 9pt; overflow: hidden; break-inside: avoid; }
 .dos-col .ecuacion .katex-display { text-align: left; }
 .dos-col .ecuacion .katex-display > .katex { text-align: left; white-space: normal; }
 .dos-col table.angosta { column-span: none; }
-.g-fig { margin: 4pt 0 9pt; break-inside: avoid; }
-.g-fig figcaption { font-size: 7.6pt; color: var(--ceniza); margin-top: 3pt; line-height: 1.3; }
+.bloque-ancho { column-span: all; break-inside: avoid; }
+.bloque-ancho h3 { margin-top: 10pt; }
+.bloque-local { break-inside: avoid; }
+p code, li code { overflow-wrap: anywhere; }
+.g-fig { margin: 6pt 0 12pt; break-inside: avoid; }
+.g-fig figcaption { font-size: 8pt; color: var(--ceniza); margin-top: 5pt; line-height: 1.4; }
 .g { width: 100%; height: auto; display: block; overflow: visible; }
 .g .et { font-family: Inter, sans-serif; font-size: 16px; font-weight: 600; fill: var(--tinta); }
 .g .et.halo { paint-order: stroke; stroke: #fff; stroke-width: 5px; }

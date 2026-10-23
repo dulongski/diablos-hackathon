@@ -107,7 +107,7 @@ def corr(a, b) -> float:
 
 
 def grupos(df: pd.DataFrame) -> np.ndarray:
-    return df.pitcher_anon_id.astype(str).fillna("__desconocido__").to_numpy()
+    return models.group_ids(df.pitcher_anon_id)
 
 
 def entrena_stuff(df: pd.DataFrame, feats: list[str], filas: np.ndarray) -> lgb.Booster:
@@ -124,8 +124,8 @@ def transferir(df: pd.DataFrame, feats: list[str], rho_destino: float) -> pd.Dat
     aero = physics.decompose(df)
     kw = dict(rho_observed=df.rho_game.to_numpy(), aero=aero,
               magnus_gamma=phys["magnus_gamma_vertical"], magnus_gamma_h=phys["magnus_gamma_horizontal"])
-    ref = physics.transfer_shape(df, 1.0, **kw)
-    destino = ref if rho_destino == 1.0 else physics.transfer_shape(df, rho_destino, **kw)
+    ref = physics.observed_shape(df)
+    destino = physics.transfer_shape(df, rho_destino, **kw)
     return physics.transfer_features(df[feats], ref, destino)
 
 
@@ -135,8 +135,9 @@ def parque(df: pd.DataFrame) -> dict:
 
     Para cada lanzamiento de altura tenemos tres números. Las carreras que pasaron (obs). Lo que el modelo predice
     con la forma que la pelota tuvo de verdad en altura (alt). Y lo que predice si a esa misma pelota la volamos a
-    nivel del mar (mar). Entonces obs − mar es todo el exceso de carreras de jugar en altura, alt − mar es la parte
-    que viene de cómo se mueve el lanzamiento, y obs − alt es lo que queda, sobre todo el batazo que vuela más.
+    nivel del mar (mar). obs − mar es un contraste contra el modelo, alt − mar
+    es su cambio por forma y obs − alt su residual. No identifica una fracción causal
+    porque también contiene error de calibración y diferencias no controladas.
     """
     feats = F.feature_sets()["stuff"]
     ext = (df.altitude_category == EXT).to_numpy()
@@ -175,6 +176,8 @@ def parque(df: pd.DataFrame) -> dict:
     ajustado = p_alt - p_alt.mean() + y.mean()            # mismo orden, nivel corregido
     res = {
         "n": int(len(y)), "lanzadores": int(len(np.unique(ids))),
+        "method": "Model-based decomposition with pitcher holdout and sea-only training.",
+        "limits": "Not an identified causal share. Includes model calibration error and uncontrolled context; upstream references are global.",
         "por_100": {k: v * 100 if k != "fraccion" else v for k, v in base.items()},
         "ic95_por_100": {k: [x * 100 if k != "fraccion" else x for x in ic([b[k] for b in bs])] for k in base},
         "r2_forma_altura": 1 - np.sum((y - p_alt) ** 2) / sst,
@@ -270,7 +273,7 @@ def confiabilidad(df: pd.DataFrame, oof: np.ndarray) -> dict:
 
 # ================================================================================ D. futuro
 def futuro(df: pd.DataFrame, oof: np.ndarray) -> dict:
-    """¿Stuff+ de un año predice las carreras y los swings fallidos del siguiente mejor que las carreras del año?"""
+    """Asociación retrospectiva entre años; OLS agregado con holdout de pitcher."""
     d = pd.DataFrame({"p": grupos(df), "year": df.year.to_numpy(), "s": -oof[0], "rv": df.rv.to_numpy(),
                       "sw": df.y_whiff.to_numpy()})
     d = d[np.isfinite(d.s) & np.isfinite(d.rv)]
@@ -288,7 +291,11 @@ def futuro(df: pd.DataFrame, oof: np.ndarray) -> dict:
     pf = pd.concat(pares, ignore_index=True)
     ids = pf.p.to_numpy()
     preds = {"stuff": pf.s_0.to_numpy(), "carreras_pasadas": -pf.rv_0.to_numpy(), "whiff_pasado": pf.sw_0.to_numpy()}
-    res = {"pares": int(len(pf)), "lanzadores": int(len(np.unique(ids))), "por_par": pf.par.value_counts().to_dict()}
+    res = {"pares": int(len(pf)), "lanzadores": int(len(np.unique(ids))), "por_par": pf.par.value_counts().to_dict(),
+           "method": "Retrospective year-pair association; aggregated OLS is cross-fitted by pitcher.",
+           "limits": ["Input Stuff+ OOF models were trained across all calendar years, excluding the focal pitcher.",
+                      "This is not prospective temporal validation.",
+                      "Target/count references and physics in stored OOF artifacts were not nested."]}
     for objetivo, yv in (("carreras", -pf.rv_1.to_numpy()), ("whiff", pf.sw_1.to_numpy())):
         r = {}
         for k, x in preds.items():
@@ -296,17 +303,24 @@ def futuro(df: pd.DataFrame, oof: np.ndarray) -> dict:
         dif = boot_lanzadores(ids, lambda i: corr(preds["stuff"][i], yv[i]) - corr(preds["carreras_pasadas"][i], yv[i]))
         r["stuff_menos_carreras_pasadas"] = {"d": r["stuff"]["r"] - r["carreras_pasadas"]["r"], "ic95": ic(dif)}
 
-        # Aporte incremental: R² de las carreras pasadas solas contra carreras pasadas + Stuff+.
+        # Mejora de error sobre predicciones realmente fuera del ajuste agregado.
+        p_base, p_extra = models.incremental_oof(yv, preds["carreras_pasadas"], preds["stuff"], ids)
+        valid = np.isfinite(yv) & np.isfinite(p_base) & np.isfinite(p_extra)
+        Y = yv[valid]
+        loss_gain = (Y - p_base[valid]) ** 2 - (Y - p_extra[valid]) ** 2
         def r2_inc(i):
-            Y = yv[i]
-            X1 = np.c_[np.ones(len(i)), preds["carreras_pasadas"][i]]
-            X2 = np.c_[X1, preds["stuff"][i]]
-            def r2(X):
-                beta, *_ = np.linalg.lstsq(X, Y, rcond=None)
-                return 1 - np.sum((Y - X @ beta) ** 2) / np.sum((Y - Y.mean()) ** 2)
-            return r2(X2) - r2(X1)
-        todos = np.arange(len(pf))
-        r["r2_incremental_stuff"] = {"d": r2_inc(todos), "ic95": ic(boot_lanzadores(ids, r2_inc))}
+            variance = np.var(Y[i])
+            return float(np.mean(loss_gain[i]) / variance) if variance > 0 else np.nan
+        todos = np.arange(len(Y))
+        r["r2_incremental_stuff"] = {
+            "d": r2_inc(todos),
+            "ic95": ic(boot_lanzadores(ids[valid], r2_inc)),
+            "n": int(valid.sum()),
+            "method": "Pitcher-grouped OOF OLS; bootstrap fixed paired squared-error differences by pitcher divided by outcome variance.",
+            "limits": "Conditional interval for fixed OOF predictions; excludes retraining and upstream model uncertainty.",
+            "baseline_oof": models.score(Y, p_base[valid]),
+            "plus_stuff_oof": models.score(Y, p_extra[valid]),
+        }
         res[objetivo] = r
         print(f"  {objetivo}: stuff {r['stuff']['r']:+.3f}, carreras pasadas {r['carreras_pasadas']['r']:+.3f}", flush=True)
     return limpio(res)

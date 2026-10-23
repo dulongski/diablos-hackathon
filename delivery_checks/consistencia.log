@@ -1,0 +1,15 @@
+
+> diablos-stuff-plus-app@0.1.0 consistencia
+> esbuild scripts/consistencia.ts --bundle --platform=node --format=esm --outfile=scripts/.consistencia.mjs --log-level=error && node scripts/.consistencia.mjs
+
+arrastre log_sd 0.077 (medido)
+tipo       simulador mar → HH   (Δ)    pipeline Δ
+Recta        99.9 →  81.4  (-18.5)    -13.7
+Sinker       98.7 →  87.0  (-11.7)     -9.9
+Cutter      104.3 →  96.5  ( -7.8)     -3.2
+Slider      102.2 →  91.5  (-10.7)     -5.3
+Curva        91.5 →  85.8  ( -5.7)     -6.3
+Cambio       99.7 →  96.2  ( -3.5)     -8.1
+Splitter    107.6 →  98.0  ( -9.7)     -4.7
+diferencia media de Δ 3.81 puntos; forma típica y población no tienen que coincidir
+PASS: finite values and identical-air identity for all presets. Population agreement is diagnostic.

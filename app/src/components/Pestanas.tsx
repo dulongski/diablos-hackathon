@@ -30,7 +30,7 @@ const VISTAS: { v: Vista; t: string; nota: string }[] = [
   { v: 'lanzadores', t: 'Lanzadores', nota: 'Quién aguanta' },
   { v: 'arsenal', t: 'Arsenal y perfil', nota: 'Qué buscar' },
   { v: 'hipotesis', t: 'Hipótesis', nota: 'H1 a H4' },
-  { v: 'causal', t: 'Causal Forest', nota: 'Qué hubiera pasado' },
+  { v: 'causal', t: 'Causal Forest', nota: 'Contrastes exploratorios' },
   { v: 'simulador', t: 'Simulador', nota: 'Prueba un lanzamiento' },
   { v: 'anexo', t: 'Anexo', nota: 'Términos' },
 ];

@@ -68,7 +68,7 @@ def main() -> None:
     feats = booster.feature_name()
 
     tk = dict(rho_observed=rho_obs, aero=aero, magnus_gamma=gamma_v, magnus_gamma_h=gamma_h)
-    shape_ref = physics.transfer_shape(sub, 1.0, **tk)
+    shape_ref = physics.observed_shape(sub)
     filas = []
     for objetivo, nombre in ((1.0, "mar"), (rho_ext, "alt")):
         shp = physics.transfer_shape(sub, objetivo, **tk)

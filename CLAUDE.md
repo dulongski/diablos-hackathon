@@ -1,220 +1,96 @@
-# Diablos Stuff+ · Hackathon ISAC 2026
+# Diablos Stuff+ · Estado de la entrega
 
-Entrega para el reto **Diablos Rojos: Stuff Plus Model, Calidad de Pitcheo Ajustada por Entorno**.
-Rúbrica completa: https://www.isac-app.com/competition-details/hackathon-diablos-rojos.html
+Proyecto del Hackathon ISAC 2026 para evaluar calidad de lanzamiento en la LMB y construir escenarios de altitud para el Harp Helú. Datos de 2024 a 2026, 635,002 lanzamientos. Los lanzadores están anonimizados. El conjunto sólo identifica categorías de altitud, no estadios concretos.
 
-## ⏰ Fechas
+## Decisión de esta revisión
 
-- **Entrega de proyectos: 2026-10-22.** Por correo a `itamsportsanalytics@gmail.com`, con los correos de
-  todos los integrantes del equipo.
-- Finalistas 2026-11-02 · Final 2026-11-11 (entrevista de 10 min) · Ganadores 2026-11-12.
+Se conserva el calificador LightGBM de producción, sus variables, sus árboles y su escala. El bosque secundario de entorno se recalculó con los insumos corregidos. La especificación es `STUFF_ENTRENA=todo`. Las pruebas exploratorias no justifican cambiarlo bajo el plazo de entrega.
 
-## Qué pide el reto (no perderlo de vista)
+Se corrige la referencia de transferencia física. Las variables observadas deben compararse contra su forma observada al construir diferencias y razones, no contra una referencia ya normalizada al nivel del mar. Transferir a la misma densidad debe conservar las variables originales. El arreglo cambia las calificaciones contrafactuales, las pérdidas por tipo, los perfiles y la selección de lanzadores; no cambia los árboles entrenados.
 
-La pregunta del club: **qué lanzadores son los más afectados por la altitud y cuáles son los más
-consistentes.** Todo lo demás se ordena alrededor de eso.
+La revisión de entrega vive en una copia aislada fuera de iCloud. No copiar cambios de vuelta al repositorio original ni publicar o enviar sin instrucciones del usuario. La entrega vence el 22 de octubre de 2026 a las 23:59, hora de Ciudad de México.
 
-Entregables obligatorios:
-1. Stuff+, Location+ y Pitching+ por lanzamiento, pitcher y arsenal; CDMX contra nivel del mar.
-2. Perfil físico ideal para el Harp Helú, con argumentación física y estadística.
-3. Recomendaciones: qué gana y qué pierde en altura (con riesgo de jonrón), cómo perfilar un prospecto.
-4. Dashboard simulador: ingresar un pitch → Stuff+ en Harp Helú vs nivel del mar; mapa de movimiento de
-   los pitches más y menos efectivos.
-5. Documento técnico de 6–10 páginas (PDF).
+## Fuentes de verdad
 
-Criterios (25 % cada uno): calidad del modelo (calibración, vencer al modelo nulo por conteo) ·
-robustez fuera de muestra (pitcher + park holdout) · integración arsenal + altitud (delta Stuff+ por
-pitch shape) · aplicabilidad real (entrevista con el jurado).
+- `app/public/data/*.json` alimenta el dashboard y los documentos. `artifacts/*.json` conserva los resultados analíticos.
+- `models.json` registra la especificación de entrenamiento. `scale.json` define la conversión de puntos a carreras estimadas. No escribir a mano una constante si puede leerse de ahí.
+- `docs/reporte.py` calcula las cifras desde los JSON. `docs/documento_tecnico.md` usa marcadores que `docs/cifras.py` resuelve al ejecutar `docs/tecnico.py`. No sustituir esos marcadores por cifras estáticas.
+- `entrega/documento_tecnico.pdf` y `entrega/reporte.pdf` se regeneran al terminar los cálculos. La revisión visual y el conteo de páginas deben realizarse sobre esos PDF finales.
+- `evaluations/codex_review_2026_10_22/REPORT.md` y sus JSON son el diagnóstico histórico anterior al arreglo, no las cifras finales de la entrega.
 
-## La vara: Coach DNA
+## Qué significa cada resultado
 
-El otro hackathon del mismo autor, repo público: https://github.com/dulongski/adn-del-entrenador.
-Su reporte de 17 láminas es el estándar de forma. Patrón de cada lámina:
-- **eyebrow** de sección + **titular que ES la conclusión**, en español llano;
-- una frase que empieza "En esta lámina…" y dice qué se está viendo;
-- **un solo** ejemplo concreto y una gráfica;
-- cada número con su comparación ("liga 15.1", "al azar 14 %");
-- colores semánticos constantes; logos ISAC + club; número de lámina.
-Estructura: portada → qué responde (preguntas → láminas) → el problema → definiciones y supuestos →
-método con literatura → validación con baseline al azar → ejemplo completo → **qué hacer** (con nombres)
-→ cierre con límites y referencias.
+Stuff+ sólo usa medidas físicas del lanzamiento. Location+ añade ubicación y conteo. Pitching+ añade arsenal y secuencia. La predicción directa es el valor esperado en carreras; los modelos de componente explican comportamientos y no son la fórmula de Stuff+. La escala es 100 más diez veces el valor estandarizado de la predicción con signo invertido.
 
-**Audiencia: alguien que no sabe nada de béisbol.** Todo término se explica la primera vez que aparece.
+Las tablas descriptivas, rankings y simulador usan el modelo final entrenado con todos los datos. Las métricas de validación se calculan con predicciones que excluyen las filas o lanzadores evaluados del ajuste del calificador. No confundir ambos usos.
 
-## ▶ Estado final (2026-10-22 noche, Mac)
+La física mide escenarios bajo el supuesto de la misma salida de la mano y distinto aire. La categoría extrema aproxima un entorno relevante para el Harp Helú; no identifica el efecto completo de ese estadio. El simulador representa una forma típica con 49 variaciones. La tabla por tipo promedia lanzamientos reales y no tiene por qué coincidir exactamente.
 
-Cadena completa corrida en la Mac (03 a 11 y consistencia). **Se probó `STUFF_ENTRENA=mar` y se descartó**: con
-lanzadores nuevos ya no le ganaba al modelo nulo (RMSE 0.26816 contra 0.26810, R² −0.0004) y anticipaba peor 2026
-(0.16 contra 0.22). Producción quedó con `STUFF_ENTRENA=todo`; la versión de nivel del mar vive como prueba de
-sensibilidad en `11_robustez.py` (especificaciones, variante `solo_mar`) y en Límites del documento.
+## Límites que deben permanecer visibles
 
-- **Robustez (todo).** Parque con física: exceso en altura +1.49 carreras por 100, la física del lanzamiento explica
-  +0.57 (39 %, IC 34 a 44). Por tipo el exceso no sigue el orden de la física (rho −0.57), el texto lo dice así.
-  Discriminación 10 % mejor contra peor 3.31 carreras por 100 (IC 2.98 a 3.64). Mitades 0.988, contra el tipo 0.989,
-  sólo rectas 0.990, carreras 0.293. Futuro (336 pares) Stuff+ 0.219 contra carreras pasadas 0.184, R² incremental
-  0.027 (IC 0.004 a 0.071). Combinación ponderada R² 0.0013 contra directo 0.0010, misma brecha. Sin frenado y sólo
-  nivel del mar, el orden de los tipos se mantiene (rho 0.96), la pérdida de la liga baja a −6.2 y −5.1.
-- **Simulador.** Con `log_sd` medido (0.077) exagera la pérdida unos 4.2 puntos contra el pipeline (con 0.15 serían
-  3.2). Se dejó el medido y se dice en Límites y en la entrevista.
-- Dashboard versión 13, documento con Anexo C (14 páginas, cuerpo en 10, los cuatro pasos del método en el Resumen), reporte de 15 láminas con el mismo método en la lámina 4, entrevista llena. La física del lanzamiento explica 39 % del costo de la altura (prueba de parque), no las "tres cuartas partes" de antes. OJO, 04_export arma compresion.json desde deliverables.json de 05, así que después de 05 hay que volver a correr 04.
+1. Las tablas del objetivo, baseline y preparación física de producción fueron calculadas globalmente. Sus validaciones no son una validación anidada completa. El benchmark aislado reajusta las tablas de objetivo y baseline dentro de cada corte y sigue encontrando una ventaja pequeña. No presentar un porcentaje global de precisión ni un techo teórico de Stuff+.
+2. La validación llamada anteriormente de parque excluye una categoría de altitud, no un estadio independiente. Un R² negativo y una correlación positiva pequeña no demuestran buen ordenamiento ni que todo el error sea altitud.
+3. La descomposición del exceso de carreras con un modelo de mar es dependiente del modelo. Su porcentaje no identifica la fracción causal atribuible al vuelo. El residuo incluye selección, bateo y calibración; no atribuirlo entero al batazo.
+4. La regresión incremental entre temporadas debe evaluarse fuera de muestra por lanzador. Incluso con esa reparación, las puntuaciones históricas usan modelos aprendidos con otros lanzadores de todos los años. El análisis es retrospectivo, y 2026 ya fue inspeccionado. No afirmar superioridad prospectiva concluyente.
+5. Las mitades intercaladas del mismo historial miden repetibilidad, no estabilidad en periodos futuros ni fiabilidad causal individual.
+6. H4 debe mostrar sensibilidad local. La casi igualdad entre extremos de un barrido de giro es una cancelación, no evidencia de que 100 rpm no importen. La ganancia de árboles no es importancia causal.
+7. El Causal Forest de entorno incluye tasas agregadas de rodados y swings fallidos, potencialmente posteriores al entorno. La interpretación causal exige controles previos suficientes y soporte común. GATES no confirma heterogeneidad individual. El bosque táctico tiene múltiples celdas sin corrección por comparaciones múltiples y sirve para orientar pruebas.
+8. Hay 6,346 de 171,020 turnos reconstruidos sin evento terminal. Su tratamiento puede afectar las tablas de valor. Falta una sensibilidad restringida a turnos completos.
 
-- **Mejoras probadas (scripts 12 y 12b, guardadas en robustez.json → mejoras).** Ocho variantes con la misma validación
-  (xRV del batazo, arsenal en Stuff+, ambas, frenado relativo al aire, HB en dirección del brazo, desfase del eje de giro,
-  consistencia de salida, todas las de física). R² 0.0009 a 0.0011, diferencia 10 % 3.2 a 3.5 (actual 3.31, IC 3.0 a 3.6),
-  año siguiente 0.19 a 0.24. Ninguna se separa del ruido; no se cambió el modelo. La mejor candidata para el futuro es
-  "brazo" + "desfase_eje"; cambiarla exige tocar la transferencia y el simulador del navegador.
+## Reproducir
 
-## Estado (2026-10-22, sesión local)
+Los datos de la LMB son sólo para la competencia. No subir `stuff_model_df.parquet` ni `artifacts/*.pkl`. Se necesitan localmente para reconstruir las exportaciones.
 
-Pipeline completo corrido en local con el modelo limpio (01 a 10). Documento, reporte y dashboard
-actualizados con las cifras nuevas. El venv rápido está en `~/.venvs/diablos` (el `.venv` dentro de iCloud
-se cuelga al importar).
+Entorno Python recomendado en esta Mac, fuera de iCloud, `~/.venvs/diablos/bin/python`. Instalar el proyecto editable y `econml` si se requiere reconstruir los bosques. La app usa dependencias de `app/package.json`.
 
-### Simulador con arrastre real (nube, 2026-10-22, después del modelo limpio)
-
-- **Problema.** Con el modelo limpio, el simulador daba pérdidas en altura del doble que el pipeline (recta
-  típica −24 contra −11.6 de la liga). Causa: `SpeedDrop` es la variable 1 de Stuff+ y el árbol tiene un
-  escalón entre 5 y 7 mph (la caída de velocidad delata el aire). El pipeline vuela cada lanzamiento real con
-  su propio arrastre medido; el simulador volaba todo con el arrastre mediano y caía justo en el escalón.
-- **Arreglo.** `stuffEstable` en `app/src/lib/scoring.ts`: promedio de 49 variaciones (Halton en seis
-  dimensiones) y cada una vuela con un arrastre sacado de la dispersión real entre pelotas
-  (`helpers.arrastre.log_sd`, 0.15 por defecto). Lo usan el simulador y `experimentos.ts`. El nivel
-  absoluto del integrador sí coincide con Trackman (12 lanzamientos del fixture, SpeedDrop +0.13 mph).
-- **Apuntar.** "A dónde apunta" ahora dice "sólo mueve la trayectoria": con el modelo limpio mover el
-  objetivo cambia Stuff+ en ~1 punto, como debe ser.
-- **Recalculado.** `artifacts/experimentos.json`, `hipotesis.json` (sólo cambió el experimento de H4),
-  documento 3.7 y 5.4, PDFs, dashboard republicado (versión 6).
-- **Pendiente local.** Correr `python scripts/04_export.py` para que `helpers.json` traiga el
-  `arrastre.log_sd` medido (ya está el código en `export.fit_helpers`). Luego `cd app && npm run consistencia`
-  (simulador contra pipeline por tipo; hoy error medio 3.2 puntos), y si `log_sd` cambia, volver a correr
-  `experimentos.ts` (ver su encabezado, el bundle tiene que quedar en `app/scripts/`) y `08_hipotesis.py`,
-  actualizar 5.4 del documento y las cifras de H4 abajo, regenerar PDFs y republicar.
-
-## Estado anterior (después de la sesión en la nube)
-
-Rama de trabajo: **`claude/confident-ptolemy-sz210m`** (todo lo nuevo está ahí, no en `main`).
-Dashboard publicado: https://claude.ai/artifact/1HXhuyBtkDd6szvLv9M7xo (se actualiza republicando
-`app/dist/artifact.html` con `node app/scripts/artifact.mjs`; ver "Publicar el dashboard" abajo).
-
-### Siguiente paso, en este orden
-
-1. **Correr el análisis local que falta.** Necesita los datos crudos, que sólo están en esta Mac.
-   ```bash
-   git pull origin claude/confident-ptolemy-sz210m
-   source .venv/bin/activate && uv pip install econml
-   python scripts/10_local_extras.py          # 10 a 20 min; necesita artifacts/scored.pkl
-   ```
-   Escribe `app/public/data/extras.json` y `artifacts/extras.json` con tres partes:
-   `cf_tactico` (Causal Forest táctico por conteo, lado del bateador y entorno, para slider vs cambio,
-   slider vs recta, cambio vs recta y curva vs slider), `shap` (peso por grupo de variables en cada capa) y
-   `tres_entornos` (Stuff+ por tipo a nivel del mar, altitud media y altitud extrema). Cada parte va en su
-   propio try: si una falla queda `{"error": ...}` y las otras se guardan. Sólo se probó con datos
-   sintéticos; si truena, arreglar contra las columnas reales de `scored.pkl`.
-   Si `scored.pkl` no existe, correr antes `01` a `03` (ver README).
-2. **Revisar los resultados y contarlos.** El dashboard los muestra solo (pestaña Causal Forest, Metodología
-   con SHAP, Arsenal y perfil con tres entornos). El reporte agrega la lámina táctica solo
-   (`docs/reporte.py`). El **documento técnico NO**: hay que escribir a mano en `docs/documento_tecnico.md`
-   los resultados tácticos (sección 6.4), SHAP (3.5) y tres entornos (6.1). Ojo, el cuerpo ya va en 10
-   páginas; si crece, recortar o bajar la letra en `docs/tecnico.py`.
-   También actualizar en `docs/reporte.py` los números de lámina de la tabla "Qué responde" (lámina 2),
-   porque la lámina táctica corre las demás una posición.
-3. **Regenerar y revisar.**
-   ```bash
-   python3 docs/tecnico.py && node docs/pdf.mjs entrega/documento_tecnico.html entrega/documento_tecnico.pdf
-   python3 docs/reporte.py && node docs/pdf.mjs entrega/reporte.html entrega/reporte.pdf lamina
-   python3 docs/estilo.py entrega/documento_tecnico.html entrega/reporte.html   # debe dar 0 problemas
-   cd app && npx tsc --noEmit && npm test && npm run build
-   ```
-   `docs/pdf.mjs` usa Playwright (`PW=$(npm root -g)/playwright` si no está local).
-4. **Publicar el dashboard** (ver abajo) y hacer commit y push a la rama.
-5. **Mandar el correo hoy.** `entrega/correo.txt` es texto plano para pegar; faltan integrantes y links.
-   Adjuntar `entrega/documento_tecnico.pdf` y `entrega/reporte.pdf`.
-6. Opcional antes de mandar: el link del dashboard es "cualquiera con el link" e incluye unos 3,000
-   lanzamientos sueltos sin IDs (`jurado.json`, mapa de movimiento). Decidir si eso cuenta como "datos".
-
-### Qué se hizo en la nube (para no repetirlo)
-
-- **Bug crítico:** `jurado.json` traía `NaN` y la app no cargaba. Arreglado en `07_jurado.py`.
-- **Dashboard, nueve pestañas** en orden de lectura: Inicio (respuesta corta), Metodología (siete pasos,
-  mapa de variables del reto), Validación (calibración, holdouts, tabla RMSE y R²), Lanzadores (incluye
-  constancia y efecto del Causal Forest), Arsenal y perfil, Hipótesis (H1 a H4), Causal Forest, Simulador,
-  Anexo (glosario y los siete tipos dibujados). Logos de ISAC y Diablos en `app/public/logos/`.
-- **Simulador nuevo** (`Simulador.tsx`, `Diamante3D.tsx`): una pelota con costuras en un campo de día,
-  trayectoria en vivo, todos los controles visibles, siete tipos. Su Stuff+ sale de `stuffEstable` (49
-  variaciones Halton con arrastre real). Se borraron la nube de puntos y la escena oscura.
-- **Hipótesis** (`scripts/08_hipotesis.py` + `app/scripts/experimentos.ts` → `hipotesis.json`,
-  `artifacts/experimentos.json`). Bootstrap por lanzador. H1 sí (física reproduce a Nathan, 18 → 14.9 in en
-  Coors), H2 en parte (cambio +1.27 contra su recta, pero cuarto de seis), H3 en parte (p = 0.07 una cola),
-  H4 sí (giro pesa 4 %, +0.1 por 100 rpm contra +1.9 por pulgada).
-- **Causal Forest de entorno** (`scripts/09_causal_forest.py` → `causal.json`). Costo promedio firme,
-  +1.46 carreras por 100 lanzamientos (IC 90 % 1.23 a 1.69). **Las diferencias entre lanzadores NO se
-  sostienen fuera de muestra** (GATES plano, pendiente −2.1 con IC −4.3 a +0.1). Nunca decir que el bosque
-  "llega a los mismos lanzadores que Stuff+". El mensaje correcto: las carreras confirman el promedio y
-  muestran por qué hace falta la física para separar lanzadores.
-- **Documento técnico** reescrito con LaTeX (KaTeX en Node, `docs/katex.mjs`), metodología completa,
-  hipótesis y Causal Forest. **Reporte** de 24 láminas que empieza por lo básico, con logos.
-- **Corrección importante:** Stuff+ predice directo el valor esperado en carreras (pérdida L2). Los ocho
-  modelos de componente sólo explican. El reto sugiere combinar objetivos; la justificación está en
-  Metodología y en el documento 3.5.
-
-### Guía de estilo del autor (obligatoria en todo texto que vea el lector)
-
-Voz activa, directa, de tú. Lenguaje simple pero con términos técnicos bien usados. Frases cortas y largas
-mezcladas. **Sin guiones de ningún tipo entre palabras, sin guion largo, sin dos puntos, sin punto y coma,
-sin asteriscos, sin frases de relleno** ("es importante", "cabe destacar", "no sólo"...). Afirmaciones
-directas. `docs/estilo.py` revisa el texto renderizado (código, fórmulas y el signo menos de los números
-no cuentan). En la app los tooltips `<Info>` no salen en el texto visible: revisarlos en el código.
-
-## Las cifras que cuentan la historia (modelo limpio, sin ángulos, 2026-10-22)
-
-- **Stuff+ sin fuga de ubicación.** Los cuatro ángulos de salida y llegada se quitaron de Stuff+ porque
-  codificaban puntería (corr con distancia al centro −0.70 → −0.03; R² desde la ubicación 58 % → ~0).
-  Stuff+ va mucho más regularizado (`models.CAPA_PARAMS`). 16 / 23 / 33 variables.
-- **1 punto de Stuff+ = 0.135 carreras por 100 lanzamientos** (`app/src/lexico.ts`, `CPP` en el reporte).
-  Cortes en carreras: aguanta > −3.7 puntos (media carrera), pierde mucho < −7.4 (una carrera).
-- **Validación.** Stuff+ entre mitades del mismo lanzador 0.988 (sus carreras 0.293, 602 lanzadores).
-  Stuff+ 2024–25 contra carreras 2026 0.218 (carreras pasadas 0.196, n = 114, no concluyente).
-  Calibración monótona, de +1.9 (< 80) a −2.5 (120 o más) carreras por 100. Holdouts R² / corr: lanzador
-  0.0010 / 0.036 (Pitching+ 0.043 / 0.208), temporada 0.0009 / 0.035, parque −0.0005 / +0.022 (falla en
-  nivel, no en orden; ese desfase es el efecto de la altitud).
-- **Por tipo.** Todos pierden. Recta −11.7, sinker −8.8, cambio −7.4, curva −6.3, slider −5.3, splitter
-  −4.4, cutter −3.0. Liga 103.1 → 97.1 (media) → 94.8 (extrema). Mejores rectas −19.4, peores −3.8.
-- **Lanzadores.** 561, **21 aguantan**, 354 pierden más de una carrera. Más afectado Lanzador 174 (recta ·
-  cambio, 111.3 → 92.8). Fichaje Lanzador 1099 (cutter · slider · curva, 110.2 → 109.8, ± 2.6).
-- **Hipótesis.** H1 Nathan 18 → 14.9 (Coors) / 13.8 (HH), rho −0.83 · H2 cambio +4.10 (3.48 a 4.69), cuarto
-  de seis · H3 p = 0.08 una cola · H4 movimiento 30 %, giro 8 % (variable 3 de 16), −0.01 por 100 rpm contra
-  +2.59 por pulgada; las rectas A y B NO se invierten (B gana por 19.2 a nivel del mar y por 6.1 en casa).
-- **Causal Forest.** ATE +1.52 (IC 90 % 1.27 a 1.78). La pérdida de Stuff+ de la liga equivale a 1.12, unas
-  tres cuartas partes. GATES plano (pendiente −1.95, IC −4.0 a +0.2). Acuerdo con Stuff+ 0.17 (p = 0.002).
-- **Riesgo.** Elevado +31 pies; jonrón por elevado 12.4 % → 16.3 %; rodados 40.5 % → 44.8 %.
-- **Física.** Índice del aire 1.000 / 0.898 / 0.853; exponente de Reynolds 0.7184; Magnus ∝ ρ^1.39 contra
-  arrastre ∝ ρ^0.96; la transferencia baja el error de forma ~70 %.
-
-## Datos
-
-Los datos de la LMB **no se suben al repositorio** (sólo para la competencia; se presentan resultados).
-En esta Mac están en la raíz (`stuff_model_df.parquet`) y en `artifacts/*.pkl`, ignorados por git. La nube
-no los tiene, por eso `10_local_extras.py` se corre aquí.
-
-## Correr la app
+Para recalcular después de cambiar sólo la transferencia, sin reentrenar el modelo
 
 ```bash
-cd app && npm install && npm run dev      # http://localhost:5173
-npm test                                  # física del navegador + evaluador de árboles vs LightGBM
-npm run build                             # app/dist, estática
+python scripts/04_export.py
+python scripts/05_deliverables.py
+python scripts/04_export.py
+python scripts/07_jurado.py
+python scripts/08_hipotesis.py
+python scripts/10_local_extras.py
+python scripts/11_robustez.py
 ```
 
-## Publicar el dashboard
+El segundo paso 04 es necesario porque `compresion.json` depende de `deliverables.json`, generado por 05. Revisar los argumentos disponibles en 10 y 11 para ejecutar sólo los bloques que dependen de transferencia. `09_causal_forest.py` se repitió en esta revisión al cambiar sus insumos físicos. Repetirlo de nuevo sólo si vuelven a cambiar sus dependencias. Los experimentos del simulador se reconstruyen con `app/scripts/experimentos.ts`, según su encabezado, si cambió su lógica.
+
+Para reconstruir desde los datos, ejecutar primero 01 y 02, y después `STUFF_ENTRENA=todo python scripts/03_models.py`. Esto vuelve a entrenar y requiere repetir todas las exportaciones y validaciones. No es necesario para un arreglo exclusivo de transferencia.
+
+Para generar y verificar entregables
 
 ```bash
-cd app && npm run build && node scripts/artifact.mjs
+python docs/tecnico.py
+python docs/reporte.py
+node docs/pdf.mjs entrega/documento_tecnico.html entrega/documento_tecnico.pdf
+node docs/pdf.mjs entrega/reporte.html entrega/reporte.pdf lamina
+python docs/estilo.py entrega/documento_tecnico.html entrega/reporte.html
+cd app
+npm test
+npx tsc --noEmit --incremental false
+npm run build
 ```
-Luego publicar `app/dist/artifact.html` como Artifact sobre el link de arriba, pasando en `files` los
-`assets/*` nuevos (y `null` a los viejos), `data/*.json` que cambiaron (incluido `extras.json`),
-`logos/*` y `favicon.svg`.
 
-## Convenciones
+Comprobar paridad del evaluador de árboles, identidad de transferencia, coherencia entre copias JSON, ausencia de NaN y render final. El documento tiene cuerpo técnico de 6 a 10 páginas, con anexos identificados aparte. Las láminas del reporte conservan formato 16 a 9.
 
-- Todo en español, para alguien que no sabe béisbol. Rojo = Harp Helú, azul = nivel del mar, siempre.
-- Lanzadores anonimizados por la liga: se muestran como "Lanzador 1099".
-- Stuff+ = 100 + 10 · z(−xRV): 100 es el promedio de la liga, cada 10 puntos una desviación estándar.
+## Convenciones editoriales
+
+Español claro para quien no conoce béisbol. Definir términos al primer uso. Rojo para altura, azul para nivel del mar. Cada cifra debe llevar denominador, unidad y comparación. Recomendaciones como apoyo al scouting, sujetas a salud, comando, descanso y rival. No prometer carreras futuras ni efectos causales individuales que la validación no sostiene.
+
+La revisión local de entrega y el manifiesto de archivos registran las comprobaciones finales. No presentar pruebas históricas como si ya hubieran validado una exportación recién generada.
+
+## Estado de entrega local
+
+La copia corregida está aislada fuera de iCloud, en `/private/tmp/diablos-entrega-20261022`. El enlace Claude existente se conserva. `entrega/actualizacion_artifact.zip` prepara su actualización y `entrega/actualizar_artifact.md` contiene las instrucciones. La versión alojada requiere publicación posterior. La rama de entrega de GitHub es `claude/confident-ptolemy-sz210m`; los enlaces del documento y correo apuntan a esa rama, porque `main` es la rama predeterminada y puede conservar una versión anterior. `entrega/dashboard.html` es respaldo autónomo. Ver `delivery_checks/final_checks.json` y `entrega/manifest_entrega.json` para comprobaciones y hashes.
+
+## Comprobaciones ejecutadas para esta entrega
+
+Pasaron 11 regresiones Python, paridad exacta LightGBM en 12 casos, pruebas de física y scoring del navegador, TypeScript, build Vite y 10 reconciliaciones de entrega. Se recorrieron todas las secciones y la validación en navegador de escritorio, sin errores de consola ni NaN observados. El simulador a 0 m dio 99.9 a ambos lados y cambio 0.0. Se inspeccionaron los PDF renderizados, con 14 páginas técnicas (portada, 10 de cuerpo, 3 de anexos) y 15 láminas. No equivale a probar cada control ni tamaños móviles.
+
+El Python local usado es `/Users/sdulongsalazar/.venvs/diablos/bin/python`. El render PDF de esta máquina usa `PW=/Users/sdulongsalazar/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright` y `CHROMIUM_EXECUTABLE_PATH=/Users/sdulongsalazar/Library/Caches/ms-playwright/chromium_headless_shell-1194/chrome-mac/headless_shell`. Ambas variables son opcionales cuando Playwright y su navegador predeterminado ya están instalados.
+
+`python scripts/14_delivery_check.py` verifica coherencia sin reentrenar ni cargar datos crudos. `node app/scripts/standalone.mjs` prepara el respaldo después del build. El ZIP de actualización contiene el build completo, y el ZIP de repositorio excluye los datos crudos, entornos y dependencias instaladas. La URL Claude sigue pendiente de actualizar con la herramienta de publicación de su cuenta.
+
+La tipografía final del documento técnico usa 9.25 pt, interlineado 1.43, separación de columnas de 8 mm y más espacio entre párrafos, secciones, ecuaciones y pies de figura. La comprobación de paginación está en `delivery_checks/pdf_layout.json`.

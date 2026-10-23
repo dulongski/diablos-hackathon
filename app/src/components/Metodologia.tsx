@@ -103,8 +103,8 @@ export function Metodologia({ physics, models, extras, j, irA }: {
           <p className="entrada ancha">
             Entrenamos un modelo que predice cuántas carreras vale cada lanzamiento a partir de cómo vuela la
             pelota, después usamos física para calcular cómo habría volado esa misma pelota en el aire del Harp Helú, y al
-            final le pedimos al mismo modelo que la vuelva a calificar. La diferencia entre las dos calificaciones es lo que
-            la altura le quita al lanzamiento. Abajo está cada paso con el detalle de qué hicimos y por qué.
+            final le pedimos al mismo modelo que la vuelva a calificar. La diferencia entre las dos calificaciones es el
+            cambio que estima el modelo bajo el supuesto de la misma salida de la mano. Abajo está cada paso con el detalle de qué hicimos y por qué.
           </p>
           <nav className="pasos-metodo" aria-label="Pasos">
             {PASOS.map((p, i) => (
@@ -304,9 +304,7 @@ export function Metodologia({ physics, models, extras, j, irA }: {
           </Parte>
 
           <Parte id="m-pruebas" n={8} color="var(--nivel-mar)" titulo="La validación, cómo sabemos que el modelo funciona">
-            <p>Todas las métricas que reportamos se calculan con datos que el modelo no vio al entrenar, porque medir el error en
-              los mismos datos de entrenamiento premia al modelo que memoriza. Usamos cinco pruebas, y cada una responde una
-              pregunta distinta.</p>
+            <p>Las métricas históricas siguientes excluyen filas de prueba al ajustar el modelo, pero sus tablas de valor de carrera se calcularon con el período completo. La pestaña Validación muestra por separado la auditoría que aprende objetivo y nulo sólo en entrenamiento. La repetibilidad y las asociaciones entre temporadas responden preguntas distintas de la predicción temporal.</p>
             <ul className="limites">
               <li><b>¿Le gana a lo más simple?</b> El reto pide comparar contra un modelo nulo que sólo conoce el conteo de bolas y
                 strikes y predice el valor promedio de ese conteo. Ese modelo tiene un R² de {nf(nulo.r2, 5)}, prácticamente cero,
@@ -315,11 +313,11 @@ export function Metodologia({ physics, models, extras, j, irA }: {
                 los lanzamientos de un mismo lanzador quedan juntos en entrenamiento o juntos en prueba, nunca repartidos. Si los
                 repartiéramos, el modelo podría reconocer al lanzador y el resultado se vería mejor de lo que es. Con lanzadores
                 nuevos, Stuff+ logra un R² de {nf(hp.stuff.r2, 4)} y Pitching+ uno de {nf(hp.pitching.r2, 3)}. También probamos
-                entrenar con 2024 y 2025 y predecir 2026 (R² de {nf(ht.r2, 4)}), y entrenar sin estadios de altura y predecir sólo
+                entrenar con 2024 y 2025 y predecir 2026 (R² de {nf(ht.r2, 4)}), y entrenar con la categoría sin altitud y evaluar la categoría extrema, no estadios identificados, sólo
                 en altura (correlación de {nf(hq.corr ?? 0, 3)}).</li>
-              <li><b>¿Por qué el R² es tan bajo?</b> Porque el resultado de un solo lanzamiento es casi todo azar. El mismo
-                lanzamiento perfecto a veces termina en jonrón, así que ningún modelo puede explicar mucha de la varianza de un
-                lanzamiento suelto. Lo que importa es que, cuando agregas muchos lanzamientos, las predicciones ordenen bien las
+              <li><b>¿Por qué el R² es tan bajo?</b> Estas variables explican una fracción pequeña del resultado puntual, que también depende del bateador, la defensa y el azar. Un buen
+                lanzamiento puede terminar en jonrón. Este resultado no establece el techo de otros modelos. También importa
+                que, cuando agregas muchos lanzamientos, las predicciones ordenen bien las
                 carreras, y eso lo miden las dos pruebas siguientes.</li>
               <li><b>¿Las predicciones cumplen?</b> Es una prueba de calibración. Agrupamos los lanzamientos por su Stuff+ y
                 comparamos las carreras predichas con las que de verdad ocurrieron. Los lanzamientos con Stuff+ menor a 80
@@ -328,19 +326,15 @@ export function Metodologia({ physics, models, extras, j, irA }: {
               {est && <li><b>¿Mide algo estable del lanzador?</b> Es una prueba de confiabilidad. Partimos al azar los lanzamientos
                 de cada uno de {nf(est.lanzadores_mitades)} lanzadores en dos mitades y correlacionamos su Stuff+ promedio en una
                 mitad con el de la otra. La correlación es {nf(est.mitades.stuff, 3)}, mientras que la de sus carreras reales es
-                {' '}{nf(est.mitades.rv, 3)}. Eso dice que Stuff+ mide un rasgo del lanzador y que las carreras de unos cientos de
-                lanzamientos todavía tienen mucho ruido.</li>}
+                {' '}{nf(est.mitades.rv, 3)}. Es repetibilidad entre mitades aleatorias que comparten períodos y un modelo; no demuestra pronóstico temporal.</li>}
             </ul>
-            <p>Para las hipótesis del reto y para todos los intervalos de confianza usamos <b>bootstrap por lanzador</b>. En cada
+            <p>Para las hipótesis del reto usamos <b>bootstrap por lanzador</b>. En cada
               una de 2,000 repeticiones sacamos una muestra de lanzadores con reemplazo, llevándonos todos sus lanzamientos, y
               recalculamos el resultado. El intervalo de 95 % es el rango que deja fuera el 2.5 % más bajo y el 2.5 % más alto de
               esas 2,000 estimaciones. Remuestreamos lanzadores y no lanzamientos sueltos porque los lanzamientos de una misma
               persona se parecen entre sí, y tratarlos como independientes daría intervalos demasiado angostos.</p>
             <p>Por último, Stuff+ es un modelo de predicción y no de causalidad, así que no responde qué habría pasado si el
-              lanzador hubiera tomado otra decisión. Para esas preguntas agregamos un <b>Causal Forest</b>, un método que estima
-              efectos causales que pueden variar según las características de cada caso, controlando por las variables que
-              confunden la comparación. Lo usamos para medir cuánto cuesta la altura en carreras reales y para comparar qué tipo
-              de lanzamiento conviene en cada conteo.</p>
+              lanzador hubiera tomado otra decisión. Agregamos un <b>Causal Forest</b> como análisis exploratorio de asociaciones ajustadas por variables observadas. Su interpretación causal exigiría ausencia de confusión no medida y covariables previas a la decisión. Los resúmenes de resultados de este conjunto no garantizan esos supuestos; por eso no presentamos su clasificación como política táctica validada.</p>
             <p className="enlaces-sec">
               <button type="button" className="enlace" onClick={() => irA('confianza')}>Ver la validación →</button>
               <button type="button" className="enlace" onClick={() => irA('hipotesis')}>Ver las hipótesis →</button>

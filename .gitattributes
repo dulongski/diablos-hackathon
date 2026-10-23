@@ -1,0 +1,4 @@
+# Compilaciones y registros conservados como evidencia, no código escrito a mano.
+entrega/dashboard.html linguist-generated=true whitespace=-blank-at-eol
+delivery_checks/*.log linguist-generated=true whitespace=-blank-at-eol
+app/test/*.log linguist-generated=true whitespace=-blank-at-eol

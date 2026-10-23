@@ -4,11 +4,12 @@
  * Un experimento controlado mueve una sola perilla y deja todo lo demás fijo, algo que los datos
  * observados no permiten: en la cancha, el lanzador que gira más también se mueve distinto.
  *
- *   npx esbuild scripts/experimentos.ts --bundle --platform=node --outfile=/tmp/exp.mjs --format=esm
- *   node /tmp/exp.mjs > ../artifacts/experimentos.json
+ *   npx esbuild scripts/experimentos.ts --bundle --platform=node --outfile=scripts/.experimentos.mjs --format=esm
+ *   node scripts/.experimentos.mjs > ../artifacts/experimentos.json
  */
 import { readFileSync } from 'node:fs';
 import { stuffEstable, type Escala, type Helpers } from '../src/lib/scoring';
+import { rpmSensitivity } from '../src/lib/sensitivity';
 import { densityAtAltitude, dragIndexAtAltitude, releaseAt, solveRelease, type PitchInput } from '../src/lib/physics';
 import type { Model } from '../src/lib/gbm';
 
@@ -108,6 +109,8 @@ const parejas = {
 const pendiente = (xs: { mar: number }[], paso: number) => r2((xs[xs.length - 1].mar - xs[0].mar) / ((xs.length - 1) * paso));
 const h4 = {
   giro, mov, parejas,
+  sensibilidad_giro: rpmSensitivity(giro),
+  nota: "Las pendientes entre extremos pueden ocultar sensibilidad no lineal; las rpm también reconstruyen la eficiencia. No es un efecto causal.",
   // Stuff+ por unidad, y por una desviación típica de la liga (≈ 250 rpm de giro; ≈ 3 in de elevación en rectas)
   stuff_por_100rpm: r2(pendiente(giro, 1)), stuff_por_pulgada: r2(pendiente(mov, 1)),
 };

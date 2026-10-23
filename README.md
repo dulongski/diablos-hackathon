@@ -9,16 +9,17 @@ mide cuánto vale cada uno en el Harp Helú y le dice al club qué lanzadores le
 
 | | |
 |---|---|
-| **Dashboard en vivo** | https://claude.ai/artifact/1HXhuyBtkDd6szvLv9M7xo |
+| **Dashboard alojado anterior, pendiente de actualizar** | https://claude.ai/artifact/1HXhuyBtkDd6szvLv9M7xo |
+| **Dashboard corregido preparado** | [`entrega/actualizar_artifact.md`](entrega/actualizar_artifact.md), paquete de actualización y respaldo autónomo |
+| **Código de esta entrega** | [rama corregida](https://github.com/dulongski/diablos-hackathon/tree/claude/confident-ptolemy-sz210m) |
 | **Documento técnico** | [`entrega/documento_tecnico.pdf`](entrega/documento_tecnico.pdf) |
 | **Reporte ejecutivo** | [`entrega/reporte.pdf`](entrega/reporte.pdf) |
 
 ## La respuesta corta
 
-La altitud apenas toca al lanzamiento malo y **borra la ventaja del bueno**. Las mejores rectas de la liga
-pierden 19.4 puntos de Stuff+ en el Harp Helú y las peores 3.8. En promedio la liga pierde 8.3, unas 1.1
-carreras más por cada 100 lanzamientos. De 561 lanzadores, sólo 21 aguantan la altura. El perfil que conviene engaña sin depender del movimiento, con cutter,
-slider y splitter, y provoca rodados, porque en altura un elevado viaja 31 pies más.
+La transferencia física permite comparar el mismo lanzamiento en aire de nivel del mar y de altura. La recta resulta más sensible que el cutter, pero las pérdidas y los perfiles dependen del modelo. El dashboard y los documentos toman sus cifras de los mismos JSON para que las recomendaciones se actualicen juntas.
+
+Se conserva el modelo entrenado de producción y se corrige la referencia de transferencia. Las métricas predictivas por lanzamiento son pequeñas. La validación por categoría de altitud no equivale a dejar fuera un estadio, y las asociaciones entre temporadas son retrospectivas. Los límites completos están en el documento técnico y en `CLAUDE.md`.
 
 ## Cómo funciona
 
@@ -32,7 +33,7 @@ La altitud no entra al modelo como una variable. Entra por física.
 
 Tres capas, como pide el reto. Stuff+ (física pura), Location+ (más ubicación y conteo) y Pitching+ (más
 arsenal y secuencia, con las variables relacionales contra la recta del lanzador). Todo con LightGBM y
-validado con lanzadores, temporada y estadio fuera de muestra.
+evaluado con lanzadores, temporada y categoría de altitud fuera del ajuste del calificador. La preparación global de tablas del objetivo limita el aislamiento de toda la validación.
 
 ## Dónde está cada cosa que pide el reto
 
@@ -47,8 +48,8 @@ validado con lanzadores, temporada y estadio fuera de muestra.
 | Hipótesis H1 a H4 | Pestaña Hipótesis, documento técnico 5 |
 | Causal Forest táctico (opcional) | Pestaña Causal Forest, `scripts/09` y `scripts/10` |
 | Calibración y modelo nulo | Pestaña Validación |
-| Pruebas de robustez (parque con física, discriminación, futuro, combinación ponderada) | Pestaña Validación, documento Anexo C, `scripts/11_robustez.py` |
-| Pitcher, season y park holdout | Pestaña Validación |
+| Pruebas de robustez (categoría de altitud con física, discriminación, futuro, combinación ponderada) | Pestaña Validación, documento Anexo C, `scripts/11_robustez.py` |
+| Holdout de lanzador, temporada y categoría de altitud | Pestaña Validación |
 | Variables de arsenal e interpretación con SHAP | Pestaña Metodología |
 
 ## Correr el proyecto
@@ -59,17 +60,18 @@ Los datos de la LMB no están en el repositorio. Pon `stuff_model_df.parquet` en
 uv venv && uv pip install -e . && uv pip install econml
 python scripts/01_physics.py        # densidad del aire y transferencia de forma
 python scripts/02_features.py       # secuencia, arsenal, objetivos
-python scripts/03_models.py         # las tres capas y sus holdouts
+STUFF_ENTRENA=todo python scripts/03_models.py  # las tres capas y sus holdouts
 python scripts/04_export.py         # modelo y tablas al simulador
 python scripts/05_deliverables.py   # entregables 1, 2 y 3
+python scripts/04_export.py         # actualiza compresion.json desde 05
 python scripts/07_jurado.py         # tabla por lanzador, calibración y mapa
 python scripts/08_hipotesis.py      # H1 a H4
 python scripts/09_causal_forest.py  # Causal Forest de entorno
 python scripts/10_local_extras.py   # Causal Forest táctico, SHAP y tres entornos
-python scripts/11_robustez.py       # pruebas de robustez (parque con física, discriminación, futuro, combinación)
+python scripts/11_robustez.py       # pruebas de robustez (categoría de altitud con física, discriminación, futuro, combinación)
 ```
 
-El dashboard corre completo en el navegador, sin servidor.
+El dashboard corre completo en el navegador. El enlace público anterior puede corresponder a una versión previa de esta revisión. La compilación local en `app/dist` y los PDF de esta carpeta contienen la entrega regenerada.
 
 ```bash
 cd app && npm install && npm test && npm run dev

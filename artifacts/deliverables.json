@@ -1,75 +1,75 @@
 {
   "pitchers_evaluados": 753,
-  "delta_promedio_liga": -8.282,
+  "delta_promedio_liga": -9.325,
   "por_tipo": {
     "Cutter": {
       "n": 26468,
-      "stuff_mar": 102.123,
-      "stuff_alt": 99.159,
-      "delta": -2.964,
+      "stuff_mar": 101.704,
+      "stuff_alt": 98.488,
+      "delta": -3.216,
       "d_ivb": 9.461,
       "whiff": 0.109,
-      "delta_vs_recta": 8.628
+      "delta_vs_recta": 10.473
     },
     "Splitter": {
       "n": 7289,
-      "stuff_mar": 106.162,
-      "stuff_alt": 101.726,
-      "delta": -4.436,
+      "stuff_mar": 106.989,
+      "stuff_alt": 102.251,
+      "delta": -4.738,
       "d_ivb": 3.783,
       "whiff": 0.168,
-      "delta_vs_recta": 7.156
+      "delta_vs_recta": 8.951
     },
     "Slider": {
       "n": 139717,
-      "stuff_mar": 105.988,
-      "stuff_alt": 100.686,
-      "delta": -5.301,
+      "stuff_mar": 106.16,
+      "stuff_alt": 100.816,
+      "delta": -5.344,
       "d_ivb": 2.621,
       "whiff": 0.154,
-      "delta_vs_recta": 6.291
+      "delta_vs_recta": 8.345
     },
     "Curveball": {
       "n": 54024,
-      "stuff_mar": 104.033,
-      "stuff_alt": 97.837,
-      "delta": -6.196,
+      "stuff_mar": 104.429,
+      "stuff_alt": 98.12,
+      "delta": -6.309,
       "d_ivb": -7.308,
       "whiff": 0.143,
-      "delta_vs_recta": 5.397
+      "delta_vs_recta": 7.38
     },
     "Changeup": {
       "n": 78925,
-      "stuff_mar": 101.491,
-      "stuff_alt": 94.178,
-      "delta": -7.313,
+      "stuff_mar": 102.259,
+      "stuff_alt": 94.164,
+      "delta": -8.095,
       "d_ivb": 6.475,
       "whiff": 0.143,
-      "delta_vs_recta": 4.28
+      "delta_vs_recta": 5.594
     },
     "Other": {
       "n": 62,
-      "stuff_mar": 96.051,
-      "stuff_alt": 87.599,
-      "delta": -8.452,
+      "stuff_mar": 96.006,
+      "stuff_alt": 87.761,
+      "delta": -8.245,
       "d_ivb": -10.782,
       "whiff": 0.194,
-      "delta_vs_recta": 3.141
+      "delta_vs_recta": 5.444
     },
     "Sinker": {
       "n": 110899,
-      "stuff_mar": 101.331,
-      "stuff_alt": 92.562,
-      "delta": -8.769,
+      "stuff_mar": 102.467,
+      "stuff_alt": 92.583,
+      "delta": -9.884,
       "d_ivb": 9.182,
       "whiff": 0.067,
-      "delta_vs_recta": 2.824
+      "delta_vs_recta": 3.806
     },
     "Four-Seam": {
       "n": 217618,
-      "stuff_mar": 102.514,
-      "stuff_alt": 90.921,
-      "delta": -11.593,
+      "stuff_mar": 105.605,
+      "stuff_alt": 91.916,
+      "delta": -13.689,
       "d_ivb": 15.21,
       "whiff": 0.092,
       "delta_vs_recta": 0.0
@@ -77,105 +77,105 @@
   },
   "perfil_ideal": {
     "RelSpeed": {
-      "optimo_nivel_mar": 88.32,
-      "optimo_altitud": 85.05,
-      "diferencia": -3.27,
+      "optimo_nivel_mar": 91.07,
+      "optimo_altitud": 85.38,
+      "diferencia": -5.69,
       "liga_mediana": 88.9
     },
     "InducedVertBreak": {
-      "optimo_nivel_mar": 4.44,
-      "optimo_altitud": -3.26,
-      "diferencia": -7.71,
+      "optimo_nivel_mar": 8.94,
+      "optimo_altitud": -2.59,
+      "diferencia": -11.53,
       "liga_mediana": 9.16
     },
     "HorzBreak": {
-      "optimo_nivel_mar": 0.71,
-      "optimo_altitud": -4.37,
-      "diferencia": -5.08,
+      "optimo_nivel_mar": 4.49,
+      "optimo_altitud": -4.26,
+      "diferencia": -8.75,
       "liga_mediana": 7.25
     },
     "SpinRate": {
-      "optimo_nivel_mar": 2553.81,
-      "optimo_altitud": 2503.74,
-      "diferencia": -50.07,
+      "optimo_nivel_mar": 2526.18,
+      "optimo_altitud": 2524.01,
+      "diferencia": -2.17,
       "liga_mediana": 2327.65
     },
     "SpinAxis": {
-      "optimo_nivel_mar": 138.34,
-      "optimo_altitud": 102.47,
-      "diferencia": -35.87,
+      "optimo_nivel_mar": 169.16,
+      "optimo_altitud": 103.41,
+      "diferencia": -65.75,
       "liga_mediana": 210.92
     },
     "Extension": {
-      "optimo_nivel_mar": 5.96,
-      "optimo_altitud": 5.71,
-      "diferencia": -0.25,
+      "optimo_nivel_mar": 6.05,
+      "optimo_altitud": 5.75,
+      "diferencia": -0.3,
       "liga_mediana": 5.88
     },
     "RelHeight": {
-      "optimo_nivel_mar": 5.68,
-      "optimo_altitud": 5.65,
-      "diferencia": -0.02,
+      "optimo_nivel_mar": 5.7,
+      "optimo_altitud": 5.64,
+      "diferencia": -0.06,
       "liga_mediana": 5.79
     },
     "RelSide": {
-      "optimo_nivel_mar": 2.04,
-      "optimo_altitud": 1.88,
-      "diferencia": -0.16,
+      "optimo_nivel_mar": 2.14,
+      "optimo_altitud": 1.9,
+      "diferencia": -0.24,
       "liga_mediana": 1.72
     },
     "spin_efficiency": {
-      "optimo_nivel_mar": 0.84,
-      "optimo_altitud": 0.55,
-      "diferencia": -0.29,
+      "optimo_nivel_mar": 0.88,
+      "optimo_altitud": 0.57,
+      "diferencia": -0.31,
       "liga_mediana": 0.81
     },
     "movement_total": {
-      "optimo_nivel_mar": 17.33,
-      "optimo_altitud": 11.26,
-      "diferencia": -6.06,
+      "optimo_nivel_mar": 17.49,
+      "optimo_altitud": 11.73,
+      "diferencia": -5.76,
       "liga_mediana": 14.68
     }
   },
   "mezcla_top_1pct": {
     "Changeup": {
-      "top_nivel_mar": 0.0259,
-      "top_altitud": 0.052,
+      "top_nivel_mar": 0.0134,
+      "top_altitud": 0.0447,
       "liga": 0.1157
     },
     "Curveball": {
-      "top_nivel_mar": 0.2764,
-      "top_altitud": 0.2987,
+      "top_nivel_mar": 0.1658,
+      "top_altitud": 0.3058,
       "liga": 0.0787
     },
     "Cutter": {
-      "top_nivel_mar": 0.0029,
-      "top_altitud": 0.0363,
+      "top_nivel_mar": 0.001,
+      "top_altitud": 0.024,
       "liga": 0.0334
     },
     "Four-Seam": {
-      "top_nivel_mar": 0.4054,
-      "top_altitud": 0.0148,
+      "top_nivel_mar": 0.6626,
+      "top_altitud": 0.0597,
       "liga": 0.3558
     },
     "Other": {
-      "top_nivel_mar": 0.0002,
+      "top_nivel_mar": 0.0,
       "top_altitud": 0.0002,
       "liga": 0.0001
     },
     "Sinker": {
-      "top_nivel_mar": 0.0213,
-      "top_altitud": 0.01,
+      "top_nivel_mar": 0.0138,
+      "top_altitud": 0.0092,
       "liga": 0.1746
     },
     "Slider": {
-      "top_nivel_mar": 0.2384,
-      "top_altitud": 0.5188,
+      "top_nivel_mar": 0.1255,
+      "top_altitud": 0.4894,
       "liga": 0.227
     },
     "Splitter": {
-      "top_nivel_mar": 0.0294,
-      "top_altitud": 0.0691,
+      "top_nivel_mar": 0.018,
+      "top_altitud": 0.067,
       "liga": 0.0147
     }
   },
@@ -183,193 +183,193 @@
     "Four-Seam": {
       "q1": {
         "n": 43524,
-        "plus_mar": 89.62,
-        "plus_alt": 85.82,
-        "delta": -3.81
+        "plus_mar": 91.1,
+        "plus_alt": 85.69,
+        "delta": -5.41
       },
       "q2": {
         "n": 43523,
-        "plus_mar": 96.99,
-        "plus_alt": 88.79,
-        "delta": -8.2
+        "plus_mar": 99.34,
+        "plus_alt": 89.23,
+        "delta": -10.1
       },
       "q3": {
         "n": 43524,
-        "plus_mar": 102.03,
-        "plus_alt": 90.59,
-        "delta": -11.43
+        "plus_mar": 105.31,
+        "plus_alt": 91.2,
+        "delta": -14.11
       },
       "q4": {
         "n": 43523,
-        "plus_mar": 107.53,
-        "plus_alt": 92.36,
-        "delta": -15.17
+        "plus_mar": 111.58,
+        "plus_alt": 93.57,
+        "delta": -18.01
       },
       "q5": {
         "n": 43524,
-        "plus_mar": 116.4,
-        "plus_alt": 97.05,
-        "delta": -19.35
+        "plus_mar": 120.7,
+        "plus_alt": 99.89,
+        "delta": -20.81
       }
     },
     "Slider": {
       "q1": {
         "n": 27944,
-        "plus_mar": 95.22,
-        "plus_alt": 92.19,
-        "delta": -3.04
+        "plus_mar": 95.02,
+        "plus_alt": 92.15,
+        "delta": -2.86
       },
       "q2": {
         "n": 27943,
         "plus_mar": 101.84,
-        "plus_alt": 97.15,
-        "delta": -4.68
+        "plus_alt": 97.24,
+        "delta": -4.6
       },
       "q3": {
         "n": 27943,
-        "plus_mar": 105.82,
-        "plus_alt": 100.28,
-        "delta": -5.54
+        "plus_mar": 105.94,
+        "plus_alt": 100.34,
+        "delta": -5.6
       },
       "q4": {
         "n": 27943,
-        "plus_mar": 109.93,
-        "plus_alt": 103.59,
-        "delta": -6.35
+        "plus_mar": 110.26,
+        "plus_alt": 103.74,
+        "delta": -6.53
       },
       "q5": {
         "n": 27944,
-        "plus_mar": 117.13,
-        "plus_alt": 110.22,
-        "delta": -6.91
+        "plus_mar": 117.74,
+        "plus_alt": 110.62,
+        "delta": -7.13
       }
     },
     "Changeup": {
       "q1": {
         "n": 15785,
-        "plus_mar": 90.1,
-        "plus_alt": 87.15,
-        "delta": -2.95
+        "plus_mar": 90.56,
+        "plus_alt": 86.8,
+        "delta": -3.76
       },
       "q2": {
         "n": 15785,
-        "plus_mar": 97.17,
-        "plus_alt": 91.11,
-        "delta": -6.06
+        "plus_mar": 97.86,
+        "plus_alt": 90.98,
+        "delta": -6.88
       },
       "q3": {
         "n": 15785,
-        "plus_mar": 101.58,
-        "plus_alt": 93.83,
-        "delta": -7.75
+        "plus_mar": 102.42,
+        "plus_alt": 93.8,
+        "delta": -8.62
       },
       "q4": {
         "n": 15785,
-        "plus_mar": 105.86,
-        "plus_alt": 96.82,
-        "delta": -9.05
+        "plus_mar": 106.81,
+        "plus_alt": 96.88,
+        "delta": -9.93
       },
       "q5": {
         "n": 15785,
-        "plus_mar": 112.75,
-        "plus_alt": 101.99,
-        "delta": -10.76
+        "plus_mar": 113.64,
+        "plus_alt": 102.36,
+        "delta": -11.28
       }
     },
     "Curveball": {
       "q1": {
         "n": 10805,
-        "plus_mar": 90.6,
-        "plus_alt": 87.88,
-        "delta": -2.72
+        "plus_mar": 90.78,
+        "plus_alt": 87.83,
+        "delta": -2.96
       },
       "q2": {
         "n": 10805,
-        "plus_mar": 97.95,
-        "plus_alt": 92.91,
-        "delta": -5.04
+        "plus_mar": 98.41,
+        "plus_alt": 92.94,
+        "delta": -5.47
       },
       "q3": {
         "n": 10804,
-        "plus_mar": 103.39,
-        "plus_alt": 96.83,
-        "delta": -6.56
+        "plus_mar": 103.86,
+        "plus_alt": 96.96,
+        "delta": -6.91
       },
       "q4": {
         "n": 10805,
-        "plus_mar": 109.37,
-        "plus_alt": 101.34,
-        "delta": -8.03
+        "plus_mar": 109.8,
+        "plus_alt": 101.82,
+        "delta": -7.98
       },
       "q5": {
         "n": 10805,
-        "plus_mar": 118.86,
-        "plus_alt": 110.24,
-        "delta": -8.62
+        "plus_mar": 119.29,
+        "plus_alt": 111.06,
+        "delta": -8.23
       }
     },
     "Sinker": {
       "q1": {
         "n": 22180,
-        "plus_mar": 90.14,
-        "plus_alt": 87.84,
-        "delta": -2.29
+        "plus_mar": 91.09,
+        "plus_alt": 87.49,
+        "delta": -3.6
       },
       "q2": {
         "n": 22180,
-        "plus_mar": 97.13,
-        "plus_alt": 90.38,
-        "delta": -6.74
+        "plus_mar": 98.17,
+        "plus_alt": 90.29,
+        "delta": -7.88
       },
       "q3": {
         "n": 22179,
-        "plus_mar": 101.47,
-        "plus_alt": 92.18,
-        "delta": -9.29
+        "plus_mar": 102.55,
+        "plus_alt": 92.35,
+        "delta": -10.2
       },
       "q4": {
         "n": 22180,
-        "plus_mar": 105.7,
-        "plus_alt": 94.14,
-        "delta": -11.55
+        "plus_mar": 106.89,
+        "plus_alt": 94.53,
+        "delta": -12.36
       },
       "q5": {
         "n": 22180,
-        "plus_mar": 112.23,
+        "plus_mar": 113.63,
         "plus_alt": 98.26,
-        "delta": -13.96
+        "delta": -15.38
       }
     },
     "TODOS": {
       "q1": {
         "n": 127001,
-        "plus_mar": 90.85,
-        "plus_alt": 87.5,
-        "delta": -3.35
+        "plus_mar": 91.67,
+        "plus_alt": 87.59,
+        "delta": -4.08
       },
       "q2": {
         "n": 127000,
-        "plus_mar": 98.25,
-        "plus_alt": 91.57,
-        "delta": -6.67
+        "plus_mar": 99.34,
+        "plus_alt": 92.04,
+        "delta": -7.31
       },
       "q3": {
         "n": 127000,
-        "plus_mar": 102.95,
-        "plus_alt": 94.42,
-        "delta": -8.52
+        "plus_mar": 104.27,
+        "plus_alt": 95.04,
+        "delta": -9.23
       },
       "q4": {
         "n": 127000,
-        "plus_mar": 107.72,
-        "plus_alt": 97.43,
-        "delta": -10.29
+        "plus_mar": 109.35,
+        "plus_alt": 97.96,
+        "delta": -11.38
       },
       "q5": {
         "n": 127001,
-        "plus_mar": 115.73,
-        "plus_alt": 103.15,
-        "delta": -12.57
+        "plus_mar": 117.95,
+        "plus_alt": 103.32,
+        "delta": -14.63
       }
     }
   },
@@ -417,9 +417,9 @@
     {
       "pitcher_anon_id": "pitcher_01075",
       "n": 761,
-      "stuff_mar": 114.56,
-      "stuff_alt": 110.54,
-      "delta": -4.02,
+      "stuff_mar": 114.87,
+      "stuff_alt": 110.84,
+      "delta": -4.04,
       "whiff": 0.17,
       "gb": 0.52,
       "velo": 87.76,
@@ -428,9 +428,9 @@
     {
       "pitcher_anon_id": "pitcher_00469",
       "n": 284,
-      "stuff_mar": 114.18,
-      "stuff_alt": 110.24,
-      "delta": -3.94,
+      "stuff_mar": 113.86,
+      "stuff_alt": 109.89,
+      "delta": -3.97,
       "whiff": 0.19,
       "gb": 0.54,
       "velo": 90.72,
@@ -439,20 +439,31 @@
     {
       "pitcher_anon_id": "pitcher_01099",
       "n": 657,
-      "stuff_mar": 110.2,
-      "stuff_alt": 109.8,
-      "delta": -0.4,
+      "stuff_mar": 109.6,
+      "stuff_alt": 109.62,
+      "delta": 0.02,
       "whiff": 0.15,
       "gb": 0.54,
       "velo": 85.48,
       "ext": 4.87
     },
     {
+      "pitcher_anon_id": "pitcher_00386",
+      "n": 733,
+      "stuff_mar": 113.06,
+      "stuff_alt": 108.06,
+      "delta": -5.0,
+      "whiff": 0.14,
+      "gb": 0.42,
+      "velo": 88.9,
+      "ext": 5.79
+    },
+    {
       "pitcher_anon_id": "pitcher_00225",
       "n": 212,
-      "stuff_mar": 111.77,
-      "stuff_alt": 107.83,
-      "delta": -3.94,
+      "stuff_mar": 111.85,
+      "stuff_alt": 107.88,
+      "delta": -3.97,
       "whiff": 0.17,
       "gb": 0.45,
       "velo": 89.33,
@@ -461,31 +472,20 @@
     {
       "pitcher_anon_id": "pitcher_00456",
       "n": 220,
-      "stuff_mar": 112.26,
-      "stuff_alt": 107.54,
-      "delta": -4.72,
+      "stuff_mar": 112.61,
+      "stuff_alt": 107.77,
+      "delta": -4.85,
       "whiff": 0.18,
       "gb": 0.44,
       "velo": 94.17,
       "ext": 5.78
     },
     {
-      "pitcher_anon_id": "pitcher_00386",
-      "n": 733,
-      "stuff_mar": 112.2,
-      "stuff_alt": 107.46,
-      "delta": -4.74,
-      "whiff": 0.14,
-      "gb": 0.42,
-      "velo": 88.9,
-      "ext": 5.79
-    },
-    {
       "pitcher_anon_id": "pitcher_00107",
       "n": 271,
-      "stuff_mar": 114.38,
-      "stuff_alt": 107.42,
-      "delta": -6.96,
+      "stuff_mar": 114.52,
+      "stuff_alt": 107.54,
+      "delta": -6.98,
       "whiff": 0.16,
       "gb": 0.68,
       "velo": 94.24,
@@ -494,88 +494,88 @@
     {
       "pitcher_anon_id": "pitcher_00222",
       "n": 529,
-      "stuff_mar": 111.14,
-      "stuff_alt": 106.94,
-      "delta": -4.2,
+      "stuff_mar": 111.32,
+      "stuff_alt": 107.17,
+      "delta": -4.15,
       "whiff": 0.16,
       "gb": 0.53,
       "velo": 84.58,
       "ext": 5.41
     },
     {
+      "pitcher_anon_id": "pitcher_00619",
+      "n": 1464,
+      "stuff_mar": 118.5,
+      "stuff_alt": 106.23,
+      "delta": -12.27,
+      "whiff": 0.18,
+      "gb": 0.38,
+      "velo": 88.83,
+      "ext": 6.01
+    },
+    {
       "pitcher_anon_id": "pitcher_00772",
       "n": 326,
-      "stuff_mar": 108.89,
-      "stuff_alt": 106.07,
-      "delta": -2.82,
+      "stuff_mar": 108.87,
+      "stuff_alt": 106.12,
+      "delta": -2.75,
       "whiff": 0.14,
       "gb": 0.56,
       "velo": 86.92,
       "ext": 5.32
-    },
-    {
-      "pitcher_anon_id": "pitcher_00005",
-      "n": 159,
-      "stuff_mar": 109.7,
-      "stuff_alt": 105.25,
-      "delta": -4.44,
-      "whiff": 0.21,
-      "gb": 0.38,
-      "velo": 91.55,
-      "ext": 6.16
     }
   ],
   "mas_castigados": [
     {
-      "pitcher_anon_id": "pitcher_00174",
-      "n": 649,
-      "stuff_mar": 111.26,
-      "stuff_alt": 92.81,
-      "delta": -18.45,
-      "whiff": 0.13,
-      "gb": 0.4,
-      "velo": 91.83,
-      "ext": 6.07
-    },
-    {
-      "pitcher_anon_id": "pitcher_00297",
-      "n": 357,
-      "stuff_mar": 111.14,
-      "stuff_alt": 93.76,
-      "delta": -17.38,
-      "whiff": 0.18,
-      "gb": 0.3,
-      "velo": 89.29,
-      "ext": 5.79
-    },
-    {
       "pitcher_anon_id": "pitcher_00602",
       "n": 760,
-      "stuff_mar": 106.41,
-      "stuff_alt": 89.56,
-      "delta": -16.85,
+      "stuff_mar": 108.22,
+      "stuff_alt": 89.7,
+      "delta": -18.52,
       "whiff": 0.09,
       "gb": 0.33,
       "velo": 83.55,
       "ext": 5.94
     },
     {
+      "pitcher_anon_id": "pitcher_00174",
+      "n": 649,
+      "stuff_mar": 113.76,
+      "stuff_alt": 95.26,
+      "delta": -18.5,
+      "whiff": 0.13,
+      "gb": 0.4,
+      "velo": 91.83,
+      "ext": 6.07
+    },
+    {
       "pitcher_anon_id": "pitcher_01133",
       "n": 813,
-      "stuff_mar": 113.71,
-      "stuff_alt": 97.47,
-      "delta": -16.25,
+      "stuff_mar": 115.58,
+      "stuff_alt": 97.95,
+      "delta": -17.64,
       "whiff": 0.11,
       "gb": 0.37,
       "velo": 89.83,
       "ext": 6.14
     },
     {
+      "pitcher_anon_id": "pitcher_00297",
+      "n": 357,
+      "stuff_mar": 112.49,
+      "stuff_alt": 94.88,
+      "delta": -17.61,
+      "whiff": 0.18,
+      "gb": 0.3,
+      "velo": 89.29,
+      "ext": 5.79
+    },
+    {
       "pitcher_anon_id": "pitcher_00332",
       "n": 705,
-      "stuff_mar": 111.32,
-      "stuff_alt": 95.13,
-      "delta": -16.2,
+      "stuff_mar": 110.91,
+      "stuff_alt": 94.1,
+      "delta": -16.81,
       "whiff": 0.12,
       "gb": 0.32,
       "velo": 86.72,
@@ -584,165 +584,165 @@
     {
       "pitcher_anon_id": "pitcher_00529",
       "n": 785,
-      "stuff_mar": 109.02,
-      "stuff_alt": 93.26,
-      "delta": -15.76,
+      "stuff_mar": 109.75,
+      "stuff_alt": 93.13,
+      "delta": -16.63,
       "whiff": 0.16,
       "gb": 0.31,
       "velo": 79.25,
       "ext": 5.46
     },
     {
+      "pitcher_anon_id": "pitcher_00329",
+      "n": 229,
+      "stuff_mar": 105.21,
+      "stuff_alt": 88.68,
+      "delta": -16.53,
+      "whiff": 0.08,
+      "gb": 0.16,
+      "velo": 83.11,
+      "ext": 5.68
+    },
+    {
+      "pitcher_anon_id": "pitcher_01088",
+      "n": 180,
+      "stuff_mar": 113.86,
+      "stuff_alt": 97.59,
+      "delta": -16.28,
+      "whiff": 0.11,
+      "gb": 0.5,
+      "velo": 91.6,
+      "ext": 6.35
+    },
+    {
+      "pitcher_anon_id": "pitcher_00840",
+      "n": 690,
+      "stuff_mar": 113.03,
+      "stuff_alt": 96.85,
+      "delta": -16.18,
+      "whiff": 0.13,
+      "gb": 0.38,
+      "velo": 90.57,
+      "ext": 5.98
+    },
+    {
       "pitcher_anon_id": "pitcher_00056",
       "n": 629,
-      "stuff_mar": 105.56,
-      "stuff_alt": 90.67,
-      "delta": -14.89,
+      "stuff_mar": 107.12,
+      "stuff_alt": 91.33,
+      "delta": -15.79,
       "whiff": 0.1,
       "gb": 0.37,
       "velo": 90.35,
       "ext": 6.0
-    },
-    {
-      "pitcher_anon_id": "pitcher_01103",
-      "n": 727,
-      "stuff_mar": 114.02,
-      "stuff_alt": 99.13,
-      "delta": -14.88,
-      "whiff": 0.18,
-      "gb": 0.46,
-      "velo": 93.53,
-      "ext": 6.51
-    },
-    {
-      "pitcher_anon_id": "pitcher_00285",
-      "n": 376,
-      "stuff_mar": 104.46,
-      "stuff_alt": 89.73,
-      "delta": -14.73,
-      "whiff": 0.09,
-      "gb": 0.42,
-      "velo": 90.64,
-      "ext": 5.34
-    },
-    {
-      "pitcher_anon_id": "pitcher_00573",
-      "n": 705,
-      "stuff_mar": 108.38,
-      "stuff_alt": 93.69,
-      "delta": -14.69,
-      "whiff": 0.14,
-      "gb": 0.24,
-      "velo": 89.39,
-      "ext": 5.93
     }
   ],
   "mas_resistentes": [
     {
-      "pitcher_anon_id": "pitcher_00722",
-      "n": 456,
-      "stuff_mar": 102.21,
-      "stuff_alt": 102.29,
-      "delta": 0.08,
-      "whiff": 0.12,
-      "gb": 0.46,
-      "velo": 84.79,
-      "ext": 5.0
-    },
-    {
       "pitcher_anon_id": "pitcher_01099",
       "n": 657,
-      "stuff_mar": 110.2,
-      "stuff_alt": 109.8,
-      "delta": -0.4,
+      "stuff_mar": 109.6,
+      "stuff_alt": 109.62,
+      "delta": 0.02,
       "whiff": 0.15,
       "gb": 0.54,
       "velo": 85.48,
       "ext": 4.87
     },
     {
-      "pitcher_anon_id": "pitcher_00091",
-      "n": 241,
-      "stuff_mar": 98.98,
-      "stuff_alt": 97.77,
-      "delta": -1.21,
+      "pitcher_anon_id": "pitcher_00722",
+      "n": 456,
+      "stuff_mar": 102.38,
+      "stuff_alt": 101.31,
+      "delta": -1.06,
       "whiff": 0.12,
-      "gb": 0.54,
-      "velo": 88.07,
-      "ext": 5.17
-    },
-    {
-      "pitcher_anon_id": "pitcher_00531",
-      "n": 215,
-      "stuff_mar": 99.91,
-      "stuff_alt": 98.54,
-      "delta": -1.36,
-      "whiff": 0.1,
-      "gb": 0.53,
-      "velo": 87.38,
-      "ext": 5.58
-    },
-    {
-      "pitcher_anon_id": "pitcher_00586",
-      "n": 453,
-      "stuff_mar": 103.76,
-      "stuff_alt": 101.86,
-      "delta": -1.91,
-      "whiff": 0.11,
-      "gb": 0.4,
-      "velo": 83.44,
-      "ext": 5.46
-    },
-    {
-      "pitcher_anon_id": "pitcher_00539",
-      "n": 1029,
-      "stuff_mar": 95.92,
-      "stuff_alt": 93.97,
-      "delta": -1.95,
-      "whiff": 0.1,
       "gb": 0.46,
-      "velo": 85.86,
-      "ext": 5.67
-    },
-    {
-      "pitcher_anon_id": "pitcher_00458",
-      "n": 699,
-      "stuff_mar": 100.59,
-      "stuff_alt": 98.55,
-      "delta": -2.04,
-      "whiff": 0.1,
-      "gb": 0.5,
-      "velo": 80.59,
-      "ext": 5.63
+      "velo": 84.79,
+      "ext": 5.0
     },
     {
       "pitcher_anon_id": "pitcher_00430",
       "n": 1191,
-      "stuff_mar": 100.88,
-      "stuff_alt": 98.79,
-      "delta": -2.09,
+      "stuff_mar": 100.19,
+      "stuff_alt": 98.08,
+      "delta": -2.11,
       "whiff": 0.13,
       "gb": 0.47,
       "velo": 87.75,
       "ext": 5.75
     },
     {
+      "pitcher_anon_id": "pitcher_00458",
+      "n": 699,
+      "stuff_mar": 100.82,
+      "stuff_alt": 98.69,
+      "delta": -2.13,
+      "whiff": 0.1,
+      "gb": 0.5,
+      "velo": 80.59,
+      "ext": 5.63
+    },
+    {
+      "pitcher_anon_id": "pitcher_00539",
+      "n": 1029,
+      "stuff_mar": 95.88,
+      "stuff_alt": 93.6,
+      "delta": -2.28,
+      "whiff": 0.1,
+      "gb": 0.46,
+      "velo": 85.86,
+      "ext": 5.67
+    },
+    {
+      "pitcher_anon_id": "pitcher_00531",
+      "n": 215,
+      "stuff_mar": 99.91,
+      "stuff_alt": 97.57,
+      "delta": -2.33,
+      "whiff": 0.1,
+      "gb": 0.53,
+      "velo": 87.38,
+      "ext": 5.58
+    },
+    {
+      "pitcher_anon_id": "pitcher_00091",
+      "n": 241,
+      "stuff_mar": 98.71,
+      "stuff_alt": 96.2,
+      "delta": -2.51,
+      "whiff": 0.12,
+      "gb": 0.54,
+      "velo": 88.07,
+      "ext": 5.17
+    },
+    {
       "pitcher_anon_id": "pitcher_00452",
       "n": 152,
-      "stuff_mar": 100.43,
-      "stuff_alt": 98.14,
-      "delta": -2.29,
+      "stuff_mar": 100.44,
+      "stuff_alt": 97.85,
+      "delta": -2.59,
       "whiff": 0.1,
       "gb": 0.45,
       "velo": 87.65,
       "ext": 5.44
     },
     {
+      "pitcher_anon_id": "pitcher_00772",
+      "n": 326,
+      "stuff_mar": 108.87,
+      "stuff_alt": 106.12,
+      "delta": -2.75,
+      "whiff": 0.14,
+      "gb": 0.56,
+      "velo": 86.92,
+      "ext": 5.32
+    },
+    {
       "pitcher_anon_id": "pitcher_00629",
       "n": 458,
-      "stuff_mar": 99.56,
-      "stuff_alt": 97.18,
-      "delta": -2.37,
+      "stuff_mar": 99.02,
+      "stuff_alt": 96.09,
+      "delta": -2.92,
       "whiff": 0.09,
       "gb": 0.68,
       "velo": 87.63,

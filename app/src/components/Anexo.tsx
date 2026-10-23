@@ -34,7 +34,7 @@ const TIPOS: { t: string; d: string; para: string }[] = [
 
 const SUPUESTOS: string[] = [
   'El conjunto no dice en qué estadio se lanzó, sólo trae tres categorías de altitud. Sacamos la densidad del aire del frenado que Trackman mide en cada lanzamiento.',
-  'Stuff+ sólo ve la forma del lanzamiento. Para saber qué vale en otro estadio, transferimos la forma a otro aire y la volvemos a calificar. La diferencia es el aire y nada más.',
+  'Stuff+ sólo ve la forma del lanzamiento. Para saber qué vale en otro estadio, transferimos la forma a otro aire y la volvemos a calificar. La diferencia es una estimación bajo los supuestos del modelo físico y de valoración; no identifica por sí sola un efecto causal en carreras.',
   'Medimos el valor de un lanzamiento en carreras sobre los 12 conteos posibles, porque el conjunto no trae corredores en base.',
   'La liga anonimizó a los lanzadores, así que aparecen como "Lanzador 1099".',
   'Mostramos el movimiento lateral de lanzadores derechos. En un zurdo es el espejo.',

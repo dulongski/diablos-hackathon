@@ -9,6 +9,7 @@
  *   npm run consistencia
  */
 import { readFileSync } from 'node:fs';
+import assert from 'node:assert/strict';
 import { stuffEstable, ARRASTRE_LOG_SD, type Escala, type Helpers } from '../src/lib/scoring';
 import type { Model } from '../src/lib/gbm';
 import type { PitchInput } from '../src/lib/physics';
@@ -39,7 +40,11 @@ for (const [es, en, o] of TIPOS) {
   const p: PitchInput = { relHeight: 5.9, relSide: 1.6, extension: 6.1, ...o } as PitchInput;
   const [m, a] = stuffEstable(p, [1, HH], true, model, helpers, escala);
   const d = ars[en].delta_plus;
+  assert.ok([m, a, d].every(Number.isFinite), `Non-finite score for ${en}`);
+  const identity = stuffEstable(p, [1, 1], true, model, helpers, escala);
+  assert.ok(Math.abs(identity[0] - identity[1]) < 1e-9, `Sea-level identity failed for ${en}`);
   err += Math.abs(a - m - d);
   console.log(`${es.padEnd(10)} ${m.toFixed(1).padStart(6)} → ${a.toFixed(1).padStart(5)}  (${(a - m).toFixed(1).padStart(5)})   ${d.toFixed(1).padStart(6)}`);
 }
-console.log(`error medio de Δ ${(err / TIPOS.length).toFixed(2)} puntos`);
+console.log(`diferencia media de Δ ${(err / TIPOS.length).toFixed(2)} puntos; forma típica y población no tienen que coincidir`);
+console.log("PASS: finite values and identical-air identity for all presets. Population agreement is diagnostic.");

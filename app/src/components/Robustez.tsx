@@ -26,25 +26,23 @@ export function Robustez({ r }: { r: DatosRobustez }) {
       <h3 className="titulo-sec sub">Pruebas de robustez, lo que preguntaría un jurado técnico</h3>
       <p className="entrada ancha">
         Las pruebas de arriba son las que pide el reto. Aquí van cinco más, cada una pensada para una duda concreta que
-        alguien con formación en estadística tendría al ver un R² tan bajo o un efecto de la altura tan grande. Todas usan
-        predicciones fuera de muestra, y los intervalos de 95 % salen de remuestrear lanzadores completos.
+        alguien con formación en estadística tendría al ver un R² tan bajo o un efecto de la altura tan grande. Las pruebas por lanzador usan predicciones con ese lanzador excluido. Las asociaciones entre temporadas son retrospectivas. Los intervalos de 95 % remuestrean lanzadores completos y no incluyen toda la incertidumbre del modelo físico.
         {r.stuff_entrena === 'mar' && <> En esta versión, Stuff+ se entrenó sólo con juegos a nivel del mar, para que no pueda aprender que un juego en altura da más carreras.</>}
       </p>
 
       {pq && (
         <div className="tarjeta">
-          <h3 className="titulo-tarjeta">¿La física explica las carreras de más en altura?</h3>
+          <h3 className="titulo-tarjeta">Comparación del cambio físico con el desfase de carreras</h3>
           <p className="nota-tarjeta">
             Entrenamos Stuff+ sólo con juegos a nivel del mar y lo usamos para predecir los {nf(pq.n)} lanzamientos de altitud
             extrema de {nf(pq.lanzadores)} lanzadores que el modelo no vio. A cada lanzamiento lo predecimos dos veces, con la
             forma que la pelota tuvo de verdad en altura y con esa misma pelota volada a nivel del mar. La resta entre las dos
-            es la parte del exceso de carreras que viene de cómo se mueve el lanzamiento, y la comparamos con el exceso que de
-            verdad ocurrió.
+            es un cambio estimado por el modelo de forma, y lo comparamos con el desfase de carreras observado. Esta comparación no identifica una fracción causal.
           </p>
           <div className="rejilla-3 cifras-robustez">
             <div><b className="num d-mucho">{sg(pq.por_100.total, 2)}</b><span>carreras más por cada 100 lanzamientos en altura de las que el modelo esperaría a nivel del mar (IC {rango(pq.ic95_por_100.total)})</span></div>
-            <div><b className="num">{sg(pq.por_100.fisica, 2)}</b><span>de esas carreras las explica el cambio en el vuelo del lanzamiento (IC {rango(pq.ic95_por_100.fisica)})</span></div>
-            <div><b className="num">{nf(pq.por_100.fraccion * 100, 0)} %</b><span>del exceso es física del lanzamiento. El resto lo pone sobre todo el batazo, que en aire delgado vuela más (IC {rango(pq.ic95_por_100.fraccion.map(x => (x == null ? null : x * 100)) as IC, 0, false)} %)</span></div>
+            <div><b className="num">{sg(pq.por_100.fisica, 2)}</b><span>cambio estimado por el modelo al transferir el vuelo del lanzamiento (IC {rango(pq.ic95_por_100.fisica)})</span></div>
+            <div><b className="num">{nf(pq.por_100.fraccion * 100, 0)} %</b><span>cociente entre el cambio predicho y el desfase observado; no es una fracción causal atribuible. El resto no se puede asignar sólo al batazo (IC {rango(pq.ic95_por_100.fraccion.map(x => (x == null ? null : x * 100)) as IC, 0, false)} %)</span></div>
           </div>
           <p className="tenue nota-pie">
             Dentro de la altura el modelo ordena los lanzamientos con una correlación de {sg(pq.corr, 3)} (IC {rango(pq.corr_ic95, 3)}). Su R² con
@@ -58,7 +56,7 @@ export function Robustez({ r }: { r: DatosRobustez }) {
                   <tr key={t.tipo}><th scope="row">{t.tipo}</th><td className="num n">{nf(t.lanzadores)}</td><td className="num n">{sg(t.fisica_100, 2)}</td><td className="num n">{sg(t.observado_100, 2)}</td></tr>
                 ))}</tbody>
               </table>
-              <p className="tenue nota-pie">Por cada 100 lanzamientos. {pq.por_tipo_spearman.rho > 0.3 ? 'El orden de los tipos coincide' : 'El exceso observado no sigue el orden de la pérdida física, porque por tipo lo domina el batazo y hay pocos lanzadores en varios tipos'}, con correlación de rangos de {sg(pq.por_tipo_spearman.rho, 2)} ({pq.por_tipo_spearman.tipos} tipos, p = {nf(pq.por_tipo_spearman.p, 3)}).</p>
+              <p className="tenue nota-pie">Por cada 100 lanzamientos. {pq.por_tipo_spearman.rho > 0.3 ? 'El orden de los tipos coincide' : 'El exceso observado no sigue el orden de la pérdida física. La comparación también refleja selección, calibración y muestras pequeñas'}, con correlación de rangos de {sg(pq.por_tipo_spearman.rho, 2)} ({pq.por_tipo_spearman.tipos} tipos, p = {nf(pq.por_tipo_spearman.p, 3)}).</p>
             </div>
           )}
         </div>
@@ -91,7 +89,7 @@ export function Robustez({ r }: { r: DatosRobustez }) {
           <h3 className="titulo-tarjeta">¿Mide calidad o sólo qué lanzamientos usa cada quien?</h3>
           <p className="nota-tarjeta">
             Partimos al azar los lanzamientos de cada lanzador en dos mitades y correlacionamos su promedio en una con el de la
-            otra. Si la estabilidad viniera sólo de la mezcla de lanzamientos (quien tira muchos sliders siempre califica
+            otra. Es repetibilidad dentro del período, no predicción temporal. Si la estabilidad viniera sólo de la mezcla de lanzamientos (quien tira muchos sliders siempre califica
             parecido), desaparecería al comparar cada lanzamiento contra el promedio de su tipo, o al usar sólo rectas.
           </p>
           <div className="tabla-scroll">
@@ -107,11 +105,10 @@ export function Robustez({ r }: { r: DatosRobustez }) {
 
       {fu && (
         <div className="tarjeta">
-          <h3 className="titulo-tarjeta">¿Anticipa el año siguiente?</h3>
+          <h3 className="titulo-tarjeta">Asociación retrospectiva con la temporada siguiente</h3>
           <p className="nota-tarjeta">
             Juntamos los pares de temporadas seguidas ({nf(fu.pares)} pares de {nf(fu.lanzadores)} lanzadores con al menos 200
-            lanzamientos en cada año) y correlacionamos lo que medimos en un año con lo que pasó en el siguiente. La pregunta es si
-            Stuff+ anticipa mejor que las propias carreras del lanzador, que es lo que haría alguien sin modelo.
+            lanzamientos en cada año) y correlacionamos lo que medimos en un año con lo que pasó en el siguiente. El modelo usa datos del período completo: esta asociación no es una validación de pronóstico temporal.
           </p>
           <div className="tabla-scroll">
             <table className="tabla-datos compacta">
@@ -124,8 +121,8 @@ export function Robustez({ r }: { r: DatosRobustez }) {
             </table>
           </div>
           <p className="tenue nota-pie">
-            Sumar Stuff+ a las carreras pasadas aumenta el R² de las carreras futuras en {nf(fu.carreras.r2_incremental_stuff.d * 100, 1)} puntos
-            porcentuales (IC {rango(fu.carreras.r2_incremental_stuff.ic95.map(x => (x == null ? null : x * 100)) as IC, 1)}).
+            En el ajuste agregado, con predicciones OLS de lanzadores excluidos, sumar Stuff+ a las carreras pasadas cambia el R² en {nf(fu.carreras.r2_incremental_stuff.d * 100, 1)} puntos
+            porcentuales (IC {rango(fu.carreras.r2_incremental_stuff.ic95.map(x => (x == null ? null : x * 100)) as IC, 1)}). El intervalo remuestrea errores pareados de esas predicciones; no incluye reajuste ni incertidumbre del modelo previo. El análisis sigue siendo retrospectivo y no estima un pronóstico independiente en años futuros.
           </p>
         </div>
       )}
@@ -160,14 +157,14 @@ export function Robustez({ r }: { r: DatosRobustez }) {
           </p>
           <div className="tabla-scroll">
             <table className="tabla-datos compacta">
-              <thead><tr><th>Versión</th><th className="n">R²</th><th className="n">Diferencia 10 %</th><th className="n">Mitades</th><th className="n">Año siguiente</th></tr></thead>
+              <thead><tr><th>Versión</th><th className="n">R²</th><th className="n">Diferencia 10 %</th><th className="n">Mitades</th><th className="n">Asociación retrospectiva</th></tr></thead>
               <tbody>{MEJORAS.filter(([k]) => mj[k]).map(([k, nom]) => {
                 const m = mj[k] as { r2_vs_rv: number; brecha_100: number; mitades: number; futuro_stuff: number };
                 return <tr key={k}><th scope="row">{nom}</th><td className="num n">{nf(m.r2_vs_rv, 5)}</td><td className="num n">{nf(m.brecha_100, 2)}</td><td className="num n">{nf(m.mitades, 3)}</td><td className="num n">{nf(m.futuro_stuff, 3)}</td></tr>;
               })}</tbody>
             </table>
           </div>
-          <p className="tenue nota-pie">Ninguna se separa de la que usamos más allá del ruido. Cada una gana en una columna y pierde en otra, que es la firma del ruido. Stuff+ ya está en el techo de lo que la física sola predice de un lanzamiento suelto. Lo que falta para un R² alto es dónde cayó la pelota, y eso por definición no entra en Stuff+.</p>
+          <p className="tenue nota-pie">Las variantes probadas ofrecen resultados parecidos, sin demostrar superioridad concluyente. Esto no establece un techo de rendimiento. La columna entre temporadas es retrospectiva y requiere una evaluación temporal independiente.</p>
         </div>
       )}
 

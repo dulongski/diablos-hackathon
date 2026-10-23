@@ -165,7 +165,7 @@ export function Simulador({ metros, onMetros, arrastre, model, helpers, escala }
 
           <div className="sim-resultados">
             <div className="res-plus">
-              <div><span className="etiqueta t-mar">Stuff+ a nivel del mar<Info>Promediamos 49 variaciones chicas alrededor de este lanzamiento (velocidad, movimiento, giro y salida), porque un lanzador nunca repite exacto. Cada una vuela con un arrastre distinto, porque dos pelotas no frenan igual. Así el número no salta por un detalle y se compara con el de la liga.</Info></span><b className="num">{nf(r.mar.plus, 1)}</b><span className="tenue">{plusEnPalabras(r.mar.plus)}</span></div>
+              <div><span className="etiqueta t-mar">Stuff+ a nivel del mar<Info>Promediamos 49 variaciones chicas alrededor de este lanzamiento (velocidad, movimiento, giro y salida), porque un lanzador nunca repite exacto. Cada una vuela con un arrastre distinto, porque dos pelotas no frenan igual. Es una forma típica suavizada: puede diferir del promedio de lanzamientos reales de la liga. No es un intervalo de confianza.</Info></span><b className="num">{nf(r.mar.plus, 1)}</b><span className="tenue">{plusEnPalabras(r.mar.plus)}</span></div>
               <div className="res-flecha" aria-hidden>→</div>
               <div><span className="etiqueta t-alt">Stuff+ en {lugar.replace(/^el /, '')}</span><b className="num">{nf(r.alt.plus, 1)}</b><span className="tenue">{plusEnPalabras(r.alt.plus)}</span></div>
               <div className="res-delta"><span className="etiqueta">Cambio</span><b className={`num ${veredicto}`}>{sg(dPlus)}</b></div>
@@ -177,6 +177,7 @@ export function Simulador({ metros, onMetros, arrastre, model, helpers, escala }
               <div><span>Movimiento por cada 1,000 rpm<Info>La pregunta de H4. Cuánto movimiento saca de su giro. Dos lanzamientos con el mismo giro pueden moverse muy distinto.</Info></span><b className="num">{nf(r.porMil, 1)} in</b></div>
             </div>
             <p className="res-lectura">{lectura}</p>
+            <p className="tenue nota-pie">Estimación de una forma típica, promediada sobre 49 variaciones. El promedio de lanzamientos reales de un tipo puede dar otro cambio. La sensibilidad depende de la forma y del modelo; estas variaciones no representan un intervalo de confianza ni todo el error de la transferencia física.</p>
           </div>
         </div>
       </div>

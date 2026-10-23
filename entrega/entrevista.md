@@ -1,99 +1,54 @@
 # Entrevista final · 10 minutos
 
-El jurado califica una cosa en esta parte, si cambiaría sus decisiones de reclutamiento y de táctica por lo que le
-muestras. Así que la historia va de decisiones, y el método sólo aparece cuando sostiene una decisión. Las cifras salen de
-la corrida final de `scripts/11_robustez.py`.
+Usa las cifras visibles en la versión final del dashboard. Evita memorizar números de una exportación anterior. Los PDF y el dashboard deben compartir los mismos JSON.
 
-## El guion, minuto por minuto
+## Guion
 
-**Minuto 0 a 1 · La pregunta.** El Harp Helú está a 2,240 metros, más alto que Coors Field. Ahí hay 20 % menos aire y
-la pelota se mueve menos. Los Stuff+ públicos se hicieron a nivel del mar, así que no te dicen qué vale un lanzamiento
-en tu casa. Nosotros sí, y te decimos qué lanzadores aguantan la altura.
+**Minuto 0 a 1 · La pregunta.** ¿Qué lanzadores conservan más valor en el aire del Harp Helú? A 2,240 metros la pelota encuentra menos aire y cambia su movimiento. Construimos escenarios para orientar scouting y decisiones de repertorio.
 
-**Minuto 1 a 3 · La idea, con el dashboard abierto en Inicio.** Mueve el control de altitud frente a ellos. La misma
-pelota, el mismo brazo, y la línea roja se separa de la azul. Explica en una frase que no metimos la altitud como una
-variable más, porque eso mezclaría el aire con quién lanza en altura. La metimos con física. Volamos cada lanzamiento
-en el aire del Harp Helú y lo calificamos otra vez. Menciona que el simulador reproduce la cifra de Alan Nathan para
-Coors Field, 18 pulgadas que se vuelven 14.9, calibrado sólo con datos de la LMB.
+**Minuto 1 a 3 · El método.** Explica los cuatro pasos del reporte. Valoramos el cambio de conteo en carreras, entrenamos Stuff+ sólo con medidas físicas, evaluamos excluyendo lanzadores del ajuste y volvemos a volar el mismo lanzamiento con otro aire. El supuesto es conservar la salida de la mano. El integrador reproduce la referencia de Nathan para Coors, una recta de 18 pulgadas pasa a alrededor de 15.
 
-**Minuto 3 a 5 · A quién firmar, pestaña Lanzadores.** Abre la ficha del lanzador de fichaje y la del que más pierde.
-A nivel del mar valen casi lo mismo y en tu casa los separan muchos puntos. Esa es la decisión que cambia, a quién
-pagar. Di cuántos aguantan de los que comparamos.
+**Minuto 3 a 5 · Candidatos de scouting.** Abre Lanzadores. Compara el candidato de fichaje con quien más pierde. Lee calidad de origen, calidad en altura, pérdida y constancia. Son prioridades para evaluación junto con comando, salud y rival, no promesas sobre carreras futuras.
 
-**Minuto 5 a 6 · Qué pedir en casa, pestañas Arsenal y Causal Forest.** Cutter, slider y splitter pierden poco. La
-recta de élite es la que más pierde, así que no pagues prima por movimiento. En el juego, con el conteo en contra y un
-bateador del lado contrario, en casa conviene slider antes que cambio.
+**Minuto 5 a 6 · Repertorio.** Muestra la tabla por tipo y la compresión de las rectas. Menor pérdida no significa automáticamente mayor calidad absoluta. El bosque táctico ofrece pistas para probar opciones, con múltiples comparaciones y sin garantía causal.
 
-**Minuto 6 a 8 · Por qué confiar, pestaña Metodología, subpestaña Validación.** Tres cifras y nada más. La calibración baja escalón por
-escalón con lanzadores que el modelo nunca vio. La diferencia entre el 10 % mejor y el 10 % peor es de 3.3
-carreras por cada 100 lanzamientos (IC 3.0 a 3.6). Y con un modelo entrenado sólo a nivel del mar, la física del
-lanzamiento explica el 39 % de las carreras de más que hay en altura (IC 34 a 44 %). El resto lo pone el batazo que vuela más.
+**Minuto 6 a 8 · Evidencia.** Muestra calibración, separación entre grupos y repetibilidad. Explica que el R² por lanzamiento es pequeño. La prueba de categoría de altitud no identifica estadios y la relación con el año siguiente es retrospectiva. Los resultados del bosque de entorno requieren controles suficientes y no confirman diferencias individuales.
 
-**Minuto 8 a 9 · Un prospecto en vivo, pestaña Simulador.** Pide al jurado una velocidad y un movimiento, o usa una
-recta típica, y muestra los dos Stuff+ lado a lado. Esta es la herramienta que el pitching coach usa el lunes.
+**Minuto 8 a 9 · Simulador.** Ingresa una forma y compara sus escenarios. Los 49 vuelos representan variaciones de esa forma típica. El promedio de una población completa puede diferir. Enseña la sensibilidad a movimiento y giro sin llamar a la diferencia entre extremos una prueba de insensibilidad.
 
-**Minuto 9 a 10 · Límites y cierre.** No sabemos el estadio exacto de cada juego, sólo qué tan delgado estaba el aire.
-No separamos altura de clima. El Causal Forest confirma el costo promedio pero no separa a un lanzador de otro con
-carreras, y por eso la física es la que decide. Cierra con la decisión, no con el método.
+**Minuto 9 a 10 · Decisión.** Propón una lista de candidatos y un protocolo de prueba en casa. El trabajo aporta una comparación física reproducible. El siguiente paso es validarla con estadio, clima y un periodo futuro reservado.
 
-## Las preguntas difíciles
+## Preguntas metodológicas
 
-**¿Por qué el R² de Stuff+ es tan bajo?** Porque el resultado de un lanzamiento suelto es casi todo azar y Stuff+ no
-sabe dónde cayó la pelota. Ningún Stuff+ público explica mucho de un lanzamiento aislado. Lo que se le pide es que
-ordene bien cuando juntas lanzamientos, y lo hace. Muestra la calibración y la diferencia entre el 10 % mejor y el 10 %
-peor, 3.3 carreras por cada 100 lanzamientos con lanzadores que nunca vio.
+**¿Por qué es tan bajo el R²?** La física disponible explica una fracción pequeña del desenlace por lanzamiento. Ubicación y conteo añaden capacidad en las otras capas. Mostramos la mejora pequeña frente al baseline y también métricas agregadas. Ninguna de esas pruebas demuestra un techo teórico del modelo.
 
-**¿El modelo aprendió física o aprendió que en altura se anotan más carreras?** Era un riesgo real, porque la variable
-más pesada es cuánta velocidad pierde la pelota, y en altura frena menos. Lo probamos de dos maneras. Sin las tres
-variables de frenado, el orden de los tipos se mantiene con correlación de rangos 0.96. Y entrenando sólo
-con juegos a nivel del mar, donde esa variable no puede delatar el aire, también se mantiene con 0.96. Probamos
-también esa versión como modelo principal y la descartamos, porque con lanzadores nuevos ya no le ganaba al modelo nulo.
+**¿El modelo aprende aire en la caída de velocidad?** Puede recogerlo. Por eso conservamos sensibilidades sin variables de frenado y con entrenamiento sólo a nivel del mar. Consulta sus pérdidas y su ordenamiento en el Anexo C. Son especificaciones distintas y no deben mezclarse como si fueran la misma estimación.
 
-**¿Falla el holdout de parque?** Ordena bien y falla el nivel, y medimos por qué. Predecimos cada lanzamiento de altura
-con su forma real y con la misma pelota volada a nivel del mar. La física explica el 39 % del exceso de carreras, 0.57 de 1.49 carreras por cada 100 lanzamientos.
-El resto viene del batazo, que en aire delgado vuela 31 pies más.
+**¿Qué se corrigió en la transferencia?** La referencia debe corresponder a la medición de origen. Antes algunas diferencias se calculaban contra una forma ya trasladada al mar. Ahora transferir al mismo aire conserva las variables originales. Recalculamos escenarios y recomendaciones, conservando los árboles entrenados.
 
-**¿La estabilidad de 0.988 no es sólo que cada lanzador usa los mismos tipos?** Lo probamos. Comparado contra el
-promedio de su tipo la correlación entre mitades es 0.989, y sólo con rectas es 0.990. Las carreras
-reales del mismo lanzador apenas llegan a 0.29. Además se calcula con un modelo que nunca vio a ese lanzador.
+**¿Falla el holdout de parque?** Es un holdout de categoría de altitud porque no tenemos estadio. El R² negativo indica una limitación real de generalización. La correlación positiva pequeña no basta para llamarlo exitoso. La descomposición física es dependiente del modelo y no identifica una fracción causal del exceso observado.
 
-**¿Predice el futuro mejor que las carreras?** En pares de temporadas seguidas, Stuff+ correlaciona 0.22 con
-las carreras del año siguiente, contra 0.18 de las carreras pasadas (336 pares). La diferencia no es concluyente,
-pero sumar Stuff+ a las carreras pasadas sí mejora la predicción, 0.027 de R² (IC 0.004 a 0.071).
+**¿La repetibilidad demuestra predicción futura?** No. Las mitades intercaladas comparten historial y condiciones. Son una prueba de consistencia de la calificación. Faltan periodos separados y una evaluación completamente prospectiva.
 
-**El reto pedía combinar varios objetivos con pesos. ¿Por qué predicen carreras directo?** Porque las carreras ya pesan
-cada resultado por lo que vale en el marcador. Aun así construimos la combinación ponderada para comparar, con nueve
-componentes incluida la probabilidad de out en el turno, y da R² de 0.0013 contra 0.0010 del modelo directo. Ordenan casi igual (la diferencia entre el 10 % mejor y el peor
-es 3.3 en los dos) y el directo es un poco más estable entre mitades (0.988 contra 0.985). Nos quedamos con el directo
-porque no hay que inventar pesos y la ganancia de la combinación es mínima.
+**¿Stuff+ predice el año siguiente mejor que las carreras pasadas?** La comparación incremental se evalúa con regresiones fuera de muestra agrupadas por lanzador. Hay que leer su intervalo final. Aun así, las puntuaciones históricas usaron otros lanzadores de todos los años y 2026 ya se había visto durante desarrollo. No afirmamos superioridad prospectiva concluyente.
 
-**¿No pudieron hacer un mejor modelo, con más variables o calificando el contacto?** Lo probamos. Calificamos cada
-batazo por lo que se espera de su velocidad de salida y su ángulo, y metimos dentro de Stuff+ las diferencias contra la
-recta del mismo lanzador, dividimos el frenado entre el aire del juego y sumamos variables de física (movimiento en
-dirección del brazo, desfase del eje de giro, consistencia de la salida). Son ocho variantes. Con la misma validación, el
-R² queda entre 0.0009 y 0.0011 y la separación entre el 10 % mejor y el peor entre 3.2 y 3.5 carreras, dentro del
-intervalo del modelo actual. Cada una gana en una métrica y pierde en otra. Ninguna se separa del ruido. Stuff+ ya está en el techo de lo que la física sola
-predice, y lo que falta es dónde cayó la pelota, que por definición no entra.
+**¿La física explica cierto porcentaje del costo de altura?** La razón entre el cambio predicho por transferencia y el exceso observado es una descomposición del modelo. Su denominador incluye selección y calibración. El residuo no puede atribuirse íntegramente al batazo ni la razón presentarse como una fracción causal identificada.
 
-**¿Por qué no meter la altitud como variable?** Porque los lanzadores que lanzan en altura no son una muestra al azar,
-y su efecto se mezclaría con quiénes son. Tampoco podrías calificar a alguien que nunca ha lanzado en altura, que es
-justo el caso de un fichaje.
+**¿H4 prueba que el giro no importa?** No. La casi igualdad de los extremos ocultaba variación entre pasos de 100 rpm. Mostramos ese cambio local y el rango de la curva. La importancia de los árboles tampoco mide causalidad, porque hay variables correlacionadas.
 
-**¿Por qué el simulador y la tabla por tipo no dan exactamente lo mismo?** La tabla promedia todos los lanzamientos
-reales de un tipo, cada uno con su propio arrastre medido. El simulador califica una forma típica promediando 49
-variaciones con la dispersión real del arrastre. El promedio de una población no es la calificación de su lanzamiento
-típico. Los siete tipos pierden en los dos, pero el simulador exagera la pérdida unos 4 puntos en promedio y el cambio
-queda mejor parado que en la tabla. Úsalo para comparar dos lanzamientos entre sí, no como cifra absoluta.
+**¿El Causal Forest resuelve la causalidad?** Sólo bajo supuestos fuertes de controles suficientes y soporte común. El análisis de entorno incluye covariables agregadas potencialmente posteriores al tratamiento. GATES no confirma heterogeneidad individual. Las celdas tácticas tampoco corrigen por comparaciones múltiples.
 
-**¿Qué le falta al modelo?** Saber el estadio exacto, separar aire de clima y modelar al bateador. Con datos de estadio
-y clima, el índice del aire se separaría en altitud y clima sin cambiar nada más del método.
+**¿La validación aísla todo el pipeline?** No. El calificador excluye las filas evaluadas, pero las tablas del objetivo, baseline y calibración física de producción se prepararon globalmente. El benchmark separado reconstruye objetivo y baseline en entrenamiento y conserva una mejora pequeña. Falta anidar también toda la preparación física.
 
-**¿Respetaron las reglas de datos?** Sí. No subimos datos de la LMB a ningún lado. El dashboard muestra resultados, y
-el mapa de movimiento sólo enseña promedios de celdas con al menos diez lanzamientos.
+**¿Qué pasa con los turnos sin evento terminal?** Hay 6,346 entre 171,020 turnos reconstruidos. Su tratamiento puede afectar las tablas del objetivo. Queda pendiente una sensibilidad usando sólo turnos completos, sin asumir que todo caso incompleto es un error de medición.
+
+**¿Por qué no reemplazaron el modelo?** Las alternativas ensayadas no aportan una mejora consistente que justifique cambiar árboles, transferencia y simulador antes de entregar. Conservamos el modelo y corregimos su uso y la interpretación de la evidencia.
+
+**¿Respetaron el uso de datos?** La entrega presenta resultados agregados y lanzadores anonimizados. Los datos originales y los archivos intermedios por lanzamiento no forman parte del paquete público.
 
 ## Antes de entrar
 
-1. Abre el dashboard en Inicio, con el control en 2,240 metros.
-2. Ten abiertas en otras pestañas la ficha del lanzador de fichaje y la subpestaña Validación dentro de Metodología.
-3. Ensaya el simulador con una recta típica para que el número no te sorprenda.
-4. Lleva el documento técnico impreso por si piden la definición formal de la escala.
+1. Abre la versión final del dashboard y verifica que coincida con los PDF.
+2. Ten listas las pestañas Lanzadores, Validación y Simulador.
+3. Ensaya una comparación que conozcas y consulta sus cifras actuales.
+4. Lleva el documento técnico con sus límites y anexos disponibles.

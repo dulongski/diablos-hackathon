@@ -1,3 +1,4 @@
+import { ValidationAudit } from './ValidationAudit';
 /**
  * ¿FUNCIONA?: criterios 1 (calidad) y 2 (robustez fuera de muestra).
  *
@@ -96,25 +97,23 @@ export function Confianza({ j, r }: { j: Jurado; r: DatosRobustez | null }) {
           <p className="eyebrow">Criterios 1 y 2 · Calidad y robustez fuera de muestra</p>
           <h2>¿Se puede confiar en la calificación?</h2>
           <p className="entrada ancha">
-            Stuff+ califica el brazo, no el resultado de un lanzamiento. Lo que pasa con un lanzamiento suelto
-            depende sobre todo de dónde cayó y del azar, y eso lo miden Location+ y Pitching+. Por eso el R² de Stuff+ es
-            bajo, como en cualquier Stuff+. <b>Está en el techo de lo que la física sola puede predecir</b>. Probamos ocho
-            variantes con las mejoras usuales y ninguna se separa del ruido (al final de esta pestaña). Lo que falta para un
-            R² alto es dónde cayó la pelota, y por definición eso no entra en Stuff+. Por eso a Stuff+ lo
-            probamos como se prueba en las Grandes Ligas. Tiene que ser un rasgo estable del lanzador, tiene que
-            anticipar sus carreras futuras, y tiene que ordenar las carreras de
-            lanzadores que el modelo <b>nunca vio</b>.
+            Stuff+ valora la forma del lanzamiento. Su capacidad para explicar carreras de un lanzamiento suelto es
+            limitada: aquí mostramos el R² y las correlaciones para que esa limitación sea visible. Las variantes probadas
+            no demuestran un techo de lo que puede aprenderse. Distinguimos la repetibilidad entre mitades al azar,
+            la validación con lanzadores o temporadas excluidos y las asociaciones retrospectivas entre temporadas.
           </p>
         </header>
+
+        <ValidationAudit />
 
         {e && (
           <div className="rejilla-2">
             <div className="tarjeta">
-              <h3 className="titulo-tarjeta">Es un rasgo del lanzador, no suerte</h3>
+              <h3 className="titulo-tarjeta">Repetibilidad entre mitades al azar</h3>
               <p className="nota-tarjeta">
                 Partimos los lanzamientos de cada uno de {nf(e.lanzadores_mitades)} lanzadores en dos mitades. Su Stuff+ en
-                una mitad predice el de la otra con correlación <b>{nf(e.mitades.stuff, 2)}</b>. Sus carreras permitidas,
-                apenas <b>{nf(e.mitades.rv, 2)}</b>. Las carreras de un lanzador son casi azar. Su Stuff+ no.
+                una mitad se relaciona con el de la otra con correlación <b>{nf(e.mitades.stuff, 2)}</b>. Sus carreras permitidas,
+                apenas <b>{nf(e.mitades.rv, 2)}</b>. Las mitades comparten temporadas y un modelo ya ajustado: esta estabilidad no demuestra predicción temporal.
               </p>
               <div className="habilidades">
                 {([['Stuff+', e.mitades.stuff], ['Location+', e.mitades.location], ['Pitching+', e.mitades.pitching], ['Carreras que permitió', e.mitades.rv]] as const).map(([k, v]) => (
@@ -123,15 +122,13 @@ export function Confianza({ j, r }: { j: Jurado; r: DatosRobustez | null }) {
               </div>
             </div>
             <div className="tarjeta">
-              <h3 className="titulo-tarjeta">Anticipa el año siguiente sin necesitar historial</h3>
+              <h3 className="titulo-tarjeta">Asociación retrospectiva entre temporadas</h3>
               {fu ? (
                 <>
                   <p className="nota-tarjeta">
-                    En {nf(fu.pares)} pares de temporadas seguidas ({nf(fu.lanzadores)} lanzadores), medimos qué anticipa mejor las
-                    carreras del año siguiente. Stuff+ lo hace con correlación <b>{sg(fu.carreras.stuff.r, 2)}</b> y las carreras del año
-                    anterior con <b>{sg(fu.carreras.carreras_pasadas.r, 2)}</b>. Esa diferencia no es concluyente, pero sumar Stuff+ a las
-                    carreras pasadas sí mejora la predicción. Y Stuff+ lo logra sin años de resultados, así que sirve para un prospecto
-                    que todavía no los tiene.
+                    En {nf(fu.pares)} pares de temporadas seguidas ({nf(fu.lanzadores)} lanzadores), medimos la asociación con las
+                    carreras del año siguiente. Stuff+ tiene correlación <b>{sg(fu.carreras.stuff.r, 2)}</b> y las carreras del año
+                    anterior con <b>{sg(fu.carreras.carreras_pasadas.r, 2)}</b>. El modelo y sus variables se construyeron con datos de todo el período; este análisis no es un pronóstico temporal independiente ni valida prospectos sin historial.
                   </p>
                   <div className="habilidades">
                     {([['Stuff+', fu.carreras.stuff.r], ['Sus carreras pasadas', fu.carreras.carreras_pasadas.r], ['Su swing fallido pasado', fu.carreras.whiff_pasado.r]] as const).map(([k, v]) => (
@@ -143,8 +140,8 @@ export function Confianza({ j, r }: { j: Jurado; r: DatosRobustez | null }) {
                 <>
                   <p className="nota-tarjeta">
                     Para {nf(e.lanzadores_futuro)} lanzadores con al menos 300 lanzamientos antes y después, su Stuff+ de 2024 y 2025
-                    anticipa sus carreras de 2026 con correlación <b>{sg(e.futuro.stuff, 2)}</b>, y sus propias carreras con
-                    <b> {sg(e.futuro.carreras_pasadas, 2)}</b>.
+                    se asocia con sus carreras de 2026 con correlación <b>{sg(e.futuro.stuff, 2)}</b>, y sus propias carreras con
+                    <b> {sg(e.futuro.carreras_pasadas, 2)}</b>. Es una asociación retrospectiva con un modelo ajustado sobre el período completo, no un pronóstico independiente.
                   </p>
                 </>
               )}
@@ -156,16 +153,16 @@ export function Confianza({ j, r }: { j: Jurado; r: DatosRobustez | null }) {
           <h3 className="titulo-tarjeta">Más calificación, menos carreras, escalón por escalón</h3>
           <p className="nota-tarjeta">
             Calificamos cada lanzamiento con un modelo entrenado <b>sin su lanzador</b> ({nf(c.reduce((a, t) => a + t.n, 0))} lanzamientos
-            en cinco grupos de lanzadores). Los de menos de 80 permitieron <b>{sg(bajo.carreras_100, 1)}</b> carreras por cada 100
+            en cuatro grupos de lanzadores). Los de menos de 80 permitieron <b>{sg(bajo.carreras_100, 1)}</b> carreras por cada 100
             lanzamientos y los de 120 o más, <b>{sg(alto.carreras_100, 1)}</b>. De un extremo al otro hay{' '}
-            <b>{nf(bajo.carreras_100 - alto.carreras_100, 1)} carreras cada 100 lanzamientos</b>. La diferencia es chica a
-            propósito. Stuff+ no ve dónde cayó la pelota, y en un lanzamiento suelto eso pesa más que el brazo. Lo que importa
-            es que baja escalón por escalón, sin un solo salto al revés.
+            <b>{nf(bajo.carreras_100 - alto.carreras_100, 1)} carreras cada 100 lanzamientos</b>. Stuff+ no ve dónde cayó la pelota.
+            En estos grupos las carreras bajan escalón por escalón. La curva conserva las tablas históricas del objetivo,
+            preparadas con el período completo; no sustituye la auditoría con tablas ajustadas sólo en entrenamiento.
           </p>
           <Calibracion c={c} />
         </div>
 
-        <h3 className="titulo-sec sub">Las tres pruebas fuera de muestra que pide el reto</h3>
+        <h3 className="titulo-sec sub">Benchmark histórico: tres separaciones de evaluación</h3>
         <div className="rejilla-3">
           <Prueba titulo="Lanzadores nuevos · pitcher holdout"
                   que="Se entrena sin un grupo de lanzadores y se prueba sólo con ellos."
@@ -174,39 +171,36 @@ export function Confianza({ j, r }: { j: Jurado; r: DatosRobustez | null }) {
           <Prueba titulo="Temporada nueva · season holdout"
                   que="Se entrena con 2024 y 2025 y se prueba con 2026."
                   cifra={ordena(j.holdout.temporada.stuff)} unidad="correlación con las carreras de 2026"
-                  nota={`Casi igual que con lanzadores nuevos (R² ${nf(j.holdout.temporada.stuff.r2, 5)}). Lo aprendido no se gasta con el tiempo.`} />
-          <Prueba titulo="Estadio nuevo · park holdout"
-                  que="Se entrena sin ningún estadio de altura y se prueba sólo en altura."
+                  nota={`Casi igual que con lanzadores nuevos (R² ${nf(j.holdout.temporada.stuff.r2, 5)}). Es una sola separación temporal y no garantiza estabilidad futura.`} />
+          <Prueba titulo="Categoría de altitud excluida"
+                  que="Se entrena con la categoría sin altitud y se prueba en altitud extrema; no se conocen los estadios exactos."
                   cifra={ordena(j.holdout.parque.stuff)} unidad="correlación con las carreras en altura"
-                  nota={r?.stuff_entrena === 'mar'
-                    ? `Sigue ordenando de mejor a peor en un aire que nunca vio, pero espera menos carreras de las que pasan en altura (R² ${nf(j.holdout.parque.stuff.r2, 5)}). Abajo, en las pruebas de robustez, medimos cuánto de ese desfase explica la física del lanzamiento.`
-                    : `Sigue ordenando de mejor a peor en un aire que nunca vio. Lo que falla es el nivel (R² ${nf(j.holdout.parque.stuff.r2, 5)}). Entrenado a nivel del mar, espera menos carreras de las que pasan en altura. Ese desfase es el efecto que este trabajo mide y corrige con la física.`} />
+                  nota={`La correlación es pequeña y el R² es ${nf(j.holdout.parque.stuff.r2, 5)}. No equivale a excluir estadios identificados ni prueba que la física corrija todo el desfase de carreras.`} />
         </div>
         <div className="tarjeta metricas">
           <h3 className="titulo-tarjeta">Las métricas, como las pide la rúbrica</h3>
-          <p className="nota-tarjeta">Error cuadrático medio (RMSE) y R², en carreras por lanzamiento, siempre con datos que el modelo no vio. Menor RMSE es mejor.</p>
+          <p className="nota-tarjeta">RMSE y R² del benchmark histórico. Las filas de prueba se excluyen del ajuste del modelo, pero las tablas del objetivo se calcularon globalmente. La auditoría de arriba ajusta esas tablas sólo con entrenamiento. Menor RMSE es mejor.</p>
           <div className="tabla-scroll">
             <table className="tabla-datos compacta">
               <thead><tr><th>Prueba</th><th>Capa</th><th className="n">Variables</th><th className="n">RMSE</th><th className="n">R²</th><th className="n">RMSE contra el nulo</th></tr></thead>
               <tbody>
                 <tr><th scope="row">Modelo nulo, promedio por conteo</th><td>Ninguna</td><td className="num n">0</td><td className="num n">{nf(nul.rmse, 5)}</td><td className="num n">{nf(nul.r2, 5)}</td><td className="num n tenue">base</td></tr>
                 {([['Lanzadores nuevos', 'Stuff+', hp.stuff], ['Lanzadores nuevos', 'Location+', j.holdout.pitcher.location], ['Lanzadores nuevos', 'Pitching+', hp.pitching],
-                   ['Temporada nueva', 'Stuff+', j.holdout.temporada.stuff], ['Estadio nuevo, en altura', 'Stuff+', j.holdout.parque.stuff]] as const).map(([prueba, capa, m]) => (
+                   ['Temporada nueva', 'Stuff+', j.holdout.temporada.stuff], ['Altitud extrema excluida', 'Stuff+', j.holdout.parque.stuff]] as const).map(([prueba, capa, m]) => (
                   <tr key={prueba + capa}><th scope="row">{prueba}</th><td>{capa}</td><td className="num n">{m.n_features ?? hp.stuff.n_features ?? '—'}</td><td className="num n">{nf(m.rmse, 5)}</td><td className="num n">{nf(m.r2, 5)}</td>
                     <td className="num n destacado">{prueba !== 'Lanzadores nuevos' ? 'ver nota' : `${sg(((m.rmse - nul.rmse) / nul.rmse) * 100, 2)} %`}</td></tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <p className="tenue nota-pie">El estadio nuevo se prueba sólo en altura, donde hay más carreras. Su R² queda apenas abajo de cero aunque el orden se mantiene (correlación {sg(j.holdout.parque.stuff.corr ?? 0, 3)}), porque un modelo de nivel del mar espera menos carreras de las que pasan. La temporada nueva y el estadio nuevo son otros subconjuntos de lanzamientos, así que su RMSE no se compara con el nulo de toda la liga.</p>
+          <p className="tenue nota-pie">La prueba de entorno excluye una categoría de altitud, no estadios identificados. La correlación en altitud extrema es {sg(j.holdout.parque.stuff.corr ?? 0, 3)} y su R² es {nf(j.holdout.parque.stuff.r2, 5)}. Cada separación usa otro subconjunto; su RMSE requiere un nulo calculado en ese mismo subconjunto.</p>
         </div>
 
         <p className="aclaracion">
-          <b>Por qué los porcentajes se ven chicos.</b> El resultado de un lanzamiento suelto es casi puro azar.
-          El mismo lanzamiento perfecto a veces termina en jonrón. Ningún modelo explica mucho de un lanzamiento
-          aislado, y menos si no sabe dónde cayó, que es el caso de Stuff+. Por eso el valor de Stuff+ está en que es estable
-          y en que anticipa las carreras futuras de un lanzador, las dos tarjetas de arriba. Contra el modelo nulo, gana con
-          lanzadores nuevos, y con temporada nueva ordena igual. En un estadio nuevo ordena, pero falla el nivel, y por eso hace falta la física.
+          <b>Cómo leer la evidencia.</b> Un R² pequeño implica poca capacidad predictiva a nivel de lanzamiento.
+          Una alta repetibilidad entre mitades no sustituye la validación temporal. Las asociaciones entre temporadas
+          mostradas aquí son retrospectivas; para sostener una promesa de pronóstico hay que ajustar todas las etapas
+          sólo con temporadas anteriores y evaluar una temporada futura que no haya intervenido en el diseño.
         </p>
 
         {r && <Robustez r={r} />}

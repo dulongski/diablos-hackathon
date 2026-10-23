@@ -424,10 +424,31 @@ TRANSFERRED = {
 #               componentes vertical y horizontal se escalan con exponentes distintos.
 
 
+def observed_shape(df: pd.DataFrame) -> pd.DataFrame:
+    """Forma medida que corresponde a las variables originales, antes de transferir.
+
+    Una referencia a nivel del mar sólo corresponde a un frame que ya fue normalizado
+    entero a nivel del mar. Usar esta función cuando X conserva mediciones observadas.
+    """
+    return pd.DataFrame({key: df[col].to_numpy(dtype=float)
+                         for key, col in SHAPE_ANCHORS.items()}, index=df.index)
+
+
 def transfer_features(
     X: pd.DataFrame, shape_ref: pd.DataFrame, shape_new: pd.DataFrame
 ) -> pd.DataFrame:
-    """Aplica a un frame de features el cambio de forma entre dos densidades."""
+    """Aplica el cambio de forma desde el entorno que realmente representa X.
+
+    shape_ref debe corresponder a X, no ser una referencia arbitraria de nivel del mar.
+    La comprobación evita mezclar IVB/HB transferidos con VertBreak y eficiencia observados.
+    """
+    if len(X) != len(shape_ref) or len(X) != len(shape_new):
+        raise ValueError("X y las dos formas deben contener las mismas filas en el mismo orden")
+    for col, key in (("InducedVertBreak", "ivb"), ("HorzBreak", "hb")):
+        if col in X and not np.allclose(X[col].to_numpy(dtype=float),
+                                       shape_ref[key].to_numpy(dtype=float),
+                                       atol=1e-6, rtol=0, equal_nan=True):
+            raise ValueError(f"La forma de referencia no corresponde a X[{col}]")
     out = X.copy()
     for col, key in TRANSFERRED.items():
         if col in out.columns:

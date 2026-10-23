@@ -35,19 +35,26 @@ def barrel(exit_speed: pd.Series, angle: pd.Series) -> np.ndarray:
     return ((ev >= 98.0) & (la >= np.maximum(lo, 8.0)) & (la <= np.minimum(hi, 50.0))).astype(float)
 
 
-def run_values(df: pd.DataFrame, pa_events: pd.DataFrame) -> pd.DataFrame:
+def run_values(
+    df: pd.DataFrame, pa_events: pd.DataFrame,
+    reference: tuple[float, pd.Series] | None = None,
+) -> tuple[pd.DataFrame, pd.Series]:
     """Valor de carrera por lanzamiento y tabla de valor por conteo."""
     ev_by_pa = pa_events.set_index("pa_id")["pa_event"]
     pa_value = ev_by_pa.map(LINEAR_WEIGHTS).astype(float)
-    pa_value = pa_value - pa_value.mean()  # el turno promedio vale cero
+    pa_center = float(pa_value.mean()) if reference is None else reference[0]
+    pa_value = pa_value - pa_center  # usa solo el centro del entrenamiento en validación
 
     df = df.copy()
     df["pa_value"] = df["pa_id"].map(pa_value)
     df["count"] = df["Balls"].astype(int).astype(str) + "-" + df["Strikes"].astype(int).astype(str)
 
     # Valor de cada conteo = valor medio de los turnos que pasan por el.
-    count_value = df.groupby("count")["pa_value"].mean()
-    count_value = count_value.reindex(COUNTS).ffill().fillna(0.0)
+    if reference is None:
+        count_value = df.groupby("count")["pa_value"].mean()
+        count_value = count_value.reindex(COUNTS).fillna(0.0)
+    else:
+        count_value = reference[1].reindex(COUNTS).fillna(0.0)
 
     balls = df["Balls"].to_numpy(dtype=float)
     strikes = df["Strikes"].to_numpy(dtype=float)
@@ -96,3 +103,14 @@ def build(df: pd.DataFrame) -> pd.DataFrame:
     df["y_hard_contact"] = np.where(bip == 1, (df["ExitSpeed"].to_numpy(dtype=float) >= 95.0), np.nan)
     df["y_weak_contact"] = np.where(bip == 1, (df["ExitSpeed"].to_numpy(dtype=float) < 80.0), np.nan)
     return df
+
+
+def fit_reference(df: pd.DataFrame, pa_events: pd.DataFrame) -> tuple[float, pd.Series]:
+    """Ajusta únicamente con entrenamiento el centro de PA y el valor de cada conteo.
+
+    Un conteo ausente usa cero, el valor neutro del entrenamiento. La tabla no se
+    actualiza al puntuar pruebas, aunque cambien todos sus resultados.
+    """
+    center = float(pa_events.pa_event.map(LINEAR_WEIGHTS).mean())
+    _, counts = run_values(df, pa_events)
+    return center, counts

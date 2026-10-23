@@ -4,7 +4,8 @@ import path from 'path';
 const require = createRequire(import.meta.url);
 const { chromium } = require(process.env.PW || 'playwright');
 const [entrada, salida, formato = 'carta'] = process.argv.slice(2);
-const b = await chromium.launch();
+const b = await chromium.launch(process.env.CHROMIUM_EXECUTABLE_PATH
+  ? { executablePath: process.env.CHROMIUM_EXECUTABLE_PATH } : {});
 const p = await b.newPage();
 await p.goto('file://' + path.resolve(entrada), { waitUntil: 'networkidle' });
 await p.evaluate(() => document.fonts.ready);

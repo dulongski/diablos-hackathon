@@ -23,6 +23,8 @@ export interface Model {
 }
 
 function evalTree(tree: FlatTree, x: Float64Array): number {
+  // LightGBM can emit a single constant leaf with no split nodes.
+  if (tree.f.length === 0) return tree.v[0];
   let node = 0;
   for (;;) {
     const value = x[tree.f[node]];

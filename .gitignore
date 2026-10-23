@@ -16,3 +16,9 @@ app/node_modules/.cache/
 .DS_Store
 *.tsbuildinfo
 app/scripts/.consistencia.mjs
+
+# Entrega local y previsualizaciones regenerables
+app/scripts/.experimentos.mjs
+delivery_checks/pdf_*/
+delivery_checks/browser_probe.cjs
+entrega/repositorio_corregido.zip

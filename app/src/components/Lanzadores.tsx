@@ -124,7 +124,7 @@ function Ficha({ x, cf }: { x: Pitcher; cf?: PitcherCF }) {
           <span className="etiqueta">Causal Forest, costo de la altura en carreras</span>
           <p>
             <b className="num">{sg(cf.tau, 2)}</b> carreras por cada 100 lanzamientos (intervalo de {nf(cf.tau_lo, 2)} a {nf(cf.tau_hi, 2)}).
-             <span className="tenue">Las diferencias entre lanzadores son chicas. Úsalo para confirmar, y decide con Stuff+.</span>
+             <span className="tenue">El bosque no valida diferencias individuales. Este contraste exploratorio no confirma la clasificación de Stuff+.</span>
           </p>
         </div>
       )}
@@ -186,7 +186,7 @@ export function Lanzadores({ j, c }: { j: Jurado; c: Causal }) {
         <div className="lanz-rejilla">
           <div className="tarjeta">
             <h3 className="titulo-tarjeta">El mapa del fichaje</h3>
-            <p className="nota-tarjeta">Cada punto es un lanzador. A la derecha, los mejores. Abajo, los que más pierden en casa. Arriba a la derecha está a quién conviene firmar.</p>
+            <p className="nota-tarjeta">Cada punto es un lanzador. A la derecha, los mejores. Abajo, los que más pierden en casa. Arriba a la derecha aparecen perfiles favorables bajo el modelo; esto no basta para decidir un fichaje.</p>
             <MapaFichajes p={j.pitchers} sel={sel} onSel={setSel} />
           </div>
           {sel && <Ficha x={sel} cf={porCF.get(sel.nombre)} />}

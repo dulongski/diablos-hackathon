@@ -1,0 +1,125 @@
+{
+  "date_local": "2026-10-22",
+  "source_commit": "abfbf399a70e42ad1609cd0b9647137037dad397",
+  "working_branch": "codex/submission-consistency",
+  "production_models": "SHA256 unchanged; see delivery_checks/model_hashes_before.txt and after.txt",
+  "dashboard": {
+    "url": "https://claude.ai/artifact/1HXhuyBtkDd6szvLv9M7xo",
+    "publication": "update_files_prepared_not_published",
+    "public_data_files": 13
+  },
+  "documents": {
+    "technical_pdf_pages": 14,
+    "technical_body_pages": 10,
+    "technical_cover_pages": 1,
+    "technical_annex_pages": 3,
+    "executive_report_slides": 15
+  },
+  "headline_results": {
+    "pitchers": 561,
+    "survive_half_run_cutoff": 7,
+    "lose_more_than_one_run": 422,
+    "league_transfer_delta_rounded": -9.3
+  },
+  "files": {
+    "documento_tecnico.pdf": {
+      "bytes": 693277,
+      "sha256": "bed662c1c7f03fbc8faa02ee3f1db86e492f23823fb44fb353f35af18c6a0c77"
+    },
+    "reporte.pdf": {
+      "bytes": 1709842,
+      "sha256": "1d9579350ae5b8129c6b4b6e22dddfcdb43ec5a12821bad4dced9c45d6ae30b2"
+    },
+    "dashboard.html": {
+      "bytes": 2388229,
+      "sha256": "615d34ed8ce9e0aae34645f6b208127fdab63da9c70eb1d6d6ff71f6d701c542"
+    },
+    "actualizacion_artifact.zip": {
+      "bytes": 686019,
+      "sha256": "ae207eba436e9e7ad0dc9c12e9efa8cafedf32d9425d3ae0e49a406214cfe14b"
+    }
+  },
+  "artifact_files": {
+    "artifact.html": {
+      "bytes": 555,
+      "sha256": "9054e32f0fa02a63a3611a957887084e64b0e6a288bdd2d009826ffb7aab822f"
+    },
+    "index.html": {
+      "bytes": 1028,
+      "sha256": "f9f99ea4e17e150b535c071a8cd56e470bd3dfd02afba65b682694b5d26e92e0"
+    },
+    "favicon.svg": {
+      "bytes": 534,
+      "sha256": "fe46e4783b7670de2e0154f4827052ae0191311ddef5482116065b7972b227a2"
+    },
+    "logos/diablos.png": {
+      "bytes": 13146,
+      "sha256": "870a75735123f5116d95ff41abfa6a459f65354b00a694b39adc6779db61d023"
+    },
+    "logos/isac.svg": {
+      "bytes": 24756,
+      "sha256": "f6b4758a5fb31283ff7a03b84e852bc5f4d98ab8cdabf47835d51fa3f918d749"
+    },
+    "data/scale.json": {
+      "bytes": 275,
+      "sha256": "1e10c66084ebbf77b60937293c965b045b53abc41012e8a52ff33ca9bd015f91"
+    },
+    "data/robustez.json": {
+      "bytes": 9185,
+      "sha256": "2f8bb2b458b89bb036bd921754f9148e139008ff2d30dffd0a065633ebf42b77"
+    },
+    "data/models.json": {
+      "bytes": 3658,
+      "sha256": "508ac69659ec21d81ec475c2d1e2b867a74e9a09de14e76b0610ec880c8a9ea4"
+    },
+    "data/causal.json": {
+      "bytes": 102684,
+      "sha256": "2dd6e92a055db67eb3d572761d104765b6ea582282f52e0042d4e65694fc2ae5"
+    },
+    "data/compresion.json": {
+      "bytes": 6130,
+      "sha256": "26ad63fbd2e9c41b1a3fcff5f8f662c039e4a9412856254c14d87875a1a2a429"
+    },
+    "data/arsenal.json": {
+      "bytes": 1819,
+      "sha256": "34e56c73278c77ecff2a191751a53c219f77a9fe8a746c98c9114e22f7c2bd1c"
+    },
+    "data/physics.json": {
+      "bytes": 1006,
+      "sha256": "82ac3d0f61c028be9ef5f167bc93122856389a6a71fc46d4fa05096ae2fba9a1"
+    },
+    "data/hipotesis.json": {
+      "bytes": 4513,
+      "sha256": "d07b28db253436c26b84bd51f4bbf79a4b444228c8598cdd92293dd2101f1830"
+    },
+    "data/extras.json": {
+      "bytes": 24953,
+      "sha256": "c97bc41f5a930c5461947b2d81ec5869da24db5e40dd1e991b8597c186d36f15"
+    },
+    "data/helpers.json": {
+      "bytes": 461,
+      "sha256": "63b8095f178b8b4b32f8e2b6607effed711a94a37ba4e9e2ed13b02dae881973"
+    },
+    "data/model_stuff.json": {
+      "bytes": 640209,
+      "sha256": "f705020928e5c78eeaf5cc748408c8447576e711f46da9874b5103d430803f07"
+    },
+    "data/jurado.json": {
+      "bytes": 285164,
+      "sha256": "484bf8848156081e640a7ba508004d004eabea18d055f961cd39faf0d813c5df"
+    },
+    "data/validation_audit.json": {
+      "bytes": 8673,
+      "sha256": "83f8202a70813aa45ff66b701d1bacd78397e5380a2bb6f3b0bc36c4282ff61b"
+    },
+    "assets/index-BJUd7Sxp.js": {
+      "bytes": 1185050,
+      "sha256": "c8b9c2cdeeeef5801c6d62be4cc257f08576d2a5358ec382820213243f2df094"
+    },
+    "assets/index-Cu88hxdW.css": {
+      "bytes": 57579,
+      "sha256": "6d8e70685b064156369bbf7d3c8c553af4fa3e6e03fe2389ce5112aa13d0b448"
+    }
+  },
+  "limits": "Current trained model preserved. Revised transfer and narrative. Legacy calibration uses global target tables; strict audit is separate refits. Causal interpretation not identified. Standalone HTML structure checked; direct file execution not browser-tested."
+}
