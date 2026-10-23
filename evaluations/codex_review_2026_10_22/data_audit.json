@@ -1,0 +1,195 @@
+{
+  "rows": 635002,
+  "pitchers": 1135,
+  "games": 2127,
+  "years": {
+    "2024": 243254,
+    "2025": 256144,
+    "2026": 135604
+  },
+  "unknown_terminal_pas": 6346,
+  "pas": 171020,
+  "shape_missing_fraction": {
+    "RelSpeed": 0.0,
+    "EffectiveVelo": 0.0,
+    "SpinRate": 0.0001259838551689601,
+    "SpinAxis": 0.0011055083291076249,
+    "InducedVertBreak": 0.0011055083291076249,
+    "HorzBreak": 0.0011055083291076249,
+    "VertBreak": 0.0011055083291076249,
+    "RelHeight": 0.0,
+    "RelSide": 0.0,
+    "Extension": 0.0012173190005700769,
+    "SpeedDrop": 0.0,
+    "ZoneTime": 0.0,
+    "ZoneSpeed": 0.0,
+    "spin_efficiency": 0.0001259838551689601,
+    "movement_total": 0.0011055083291076249,
+    "is_rhp": 0.0
+  },
+  "spin_efficiency_at_upper_cap_fraction": 0.0024283388083817057,
+  "cached_oof_current": {
+    "n": 635002,
+    "rmse": 0.26797122877001006,
+    "r2": 0.000983650560603011,
+    "skill_vs_training_count_baseline": 0.0009580920379287372,
+    "corr": 0.03567959595120079
+  },
+  "cached_models_json": {
+    "n_pitches": 635002,
+    "stuff_entrena": "todo",
+    "baseline_nulo_por_conteo": {
+      "n": 635002,
+      "rmse": 0.2680996916371606,
+      "r2": 2.558303357513836e-05,
+      "corr": 0.0050579673362946154
+    },
+    "holdout_pitcher": {
+      "stuff": {
+        "n": 635002,
+        "rmse": 0.26797122877001006,
+        "r2": 0.0009836505606029,
+        "corr": 0.03567959595120079,
+        "n_features": 16,
+        "segundos": 37.4
+      },
+      "location": {
+        "n": 635002,
+        "rmse": 0.26234966245526725,
+        "r2": 0.042459217803922145,
+        "corr": 0.20688300602402254,
+        "n_features": 23,
+        "segundos": 69.7
+      },
+      "pitching": {
+        "n": 635002,
+        "rmse": 0.26224843400397174,
+        "r2": 0.0431980155525542,
+        "corr": 0.20843955862488145,
+        "n_features": 33,
+        "segundos": 75.3
+      }
+    },
+    "holdout_temporada": {
+      "stuff": {
+        "n": 135604,
+        "rmse": 0.2662580777882025,
+        "r2": 0.0009253440693691717,
+        "corr": 0.035110904234925584
+      }
+    },
+    "holdout_parque": {
+      "stuff": {
+        "n": 183267,
+        "rmse": 0.27707475691410416,
+        "r2": -0.0005045486197945426,
+        "corr": 0.022014982975036047
+      }
+    },
+    "componentes": {
+      "y_swing": {
+        "n": 635002,
+        "brier": 0.14855459628392878,
+        "brier_base": 0.24905969025826905,
+        "skill": 0.4035381794224463,
+        "segundos": 56.1
+      },
+      "y_whiff": {
+        "n": 298029,
+        "brier": 0.1475463026699585,
+        "brier_base": 0.18307361956212073,
+        "skill": 0.19406027464326758,
+        "segundos": 37.6
+      },
+      "y_called_strike": {
+        "n": 336973,
+        "brier": 0.05619964790673119,
+        "brier_base": 0.20550630027417946,
+        "skill": 0.7265307787072632,
+        "segundos": 38.4
+      },
+      "y_chase": {
+        "n": 411912,
+        "brier": 0.14573934738304276,
+        "brier_base": 0.22514335955189962,
+        "skill": 0.3526820081520228,
+        "segundos": 45.2
+      },
+      "y_groundball": {
+        "n": 115948,
+        "brier": 0.2287777947870494,
+        "brier_base": 0.244146459402066,
+        "skill": 0.06294854593695798,
+        "segundos": 33.8
+      },
+      "y_barrel": {
+        "n": 115948,
+        "brier": 0.02437166823604134,
+        "brier_base": 0.024574053949063594,
+        "skill": 0.008235747892543666,
+        "segundos": 14.4
+      },
+      "y_hard_contact": {
+        "n": 115948,
+        "brier": 0.16677042746833562,
+        "brier_base": 0.17588389623469977,
+        "skill": 0.0518152540480632,
+        "segundos": 34.0
+      },
+      "y_weak_contact": {
+        "n": 115948,
+        "brier": 0.19563430380389332,
+        "brier_base": 0.21749944948276223,
+        "skill": 0.10052965987208995,
+        "segundos": 29.7
+      }
+    },
+    "ablacion_whiff": {
+      "stuff": {
+        "n": 298029,
+        "brier": 0.17484045718147248,
+        "brier_base": 0.18307361956212073,
+        "skill": 0.04497186651108176,
+        "n_features": 16
+      },
+      "location": {
+        "n": 298029,
+        "brier": 0.14854452033534057,
+        "brier_base": 0.18307361956212073,
+        "skill": 0.1886077268225076,
+        "n_features": 23
+      },
+      "pitching": {
+        "n": 298029,
+        "brier": 0.1475463026699585,
+        "brier_base": 0.18307361956212073,
+        "skill": 0.19406027464326758,
+        "n_features": 33
+      }
+    },
+    "escala": {
+      "stuff": {
+        "center": -0.0007889722788208323,
+        "scale": 0.013526395350189678
+      },
+      "location": {
+        "center": -0.0008379421506216805,
+        "scale": 0.060521782936695676
+      },
+      "pitching": {
+        "center": -0.0008336803633545822,
+        "scale": 0.060471859488886
+      }
+    },
+    "distribucion_stuff_plus": {
+      "1": 78.3,
+      "5": 84.0,
+      "25": 93.0,
+      "50": 99.8,
+      "75": 106.8,
+      "95": 117.0,
+      "99": 123.5
+    }
+  },
+  "warning": "Cached metrics use full-data fitted target lookup. Newly fitted metrics use training-only lookups; do not compare these two protocols as treatment effect."
+}

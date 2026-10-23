@@ -319,14 +319,14 @@ if _fu:
 nul_ = J["modelo_nulo"]; hp_ = hold["pitcher"]["stuff"]
 _mj = RB.get("mejoras") if isinstance(RB.get("mejoras"), dict) else None
 _mj_txt = (f"Probamos {len(_mj) - 2} mejoras (calidad de contacto, arsenal, frenado relativo al aire y variables de física) y "
-           "ninguna se separa del ruido. El modelo está en el techo de lo que la física sola predice.") if _mj else ""
+           "ninguna se separa del ruido.") if _mj else ""
 lamina("Validación · criterios 1 y 2", "Stuff+ ordena carreras con lanzadores que nunca vio y es un rasgo estable del lanzador",
        "En esta lámina están las pruebas de calidad que pide el reto, todas con lanzadores que el modelo no vio.", f"""
 <div class="dos ancho-izq">
   <div>{calibracion_svg()}
-  <p class="nota">Carreras por cada 100 lanzamientos según su Stuff+ fuera de muestra. Bajan escalón por escalón. Le gana al modelo
-  nulo por conteo (error {hp_['rmse']:.5f} contra {nul_['rmse']:.5f}). La diferencia es chica porque un lanzamiento suelto es casi azar y
-  Stuff+ no ve dónde cayó la pelota. {_mj_txt}</p></div>
+  <p class="nota">Carreras por cada 100 lanzamientos según su Stuff+ fuera de muestra. Bajan escalón por escalón. Un lanzamiento suelto
+  es casi azar y Stuff+ no ve dónde cayó la pelota, así que su R² es bajo en cualquier Stuff+. El nuestro está en el techo de lo que la
+  física sola predice. {_mj_txt} Le gana al modelo nulo por conteo (error {hp_['rmse']:.5f} contra {nul_['rmse']:.5f}).</p></div>
   <div class="cifras col">{cif_conf}</div>
 </div>""", clave="confianza")
 

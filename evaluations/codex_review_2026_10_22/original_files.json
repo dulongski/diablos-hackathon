@@ -1,0 +1,682 @@
+{
+  "stuff_model_df.parquet": {
+    "size": 211239244,
+    "sha256": "52d439289aa66f7e235bc60982bd7a2ea728e0ab533b7c10eb8e837e47f1415b"
+  },
+  ".DS_Store": {
+    "size": 6148,
+    "sha256": "826ce1c7da2b804e7c69ab6437c5781b5a876c38cd8ede1b63d3929068657bac"
+  },
+  "stuff_model_df.rds": {
+    "size": 136825051,
+    "sha256": "4dcdec41be520e45d817a672a6f6626d6fcd38d0bc7f0bd61d6bdbb55431c0af"
+  },
+  "pyproject.toml": {
+    "size": 492,
+    "sha256": "50c4ebb911ac9e0e701fc95ed0f43a115921496f41bc2ce5aae521717480366a"
+  },
+  "compartir.sh": {
+    "size": 1824,
+    "sha256": "2b51334d1b88602490d7368e559d287b3a10389f0db4249fce20517561c1c218"
+  },
+  "README.md": {
+    "size": 5380,
+    "sha256": "70d659adaeb5852562ac64f9e696f7778ca59639d79b2048d965bf8f9d0a6dbc"
+  },
+  "stuff_plus_data_dictionary.csv": {
+    "size": 12522,
+    "sha256": "257ded04925b7ac4456b84ba5a41df5dd4f7cf47e386256c9bbdf9ad3281c827"
+  },
+  ".gitignore": {
+    "size": 327,
+    "sha256": "8113859377ebd618c680019d85944ac66fb934e1e172217edab3a3c4597c91e0"
+  },
+  "stuff_model_df.pkl": {
+    "size": 446774545,
+    "sha256": "f2de0c05c90edd011657423323d8ee252afa183f7afef4303bcb702dc02e15fe"
+  },
+  "CLAUDE.md": {
+    "size": 16083,
+    "sha256": "161afc8150ef9752f8d8710b253b2d8e97824037730d882cc33fd8cb5706cd11"
+  },
+  "artifacts/scale.json": {
+    "size": 275,
+    "sha256": "1e10c66084ebbf77b60937293c965b045b53abc41012e8a52ff33ca9bd015f91"
+  },
+  "artifacts/robustez.json": {
+    "size": 11219,
+    "sha256": "3fa9cee23829485efac9e1f759de548d65ee259d5037db6af9562b27df31156b"
+  },
+  "artifacts/model_stuff.txt": {
+    "size": 1278647,
+    "sha256": "37e2a20038ce76999007ca296178c0d79ec2004eb47f0fa93afa58a79a623107"
+  },
+  "artifacts/model_y_called_strike.txt": {
+    "size": 3177120,
+    "sha256": "ccfab34ecbb872f8e75de2c1bdb41331a5ffe69d5b25e8780db623c0fd60d1f6"
+  },
+  "artifacts/model_y_groundball.txt": {
+    "size": 3185939,
+    "sha256": "e713df7f37a04430cb7de76b180d1e88e12ed6ea951de37f94113408d541b588"
+  },
+  "artifacts/oof_rv.npy": {
+    "size": 15240176,
+    "sha256": "9d9a3aee84015d51e500bcbb23eb33a85dcc7834291fbf6426cf7d1957d482fd"
+  },
+  "artifacts/models.json": {
+    "size": 3658,
+    "sha256": "508ac69659ec21d81ec475c2d1e2b867a74e9a09de14e76b0610ec880c8a9ea4"
+  },
+  "artifacts/count_value.json": {
+    "size": 210,
+    "sha256": "393398db46368c9fa8d903d41b781f9a0524031d121ce534d0c7b71ed66148e0"
+  },
+  "artifacts/causal.json": {
+    "size": 134265,
+    "sha256": "32a0bfb498fc77a35dd14d303ad45f373f4e976442b24bc9e87a649a014f1238"
+  },
+  "artifacts/scored.pkl": {
+    "size": 727488379,
+    "sha256": "3215ac9724cc16884a06b0028d66858e61c99495574160be15e1d48f605814c5"
+  },
+  "artifacts/stuff_por_arsenal.csv": {
+    "size": 113277,
+    "sha256": "8c4ca76d36b68aa087578784c0c05de1b2bffe52f712de628b187e714ba28b37"
+  },
+  "artifacts/model_location.txt": {
+    "size": 4587825,
+    "sha256": "edcac4e508ce871906cb8975179be2f2c13410cf0ba37b8f556b3b9cf62e3fc0"
+  },
+  "artifacts/model_y_weak_contact.txt": {
+    "size": 3183044,
+    "sha256": "aa9086aaaa68ec4a7a33aca8e5865b3bb4a0e6fbbeff8cee21ef451475fb78c1"
+  },
+  "artifacts/model_pitching.txt": {
+    "size": 4600635,
+    "sha256": "71f2388fac2ee5208ef912a633f11ac84bf97e81e0896d23b870bdf09897d47a"
+  },
+  "artifacts/model_y_whiff.txt": {
+    "size": 3188337,
+    "sha256": "5c42620a716d929b8898f0368327d0f731adc6542a0e6ed1ee29fabd098de9e1"
+  },
+  "artifacts/model_y_chase.txt": {
+    "size": 3194649,
+    "sha256": "b3454e8ce5354d83424b9072b5f6ad19931989f249214db1190370d76af8040c"
+  },
+  "artifacts/pitches_rho.pkl": {
+    "size": 500446724,
+    "sha256": "ecf5843232276673fb589e93bac7d85c9e8b7eb4864d3069ef427461bc56a50a"
+  },
+  "artifacts/model_y_barrel.txt": {
+    "size": 766003,
+    "sha256": "757cfa2ad2b4773ddca61a7361f408c3dd75765ba3781ca6efe0aa743c15945e"
+  },
+  "artifacts/stuff_por_pitcher.csv": {
+    "size": 48705,
+    "sha256": "a5e39ba987d5a50a4523cf9e00d2dccab808ae57efd6ab4c43ef92dc28c61335"
+  },
+  "artifacts/stuff_por_pitch.parquet": {
+    "size": 23665577,
+    "sha256": "fe2ae4992acbfc202022ca0c64bdec2f48613c7379e2e9589e1e6017be03e34c"
+  },
+  "artifacts/altitude_deltas.json": {
+    "size": 1954,
+    "sha256": "74968b5ed667c1c2dc87370b851446f4b9206864e9db5afceca94cb24c87162a"
+  },
+  "artifacts/physics.json": {
+    "size": 753,
+    "sha256": "1d4ae6cce9c92c09dce6f981b5188451135aebccb411d48405ae96dd225c8442"
+  },
+  "artifacts/hipotesis.json": {
+    "size": 6431,
+    "sha256": "5751ff458f4256efd91891379f403b9e69ef1611a2c86feb1a6e6c9383b7db79"
+  },
+  "artifacts/perfil_ideal.csv": {
+    "size": 404,
+    "sha256": "f988834b71132e3f036c5751916b31c9bce51640d7aa2da51e39fc0626e28d5e"
+  },
+  "artifacts/extras.json": {
+    "size": 40220,
+    "sha256": "4c9dc8946fb30543dfb895a12fabf0f198cabe22f607ade261dc630a51e437d9"
+  },
+  "artifacts/model_frame.pkl": {
+    "size": 712248054,
+    "sha256": "d27db1a36f851332e21c2a975dce803657a25058a45176cf22d47fcc927361e9"
+  },
+  "artifacts/experimentos.json": {
+    "size": 30176,
+    "sha256": "87a5a71c9b6bfac32206d8cd1c62e6ac0446a47003d5c5a9c9d7d32384b8da10"
+  },
+  "artifacts/deliverables.json": {
+    "size": 15421,
+    "sha256": "5fcbab286c4bea4cfaa395e667ef2ccb8224b228189dbdb12f430a757ad80e75"
+  },
+  "artifacts/model_y_hard_contact.txt": {
+    "size": 3180074,
+    "sha256": "8b7b9ac87ee50d465d2b827bcb0a3ac5e880a2a01b2cb79ec33c22b0d7526431"
+  },
+  "artifacts/jurado.json": {
+    "size": 387175,
+    "sha256": "b8915acc2393b39aa510e0c385af24c89b6762bffa16055839a443ba0659c47f"
+  },
+  "artifacts/pitchers_jurado.csv": {
+    "size": 179585,
+    "sha256": "72902496808100654cd743b435912a9b07c4382ca4385fb04fe437e80d7e3bb6"
+  },
+  "artifacts/model_y_swing.txt": {
+    "size": 3205599,
+    "sha256": "80a88e082bd3df14bbc9f454250657b89de087130d04718e8d144d8ead934cb8"
+  },
+  "app/index.html": {
+    "size": 928,
+    "sha256": "4df97cf4dbd4856147e65d652f2cad075ea219c487b52773aa4770cc69327d05"
+  },
+  "app/tsconfig.tsbuildinfo": {
+    "size": 940,
+    "sha256": "6b7a776eec88e71cddf4e1e1f1c1095377c552243c11e38fc54aed814a7def27"
+  },
+  "app/tsconfig 2.tsbuildinfo": {
+    "size": 566,
+    "sha256": "94e253bce51f7002c2247c32ccc6bce452738e896a6848681424579c0dd471b0"
+  },
+  "app/package-lock.json": {
+    "size": 91619,
+    "sha256": "fc080ab6a63f4c535dbbf90851f3bb92ade801008ed9e34a3f19d0592b25fd37"
+  },
+  "app/package.json": {
+    "size": 981,
+    "sha256": "71d09520321679fbcd5f6dae276ac9276ad9c01f56c0a2782fd989baac8ff24e"
+  },
+  "app/tsconfig.json": {
+    "size": 508,
+    "sha256": "3dbbde6e820d93d3bc05d0c54de9aba50d39b9e7fb6b736713a60a2edf5a17af"
+  },
+  "app/vite.config.ts": {
+    "size": 189,
+    "sha256": "8278060feed9a00622590f7f2a9e302e7db2e836d9f4c62bdf43db8abb8d7a3a"
+  },
+  "entrega/reporte.html": {
+    "size": 86281,
+    "sha256": "4fc2156b49183dc94bcab541ebe555bf09814f1ee9cee182c657939404e76eaf"
+  },
+  "entrega/documento_tecnico.html": {
+    "size": 153393,
+    "sha256": "a55053ab4ac66c09156df3c700b2a26a21a3b4185ce9889dcbcdc753907de70d"
+  },
+  "entrega/entrevista.md": {
+    "size": 8024,
+    "sha256": "a58afc057b4e36f4251d03894cceb017d353feea0246416c537eab2190e38adb"
+  },
+  "entrega/reporte.pdf": {
+    "size": 1700641,
+    "sha256": "32fe5770bd9916f9051f438979b692dcc1b74f6b51528c286f6e2646a3c2336d"
+  },
+  "entrega/correo.txt": {
+    "size": 1542,
+    "sha256": "6b0bd4dc28dddc7a3ef8251ec5ffc7a21b126d5fa80295d01fce372bbb86c18c"
+  },
+  "entrega/README.md": {
+    "size": 922,
+    "sha256": "a6838fff01adf34aa408da8b887ab9ef97a1abd937171a3215f1283f0a5f317c"
+  },
+  "entrega/documento_tecnico.pdf": {
+    "size": 528297,
+    "sha256": "d08877ca79f66b95303f8e4293fcde93e6db14e92b987a0a1ae31dd0ea80bec0"
+  },
+  ".claude/launch.json": {
+    "size": 200,
+    "sha256": "65a57c2f3a04dac36d00be3b2344dc5217e079906bee8b08c7da32b5188b4c6f"
+  },
+  "docs/verifica_cifras.py": {
+    "size": 2567,
+    "sha256": "6fc1080741b52d0a18336270a16ef0dd25dcf20b663009191617ecda0c9c6c1c"
+  },
+  "docs/pdf.mjs": {
+    "size": 787,
+    "sha256": "a8e75a8ea16903a24fde179257f8a5d5671a3190116b80ddd50bac3d897f6d8d"
+  },
+  "docs/tecnico.py": {
+    "size": 16911,
+    "sha256": "ab106d2500a705d34d4607d29dcf24716053094118efa4e2211b0e405fc2a8bf"
+  },
+  "docs/documento_tecnico.md": {
+    "size": 38904,
+    "sha256": "9cc4d52d7c43a797594aa0b398df2adb093f71744a1379dd9461924e9ad1fabf"
+  },
+  "docs/reporte.py": {
+    "size": 45446,
+    "sha256": "b74f32bff3ce49d3afdde92e00c0998a1663a542d2e495c3a97313924cabe8bc"
+  },
+  "docs/katex.mjs": {
+    "size": 609,
+    "sha256": "88e9739a8e1eb818dec8be79b2cb0d3bb6027796648499831e3fd668185adf23"
+  },
+  "docs/estilo.py": {
+    "size": 2718,
+    "sha256": "1300d19f8bf35fd02b570828bfbceb5a5d184d531d61b63c3847da1eabd396a6"
+  },
+  "scripts/12_mejoras.py": {
+    "size": 4197,
+    "sha256": "8accd87693617da25f612d343666a031fdb8f31fa721fd3006829fd48fd821c4"
+  },
+  "scripts/07_jurado.py": {
+    "size": 13913,
+    "sha256": "90dee9d2b89debe8185f315deadc6972fcb2609b8bfaa753fe766cd16d78c05a"
+  },
+  "scripts/12b_mejoras_fisica.py": {
+    "size": 4200,
+    "sha256": "47544ffe5301d513e95942743db3d991e361884171f7aa868d258bcf63ce2aca"
+  },
+  "scripts/01_physics.py": {
+    "size": 5346,
+    "sha256": "7eb37131c6726615107ee328c7fc2c6ef227bd1cf61080e2cbd248a90b5d2b82"
+  },
+  "scripts/02_features.py": {
+    "size": 1528,
+    "sha256": "8e79dc6c22c909763c561fcc9af887d4078618e2c889612baa48f206870e62d4"
+  },
+  "scripts/11_robustez.py": {
+    "size": 24146,
+    "sha256": "443f7f3b787c01821c360d178edf80bd98899a52629e43f74e87bfd8675aa670"
+  },
+  "scripts/10_local_extras.py": {
+    "size": 11352,
+    "sha256": "8cf57bdeb8173f34d2c70e90da3ae17fb9a40373bcbc8eaa0e86bff13ca097fb"
+  },
+  "scripts/08_hipotesis.py": {
+    "size": 7975,
+    "sha256": "71a5dbca63fdc6dd4312601295686cde347d81eb1cc4e8949886cf5e6049f004"
+  },
+  "scripts/09_causal_forest.py": {
+    "size": 8944,
+    "sha256": "4f3e9d9b2bf90ecf18c163ec41f0b1528968a8a7127a3a4522d23d435ee2356e"
+  },
+  "scripts/05_deliverables.py": {
+    "size": 8645,
+    "sha256": "afc8e4e1e8380df64b465386243501991dbfff0a667f79e2d51393159d77cb00"
+  },
+  "scripts/03_models.py": {
+    "size": 7349,
+    "sha256": "4c4afa373f0bf4b9e7549891d5b995a719bcc86bb8ac4d66e5599bd85efa7e2a"
+  },
+  "scripts/06_report.py": {
+    "size": 25670,
+    "sha256": "6507c4df1f56181489682a75197a38a046279544bd56374947a35e4905dc5b89"
+  },
+  "scripts/04_export.py": {
+    "size": 6541,
+    "sha256": "596d68a75deb286847eb77c663445292f860054eaa958863e97313bf10638ba3"
+  },
+  "src/stuffplus/targets.py": {
+    "size": 4543,
+    "sha256": "894c49a14a45718654b42c875ee08fb82941949db7d8790d5b1459d4ae67e356"
+  },
+  "src/stuffplus/models.py": {
+    "size": 7536,
+    "sha256": "aca30c04d772c4e416418385e454e44d3d1122b815f8274fe40df0edbe0fab9a"
+  },
+  "src/stuffplus/sequence.py": {
+    "size": 3055,
+    "sha256": "ba6a44d7a477724390df9ade8a7385c5df463272cc7f28eafe003fd3bed1d328"
+  },
+  "src/stuffplus/constants.py": {
+    "size": 1113,
+    "sha256": "d2f506cf8f142670e61172ccf709376989a27177144c53a3a819cf3a9f002439"
+  },
+  "src/stuffplus/io.py": {
+    "size": 3222,
+    "sha256": "416af26671e9d766bc28f5e77ca9607409c543f4c9e9409a9fa8b212697e9dc3"
+  },
+  "src/stuffplus/__init__.py": {
+    "size": 82,
+    "sha256": "9e81e7ba002543cf77db4db6a4ec583beeff351efa71cde2b4ee0d8e4b4863a1"
+  },
+  "src/stuffplus/features.py": {
+    "size": 5510,
+    "sha256": "e65ed7a68d6e80e288e854147e413a9ecf7a6fa48c850ff8351466edd520a4a1"
+  },
+  "src/stuffplus/export.py": {
+    "size": 5105,
+    "sha256": "370fe817dfd509d13410b2fc70507c685c115e9258a53fb8aa74e266074ccdbb"
+  },
+  "src/stuffplus/physics.py": {
+    "size": 18906,
+    "sha256": "4b1425b61570eb0f15c11f0ab09e751c3fc580d164070357f784d6cd188ff2f7"
+  },
+  "src/stuffplus/__pycache__/io.cpython-313.pyc": {
+    "size": 3836,
+    "sha256": "5b10519c394868f38283de77218107174191de10762e26e5946c26cb1ed18821"
+  },
+  "src/stuffplus/__pycache__/sequence.cpython-313.pyc": {
+    "size": 4472,
+    "sha256": "8f92493c004056d32f9b6127fe89ed519a9b7fa9793a09117ad612d96a8b523e"
+  },
+  "src/stuffplus/__pycache__/targets.cpython-313.pyc": {
+    "size": 7948,
+    "sha256": "12f5d1441fea2e50d14f824f14f3b9c50d94e7f754957bf0f83aa329180d91b2"
+  },
+  "src/stuffplus/__pycache__/features.cpython-313.pyc": {
+    "size": 6575,
+    "sha256": "d3e42500d258383559735e82f021ca4d9f0996240b14772379fb18b74820016b"
+  },
+  "src/stuffplus/__pycache__/models.cpython-313.pyc": {
+    "size": 9273,
+    "sha256": "cb87ee0d5b43ec65b947f1414d3e22b3ce3b47bf83e007639dbba9d7aebd9c05"
+  },
+  "src/stuffplus/__pycache__/constants.cpython-313.pyc": {
+    "size": 921,
+    "sha256": "fca2b076643c0453414ecfe9863d9ac0abd847d3e56e3cec8238ef77f3b1d612"
+  },
+  "src/stuffplus/__pycache__/physics.cpython-313.pyc": {
+    "size": 21053,
+    "sha256": "2ab0aec0848841ab451fd72bccec7370f97503f9757731c5415977771fbf5b64"
+  },
+  "src/stuffplus/__pycache__/export.cpython-313.pyc": {
+    "size": 6762,
+    "sha256": "1f2b3e1a628385d020d296cc825087da8596977b245888fe38c7926e74a5326a"
+  },
+  "src/stuffplus/__pycache__/__init__.cpython-313.pyc": {
+    "size": 267,
+    "sha256": "9b08d7919d8a00d079f87958f932b2c3033265a6cf39678ea10d43b1e74d5e01"
+  },
+  "app/test/gbm.test.ts": {
+    "size": 1234,
+    "sha256": "b48675129037b3a571ed5aba83ce3bcd77d7d0e66b59d950e7fcf109ef95a678"
+  },
+  "app/test/physics.test.ts": {
+    "size": 2840,
+    "sha256": "9785b2498613c4c73076c1e8ab33bce2b4b56166a25902d4552c930f1260f3dd"
+  },
+  "app/dist/artifact.html": {
+    "size": 497,
+    "sha256": "b6e2c9c97123940d38654b4f611204afd69a52b24ebba232c710332e99acae0e"
+  },
+  "app/dist/index.html": {
+    "size": 1028,
+    "sha256": "9db2772982df784ca5c43c8fa86613a1dba6f1d619fb15616abc7faafc3b472b"
+  },
+  "app/dist/favicon.svg": {
+    "size": 534,
+    "sha256": "fe46e4783b7670de2e0154f4827052ae0191311ddef5482116065b7972b227a2"
+  },
+  "app/public/favicon.svg": {
+    "size": 534,
+    "sha256": "fe46e4783b7670de2e0154f4827052ae0191311ddef5482116065b7972b227a2"
+  },
+  "app/scripts/artifact.mjs": {
+    "size": 1353,
+    "sha256": "e8140ada606137efbf0123c07af02a93786e9184f0e865e6e12de6cdae18dca1"
+  },
+  "app/scripts/.consistencia.mjs": {
+    "size": 11803,
+    "sha256": "fcdec993764cd35666d89ee35ac4c42a8842617d22f757fa38d821749b6ff039"
+  },
+  "app/scripts/consistencia.ts": {
+    "size": 2761,
+    "sha256": "de540f76e4416a0e81dc2294762ff8688718447cd57e044cc032661ce621e190"
+  },
+  "app/scripts/experimentos.ts": {
+    "size": 5957,
+    "sha256": "9ea9bbfc3be370f5c051adbb7f11e9de33dfac4a03306af6e8fb487d79911c83"
+  },
+  "app/scripts/serve.mjs": {
+    "size": 1923,
+    "sha256": "d978f1fc7cb84c7973cc70608b96083b99286d3b106423567dcd1cce28670c2c"
+  },
+  "app/src/App.tsx": {
+    "size": 9167,
+    "sha256": "a6ead92fdaa64fda1ba9a908cb60a6a74478b7b50aeebd93fbf41bc2dc1258bf"
+  },
+  "app/src/main.tsx": {
+    "size": 270,
+    "sha256": "53e7dd7007a962e009d9685c111f32d43c45711790eafdc4eb7b4db3d1e9d8f1"
+  },
+  "app/src/styles.css": {
+    "size": 7526,
+    "sha256": "3aadefe4584191ddf7e5d5c6409d8e43cc30d4ec3b7cc32a519f786fc3b63209"
+  },
+  "app/src/lexico.ts": {
+    "size": 2376,
+    "sha256": "7e81f233ef91183d167b1eaf6b18db8fdc84298b7f009ad1ccf891b62159034d"
+  },
+  "app/src/settings.ts": {
+    "size": 3541,
+    "sha256": "70deef935c010ea3e6262f315a0cb17818b2a917c54f06a375e3f1a9a7fd55a3"
+  },
+  "app/src/app.css": {
+    "size": 65498,
+    "sha256": "c8992550501e4c9f373743b963818e0070828cea47c1193adf90374b05705dfc"
+  },
+  "app/src/jurado.ts": {
+    "size": 8430,
+    "sha256": "c53ddf6b55fc3c10500333722dbe3fedad7b13979be857a2918328b487f1d320"
+  },
+  "app/src/components/Resumen.tsx": {
+    "size": 19384,
+    "sha256": "de6e2c95c01f49b0ce893404139c32b1fcabcdebeecc44b36cfc2e614d8b97cd"
+  },
+  "app/src/components/Compresion.tsx": {
+    "size": 3569,
+    "sha256": "409c3dc337a78d90b4cef62727c8e2a55bc89fcec0dcee7ea66001659efdc3d5"
+  },
+  "app/src/components/MapaEfectivos.tsx": {
+    "size": 5713,
+    "sha256": "0ced90089c0d67f8c2137d0290d2e2e07136ef86a57822379654c0cc2dfdebe6"
+  },
+  "app/src/components/Inicio.tsx": {
+    "size": 9542,
+    "sha256": "50fa939b7327bc48865aa4b8d79725dedfb23a7d64578faa4fb59e0804d8c2fc"
+  },
+  "app/src/components/Robustez.tsx": {
+    "size": 15234,
+    "sha256": "631df99fe6b1e5964fa3a6193130132b1504c9ae2aed8b6ce754dce055d3cbd3"
+  },
+  "app/src/components/Info.tsx": {
+    "size": 2488,
+    "sha256": "e15e929b27474c9f92d26c6babd4a9acaa7103da5c18971cdbdc1a2743a836e8"
+  },
+  "app/src/components/ControlAltitud.tsx": {
+    "size": 2077,
+    "sha256": "e5cdafd63225c793a187992702f7f11961e1d808666547ed82a122b5ec27ff82"
+  },
+  "app/src/components/MapaMigracion.tsx": {
+    "size": 5372,
+    "sha256": "41e1fab54761447e8b73b5406490589930ed0d659b13f917bd0a33ea0ed064b0"
+  },
+  "app/src/components/Confianza.tsx": {
+    "size": 15443,
+    "sha256": "6e112a6e24c8489cba189fe0a2d12eb4044beae918e18dae6a83006b935aaee0"
+  },
+  "app/src/components/Simulador.tsx": {
+    "size": 11410,
+    "sha256": "fc683305608698ee90cd5f7701be447932c714e2d6251255fb0779cdf4948be2"
+  },
+  "app/src/components/Barra.tsx": {
+    "size": 1318,
+    "sha256": "340d6d325daded00f20e4df8f2d1acca6371f93e9c117fd239b17e7c3bdc722b"
+  },
+  "app/src/components/TablaArsenal.tsx": {
+    "size": 5006,
+    "sha256": "60bed6acecb0fa70959198673bf485b5da135aec7aa0b4023e22999fe41acc9f"
+  },
+  "app/src/components/Lanzadores.tsx": {
+    "size": 15311,
+    "sha256": "81fe3fee28b5c8b492a475afe527d870fbf6a59867aacc1e940085e53756f661"
+  },
+  "app/src/components/LimiteError.tsx": {
+    "size": 1165,
+    "sha256": "ad0b598d99d7e68966d4f5cce4573e296621c0f9e39f2bd333b43a29f44abf04"
+  },
+  "app/src/components/Logos.tsx": {
+    "size": 761,
+    "sha256": "1e0002d313e5bc88db4d2a7cc6b84e6f37b1ffb26ef8d5450c6066131ae79385"
+  },
+  "app/src/components/Pestanas.tsx": {
+    "size": 3532,
+    "sha256": "e5a029ca68dc3fbab0e4447f9ae798fac1ebdc5053c224633c3629bd8365ccdd"
+  },
+  "app/src/components/Diamante3D.tsx": {
+    "size": 13962,
+    "sha256": "4e39321a68ddbaf2e7d111bb40f1c7b3ce3b7866fe51bf75db5f3e1dd3aa66df"
+  },
+  "app/src/components/Metodologia.tsx": {
+    "size": 30917,
+    "sha256": "1948fee797ac62a782fc1785622050489b7fe787b9d9e8803c3759a29c108cfe"
+  },
+  "app/src/components/Hipotesis.tsx": {
+    "size": 13425,
+    "sha256": "018087ba16d0818a571a28cf698b0439e3ad2c240bd4c13a07116ee6a4ac9465"
+  },
+  "app/src/components/Ajustes.tsx": {
+    "size": 3638,
+    "sha256": "c8f28b141073637ace94cf5383b0b2f5f38dc680e020bd833fa3a675e7c7b8f1"
+  },
+  "app/src/components/CausalForest.tsx": {
+    "size": 13988,
+    "sha256": "61060d7ac268986d25fb92717af395643b0bee4aa3d6d1f5c5e44dc06ad2c44f"
+  },
+  "app/src/components/AirField.tsx": {
+    "size": 2385,
+    "sha256": "9b6a73ac18b95a5d893d32b7bd782d426caf9ea66d6f6a063940063ccae19871"
+  },
+  "app/src/components/Anexo.tsx": {
+    "size": 11594,
+    "sha256": "dd4454391713065052d3ab503991d0981b361204473a090d1927ae2b6b3f7959"
+  },
+  "app/src/lib/gbm.ts": {
+    "size": 2208,
+    "sha256": "ef3303496d0116df1239f06b4239d4263649059ba3e1ed2a3bc463619671d1d4"
+  },
+  "app/src/lib/physics.ts": {
+    "size": 10292,
+    "sha256": "c85fdda66bfa75b99ee4028eed4b9dbe0b4714629e2d3e45da1e6deeee3c3dca"
+  },
+  "app/src/lib/scoring.ts": {
+    "size": 6950,
+    "sha256": "2bd68f4c467bc78e202f86d956e2faf5715db8d129a96aff0d81dcba03379ef3"
+  },
+  "app/public/logos/diablos.png": {
+    "size": 13146,
+    "sha256": "870a75735123f5116d95ff41abfa6a459f65354b00a694b39adc6779db61d023"
+  },
+  "app/public/logos/isac.svg": {
+    "size": 24756,
+    "sha256": "f6b4758a5fb31283ff7a03b84e852bc5f4d98ab8cdabf47835d51fa3f918d749"
+  },
+  "app/public/data/scale.json": {
+    "size": 275,
+    "sha256": "1e10c66084ebbf77b60937293c965b045b53abc41012e8a52ff33ca9bd015f91"
+  },
+  "app/public/data/robustez.json": {
+    "size": 11219,
+    "sha256": "3fa9cee23829485efac9e1f759de548d65ee259d5037db6af9562b27df31156b"
+  },
+  "app/public/data/models.json": {
+    "size": 3658,
+    "sha256": "508ac69659ec21d81ec475c2d1e2b867a74e9a09de14e76b0610ec880c8a9ea4"
+  },
+  "app/public/data/causal.json": {
+    "size": 102292,
+    "sha256": "f206f70decd2c0fc1f179c1a49703bbfef0947fd7045ad075bce0adf9d4487bb"
+  },
+  "app/public/data/compresion.json": {
+    "size": 6140,
+    "sha256": "e1b02bcaeec830dbee6a1cb18b9b5c52fa514a72bc4c3ebf488ae0ab6e4e1bfb"
+  },
+  "app/public/data/arsenal.json": {
+    "size": 1817,
+    "sha256": "d98d081043d517c402135ab037bb5bae160b1f8ea5febfb8911b946298202462"
+  },
+  "app/public/data/physics.json": {
+    "size": 1006,
+    "sha256": "82ac3d0f61c028be9ef5f167bc93122856389a6a71fc46d4fa05096ae2fba9a1"
+  },
+  "app/public/data/hipotesis.json": {
+    "size": 4196,
+    "sha256": "facec5efcbd19c246574069b111fe9aa722bb7fc552d3a5688078f28c42ec799"
+  },
+  "app/public/data/extras.json": {
+    "size": 24952,
+    "sha256": "9e35ef1f9152f25038acc3e3b20ce55a3dbeb4e80d388a75e4a17556e7c9f9b7"
+  },
+  "app/public/data/helpers.json": {
+    "size": 461,
+    "sha256": "63b8095f178b8b4b32f8e2b6607effed711a94a37ba4e9e2ed13b02dae881973"
+  },
+  "app/public/data/model_stuff.json": {
+    "size": 640209,
+    "sha256": "f705020928e5c78eeaf5cc748408c8447576e711f46da9874b5103d430803f07"
+  },
+  "app/public/data/jurado.json": {
+    "size": 285333,
+    "sha256": "670d6397e3415828b3718b3b9805b43079a03e24a889e94b8432c6dab3e630aa"
+  },
+  "app/dist/logos/diablos.png": {
+    "size": 13146,
+    "sha256": "870a75735123f5116d95ff41abfa6a459f65354b00a694b39adc6779db61d023"
+  },
+  "app/dist/logos/isac.svg": {
+    "size": 24756,
+    "sha256": "f6b4758a5fb31283ff7a03b84e852bc5f4d98ab8cdabf47835d51fa3f918d749"
+  },
+  "app/dist/data/scale.json": {
+    "size": 275,
+    "sha256": "1e10c66084ebbf77b60937293c965b045b53abc41012e8a52ff33ca9bd015f91"
+  },
+  "app/dist/data/robustez.json": {
+    "size": 11219,
+    "sha256": "3fa9cee23829485efac9e1f759de548d65ee259d5037db6af9562b27df31156b"
+  },
+  "app/dist/data/models.json": {
+    "size": 3658,
+    "sha256": "508ac69659ec21d81ec475c2d1e2b867a74e9a09de14e76b0610ec880c8a9ea4"
+  },
+  "app/dist/data/causal.json": {
+    "size": 102292,
+    "sha256": "f206f70decd2c0fc1f179c1a49703bbfef0947fd7045ad075bce0adf9d4487bb"
+  },
+  "app/dist/data/compresion.json": {
+    "size": 6140,
+    "sha256": "e1b02bcaeec830dbee6a1cb18b9b5c52fa514a72bc4c3ebf488ae0ab6e4e1bfb"
+  },
+  "app/dist/data/arsenal.json": {
+    "size": 1817,
+    "sha256": "d98d081043d517c402135ab037bb5bae160b1f8ea5febfb8911b946298202462"
+  },
+  "app/dist/data/physics.json": {
+    "size": 1006,
+    "sha256": "82ac3d0f61c028be9ef5f167bc93122856389a6a71fc46d4fa05096ae2fba9a1"
+  },
+  "app/dist/data/hipotesis.json": {
+    "size": 4196,
+    "sha256": "facec5efcbd19c246574069b111fe9aa722bb7fc552d3a5688078f28c42ec799"
+  },
+  "app/dist/data/extras.json": {
+    "size": 24952,
+    "sha256": "9e35ef1f9152f25038acc3e3b20ce55a3dbeb4e80d388a75e4a17556e7c9f9b7"
+  },
+  "app/dist/data/helpers.json": {
+    "size": 461,
+    "sha256": "63b8095f178b8b4b32f8e2b6607effed711a94a37ba4e9e2ed13b02dae881973"
+  },
+  "app/dist/data/model_stuff.json": {
+    "size": 640209,
+    "sha256": "f705020928e5c78eeaf5cc748408c8447576e711f46da9874b5103d430803f07"
+  },
+  "app/dist/data/jurado.json": {
+    "size": 285333,
+    "sha256": "670d6397e3415828b3718b3b9805b43079a03e24a889e94b8432c6dab3e630aa"
+  },
+  "app/dist/assets/index-C8DbAba3.css": {
+    "size": 57445,
+    "sha256": "508418a174fd23ce9c57c5824825313fc11b1df3c3096ca8f41dfc3292d437f8"
+  },
+  "app/dist/assets/index-DK5TcaBz.js": {
+    "size": 1178663,
+    "sha256": "fc21508071b8cceeb061edb2a36a0fced31ad413237c70727e331075652dd319"
+  },
+  "app/test/fixtures/gbm.json": {
+    "size": 7599,
+    "sha256": "c399bc7c0970cbfb6991c972dced766773ee52f517c3a1dba4501f52cbbbce0e"
+  }
+}

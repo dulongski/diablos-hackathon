@@ -313,6 +313,13 @@ cerca de un tercio.
 
 ### 4.2 Calidad y robustez
 
+**Antes de ver el $R^2$.** El $R^2$ de un lanzamiento suelto es bajo en cualquier Stuff+, porque su desenlace es casi
+azar y Stuff+ no sabe dónde cayó la pelota. Nuestro modelo está en el techo de lo que la física sola puede predecir.
+Probamos ocho variantes con las mejoras usuales (calidad de contacto del batazo, arsenal, frenado relativo al aire y
+variables de física) y ninguna se separa del ruido (Anexo C). Lo que falta para un $R^2$ alto es dónde cayó la pelota,
+y por definición eso no entra en Stuff+. Por eso lo juzgamos como se juzga en Grandes Ligas, por si ordena carreras,
+si es estable y si anticipa el año siguiente.
+
 | Prueba | Capa | Variables | RMSE | $R^2$ | Correlación |
 |---|---|---|---|---|---|
 | Modelo nulo, promedio por conteo | | | 0.26810 | 0.0000 | 0.005 |
@@ -322,13 +329,8 @@ cerca de un tercio.
 | Holdout de temporada | Stuff+ | 16 | 0.26626 | 0.0009 | 0.035 |
 | Holdout de parque | Stuff+ | 16 | 0.27707 | $-0.0005$ | 0.022 |
 
-Las tres capas vencen al modelo nulo con lanzadores que nunca vieron. El $R^2$ de un lanzamiento suelto
-es bajo por construcción, porque su desenlace lo dominan el azar y la ubicación. Stuff+ no ve la
-ubicación, así que su $R^2$ es el más bajo de los tres, y así debe ser. Location+ y Pitching+ suben
-porque suman dónde llegó la pelota y el conteo. Probamos ocho variantes con las mejoras usuales, calificar cada batazo por su calidad de
-contacto, meter el arsenal, dividir el frenado entre el aire y sumar variables de física, y ninguna se separa del
-ruido (Anexo C). El modelo está en el techo de lo que
-la física sola predice.
+Las tres capas vencen al modelo nulo con lanzadores que nunca vieron. Stuff+ tiene el $R^2$ más bajo de las tres
+porque no ve la ubicación, y así debe ser. Location+ y Pitching+ suben porque suman dónde llegó la pelota y el conteo.
 
 <!-- si stuff_entrena=todo -->
 **El holdout de parque no falla en el orden, falla en el nivel.** Un modelo entrenado sin altura

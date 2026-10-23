@@ -1,0 +1,96 @@
+{
+  "existing_sea_reference_sea": {
+    "mean_plus": 102.9260399296286,
+    "mean_VertBreak": -28.969532169301583,
+    "mean_spin_efficiency": 0.7514274845538942
+  },
+  "existing_sea_reference_altitude": {
+    "mean_plus": 94.71066366671639,
+    "mean_VertBreak": -31.162280364021473,
+    "mean_spin_efficiency": 0.5614822306743831
+  },
+  "existing_sea_reference_delta_mean": -8.215376262912212,
+  "observed_reference_sea": {
+    "mean_plus": 104.34348108224226,
+    "mean_VertBreak": -27.916622492814117,
+    "mean_spin_efficiency": 0.8533411923988835
+  },
+  "observed_reference_altitude": {
+    "mean_plus": 95.09373246259501,
+    "mean_VertBreak": -30.10937068753401,
+    "mean_spin_efficiency": 0.6371891113802683
+  },
+  "observed_reference_delta_mean": -9.24974861964726,
+  "corrected_minus_existing_sea": {
+    "mean": 1.417441152613677,
+    "mean_abs": 2.4901813374802932,
+    "p05": -3.07205512656583,
+    "p95": 9.155370303438863,
+    "max_abs": 17.231555704742902
+  },
+  "corrected_minus_existing_altitude": {
+    "mean": 0.38306879587863024,
+    "mean_abs": 1.7819989271735168,
+    "p05": -3.6138944650093427,
+    "p95": 5.13263581937842,
+    "max_abs": 19.771339303172866
+  },
+  "corrected_minus_existing_delta": {
+    "mean": -1.034372356735047,
+    "mean_abs": 2.664394051299526,
+    "p05": -7.922695236076105,
+    "p95": 4.512292333706574,
+    "max_abs": 18.13586035696507
+  },
+  "by_pitch_type": [
+    {
+      "type": "Changeup",
+      "n": 604,
+      "existing_delta": -7.283462605095925,
+      "observed_reference_delta": -7.888737560731533
+    },
+    {
+      "type": "Curveball",
+      "n": 443,
+      "existing_delta": -6.372763523653789,
+      "observed_reference_delta": -6.467824447451003
+    },
+    {
+      "type": "Cutter",
+      "n": 221,
+      "existing_delta": -2.9863944690656266,
+      "observed_reference_delta": -3.2251874927738875
+    },
+    {
+      "type": "Four-Seam",
+      "n": 1701,
+      "existing_delta": -11.436384706804887,
+      "observed_reference_delta": -13.584462717898154
+    },
+    {
+      "type": "Sinker",
+      "n": 864,
+      "existing_delta": -8.360192458551928,
+      "observed_reference_delta": -9.607381109151097
+    },
+    {
+      "type": "Slider",
+      "n": 1106,
+      "existing_delta": -5.605692004346739,
+      "observed_reference_delta": -5.609999623964834
+    },
+    {
+      "type": "Splitter",
+      "n": 61,
+      "existing_delta": -5.2155812322872475,
+      "observed_reference_delta": -4.808606555315058
+    }
+  ],
+  "sample": {
+    "n": 5000,
+    "random_state": 20261022,
+    "source": "artifacts/scored.pkl",
+    "no_retraining": true,
+    "limitation": "Reference correction alone; does not validate full physical transfer or model generalization."
+  }
+}

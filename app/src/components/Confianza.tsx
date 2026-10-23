@@ -97,7 +97,10 @@ export function Confianza({ j, r }: { j: Jurado; r: DatosRobustez | null }) {
           <h2>¿Se puede confiar en la calificación?</h2>
           <p className="entrada ancha">
             Stuff+ califica el brazo, no el resultado de un lanzamiento. Lo que pasa con un lanzamiento suelto
-            depende sobre todo de dónde cayó y del azar, y eso lo miden Location+ y Pitching+. Por eso a Stuff+ lo
+            depende sobre todo de dónde cayó y del azar, y eso lo miden Location+ y Pitching+. Por eso el R² de Stuff+ es
+            bajo, como en cualquier Stuff+. <b>Está en el techo de lo que la física sola puede predecir</b>. Probamos ocho
+            variantes con las mejoras usuales y ninguna se separa del ruido (al final de esta pestaña). Lo que falta para un
+            R² alto es dónde cayó la pelota, y por definición eso no entra en Stuff+. Por eso a Stuff+ lo
             probamos como se prueba en las Grandes Ligas. Tiene que ser un rasgo estable del lanzador, tiene que
             anticipar sus carreras futuras, y tiene que ordenar las carreras de
             lanzadores que el modelo <b>nunca vio</b>.
