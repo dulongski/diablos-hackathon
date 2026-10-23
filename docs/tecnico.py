@@ -156,6 +156,54 @@ def alinear(t):
         out.append(fila)
     return "".join(out)
 cuerpo = re.sub(r"<table>.*?</table>", lambda m: alinear(m.group(0)), cuerpo, flags=re.S)
+# Gráficas en lugar de tablas. Se reusan las funciones SVG del reporte, así las dos piezas dibujan igual.
+import runpy
+R_ = runpy.run_path(str(AQUI / "reporte.py"))
+_h1, _h2, _h3, _h4 = R_["h1"], R_["h2"], R_["h3"], R_["h4"]
+_mae, _nat, _PH = R_["mae"], R_["nat"], R_["PH"]
+_AZ, _RO, _AM, _VE, _CE = R_["AZUL"], R_["ROJO"], R_["AMBAR"], R_["VERDE"], R_["CENIZA"]
+_barras, _bosque = R_["barras_h"], R_["bosque_svg"]
+_comp = R_["J"]["holdout"]["componentes"]
+_NOMC = {"y_called_strike": "Strike cantado", "y_swing": "Swing", "y_chase": "Persecución", "y_whiff": "Swing fallido",
+         "y_weak_contact": "Contacto débil", "y_groundball": "Rodado", "y_hard_contact": "Contacto duro", "y_barrel": "Barril"}
+def _fig(svg, pie):
+    return f'<figure class="g-fig">{svg}<figcaption>{pie}</figcaption></figure>'
+_rc = _PH["rho_por_cubeta"]
+GRAF = {
+    "aire": _fig(_barras([("Nivel del mar", _rc["No Altitude"]), ("Altitud media", _rc["Medium Altitude"]), ("Altitud extrema", _rc["Extreme Altitude"])],
+                         ancho=460, alto_fila=40, maxv=1.05, fmt=lambda v: f"{v:.3f}", etiqueta_w=150,
+                         colores={"Nivel del mar": _AZ, "Altitud media": _AM, "Altitud extrema": _RO}),
+                 "Índice de arrastre por categoría (mediana por juego). 1.000 es el nivel del mar."),
+    "transfer": _fig(_barras([("Sin transferir", _mae["sin_transferir"]["ivb"]), ("Sólo densidad", _mae["solo_densidad"]["ivb"]), ("Nuestro modelo", _mae["calibrado"]["ivb"])],
+                             ancho=460, alto_fila=40, fmt=lambda v: f"{v:.2f} in", etiqueta_w=150,
+                             colores={"Sin transferir": _CE, "Sólo densidad": _AM, "Nuestro modelo": _VE}),
+                     f"Error medio en elevación, en combinaciones de lanzador y tipo que no usamos para calibrar. En movimiento lateral "
+                     f"baja de {_mae['sin_transferir']['hb']:.2f} a {_mae['calibrado']['hb']:.2f} pulgadas, y en velocidad al plato de "
+                     f"{_mae['sin_transferir']['zone_speed']:.2f} a {_mae['calibrado']['zone_speed']:.2f} mph."),
+    "calib": _fig(R_["calibracion_svg"](), "Carreras por cada 100 lanzamientos según el Stuff+ fuera de muestra. Barras, lo observado. "
+                  "Puntos, lo predicho."),
+    "nathan": _fig(_barras([("Nivel del mar", _nat["recta"]["mar"]), ("Coors Field", _nat["recta"]["coors"]), ("Harp Helú", _nat["recta"]["hh"]),
+                            ("Coors, sólo densidad", _nat["recta"]["solo_densidad_coors"])], ancho=460, alto_fila=40, maxv=19,
+                           fmt=lambda v: f"{v:.1f} in", etiqueta_w=170,
+                           colores={"Nivel del mar": _AZ, "Coors Field": _AM, "Harp Helú": _RO, "Coors, sólo densidad": _CE}),
+                   "Quiebre total de una recta de 18 pulgadas a nivel del mar, volada en otros aires. Nathan estima 14 a 15 en Coors."),
+    "h1": _fig(_bosque([(t["tipo"], t["delta"], t["ic"]) for t in _h1["por_tipo"]], -14, 0, ancho=480, fila=34),
+               "Cambio medio de Stuff+ por tipo al pasar al Harp Helú, con su intervalo de 95 % (bootstrap por lanzador)."),
+    "h2": _fig(_bosque([(t["tipo"], t["ventaja_vs_recta"], t["ic"]) for t in _h2["pares"]], 0, 10, ancho=480, fila=34, fuerte="Cambio"),
+               "Cuántos puntos menos pierde cada tipo que la recta del mismo lanzador, con su intervalo de 95 %."),
+    "h3": _fig(_bosque([("En altura", _h3["pendiente_alt"], _h3["ic_alt"]), ("A nivel del mar", _h3["pendiente_mar"], _h3["ic_mar"]),
+                        ("Diferencia", _h3["diferencia"], _h3["ic_dif"])], -1, 1, ancho=480, fila=34),
+               "Carreras por cada 100 lanzamientos por cada 10 puntos más de rodados, con su intervalo de 95 %. Negativo previene carreras."),
+    "h4": _fig(_barras([(i["grupo"].replace(" (eficiencia)", "").replace("Giro que se vuelve movimiento", "Eficiencia de giro"), i["peso"] * 100)
+                        for i in _h4["importancia"] if i["peso"] > 0.01], ancho=460, alto_fila=34, fmt=lambda v: f"{v:.0f} %", etiqueta_w=190,
+                       colores={"Giro (rpm)": _RO, "Movimiento (quiebres)": _VE}),
+               "Peso de cada grupo de variables dentro de Stuff+ (ganancia total de los árboles)."),
+    "anexoA": _fig(_barras([(_NOMC[k], v["skill"] * 100) for k, v in sorted(_comp.items(), key=lambda kv: -kv[1]["skill"]) if k in _NOMC],
+                           ancho=460, alto_fila=32, fmt=lambda v: f"{v:+.1f} %", etiqueta_w=150, colores={n: _AZ for n in _NOMC.values()}),
+                   "Habilidad de cada modelo de componente, cuánto mejora su Brier sobre la tasa base, con lanzadores que no vio."),
+}
+cuerpo = re.sub(r"<!-- g:(\w+) -->", lambda m: GRAF[m.group(1)], cuerpo)
+
 # el aviso final de datos ya está en la portada
 cuerpo = re.sub(r"<hr />\s*<p><em>Los datos de la LMB.*?</p>\s*$", "", cuerpo, flags=re.S)
 # el título y subtítulo van en la portada, no en el cuerpo
@@ -194,6 +242,17 @@ hr { border: none; border-top: 1px solid var(--linea); margin: 14pt 0; }
 .ecuacion { margin: 8pt 0 10pt; overflow-x: auto; }
 .katex { font-size: 1.06em; } .katex-display { margin: 0; }
 h2.anexo { break-before: page; }
+.dos-col { column-count: 2; column-gap: 7mm; column-fill: auto; }
+.dos-col h2 { column-span: all; }
+.dos-col table, .dos-col .ecuacion, .dos-col pre { column-span: all; }
+.dos-col table.angosta { column-span: none; }
+.g-fig { margin: 4pt 0 9pt; break-inside: avoid; }
+.g-fig figcaption { font-size: 7.6pt; color: var(--ceniza); margin-top: 3pt; line-height: 1.3; }
+.g { width: 100%; height: auto; display: block; overflow: visible; }
+.g .et { font-family: Inter, sans-serif; font-size: 16px; font-weight: 600; fill: var(--tinta); }
+.g .et.halo { paint-order: stroke; stroke: #fff; stroke-width: 5px; }
+.g .eje { font-family: 'JetBrains Mono', monospace; font-size: 13px; fill: var(--ceniza); }
+.g .val { font-family: 'JetBrains Mono', monospace; font-size: 17px; font-weight: 700; }
 .pie { font-size: 8pt; color: var(--ceniza); border-top: 1px solid var(--linea); padding-top: 8pt; }
 """
 
@@ -208,7 +267,7 @@ PORTADA = """
     <div class="cifras">
       <div><b>635,002</b><span>lanzamientos de la LMB, 2024 a 2026, medidos con Trackman</span></div>
       <div><b>561</b><span>lanzadores comparados entre el nivel del mar y el Harp Helú</span></div>
-      <div><b>4 + 1</b><span>hipótesis del reto probadas, más un Causal Forest como modelo secundario</span></div>
+      <div><b>{aguantan}</b><span>lanzadores aguantan la altura, pierden menos de media carrera por cada 100 lanzamientos</span></div>
     </div>
   </div>
   <p class="pie">Trabajo independiente de los participantes. No es un producto oficial de ISAC ni del club. Usamos los datos de la
@@ -221,7 +280,7 @@ LOGOS = AQUI.parent / "app" / "public" / "logos"
 html = f"""<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Diablos Stuff+ · Documento técnico</title>
 <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{KATEX_CSS}">
-<style>{CSS}</style></head><body>{PORTADA.format(isac=(LOGOS / 'isac.svg').as_uri(), diablos=(LOGOS / 'diablos.png').as_uri())}{cuerpo}</body></html>"""
+<style>{CSS}</style></head><body>{PORTADA.format(isac=(LOGOS / 'isac.svg').as_uri(), diablos=(LOGOS / 'diablos.png').as_uri(), aguantan=R_['aguantan'])}<div class="dos-col">{cuerpo}</div></body></html>"""
 salida = AQUI.parent / "entrega" / "documento_tecnico.html"
 salida.write_text(html)
 print("HTML:", salida)

@@ -112,11 +112,7 @@ El arrastre vale $\tfrac12 \rho\, C_d A\, v^2 / m$. Por eso el cociente $k_{\tex
 es proporcional a $\rho\, C_d$, y lo calculamos para cada lanzamiento. Su mediana por juego, normalizada
 al nivel del mar, es el **índice de arrastre** $I$ de ese juego.
 
-| Categoría | Índice de arrastre $I$ (mediana) |
-|---|---|
-| Nivel del mar | 1.0003 |
-| Altitud media | 0.8981 |
-| Altitud extrema | 0.8534 |
+<!-- g:aire -->
 
 **El arrastre no es la densidad.** A 2,240 metros la atmósfera estándar da $\rho/\rho_0 = 0.802$, pero
 medimos un índice de 0.853. La causa es aerodinámica. Con menos aire baja el número de Reynolds y sube
@@ -302,11 +298,7 @@ Agrupamos por efecto predicho y comprobamos si el castigo observado sube de grup
 **sin tocar**. En esas 436 combinaciones predecimos lo que el lanzador tiró en altura a partir de lo que
 tiró a nivel del mar.
 
-| Error medio | Sin transferir | Sólo densidad | Nuestro modelo | Reducción |
-|---|---|---|---|---|
-| Quiebre vertical (in) | 2.573 | 1.119 | **0.802** | 68.8 % |
-| Quiebre horizontal (in) | 2.932 | 1.612 | **0.875** | 70.2 % |
-| Velocidad al plato (mph) | 1.323 | 0.578 | **0.574** | 56.6 % |
+<!-- g:transfer -->
 
 Si escalas todo sólo por la densidad del aire, sin la corrección de Reynolds, subestimas el efecto en
 cerca de un tercio.
@@ -360,14 +352,7 @@ prospecto lo puedes calificar desde su primera sesión de Trackman (Anexo C).
 
 **Calibración.** La escala ordena carreras cuando agregas lanzamientos, que es donde importa.
 
-| Stuff+ fuera de muestra | Lanzamientos | Carreras por 100, observadas | Carreras por 100, predichas |
-|---|---|---|---|
-| < 80 | 16,663 | +1.9 | +3.3 |
-| 80 a 90 | 98,683 | +1.3 | +2.0 |
-| 90 a 100 | 212,677 | +0.5 | +0.7 |
-| 100 a 110 | 203,208 | $-0.3$ | $-0.5$ |
-| 110 a 120 | 87,256 | $-1.3$ | $-1.8$ |
-| 120 o más | 16,515 | $-2.5$ | $-3.1$ |
+<!-- g:calib -->
 
 La relación baja en los seis tramos, sin excepción. De un extremo al otro hay unas 4.3 carreras por
 cada 100 lanzamientos, sólo por la forma. Entre 80 y 120 está el 95 % de los lanzamientos, y ahí lo
@@ -381,27 +366,14 @@ la dirección correcta.
 **La física reproduce a Nathan.** Tomamos una recta con 18.0 pulgadas de quiebre a nivel del mar y la
 volamos en otros aires con el integrador, calibrado sólo con datos de la LMB.
 
-| Aire | Quiebre total | Según Nathan |
-|---|---|---|
-| Nivel del mar | 18.0 in | 18 |
-| Coors Field, 1,609 m | **14.9 in** | 14 a 15 |
-| Harp Helú, 2,240 m | **13.8 in** | |
-| Coors, escalando sólo por densidad | 15.4 in | |
+<!-- g:nathan -->
 
 Una curva típica de 78 mph y 12.4 pulgadas de quiebre total cae 1.4 pulgadas menos en Coors y 2.0 menos
 en el Harp Helú. Su quiebre total baja 2.5 y 3.4 pulgadas.
 
 **Todos los tipos pierden Stuff+.** En los siete el intervalo de 95 % queda bajo cero.
 
-| Tipo | Lanzadores | $\bar\Delta$ Stuff+ | IC 95 % | Cambio de elevación medido (in) |
-|---|---|---|---|---|
-| Cutter | 164 | $-2.97$ | $-3.46$ a $-2.53$ | $-2.50$ |
-| Splitter | 43 | $-4.43$ | $-5.26$ a $-3.44$ | $-0.91$ |
-| Slider | 644 | $-5.32$ | $-5.50$ a $-5.15$ | $-0.74$ |
-| Curva | 333 | $-6.33$ | $-6.72$ a $-5.97$ | $+1.82$ |
-| Cambio | 427 | $-7.42$ | $-7.78$ a $-7.07$ | $-2.25$ |
-| Sinker | 489 | $-8.82$ | $-9.25$ a $-8.39$ | $-2.10$ |
-| Recta | 708 | $-11.69$ | $-12.06$ a $-11.30$ | $-3.73$ |
+<!-- g:h1 -->
 
 La recta pierde casi cuatro veces lo que pierde el cutter. En carreras, su pérdida equivale a 1.6
 carreras más por cada 100 rectas. La curva gana elevación, o sea que cae menos, y por eso pierde. Su
@@ -410,14 +382,7 @@ cancha es el que más Stuff+ pierde (correlación de rangos $-0.83$, $p = 0.04$)
 
 ### 5.2 H2 · El cambio gana valor relativo. Se confirma en parte
 
-| Contra la recta del mismo lanzador | Lanzadores | Ventaja $\bar D$ | IC 95 % | Lanzadores donde gana |
-|---|---|---|---|---|
-| Splitter | 40 | +7.75 | +6.16 a +9.58 | 98 % |
-| Cutter | 155 | +5.80 | +4.93 a +6.83 | 94 % |
-| Slider | 555 | +5.50 | +5.02 a +5.97 | 86 % |
-| **Cambio** | **372** | **+4.10** | **+3.48 a +4.69** | **80 %** |
-| Curva | 289 | +4.06 | +3.32 a +4.83 | 80 % |
-| Sinker | 386 | +1.92 | +1.59 a +2.26 | 68 % |
+<!-- g:h2 -->
 
 El cambio sí gana valor contra la recta, 4.1 puntos, y no es casualidad. Pero queda cuarto de seis,
 empatado con la curva y detrás del splitter, el cutter y el slider. La razón está en su forma. Un cambio
@@ -427,11 +392,7 @@ splitter, que engaña por velocidad y además casi no gira, gana más que todos.
 
 ### 5.3 H3 · Los lanzadores de rodados valen más en altura. Se confirma en parte
 
-| Entorno | Pendiente $b_e$, carreras por 100 por cada 10 puntos de rodados | IC 95 % |
-|---|---|---|
-| Altura | $-0.38$ | $-0.62$ a $-0.13$ |
-| Nivel del mar | $-0.16$ | $-0.36$ a $+0.07$ |
-| Diferencia | $-0.22$ | $-0.52$ a $+0.08$ |
+<!-- g:h3 -->
 
 En altura los rodados previenen carreras con claridad. A nivel del mar el efecto no se distingue de
 cero. La diferencia va en la dirección de la hipótesis ($p = 0.08$, una cola), pero no llega al 95 %. Por tercios, los lanzadores con pocos rodados (34 %) permiten 1.76 carreras más por
@@ -440,14 +401,7 @@ rodado sube de 40.5 % a 44.8 % en altitud extrema y el jonrón por elevado sube 
 
 ### 5.4 H4 · Importa cuánto se mueve, no cuánto gira. Se confirma
 
-| Grupo de variables en Stuff+ | Peso |
-|---|---|
-| Movimiento, los quiebres | 30 % |
-| Velocidad | 25 % |
-| Punto de salida y extensión | 24 % |
-| **Giro en rpm** | **8 %** |
-| Eficiencia de giro | 7 % |
-| Eje de giro | 6 % |
+<!-- g:h4 -->
 
 El modelo sí usa el giro. Es la tercera de 16 variables, pero sobre todo para distinguir un tipo de
 lanzamiento de otro. En el experimento controlado, 100 revoluciones más **con el mismo movimiento**
@@ -599,16 +553,7 @@ El código, los modelos entrenados y los pasos para correr todo están en
 Estos modelos explican de dónde sale el valor y no entran en Stuff+. La habilidad mide cuánto mejoran
 sobre la tasa base, con holdout de lanzador.
 
-| Objetivo | Lanzamientos | Brier | Habilidad |
-|---|---|---|---|
-| Strike cantado | 336,973 | 0.0562 | +72.7 % |
-| Swing | 635,002 | 0.1486 | +40.4 % |
-| Persecución | 411,912 | 0.1457 | +35.3 % |
-| Swing fallido | 298,029 | 0.1475 | +19.4 % |
-| Contacto débil | 115,948 | 0.1956 | +10.1 % |
-| Rodado | 115,948 | 0.2288 | +6.3 % |
-| Contacto duro | 115,948 | 0.1668 | +5.2 % |
-| Barril | 115,948 | 0.0244 | +0.8 % |
+<!-- g:anexoA -->
 
 El arsenal se nota donde actúa su mecanismo, en el swing fallido. Ahí la habilidad sube de 4.5 % con
 sólo la física a 18.9 % con ubicación y a 19.4 % con arsenal y secuencia.

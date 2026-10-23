@@ -1,0 +1,503 @@
+{
+  "protocol": {
+    "target": "Production count-transition RV with PA centering and count-state values fitted on training split only",
+    "baseline": "Training-only mean RV by count",
+    "params": {
+      "objective": "regression",
+      "learning_rate": 0.03,
+      "num_leaves": 31,
+      "min_data_in_leaf": 4000,
+      "feature_fraction": 0.8,
+      "bagging_fraction": 0.8,
+      "bagging_freq": 1,
+      "lambda_l2": 50.0,
+      "verbose": -1,
+      "num_threads": 4,
+      "seed": 20261022,
+      "verbosity": -1
+    },
+    "rounds": 400,
+    "candidate_selection": "Fixed exploratory candidates, no search",
+    "caveats": [
+      "Four outer pitcher folds share training data; bootstrap captures held-out pitcher sampling, not full model-selection uncertainty.",
+      "2026 was already inspected by prior project development; chronological test is a retrospective check, not an untouched final test.",
+      "Only target tables and count baseline are fold-fitted here. Physics/shape preprocessing remains the supplied globally prepared artifact.",
+      "Environment-residual is a diagnostic deconfounding candidate; predictive accuracy does not identify a causal altitude effect."
+    ]
+  },
+  "grouped": {
+    "current": {
+      "n": 635002,
+      "rmse": 0.26799662230751675,
+      "r2": 0.0008977278493939034,
+      "skill_vs_training_count_baseline": 0.0008506027287317197,
+      "corr": 0.034908273086619375,
+      "paired_vs_current": {
+        "mse_improvement": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "clusters": 1135
+      }
+    },
+    "mirror_circular": {
+      "n": 635002,
+      "rmse": 0.26796833624933175,
+      "r2": 0.0011086198625457344,
+      "skill_vs_training_count_baseline": 0.0010615046891250257,
+      "corr": 0.03713712524234564,
+      "paired_vs_current": {
+        "mse_improvement": 1.5160336002851104e-05,
+        "ci95": [
+          7.729804243047488e-06,
+          2.300102612047305e-05
+        ],
+        "clusters": 1135
+      }
+    },
+    "no_drag": {
+      "n": 635002,
+      "rmse": 0.26800374917568376,
+      "r2": 0.000844588635955601,
+      "skill_vs_training_count_baseline": 0.0007974610088514744,
+      "corr": 0.03377146065527,
+      "paired_vs_current": {
+        "mse_improvement": -3.820003985036654e-06,
+        "ci95": [
+          -1.2144410481702983e-05,
+          4.384679005307748e-06
+        ],
+        "clusters": 1135
+      }
+    },
+    "environment_residual": {
+      "n": 635002,
+      "rmse": 0.26803735735756473,
+      "r2": 0.0005939809307941024,
+      "skill_vs_training_count_baseline": 0.0005468414831599766,
+      "corr": 0.029193333298501104,
+      "paired_vs_current": {
+        "mse_improvement": -2.1835370989080873e-05,
+        "ci95": [
+          -3.078517808432491e-05,
+          -1.3270970986953691e-05
+        ],
+        "clusters": 1135
+      }
+    },
+    "current_shrink_half": {
+      "n": 635002,
+      "rmse": 0.26796353649126553,
+      "r2": 0.0011444031501388618,
+      "skill_vs_training_count_baseline": 0.0010972896645251584,
+      "corr": 0.03489653155602171,
+      "paired_vs_current": {
+        "mse_improvement": 1.773267933198811e-05,
+        "ci95": [
+          8.050891587062317e-06,
+          2.785631098117226e-05
+        ],
+        "clusters": 1135
+      }
+    },
+    "count_baseline": {
+      "n": 635002,
+      "rmse": 0.268110674401556,
+      "r2": 4.716523954362284e-05,
+      "skill_vs_training_count_baseline": 0.0,
+      "corr": 0.006944731111192047
+    }
+  },
+  "chronological": {
+    "2025": {
+      "train_rows": 243254,
+      "test_rows": 256144,
+      "metrics": {
+        "current": {
+          "n": 256144,
+          "rmse": 0.27089430719607943,
+          "r2": -0.00037248639261244776,
+          "skill_vs_training_count_baseline": 6.112155156390298e-05,
+          "corr": 0.030745221847826954,
+          "paired_vs_current": {
+            "mse_improvement": 0.0,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "clusters": 628
+          }
+        },
+        "current_shrink_half": {
+          "n": 256144,
+          "rmse": 0.2707789675751439,
+          "r2": 0.00047919647326177817,
+          "skill_vs_training_count_baseline": 0.0009124352584882756,
+          "corr": 0.030745221847826947,
+          "paired_vs_current": {
+            "mse_improvement": 6.247639018302404e-05,
+            "ci95": [
+              4.5425044019953935e-05,
+              8.02001187182313e-05
+            ],
+            "clusters": 628
+          }
+        },
+        "mirror_circular": {
+          "n": 256144,
+          "rmse": 0.2708826107295499,
+          "r2": -0.00028610162638620373,
+          "skill_vs_training_count_baseline": 0.00014746887461636327,
+          "corr": 0.03240025351649027,
+          "paired_vs_current": {
+            "mse_improvement": 6.336875587008717e-06,
+            "ci95": [
+              -7.514706726967493e-06,
+              2.0284581885332186e-05
+            ],
+            "clusters": 628
+          }
+        },
+        "no_drag": {
+          "n": 256144,
+          "rmse": 0.27090715791119047,
+          "r2": -0.0004674002125519827,
+          "skill_vs_training_count_baseline": -3.375112831349725e-05,
+          "corr": 0.029070971214930567,
+          "paired_vs_current": {
+            "mse_improvement": -6.962536274817196e-06,
+            "ci95": [
+              -2.172863128515449e-05,
+              7.929124346927111e-06
+            ],
+            "clusters": 628
+          }
+        },
+        "environment_residual": {
+          "n": 256144,
+          "rmse": 0.2709088451763424,
+          "r2": -0.00047986248228171213,
+          "skill_vs_training_count_baseline": -4.620799631593897e-05,
+          "corr": 0.026773077391543956,
+          "paired_vs_current": {
+            "mse_improvement": -7.876723535595253e-06,
+            "ci95": [
+              -2.275207199814118e-05,
+              6.575187319006403e-06
+            ],
+            "clusters": 628
+          }
+        },
+        "count_baseline": {
+          "n": 256144,
+          "rmse": 0.2709025863157887,
+          "r2": -0.0004336344485866839,
+          "skill_vs_training_count_baseline": 0.0,
+          "corr": 0.0037935507426437812
+        }
+      }
+    },
+    "2026": {
+      "train_rows": 499398,
+      "test_rows": 135604,
+      "metrics": {
+        "current": {
+          "n": 135604,
+          "rmse": 0.26638910696078516,
+          "r2": 0.0010832025362486064,
+          "skill_vs_training_count_baseline": 0.001051391109804456,
+          "corr": 0.036548140954864985,
+          "paired_vs_current": {
+            "mse_improvement": 0.0,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "clusters": 551
+          }
+        },
+        "current_shrink_half": {
+          "n": 135604,
+          "rmse": 0.2663739109251011,
+          "r2": 0.0011971647212432046,
+          "skill_vs_training_count_baseline": 0.001165356924029859,
+          "corr": 0.036548140954864985,
+          "paired_vs_current": {
+            "mse_improvement": 8.09588583097303e-06,
+            "ci95": [
+              -1.2252201676106512e-05,
+              2.7357183477903656e-05
+            ],
+            "clusters": 551
+          }
+        },
+        "mirror_circular": {
+          "n": 135604,
+          "rmse": 0.26639581612997115,
+          "r2": 0.0010328852671301902,
+          "skill_vs_training_count_baseline": 0.0010010722382862713,
+          "corr": 0.03616845859702087,
+          "paired_vs_current": {
+            "mse_improvement": -3.57454418873628e-06,
+            "ci95": [
+              -1.9342209420789235e-05,
+              1.1692345519262147e-05
+            ],
+            "clusters": 551
+          }
+        },
+        "no_drag": {
+          "n": 135604,
+          "rmse": 0.2664329850191931,
+          "r2": 0.000754103949310525,
+          "skill_vs_training_count_baseline": 0.0007222820424184206,
+          "corr": 0.03334293009169386,
+          "paired_vs_current": {
+            "mse_improvement": -2.337919887292995e-05,
+            "ci95": [
+              -3.951915660962967e-05,
+              -7.858487726059904e-06
+            ],
+            "clusters": 551
+          }
+        },
+        "environment_residual": {
+          "n": 135604,
+          "rmse": 0.2664474237221542,
+          "r2": 0.0006457974975573322,
+          "skill_vs_training_count_baseline": 0.0006139721415464594,
+          "corr": 0.030281229479768978,
+          "paired_vs_current": {
+            "mse_improvement": -3.1073300808521245e-05,
+            "ci95": [
+              -4.734000223255827e-05,
+              -1.4377497069311264e-05
+            ],
+            "clusters": 551
+          }
+        },
+        "count_baseline": {
+          "n": 135604,
+          "rmse": 0.26652925705429853,
+          "r2": 3.1844907897204955e-05,
+          "skill_vs_training_count_baseline": 0.0,
+          "corr": 0.012761016338417629
+        }
+      }
+    }
+  },
+  "folds": [
+    {
+      "fold": 1,
+      "train": 476251,
+      "test": 158751,
+      "pitcher_overlap": 0,
+      "metrics": {
+        "current": {
+          "n": 158751,
+          "rmse": 0.2673102807681239,
+          "r2": 0.0009771943210263867,
+          "skill_vs_training_count_baseline": 0.000895345740756559,
+          "corr": 0.035776959248496304
+        },
+        "current_shrink_half": {
+          "n": 158751,
+          "rmse": 0.26728148646995864,
+          "r2": 0.0011924094719905076,
+          "skill_vs_training_count_baseline": 0.0011105785240054233,
+          "corr": 0.035776959248496304
+        },
+        "mirror_circular": {
+          "n": 158751,
+          "rmse": 0.267276411694222,
+          "r2": 0.0012303371000794705,
+          "skill_vs_training_count_baseline": 0.001148509259453312,
+          "corr": 0.03839465480954575
+        },
+        "no_drag": {
+          "n": 158751,
+          "rmse": 0.26732599013145847,
+          "r2": 0.000859769182391168,
+          "skill_vs_training_count_baseline": 0.0007779109816393737,
+          "corr": 0.03401897933369921
+        },
+        "environment_residual": {
+          "n": 158751,
+          "rmse": 0.2673457616834632,
+          "r2": 0.0007119699837290216,
+          "skill_vs_training_count_baseline": 0.000630099673989748,
+          "corr": 0.030555838016554933
+        },
+        "count_baseline": {
+          "n": 158751,
+          "rmse": 0.2674300287466813,
+          "r2": 8.192192871980808e-05,
+          "skill_vs_training_count_baseline": 0.0,
+          "corr": 0.010334177923069574
+        }
+      }
+    },
+    {
+      "fold": 2,
+      "train": 476252,
+      "test": 158750,
+      "pitcher_overlap": 0,
+      "metrics": {
+        "current": {
+          "n": 158750,
+          "rmse": 0.2706417181394888,
+          "r2": 0.0006041725348997495,
+          "skill_vs_training_count_baseline": 0.0006038906246373932,
+          "corr": 0.03211302654423912
+        },
+        "current_shrink_half": {
+          "n": 158750,
+          "rmse": 0.2705886207925876,
+          "r2": 0.0009962780968609808,
+          "skill_vs_training_count_baseline": 0.0009959962972039271,
+          "corr": 0.03211302654423913
+        },
+        "mirror_circular": {
+          "n": 158750,
+          "rmse": 0.27061402791389416,
+          "r2": 0.0008086648831514553,
+          "skill_vs_training_count_baseline": 0.0008083830305722906,
+          "corr": 0.03435302624155086
+        },
+        "no_drag": {
+          "n": 158750,
+          "rmse": 0.27065611589576705,
+          "r2": 0.0004978368200142524,
+          "skill_vs_training_count_baseline": 0.0004975548797565565,
+          "corr": 0.030609320396213887
+        },
+        "environment_residual": {
+          "n": 158750,
+          "rmse": 0.2706729529440057,
+          "r2": 0.00037347835487122616,
+          "skill_vs_training_count_baseline": 0.0003731963795344795,
+          "corr": 0.02661236465053503
+        },
+        "count_baseline": {
+          "n": 158750,
+          "rmse": 0.27072347416823733,
+          "r2": 2.820806083159155e-07,
+          "skill_vs_training_count_baseline": 0.0,
+          "corr": 0.004660124632225781
+        }
+      }
+    },
+    {
+      "fold": 3,
+      "train": 476251,
+      "test": 158751,
+      "pitcher_overlap": 0,
+      "metrics": {
+        "current": {
+          "n": 158751,
+          "rmse": 0.267435014086002,
+          "r2": 0.0008537277483402494,
+          "skill_vs_training_count_baseline": 0.0008524532639025972,
+          "corr": 0.034417633301620766
+        },
+        "current_shrink_half": {
+          "n": 158751,
+          "rmse": 0.2674011808400331,
+          "r2": 0.0011065160633332294,
+          "skill_vs_training_count_baseline": 0.0011052419013455328,
+          "corr": 0.03441763330162078
+        },
+        "mirror_circular": {
+          "n": 158751,
+          "rmse": 0.2674049441103126,
+          "r2": 0.0010784000123826853,
+          "skill_vs_training_count_baseline": 0.0010771258145308993,
+          "corr": 0.03692001184996931
+        },
+        "no_drag": {
+          "n": 158751,
+          "rmse": 0.26742840551320296,
+          "r2": 0.0009031068419289578,
+          "skill_vs_training_count_baseline": 0.0009018324204779216,
+          "corr": 0.0341611176477546
+        },
+        "environment_residual": {
+          "n": 158751,
+          "rmse": 0.26748329975444496,
+          "r2": 0.0004929013914390934,
+          "skill_vs_training_count_baseline": 0.0004916264467408338,
+          "corr": 0.028124475290164718
+        },
+        "count_baseline": {
+          "n": 158751,
+          "rmse": 0.26754907494016483,
+          "r2": 1.2755718030721397e-06,
+          "skill_vs_training_count_baseline": 0.0,
+          "corr": 0.003408353560362838
+        }
+      }
+    },
+    {
+      "fold": 4,
+      "train": 476252,
+      "test": 158750,
+      "pitcher_overlap": 0,
+      "metrics": {
+        "current": {
+          "n": 158750,
+          "rmse": 0.2665812257464619,
+          "r2": 0.0011281504560431976,
+          "skill_vs_training_count_baseline": 0.0010579291742830454,
+          "corr": 0.0371344126839618
+        },
+        "current_shrink_half": {
+          "n": 158750,
+          "rmse": 0.2665648992741606,
+          "r2": 0.0012504963125762325,
+          "skill_vs_training_count_baseline": 0.0011802836318022258,
+          "corr": 0.037134412683961775
+        },
+        "mirror_circular": {
+          "n": 158750,
+          "rmse": 0.266559720654278,
+          "r2": 0.001289301825315281,
+          "skill_vs_training_count_baseline": 0.0012190918725918376,
+          "corr": 0.038676759730572635
+        },
+        "no_drag": {
+          "n": 158750,
+          "rmse": 0.26658614436620365,
+          "r2": 0.0010912902749876663,
+          "skill_vs_training_count_baseline": 0.0010210664019351112,
+          "corr": 0.036226815057730524
+        },
+        "environment_residual": {
+          "n": 158750,
+          "rmse": 0.26662930177547617,
+          "r2": 0.0007678390944297897,
+          "skill_vs_training_count_baseline": 0.0006975924825678437,
+          "corr": 0.03122233223000741
+        },
+        "count_baseline": {
+          "n": 158750,
+          "rmse": 0.2667223497587629,
+          "r2": 7.029564957861112e-05,
+          "skill_vs_training_count_baseline": 0.0,
+          "corr": 0.008970537957056905
+        }
+      }
+    }
+  ],
+  "target_lookup_sensitivity": {
+    "mean_abs_change_from_cached_rv": 0.0011682703383227983,
+    "max_abs_change": 0.0069193598857204
+  },
+  "runtime_seconds": 220.13,
+  "versions": {
+    "python": "3.13.3",
+    "numpy": "2.5.4",
+    "pandas": "3.0.6",
+    "lightgbm": "4.7.0"
+  }
+}

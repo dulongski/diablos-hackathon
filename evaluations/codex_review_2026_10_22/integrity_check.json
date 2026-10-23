@@ -1,0 +1,103 @@
+{
+  "manifest_files": 170,
+  "unchanged": 151,
+  "changed": [
+    {
+      "file": "entrega/reporte.html",
+      "before": "4fc2156b49183dc94bcab541ebe555bf09814f1ee9cee182c657939404e76eaf",
+      "after": "a517e7111cbffb54f799b4d65c53e7e15371fad7f420375d0fb5dfc675a3a636"
+    },
+    {
+      "file": "entrega/documento_tecnico.html",
+      "before": "a55053ab4ac66c09156df3c700b2a26a21a3b4185ce9889dcbcdc753907de70d",
+      "after": "6e1020447a4425178916248df00d495d97192d86b9f6724d51e0d5d93129b11d"
+    },
+    {
+      "file": "entrega/entrevista.md",
+      "before": "a58afc057b4e36f4251d03894cceb017d353feea0246416c537eab2190e38adb",
+      "after": "a4cbf58e2e11b2a6bf4d5a5c7579ab75b9bddb155a6c2895a78cacc774cca673"
+    },
+    {
+      "file": "entrega/reporte.pdf",
+      "before": "32fe5770bd9916f9051f438979b692dcc1b74f6b51528c286f6e2646a3c2336d",
+      "after": "4e45d83c0dcdcbcdaa79775312c2c267177b7454d0957107366af2824e1c0859"
+    },
+    {
+      "file": "entrega/correo.txt",
+      "before": "6b0bd4dc28dddc7a3ef8251ec5ffc7a21b126d5fa80295d01fce372bbb86c18c",
+      "after": "3876cd737412b0f659ca93361509dd18c981cb32fc560a8f8c2f2fd56d9b4a42"
+    },
+    {
+      "file": "entrega/documento_tecnico.pdf",
+      "before": "d08877ca79f66b95303f8e4293fcde93e6db14e92b987a0a1ae31dd0ea80bec0",
+      "after": "3fe1726bb5b407025ddffd096a362d846b624762928b76eba2584578df97ca77"
+    },
+    {
+      "file": "docs/tecnico.py",
+      "before": "ab106d2500a705d34d4607d29dcf24716053094118efa4e2211b0e405fc2a8bf",
+      "after": "ebcd70af471e6cff95835a193864719659097aee1b9475d7c94d5e52343f9d09"
+    },
+    {
+      "file": "docs/documento_tecnico.md",
+      "before": "9cc4d52d7c43a797594aa0b398df2adb093f71744a1379dd9461924e9ad1fabf",
+      "after": "46ac29299591bfd39a51a4b4a4d8c7073b4a7e6d8798efb80e36016bebe08807"
+    },
+    {
+      "file": "docs/reporte.py",
+      "before": "b74f32bff3ce49d3afdde92e00c0998a1663a542d2e495c3a97313924cabe8bc",
+      "after": "6e540c19f54708b5afb00b43fd6578b9d5b5298a697e941dfcb4214c9616f2b4"
+    },
+    {
+      "file": "app/dist/artifact.html",
+      "before": "b6e2c9c97123940d38654b4f611204afd69a52b24ebba232c710332e99acae0e",
+      "after": "c5e4005ea1331c053c0d6e6624ad83a08e64ac3727c61e576c90360231b27852"
+    },
+    {
+      "file": "app/dist/index.html",
+      "before": "9db2772982df784ca5c43c8fa86613a1dba6f1d619fb15616abc7faafc3b472b",
+      "after": "3d0f9ce66b8b604efaa5a07986c4d27abae7d9d6078fc7b79fe739da4143064b"
+    },
+    {
+      "file": "app/src/App.tsx",
+      "before": "a6ead92fdaa64fda1ba9a908cb60a6a74478b7b50aeebd93fbf41bc2dc1258bf",
+      "after": "8c9103119a4b436161d41b540f4d938cf8cb615fbb64270bbed49b2003b7c82e"
+    },
+    {
+      "file": "app/src/app.css",
+      "before": "c8992550501e4c9f373743b963818e0070828cea47c1193adf90374b05705dfc",
+      "after": "48a8f0df9fa3a530690c9970fa6fdf71cc240454939e84cbdce032523cd20754"
+    },
+    {
+      "file": "app/src/components/Confianza.tsx",
+      "before": "6e112a6e24c8489cba189fe0a2d12eb4044beae918e18dae6a83006b935aaee0",
+      "after": "4c3822b79e2f1dcea38ee2549f9488fc3ceaeb78b329a274c65dbec9259fee79"
+    },
+    {
+      "file": "app/src/components/Pestanas.tsx",
+      "before": "e5a029ca68dc3fbab0e4447f9ae798fac1ebdc5053c224633c3629bd8365ccdd",
+      "after": "5f95565a01f1ca80e328e27a64545e3fe33933c7eb148f7d2c6bf994abf04e9e"
+    },
+    {
+      "file": "app/src/components/Metodologia.tsx",
+      "before": "1948fee797ac62a782fc1785622050489b7fe787b9d9e8803c3759a29c108cfe",
+      "after": "521925d6802ae346170491b2865b1896e2e1cfa4d68d34b50bffc9003a625b9c"
+    },
+    {
+      "file": "app/src/components/Hipotesis.tsx",
+      "before": "018087ba16d0818a571a28cf698b0439e3ad2c240bd4c13a07116ee6a4ac9465",
+      "after": "f2583f4d37f81fc5ce8b0a23171861eec5cf1204ccd54923501ec84ac5542d03"
+    }
+  ],
+  "missing": [
+    "app/dist/assets/index-C8DbAba3.css",
+    "app/dist/assets/index-DK5TcaBz.js"
+  ],
+  "scope_exclusions": [
+    ".git",
+    ".venv",
+    "node_modules",
+    "evaluations"
+  ],
+  "attribution": "All review writes were confined to evaluations/codex_review_2026_10_22. Existing files and git history changed concurrently through external activity. The reviewer did not edit or revert these changes.",
+  "git_head_at_verification": "abf29dbaeb0b8b0dcd11712be25210bcd77c80e6"
+}

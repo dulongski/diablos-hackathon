@@ -1,0 +1,44 @@
+{
+  "existing_sea_reference": {
+    "max_absolute_feature_errors": {
+      "RelSpeed": 0.0,
+      "EffectiveVelo": 0.0,
+      "SpinRate": 0.0,
+      "SpinAxis": 0.0,
+      "InducedVertBreak": 0.0,
+      "HorzBreak": 0.0,
+      "VertBreak": 6.042329637640837,
+      "RelHeight": 0.0,
+      "RelSide": 0.0,
+      "Extension": 0.0,
+      "SpeedDrop": 0.0,
+      "ZoneTime": 0.0,
+      "ZoneSpeed": 0.0,
+      "spin_efficiency": 0.3367758761039704,
+      "movement_total": 0.0,
+      "is_rhp": 0.0
+    },
+    "identity_pass_1e_minus_9": false
+  },
+  "observed_reference": {
+    "max_absolute_feature_errors": {
+      "RelSpeed": 0.0,
+      "EffectiveVelo": 0.0,
+      "SpinRate": 0.0,
+      "SpinAxis": 0.0,
+      "InducedVertBreak": 0.0,
+      "HorzBreak": 0.0,
+      "VertBreak": 0.0,
+      "RelHeight": 0.0,
+      "RelSide": 0.0,
+      "Extension": 0.0,
+      "SpeedDrop": 0.0,
+      "ZoneTime": 0.0,
+      "ZoneSpeed": 0.0,
+      "spin_efficiency": 0.0,
+      "movement_total": 0.0,
+      "is_rhp": 0.0
+    },
+    "identity_pass_1e_minus_9": true
+  }
+}

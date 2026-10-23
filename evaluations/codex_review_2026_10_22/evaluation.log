@@ -13,3 +13,13 @@ pitcher_fold_3 environment_residual {"n": 158751, "rmse": 0.26748329975444496, "
 pitcher_fold_4 current {"n": 158750, "rmse": 0.2665812257464619, "r2": 0.0011281504560431976, "skill_vs_training_count_baseline": 0.0010579291742830454, "corr": 0.0371344126839618}
 pitcher_fold_4 mirror_circular {"n": 158750, "rmse": 0.266559720654278, "r2": 0.001289301825315281, "skill_vs_training_count_baseline": 0.0012190918725918376, "corr": 0.038676759730572635}
 pitcher_fold_4 no_drag {"n": 158750, "rmse": 0.26658614436620365, "r2": 0.0010912902749876663, "skill_vs_training_count_baseline": 0.0010210664019351112, "corr": 0.036226815057730524}
+pitcher_fold_4 environment_residual {"n": 158750, "rmse": 0.26662930177547617, "r2": 0.0007678390944297897, "skill_vs_training_count_baseline": 0.0006975924825678437, "corr": 0.03122233223000741}
+train_through_2024_test_2025 current {"n": 256144, "rmse": 0.27089430719607943, "r2": -0.00037248639261244776, "skill_vs_training_count_baseline": 6.112155156390298e-05, "corr": 0.030745221847826954}
+train_through_2024_test_2025 mirror_circular {"n": 256144, "rmse": 0.2708826107295499, "r2": -0.00028610162638620373, "skill_vs_training_count_baseline": 0.00014746887461636327, "corr": 0.03240025351649027}
+train_through_2024_test_2025 no_drag {"n": 256144, "rmse": 0.27090715791119047, "r2": -0.0004674002125519827, "skill_vs_training_count_baseline": -3.375112831349725e-05, "corr": 0.029070971214930567}
+train_through_2024_test_2025 environment_residual {"n": 256144, "rmse": 0.2709088451763424, "r2": -0.00047986248228171213, "skill_vs_training_count_baseline": -4.620799631593897e-05, "corr": 0.026773077391543956}
+train_through_2025_test_2026 current {"n": 135604, "rmse": 0.26638910696078516, "r2": 0.0010832025362486064, "skill_vs_training_count_baseline": 0.001051391109804456, "corr": 0.036548140954864985}
+train_through_2025_test_2026 mirror_circular {"n": 135604, "rmse": 0.26639581612997115, "r2": 0.0010328852671301902, "skill_vs_training_count_baseline": 0.0010010722382862713, "corr": 0.03616845859702087}
+train_through_2025_test_2026 no_drag {"n": 135604, "rmse": 0.2664329850191931, "r2": 0.000754103949310525, "skill_vs_training_count_baseline": 0.0007222820424184206, "corr": 0.03334293009169386}
+train_through_2025_test_2026 environment_residual {"n": 135604, "rmse": 0.2664474237221542, "r2": 0.0006457974975573322, "skill_vs_training_count_baseline": 0.0006139721415464594, "corr": 0.030281229479768978}
+FINISHED 220.13
