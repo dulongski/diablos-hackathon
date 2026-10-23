@@ -1,0 +1,20 @@
+{
+  "checks": [
+    {
+      "name": "physics",
+      "exit_code": 0,
+      "passed": true
+    },
+    {
+      "name": "gbm",
+      "exit_code": 0,
+      "passed": true
+    },
+    {
+      "name": "typescript_no_emit",
+      "exit_code": 0,
+      "passed": true
+    }
+  ],
+  "scope": "Existing tests compiled in memory; typecheck emits no files. No full Vite build or visual browser review."
+}

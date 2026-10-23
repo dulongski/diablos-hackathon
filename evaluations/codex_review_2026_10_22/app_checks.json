@@ -1,0 +1,122 @@
+{
+  "simulator": [
+    {
+      "type": "Four-Seam",
+      "sea": 99.93750330292872,
+      "altitude": 81.44415441666416,
+      "delta": -18.493348886264556,
+      "pipeline_delta": -11.59,
+      "absolute_delta_disagreement": 6.903348886264556
+    },
+    {
+      "type": "Sinker",
+      "sea": 98.68561756954435,
+      "altitude": 86.97458455762627,
+      "delta": -11.711033011918076,
+      "pipeline_delta": -8.77,
+      "absolute_delta_disagreement": 2.9410330119180763
+    },
+    {
+      "type": "Cutter",
+      "sea": 104.28747740922269,
+      "altitude": 96.52335424133767,
+      "delta": -7.7641231678850176,
+      "pipeline_delta": -2.96,
+      "absolute_delta_disagreement": 4.804123167885018
+    },
+    {
+      "type": "Slider",
+      "sea": 102.1809729133165,
+      "altitude": 91.45343602061313,
+      "delta": -10.72753689270337,
+      "pipeline_delta": -5.3,
+      "absolute_delta_disagreement": 5.42753689270337
+    },
+    {
+      "type": "Curveball",
+      "sea": 91.50414026084016,
+      "altitude": 85.79005750804572,
+      "delta": -5.71408275279444,
+      "pipeline_delta": -6.2,
+      "absolute_delta_disagreement": 0.4859172472055606
+    },
+    {
+      "type": "Changeup",
+      "sea": 99.67655857895849,
+      "altitude": 96.18268211693096,
+      "delta": -3.4938764620275293,
+      "pipeline_delta": -7.31,
+      "absolute_delta_disagreement": 3.8161235379724703
+    },
+    {
+      "type": "Splitter",
+      "sea": 107.64325467920843,
+      "altitude": 97.96910743321877,
+      "delta": -9.674147245989658,
+      "pipeline_delta": -4.44,
+      "absolute_delta_disagreement": 5.234147245989658
+    }
+  ],
+  "simulator_delta_mae": 4.230318569991243,
+  "gbm_parity": {
+    "n": 12,
+    "max_raw_absolute_error": 0,
+    "max_plus_absolute_error": 0
+  },
+  "arrastre_log_sd": 0.07665891667191184,
+  "h4": {
+    "saved_endpoint_slope_per_100rpm": -0.01,
+    "sea_score_range": [
+      98.1,
+      104
+    ],
+    "mean_absolute_adjacent_100rpm_change": 1.7375000000000007,
+    "adjacent_steps": [
+      {
+        "from_rpm": 1900,
+        "to_rpm": 2000,
+        "sea_change": -1.0999999999999943
+      },
+      {
+        "from_rpm": 2000,
+        "to_rpm": 2100,
+        "sea_change": 2.3999999999999915
+      },
+      {
+        "from_rpm": 2100,
+        "to_rpm": 2200,
+        "sea_change": 1.7000000000000028
+      },
+      {
+        "from_rpm": 2200,
+        "to_rpm": 2300,
+        "sea_change": -1.5
+      },
+      {
+        "from_rpm": 2300,
+        "to_rpm": 2400,
+        "sea_change": -1.5999999999999943
+      },
+      {
+        "from_rpm": 2400,
+        "to_rpm": 2500,
+        "sea_change": -2.200000000000003
+      },
+      {
+        "from_rpm": 2500,
+        "to_rpm": 2600,
+        "sea_change": -0.6000000000000085
+      },
+      {
+        "from_rpm": 2600,
+        "to_rpm": 2700,
+        "sea_change": 2.8000000000000114
+      }
+    ]
+  },
+  "limitations": [
+    "Simulator typical-pitch vs population comparison is diagnostic; it is not evidence that the population baseline is correct.",
+    "GBM fixtures test observed-feature prediction parity; they do not test feature transfer semantics.",
+    "H4 sensitivity analysis uses the saved experiment grid."
+  ]
+}

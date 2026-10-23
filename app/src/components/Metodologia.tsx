@@ -167,7 +167,7 @@ export function Metodologia({ physics, models, extras, j, irA }: {
             <p className="nota">El reto sugiere combinar varias probabilidades, como la de que el bateador falle el swing o pegue un
               rodado, con pesos elegidos a mano. También entrenamos esos ocho modelos, pero no los sumamos, porque el valor en
               carreras ya pondera cada resultado por lo que vale en el marcador y no hay que inventar los pesos. Esos modelos nos
-              sirven para explicar de dónde sale cada calificación, y sus resultados están en la pestaña Validación.</p>
+              sirven para explicar de dónde sale cada calificación, y sus resultados están en la subpestaña Validación.</p>
           </Parte>
 
           <Parte id="m-modelo" n={4} color="var(--gana)" titulo="El modelo, tres regresiones con árboles de decisión">

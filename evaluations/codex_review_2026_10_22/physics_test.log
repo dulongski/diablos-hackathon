@@ -1,0 +1,46 @@
+=== 1. el solver inverso reproduce lo que se le pide (a nivel del mar) ===
+ recta 4C
+  ok   IVB                        obtenido 17.100  esperado 17.100  (tol 0.05)
+  ok   HB                         obtenido 7.400  esperado 7.400  (tol 0.05)
+  ok   altura en el plato         obtenido 2.700  esperado 2.700  (tol 0.01)
+  ok   lado en el plato           obtenido 0.100  esperado 0.100  (tol 0.01)
+  ok   velocidad de release       obtenido 93.500  esperado 93.500  (tol 0.05)
+ slider
+  ok   IVB                        obtenido 2.900  esperado 2.900  (tol 0.05)
+  ok   HB                         obtenido -5.700  esperado -5.700  (tol 0.05)
+  ok   altura en el plato         obtenido 2.000  esperado 2.000  (tol 0.01)
+  ok   lado en el plato           obtenido -0.500  esperado -0.500  (tol 0.01)
+  ok   velocidad de release       obtenido 84.000  esperado 84.000  (tol 0.05)
+ curva
+  ok   IVB                        obtenido -8.000  esperado -8.000  (tol 0.05)
+  ok   HB                         obtenido -9.500  esperado -9.500  (tol 0.05)
+  ok   altura en el plato         obtenido 1.799  esperado 1.800  (tol 0.01)
+  ok   lado en el plato           obtenido 0.200  esperado 0.200  (tol 0.01)
+  ok   velocidad de release       obtenido 78.500  esperado 78.500  (tol 0.05)
+ changeup
+  ok   IVB                        obtenido 7.300  esperado 7.300  (tol 0.05)
+  ok   HB                         obtenido 13.500  esperado 13.500  (tol 0.05)
+  ok   altura en el plato         obtenido 2.100  esperado 2.100  (tol 0.01)
+  ok   lado en el plato           obtenido 0.300  esperado 0.300  (tol 0.01)
+  ok   velocidad de release       obtenido 84.500  esperado 84.500  (tol 0.05)
+ sinker
+  ok   IVB                        obtenido 10.000  esperado 10.000  (tol 0.05)
+  ok   HB                         obtenido 15.600  esperado 15.600  (tol 0.05)
+  ok   altura en el plato         obtenido 2.200  esperado 2.200  (tol 0.01)
+  ok   lado en el plato           obtenido 0.400  esperado 0.400  (tol 0.01)
+  ok   velocidad de release       obtenido 92.000  esperado 92.000  (tol 0.05)
+
+=== 2. respuesta a la altitud del Harp Helu (2,240 m) ===
+ densidad del aire ISA : 0.8020
+ indice de arrastre    : 0.8534  (debe dar ~0.8534, lo medido en LMB)
+  ok   indice de arrastre         obtenido 0.853  esperado 0.853  (tol 0.002)
+
+ delta de forma por tipo (esperado: 4C pierde ~3.6 in de IVB):
+  recta 4C   IVB 17.10 -> 13.22  (-3.88)   HB 7.40 -> 5.37  (-2.03)   vel.plato 86.5 -> 87.6
+  slider     IVB 2.90 -> 2.33  (-0.57)   HB -5.70 -> -3.88  (1.82)   vel.plato 77.9 -> 78.8
+  curva      IVB -8.00 -> -6.01  (1.99)   HB -9.50 -> -6.66  (2.84)   vel.plato 72.9 -> 73.8
+  changeup   IVB 7.30 -> 5.71  (-1.59)   HB 13.50 -> 9.71  (-3.79)   vel.plato 78.4 -> 79.3
+  sinker     IVB 10.00 -> 7.78  (-2.22)   HB 15.60 -> 11.23  (-4.37)   vel.plato 85.1 -> 86.2
+  ok   delta IVB recta 4C         obtenido -3.876  esperado -3.600  (tol 0.9)
+
+TODO OK

@@ -1,12 +1,11 @@
 /**
  * HIPÓTESIS: las cuatro hipótesis del reto, cada una con cómo se probó, el resultado y su veredicto.
- * Al final, el modelo secundario (Causal Forest) que pide el reto como opcional.
  *
  * Toda incertidumbre es bootstrap por lanzador: se remuestrean lanzadores, no lanzamientos, porque
  * los lanzamientos de un mismo brazo no son independientes. Lo produce scripts/08_hipotesis.py.
  */
 import type { ReactNode } from 'react';
-import type { Causal, Hipotesis as H } from '../jurado';
+import type { Hipotesis as H } from '../jurado';
 import { COLOR_TIPO_ES } from '../jurado';
 import { nf, sg } from '../settings';
 
@@ -79,7 +78,7 @@ function Barras({ filas, max, fmt, color }: { filas: { et: string; v: number; fu
   );
 }
 
-export function Hipotesis({ h, c, irCausal }: { h: H; c: Causal; irCausal: () => void }) {
+export function Hipotesis({ h }: { h: H }) {
   const { h1, h2, h3, h4 } = h;
   const nat = h1.nathan;
   const cam = h2.pares.find(p => p.tipo === 'Cambio')!;
@@ -93,7 +92,7 @@ export function Hipotesis({ h, c, irCausal }: { h: H; c: Causal; irCausal: () =>
     <section className="vista-sec">
       <div className="envoltura">
         <header className="cabeza-pregunta">
-          <p className="eyebrow">Hipótesis del reto · H1 a H4 y modelo secundario</p>
+          <p className="eyebrow">Hipótesis del reto · H1 a H4</p>
           <h2>Lo que el reto propone, puesto a prueba</h2>
           <p className="entrada ancha">
             El reto plantea cuatro hipótesis. Cada una se prueba aquí con los datos de la LMB y con un intervalo
@@ -154,22 +153,6 @@ export function Hipotesis({ h, c, irCausal }: { h: H; c: Causal; irCausal: () =>
           </Tarjeta>
         </div>
 
-        <article className="tarjeta hip cf">
-          <header className="hip-cabeza">
-            <span className="hip-n">CF</span>
-            <div>
-              <h3>Modelo secundario, un Causal Forest</h3>
-              <p className="hip-propone">El reto sugiere un Causal Forest para preguntas de qué hubiera pasado. Lo usamos para dos. Qué lanzamiento conviene en cada conteo, en casa y de visitante. Y cuánto cuesta la altura en carreras reales.</p>
-            </div>
-            <span className="sello sello-v-parcial">Ver su pestaña</span>
-          </header>
-          <div className="cifras-fila tres">
-            <div><b className="num d-mucho">{sg(c.ate, 2)}</b><span>carreras más por cada 100 lanzamientos cuesta la altura, medido en el marcador (IC 90 % de {nf(c.ate_ic90[0], 2)} a {nf(c.ate_ic90[1], 2)})</span></div>
-            <div><b className="num">{nf(c.acuerdo_stuff.pearson, 2)}</b><span>correlación, fuera de muestra, entre lo que el bosque predice y la pérdida de Stuff+</span></div>
-            <div><b className="num">{nf(c.tau_rango[0], 2)} a {nf(c.tau_rango[1], 2)}</b><span>rango entre lanzadores. Es angosto y no se confirma fuera de muestra, así que para separar lanzadores usamos Stuff+</span></div>
-          </div>
-          <p className="enlaces-sec"><button type="button" className="enlace" onClick={irCausal}>Ver el Causal Forest completo →</button></p>
-        </article>
       </div>
     </section>
   );

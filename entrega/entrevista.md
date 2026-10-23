@@ -24,7 +24,7 @@ pagar. Di cuántos aguantan de los que comparamos.
 recta de élite es la que más pierde, así que no pagues prima por movimiento. En el juego, con el conteo en contra y un
 bateador del lado contrario, en casa conviene slider antes que cambio.
 
-**Minuto 6 a 8 · Por qué confiar, pestaña Validación.** Tres cifras y nada más. La calibración baja escalón por
+**Minuto 6 a 8 · Por qué confiar, pestaña Metodología, subpestaña Validación.** Tres cifras y nada más. La calibración baja escalón por
 escalón con lanzadores que el modelo nunca vio. La diferencia entre el 10 % mejor y el 10 % peor es de 3.3
 carreras por cada 100 lanzamientos (IC 3.0 a 3.6). Y con un modelo entrenado sólo a nivel del mar, la física del
 lanzamiento explica el 39 % de las carreras de más que hay en altura (IC 34 a 44 %). El resto lo pone el batazo que vuela más.
@@ -94,6 +94,6 @@ el mapa de movimiento sólo enseña promedios de celdas con al menos diez lanzam
 ## Antes de entrar
 
 1. Abre el dashboard en Inicio, con el control en 2,240 metros.
-2. Ten abiertas en otras pestañas la ficha del lanzador de fichaje y la pestaña Validación.
+2. Ten abiertas en otras pestañas la ficha del lanzador de fichaje y la subpestaña Validación dentro de Metodología.
 3. Ensaya el simulador con una recta típica para que el número no te sorprenda.
 4. Lleva el documento técnico impreso por si piden la definición formal de la escala.

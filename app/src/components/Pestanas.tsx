@@ -26,8 +26,7 @@ const ICONOS: Record<Vista, ReactNode> = {
 
 const VISTAS: { v: Vista; t: string; nota: string }[] = [
   { v: 'inicio', t: 'Inicio', nota: 'Qué responde' },
-  { v: 'metodologia', t: 'Metodología', nota: 'Qué hicimos' },
-  { v: 'confianza', t: 'Validación', nota: 'Por qué confiar' },
+  { v: 'metodologia', t: 'Metodología', nota: 'Qué hicimos y por qué confiar' },
   { v: 'lanzadores', t: 'Lanzadores', nota: 'Quién aguanta' },
   { v: 'arsenal', t: 'Arsenal y perfil', nota: 'Qué buscar' },
   { v: 'hipotesis', t: 'Hipótesis', nota: 'H1 a H4' },
@@ -40,10 +39,10 @@ export function Pestanas({ vista, onVista }: { vista: Vista; onVista: (v: Vista)
   return (
     <nav className="pestanas" aria-label="Secciones">
       <div className="envoltura pestanas-fila">
-        {VISTAS.map(p => (
+        {VISTAS.map(p => { const activa = vista === p.v || (p.v === 'metodologia' && vista === 'confianza'); return (
           <button key={p.v} type="button"
-                  className={`pestana p-${p.v}${vista === p.v ? ' activa' : ''}`}
-                  aria-current={vista === p.v ? 'page' : undefined}
+                  className={`pestana p-${p.v}${activa ? ' activa' : ''}`}
+                  aria-current={activa ? 'page' : undefined}
                   onClick={() => { onVista(p.v); window.scrollTo({ top: 0 }); }}>
             <svg viewBox="0 0 24 24" aria-hidden className="pestana-icono">{ICONOS[p.v]}</svg>
             <span className="pestana-texto">
@@ -51,8 +50,22 @@ export function Pestanas({ vista, onVista }: { vista: Vista; onVista: (v: Vista)
               <span className="pestana-nota">{p.nota}</span>
             </span>
           </button>
-        ))}
+        ); })}
       </div>
     </nav>
+  );
+}
+
+/** Dentro de Metodología, dos vistas: cómo lo construimos y la validación. */
+export function SubMetodo({ vista, onVista }: { vista: Vista; onVista: (v: Vista) => void }) {
+  return (
+    <div className="envoltura sub-metodo">
+      <div className="segmentado" role="tablist" aria-label="Metodología">
+        {([['metodologia', 'Cómo lo construimos'], ['confianza', 'Validación, por qué confiar']] as const).map(([v, t]) => (
+          <button key={v} type="button" role="tab" aria-selected={vista === v} className={vista === v ? 'activo' : ''}
+                  onClick={() => { onVista(v); window.scrollTo({ top: 0 }); }}>{t}</button>
+        ))}
+      </div>
+    </div>
   );
 }

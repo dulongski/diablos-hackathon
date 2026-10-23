@@ -1,0 +1,21 @@
+// Read production sources and artifacts; compile only in memory; create one new result file.
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../..');
+const {default:esbuild}=await import(path.join(root,'app/node_modules/esbuild/lib/main.js'));
+const source = `import fs from 'node:fs'; import {stuffEstable} from './app/src/lib/scoring.ts'; import {predict,toPlus} from './app/src/lib/gbm.ts';
+const read=n=>JSON.parse(fs.readFileSync(${JSON.stringify(root)}+'/app/public/data/'+n+'.json')); const m=read('model_stuff'),h=read('helpers'),s=read('scale').stuff,a=read('arsenal');
+const types=[['Four-Seam',92.4,15.7,8,2300,2.9,0],['Sinker',92.2,8.8,14.4,2150,2.1,.3],['Cutter',89.4,9.3,-1.1,2380,2.5,-.3],['Slider',84,2.8,-4.3,2450,2,-.5],['Curveball',78.5,-7.9,-8.2,2550,1.9,-.3],['Changeup',84.1,5.9,12,1800,2,.4],['Splitter',84,3.3,6.4,1450,1.9,.2]];
+const simulator=types.map(([type,relSpeed,ivb,hb,spinRate,plateZ,plateX])=>{const p={relSpeed,ivb,hb,spinRate,plateZ,plateX,relHeight:5.9,relSide:1.6,extension:6.1};const [sea,altitude]=stuffEstable(p,[1,.8534],true,m,h,s);const pipeline_delta=a.tipos.find(t=>t.tipo===type).delta_plus;return{type,sea,altitude,delta:altitude-sea,pipeline_delta,absolute_delta_disagreement:Math.abs(altitude-sea-pipeline_delta)}});
+const fixture=JSON.parse(fs.readFileSync(${JSON.stringify(root)}+'/app/test/fixtures/gbm.json'));const parity=fixture.casos.map(c=>{const x=Object.fromEntries(Object.entries(c.features).map(([k,v])=>[k,v===null?NaN:v]));const raw=predict(m,x);return{raw_absolute_error:Math.abs(raw-c.raw),plus_absolute_error:Math.abs(toPlus(raw,s.center,s.scale)-c.plus)}});
+export default {simulator,simulator_delta_mae:simulator.reduce((s,r)=>s+r.absolute_delta_disagreement,0)/simulator.length,gbm_parity:{n:parity.length,max_raw_absolute_error:Math.max(...parity.map(x=>x.raw_absolute_error)),max_plus_absolute_error:Math.max(...parity.map(x=>x.plus_absolute_error))},arrastre_log_sd:h.arrastre.log_sd};`;
+const bundle=await esbuild.build({stdin:{contents:source,resolveDir:root},bundle:true,platform:'node',format:'esm',write:false});
+const {default:result}=await import('data:text/javascript;base64,'+Buffer.from(bundle.outputFiles[0].text).toString('base64'));
+const exp=JSON.parse(fs.readFileSync(path.join(root,'artifacts/experimentos.json'))).h4;
+const steps=exp.giro.slice(1).map((v,i)=>({from_rpm:exp.giro[i].rpm,to_rpm:v.rpm,sea_change:v.mar-exp.giro[i].mar}));
+result.h4={saved_endpoint_slope_per_100rpm:exp.stuff_por_100rpm,sea_score_range:[Math.min(...exp.giro.map(v=>v.mar)),Math.max(...exp.giro.map(v=>v.mar))],mean_absolute_adjacent_100rpm_change:steps.reduce((s,r)=>s+Math.abs(r.sea_change),0)/steps.length,adjacent_steps:steps};
+result.limitations=['Simulator typical-pitch vs population comparison is diagnostic; it is not evidence that the population baseline is correct.','GBM fixtures test observed-feature prediction parity; they do not test feature transfer semantics.','H4 sensitivity analysis uses the saved experiment grid.'];
+const output=path.join(root,'evaluations/codex_review_2026_10_22/app_checks.json');
+fs.writeFileSync(output,JSON.stringify(result,null,2),{flag:'wx'});
+console.log(JSON.stringify(result,null,2));

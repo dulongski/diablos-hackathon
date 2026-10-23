@@ -12,7 +12,7 @@ import { Lanzadores } from './components/Lanzadores';
 import { LimiteError } from './components/LimiteError';
 import { MapaEfectivos } from './components/MapaEfectivos';
 import { Metodologia } from './components/Metodologia';
-import { Pestanas, type Vista } from './components/Pestanas';
+import { Pestanas, SubMetodo, type Vista } from './components/Pestanas';
 import { Diamante3D } from './components/Diamante3D';
 import { Resumen, type DatosResumen } from './components/Resumen';
 import { Simulador } from './components/Simulador';
@@ -100,7 +100,7 @@ export function App() {
       <Barra metros={metros} />
       <Pestanas vista={vista} onVista={setVista} />
 
-      <main className={`vista-${vista}`}>
+      <main className={`vista-${vista === 'confianza' ? 'metodologia' : vista}`}>
         {error && (
           <section><div className="envoltura aviso">
             <h3>Faltan los archivos del modelo</h3>
@@ -160,10 +160,12 @@ export function App() {
         )}
 
         {datos && vista === 'hipotesis' && (
-          <LimiteError nombre="Las hipótesis"><Hipotesis h={datos.hipotesis} c={datos.causal} irCausal={() => irA('causal')} /></LimiteError>
+          <LimiteError nombre="Las hipótesis"><Hipotesis h={datos.hipotesis} /></LimiteError>
         )}
 
         {datos && vista === 'anexo' && <Anexo j={datos.jurado} />}
+
+        {datos && (vista === 'metodologia' || vista === 'confianza') && <SubMetodo vista={vista} onVista={irA} />}
 
         {datos && vista === 'metodologia' && (
           <Metodologia physics={datos.physics} models={datos.models} extras={datos.extras} j={datos.jurado} irA={irA} />

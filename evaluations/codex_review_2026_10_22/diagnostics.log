@@ -1,0 +1,56 @@
+{
+  "unknown_terminal_pas": 6346,
+  "total_pas": 171020,
+  "unknown_fraction": 0.03710677113787861,
+  "unknown_last_pitch_calls": {
+    "BallCalled": 2684,
+    "FoulBallNotFieldable": 1064,
+    "StrikeCalled": 1042,
+    "Undefined": 820,
+    "StrikeSwinging": 534,
+    "BallinDirt": 104,
+    "FoulBallFieldable": 82,
+    "FoulBall": 16,
+    "BallIntentional": 0,
+    "HitByPitch": 0,
+    "InPlay": 0,
+    "AutomaticBall": 0,
+    "AutomaticStrike": 0
+  },
+  "unknown_last_play_results": {
+    "NeutralPlay": 2942,
+    "BallCalled": 2684,
+    "StrikeSwinging": 534,
+    "BallinDirt": 104,
+    "FoulBallFieldable": 82,
+    "Double": 0,
+    "Error": 0,
+    "FieldersChoice": 0,
+    "Out": 0,
+    "Sacrifice": 0,
+    "Single": 0,
+    "StrikeCalled": 0,
+    "Strikeout": 0,
+    "Walk": 0,
+    "HomeRun": 0,
+    "HitByPitch": 0,
+    "Triple": 0,
+    "InPlay": 0
+  },
+  "hbp_calls": 2280,
+  "hbp_flags": 2280,
+  "hbp_flag_mismatch": 0,
+  "incremental_future_meta_model": {
+    "pairs": 336,
+    "pitchers": 250,
+    "past_rv_only_oof_r2": 0.01772731693535623,
+    "past_rv_plus_stuff_oof_r2": 0.027436144368819027,
+    "incremental_oof_r2": 0.009708827433462797,
+    "paired_mse_improvement": 2.631030985413705e-06,
+    "paired_mse_improvement_ci95": [
+      -6.805013418634367e-06,
+      1.1521469427895854e-05
+    ],
+    "limitation": "Repairs second-stage resubstitution only; original Stuff+ scores still use other pitchers from future calendar years. This remains retrospective, not prospective."
+  }
+}

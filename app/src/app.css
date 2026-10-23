@@ -992,3 +992,7 @@ main ol > li::marker { color: var(--seccion); }
 .cifras-robustez > div { display: grid; gap: 6px; padding: 12px 14px; border: var(--borde-tenue); border-radius: var(--radio); background: var(--basalto-alto); }
 .cifras-robustez b { font-size: 1.7rem; }
 .cifras-robustez span { font-size: 0.86rem; color: var(--enrarecido); }
+
+/* Subpestañas de Metodología (cómo lo construimos / validación) */
+.sub-metodo { padding-top: 22px; display: flex; justify-content: flex-start; }
+.sub-metodo .segmentado button { padding: 8px 18px; font-size: 0.92rem; }

@@ -1,1 +1,15 @@
 pitcher_fold_1 current {"n": 158751, "rmse": 0.2673102807681239, "r2": 0.0009771943210263867, "skill_vs_training_count_baseline": 0.000895345740756559, "corr": 0.035776959248496304}
+pitcher_fold_1 mirror_circular {"n": 158751, "rmse": 0.267276411694222, "r2": 0.0012303371000794705, "skill_vs_training_count_baseline": 0.001148509259453312, "corr": 0.03839465480954575}
+pitcher_fold_1 no_drag {"n": 158751, "rmse": 0.26732599013145847, "r2": 0.000859769182391168, "skill_vs_training_count_baseline": 0.0007779109816393737, "corr": 0.03401897933369921}
+pitcher_fold_1 environment_residual {"n": 158751, "rmse": 0.2673457616834632, "r2": 0.0007119699837290216, "skill_vs_training_count_baseline": 0.000630099673989748, "corr": 0.030555838016554933}
+pitcher_fold_2 current {"n": 158750, "rmse": 0.2706417181394888, "r2": 0.0006041725348997495, "skill_vs_training_count_baseline": 0.0006038906246373932, "corr": 0.03211302654423912}
+pitcher_fold_2 mirror_circular {"n": 158750, "rmse": 0.27061402791389416, "r2": 0.0008086648831514553, "skill_vs_training_count_baseline": 0.0008083830305722906, "corr": 0.03435302624155086}
+pitcher_fold_2 no_drag {"n": 158750, "rmse": 0.27065611589576705, "r2": 0.0004978368200142524, "skill_vs_training_count_baseline": 0.0004975548797565565, "corr": 0.030609320396213887}
+pitcher_fold_2 environment_residual {"n": 158750, "rmse": 0.2706729529440057, "r2": 0.00037347835487122616, "skill_vs_training_count_baseline": 0.0003731963795344795, "corr": 0.02661236465053503}
+pitcher_fold_3 current {"n": 158751, "rmse": 0.267435014086002, "r2": 0.0008537277483402494, "skill_vs_training_count_baseline": 0.0008524532639025972, "corr": 0.034417633301620766}
+pitcher_fold_3 mirror_circular {"n": 158751, "rmse": 0.2674049441103126, "r2": 0.0010784000123826853, "skill_vs_training_count_baseline": 0.0010771258145308993, "corr": 0.03692001184996931}
+pitcher_fold_3 no_drag {"n": 158751, "rmse": 0.26742840551320296, "r2": 0.0009031068419289578, "skill_vs_training_count_baseline": 0.0009018324204779216, "corr": 0.0341611176477546}
+pitcher_fold_3 environment_residual {"n": 158751, "rmse": 0.26748329975444496, "r2": 0.0004929013914390934, "skill_vs_training_count_baseline": 0.0004916264467408338, "corr": 0.028124475290164718}
+pitcher_fold_4 current {"n": 158750, "rmse": 0.2665812257464619, "r2": 0.0011281504560431976, "skill_vs_training_count_baseline": 0.0010579291742830454, "corr": 0.0371344126839618}
+pitcher_fold_4 mirror_circular {"n": 158750, "rmse": 0.266559720654278, "r2": 0.001289301825315281, "skill_vs_training_count_baseline": 0.0012190918725918376, "corr": 0.038676759730572635}
+pitcher_fold_4 no_drag {"n": 158750, "rmse": 0.26658614436620365, "r2": 0.0010912902749876663, "skill_vs_training_count_baseline": 0.0010210664019351112, "corr": 0.036226815057730524}
