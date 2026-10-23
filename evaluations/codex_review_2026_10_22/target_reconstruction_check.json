@@ -1,0 +1,6 @@
+{
+  "n": 635002,
+  "max_abs_rv_error_full_lookup": 0.0,
+  "passed": true,
+  "scope": "Checks transition parity when given the same full-data lookup. New benchmark instead fits these tables per training split."
+}

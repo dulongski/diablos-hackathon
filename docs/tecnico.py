@@ -244,7 +244,10 @@ hr { border: none; border-top: 1px solid var(--linea); margin: 14pt 0; }
 h2.anexo { break-before: page; }
 .dos-col { column-count: 2; column-gap: 7mm; column-fill: auto; }
 .dos-col h2 { column-span: all; }
-.dos-col table, .dos-col .ecuacion, .dos-col pre { column-span: all; }
+.dos-col table, .dos-col pre { column-span: all; }
+.dos-col .ecuacion { column-span: none; font-size: 7.4pt; margin: 5pt 0 7pt; overflow: hidden; break-inside: avoid; }
+.dos-col .ecuacion .katex-display { text-align: left; }
+.dos-col .ecuacion .katex-display > .katex { text-align: left; white-space: normal; }
 .dos-col table.angosta { column-span: none; }
 .g-fig { margin: 4pt 0 9pt; break-inside: avoid; }
 .g-fig figcaption { font-size: 7.6pt; color: var(--ceniza); margin-top: 3pt; line-height: 1.3; }

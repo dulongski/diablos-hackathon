@@ -48,6 +48,8 @@ Ver tablas cronológicas y CIs en el reporte. Ninguna variante se promovió. No 
 
 ## Límites que deben acompañar los números
 
+La contracción de 50 % mejora el error de carreras, pero su IC de mejora en 2026 incluye cero. Si se recalcula la escala plus, la contracción afín se cancela y Stuff+ queda igual. No venderla como mejora del ranking.
+
 La física y las variables de origen siguen preparadas globalmente. No se rehízo todo el pipeline dentro de folds. El 2026 ya se había usado en desarrollo anterior. Los IC son de remuestreo de pitchers sobre predicciones fijas, sin corrección por selección múltiple. La comparación de típica contra media poblacional no prueba equivalencia. La corrección de referencia no valida causalidad. No se hizo revisión visual de dashboard ni se regeneraron entregables.
 
 ## Reproducir sin tocar originales

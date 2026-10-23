@@ -46,6 +46,8 @@ Intervalos pareados de mejora de MSE frente al actual. Un número positivo favor
 
 Estos intervalos capturan variación de los lanzadores evaluados, no toda la incertidumbre de volver a entrenar, elegir variantes o preparar la física. No se corrigen por comparar varias variantes.
 
+La contracción de 50 % mejora la calibración de carreras en los holdouts y en ambos cortes cronológicos, pero su intervalo de mejora en 2026 incluye cero. Además, no cambia el orden de los lanzamientos. Si se vuelve a estimar centro y desviación estándar para construir Stuff+, cualquier transformación afín positiva se cancela y Stuff+ queda igual. Es una candidata de calibración del valor crudo de carreras, no una mejora demostrada del ranking ni del simulador.
+
 ## Cortes cronológicos
 
 Entrenamiento hasta 2024 y evaluación en 2025.
@@ -146,7 +148,7 @@ No se recomienda reemplazar el modelo de producción sólo porque un candidato t
 
 ## Archivos y reproducción
 
-`results.json` contiene todos los resultados nuevos, pliegues, parámetros, intervalos, tiempos y versiones. `evaluation.log` conserva la salida. `data_audit.json` incluye el resultado OOF original separado del protocolo nuevo. `target_and_future_diagnostics.json`, `app_checks.json`, `transfer_reference_checks.json` y `transfer_identity_results.json` contienen los diagnósticos detallados. `verification_results.json` y los logs registran pruebas de ejecución. `original_files.json` y `integrity_check.json` registran integridad y cambios concurrentes. `CLAUDE.md` es el handoff local de esta evaluación. El CLAUDE de la raíz permanece fuera del alcance de edición.
+`results.json` contiene todos los resultados nuevos, pliegues, parámetros, intervalos, tiempos y versiones. `evaluation.log` conserva la salida. `data_audit.json` incluye el resultado OOF original separado del protocolo nuevo. `target_and_future_diagnostics.json`, `app_checks.json`, `transfer_reference_checks.json` y `transfer_identity_results.json` contienen los diagnósticos detallados. `verification_results.json` y los logs registran pruebas de ejecución. `target_reconstruction_check.json` confirma que la implementación de las transiciones reproduce las etiquetas originales cuando usa la misma tabla global. `original_files.json` y `integrity_check.json` registran integridad y cambios concurrentes. `CLAUDE.md` es el handoff local de esta evaluación. El CLAUDE de la raíz permanece fuera del alcance de edición.
 
 Los scripts de evaluación se pueden copiar a una carpeta hermana, manteniendo la misma profundidad, para repetir sin sobrescribir estos resultados. `eval_app.mjs` se niega a sobrescribir su JSON. `eval_transfer_reference.py` recibe una ruta nueva de salida. El benchmark no escribe modelos de producción, no cambia la app y no publica resultados.
 '''
@@ -193,6 +195,8 @@ La etiqueta por conteo y la media del PA se ajustan en entrenamiento. El baselin
 Ver tablas cronológicas y CIs en el reporte. Ninguna variante se promovió. No convertir una mejora exploratoria pequeña en una afirmación de rendimiento grande. Antes de adoptar la representación nueva hay que adaptarla a la transferencia Python y al generador de features del navegador, mantener la escala común y validar el conjunto.
 
 ## Límites que deben acompañar los números
+
+La contracción de 50 % mejora el error de carreras, pero su IC de mejora en 2026 incluye cero. Si se recalcula la escala plus, la contracción afín se cancela y Stuff+ queda igual. No venderla como mejora del ranking.
 
 La física y las variables de origen siguen preparadas globalmente. No se rehízo todo el pipeline dentro de folds. El 2026 ya se había usado en desarrollo anterior. Los IC son de remuestreo de pitchers sobre predicciones fijas, sin corrección por selección múltiple. La comparación de típica contra media poblacional no prueba equivalencia. La corrección de referencia no valida causalidad. No se hizo revisión visual de dashboard ni se regeneraron entregables.
 
