@@ -7,6 +7,12 @@ El Harp Helú está a 2,240 metros, más alto que Coors Field. Ahí hay 20 % men
 un lanzamiento lo produce el aire. Este proyecto califica los 635,002 lanzamientos de la LMB de 2024 a 2026,
 mide cuánto vale cada uno en el Harp Helú y le dice al club qué lanzadores le sirven en casa.
 
+| | |
+|---|---|
+| **Dashboard en vivo** | https://claude.ai/artifact/1HXhuyBtkDd6szvLv9M7xo |
+| **Documento técnico** | [`entrega/documento_tecnico.pdf`](entrega/documento_tecnico.pdf) |
+| **Reporte ejecutivo** | [`entrega/reporte.pdf`](entrega/reporte.pdf) |
+
 ## La respuesta corta
 
 La altitud apenas toca al lanzamiento malo y **borra la ventaja del bueno**. Las mejores rectas de la liga
