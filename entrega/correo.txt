@@ -15,7 +15,7 @@ Adjuntos
 
 Dashboard y código
 https://claude.ai/artifact/1HXhuyBtkDd6szvLv9M7xo
-[link al repositorio]
+https://github.com/dulongski/diablos-hackathon
 El simulador corre completo en el navegador, sin servidor. Le das un lanzamiento y te devuelve su Stuff+ en el Harp Helú y a nivel del mar, con el mapa de movimiento de los lanzamientos más y menos efectivos.
 
 En una frase
