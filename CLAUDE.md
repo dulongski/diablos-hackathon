@@ -1,5 +1,26 @@
 # Diablos Stuff+ · Estado de la entrega
 
+## Próxima sesión de Claude: publicar el dashboard preparado, sin recalcular
+
+**Ésta es la tarea pendiente autorizada por el usuario.** La revisión, las correcciones, las exportaciones, los PDF y el build ya terminaron y fueron verificados. El usuario recuperará créditos de Claude y quiere actualizar su artifact existente con este trabajo. Sólo falta la publicación: no volver a hacer el análisis ni reconstruir los entregables.
+
+### Dónde está el trabajo terminado
+
+- Copia local fuera de iCloud: `/private/tmp/diablos-entrega-20261022`.
+- Rama corregida: [`claude/confident-ptolemy-sz210m`](https://github.com/dulongski/diablos-hackathon/tree/claude/confident-ptolemy-sz210m). La entrega corregida quedó en `be8d4e07efcfffb734214a9e9cf716dc56000a77`; este handoff se añadió después. **No usar `main`: conserva una versión anterior.**
+- Paquete listo para publicar: `entrega/actualizacion_artifact.zip`. Si esta sesión está en la nube y no ve la Mac, [descargar el ZIP de la rama de entrega](https://raw.githubusercontent.com/dulongski/diablos-hackathon/refs/heads/claude/confident-ptolemy-sz210m/entrega/actualizacion_artifact.zip), o pedir al usuario ese mismo ZIP si el repositorio no es accesible. No hace falta descargar datos crudos ni instalar dependencias.
+- SHA256 del ZIP preparado: `ae207eba436e9e7ad0dc9c12e9efa8cafedf32d9425d3ae0e49a406214cfe14b`. El manifiesto `entrega/manifest_entrega.json` contiene los hashes de los entregables y recursos.
+- Instrucciones complementarias: [`entrega/actualizar_artifact.md`](entrega/actualizar_artifact.md). Resultados y pruebas ya ejecutadas: `delivery_checks/final_checks.json`, `delivery_checks/pdf_layout.json` y la sección de comprobaciones de este archivo.
+
+### Acción exacta
+
+1. Abrir el artifact del usuario **https://claude.ai/artifact/1HXhuyBtkDd6szvLv9M7xo** y actualizar ese mismo artifact con la herramienta de publicación disponible en su sesión. Conservar su URL; no crear otro dashboard. Si sirve para localizarlo, el identificador interno observado es `024ed2bc-f385-4c70-8d40-ca5705576d7c`.
+2. Extraer el ZIP en una carpeta temporal. Usar `artifact.html` como entrada del artifact y subir **los 20 archivos completos**, conservando las rutas relativas: ambos HTML, los bundles de `assets/`, los 13 JSON de `data/`, los logos y el favicon. Reemplazar los recursos con el mismo nombre. No publicar sólo el HTML ni mezclarlo con JSON o bundles anteriores. `artifact.html` es una envoltura para el artifact; `index.html` es la entrada para hosting estático.
+3. Publicar y abrir la misma URL para comprobar que carga los recursos nuevos. Revisar Inicio: **7 de 561**, penalización media **−9.3 Stuff+**; bosque: asociación observacional ajustada **+1.56 carreras/100**, con su límite no causal; Metodología → Validación: RMSE aislado **0.267997** frente a baseline **0.268111**. En el simulador a 0 m, ambos lados deben dar **99.9**, cambio **0.0**. No editar cifras para hacerlas coincidir: ya vienen del paquete verificado.
+4. Informar al usuario que se actualizó la URL existente sólo después de verificar la publicación. Si faltan herramienta, acceso o créditos, indicar el bloqueo concreto y conservar el paquete; no afirmar que el sitio está actualizado sin haberlo publicado.
+
+**No ejecutar en esta sesión de publicación:** scripts analíticos `01`–`14`, entrenamiento, bosques, exportaciones, experimentos, instalaciones, `npm run build`, generación de respaldos ni generación de PDF. No modificar el modelo, los JSON, el reporte ni el documento técnico: todos están terminados. Leer archivos, comprobar hashes, extraer el ZIP y verificar el sitio publicado sí forman parte de esta tarea. Los comandos de «Reproducir» que aparecen más abajo son documentación para futuros cambios, no pasos pendientes para esta entrega. El diagnóstico en `evaluations/codex_review_2026_10_22/` describe el estado anterior a las correcciones y no debe usarse para reemplazar los resultados finales.
+
 Proyecto del Hackathon ISAC 2026 para evaluar calidad de lanzamiento en la LMB y construir escenarios de altitud para el Harp Helú. Datos de 2024 a 2026, 635,002 lanzamientos. Los lanzadores están anonimizados. El conjunto sólo identifica categorías de altitud, no estadios concretos.
 
 ## Decisión de esta revisión
@@ -8,7 +29,7 @@ Se conserva el calificador LightGBM de producción, sus variables, sus árboles 
 
 Se corrige la referencia de transferencia física. Las variables observadas deben compararse contra su forma observada al construir diferencias y razones, no contra una referencia ya normalizada al nivel del mar. Transferir a la misma densidad debe conservar las variables originales. El arreglo cambia las calificaciones contrafactuales, las pérdidas por tipo, los perfiles y la selección de lanzadores; no cambia los árboles entrenados.
 
-La revisión de entrega vive en una copia aislada fuera de iCloud. No copiar cambios de vuelta al repositorio original ni publicar o enviar sin instrucciones del usuario. La entrega vence el 22 de octubre de 2026 a las 23:59, hora de Ciudad de México.
+La revisión de entrega vive en una copia aislada fuera de iCloud. No copiar cambios de vuelta al repositorio original. El usuario autorizó el push a la rama de entrega y la actualización del artifact existente descrita al principio de este archivo; cualquier otro envío queda fuera de esa tarea. La entrega vence el 22 de octubre de 2026 a las 23:59, hora de Ciudad de México.
 
 ## Fuentes de verdad
 
