@@ -325,7 +325,10 @@ cerca de un tercio.
 Las tres capas vencen al modelo nulo con lanzadores que nunca vieron. El $R^2$ de un lanzamiento suelto
 es bajo por construcción, porque su desenlace lo dominan el azar y la ubicación. Stuff+ no ve la
 ubicación, así que su $R^2$ es el más bajo de los tres, y así debe ser. Location+ y Pitching+ suben
-porque suman dónde llegó la pelota y el conteo.
+porque suman dónde llegó la pelota y el conteo. Probamos ocho variantes con las mejoras usuales, calificar cada batazo por su calidad de
+contacto, meter el arsenal, dividir el frenado entre el aire y sumar variables de física, y ninguna se separa del
+ruido (Anexo C). El modelo está en el techo de lo que
+la física sola predice.
 
 <!-- si stuff_entrena=todo -->
 **El holdout de parque no falla en el orden, falla en el nivel.** Un modelo entrenado sin altura

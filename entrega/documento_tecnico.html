@@ -462,7 +462,10 @@ cerca de un tercio.</p>
 <p>Las tres capas vencen al modelo nulo con lanzadores que nunca vieron. El <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span> de un lanzamiento suelto
 es bajo por construcción, porque su desenlace lo dominan el azar y la ubicación. Stuff+ no ve la
 ubicación, así que su <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span> es el más bajo de los tres, y así debe ser. Location+ y Pitching+ suben
-porque suman dónde llegó la pelota y el conteo.</p>
+porque suman dónde llegó la pelota y el conteo. Probamos ocho variantes con las mejoras usuales, calificar cada batazo por su calidad de
+contacto, meter el arsenal, dividir el frenado entre el aire y sumar variables de física, y ninguna se separa del
+ruido (Anexo C). El modelo está en el techo de lo que
+la física sola predice.</p>
 <p><strong>El holdout de parque no falla en el orden, falla en el nivel.</strong> Un modelo entrenado sin altura
 ordena bien los lanzamientos en altura (correlación positiva), pero espera las carreras de nivel del
 mar. En altura todo cuesta más, y por eso su <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span> queda apenas bajo cero. Esa diferencia de nivel es
@@ -1229,4 +1232,82 @@ sólo la física a 18.9 % con ubicación y a 19.4 % con arsenal y secuencia.</p>
 </tbody>
 </table>
 <p>El orden de los tipos coincide con correlación de rangos 0.96 sin frenado y 0.96 entrenando sólo a nivel del mar.</p>
+<p><strong>Mejoras que probamos y no cambian el resultado.</strong> Calificamos cada batazo por lo que se espera de su velocidad de salida y su ángulo, no por si fue hit, metimos dentro de Stuff+ las diferencias contra la recta del mismo lanzador, dividimos el frenado entre el aire del juego y sumamos variables de física (movimiento en dirección del brazo, desfase entre el eje de giro y el movimiento, consistencia del punto de salida). Misma validación por lanzador, todo medido contra las carreras reales.</p>
+<table>
+<thead>
+<tr>
+<th>Versión</th>
+<th class="n"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span></th>
+<th class="n">Diferencia 10 %</th>
+<th class="n">Mitades</th>
+<th class="n">Año siguiente</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>La que usamos</td>
+<td class="n">0.00100</td>
+<td class="n">3.31</td>
+<td class="n">0.984</td>
+<td class="n">0.230</td>
+</tr>
+<tr>
+<td>Batazo por calidad de contacto</td>
+<td class="n">0.00109</td>
+<td class="n">3.20</td>
+<td class="n">0.982</td>
+<td class="n">0.234</td>
+</tr>
+<tr>
+<td>Arsenal contra la recta dentro de Stuff+</td>
+<td class="n">0.00094</td>
+<td class="n">3.27</td>
+<td class="n">0.987</td>
+<td class="n">0.209</td>
+</tr>
+<tr>
+<td>Contacto y arsenal</td>
+<td class="n">0.00110</td>
+<td class="n">3.24</td>
+<td class="n">0.983</td>
+<td class="n">0.218</td>
+</tr>
+<tr>
+<td>Frenado relativo al aire del juego</td>
+<td class="n">0.00094</td>
+<td class="n">3.18</td>
+<td class="n">0.984</td>
+<td class="n">0.231</td>
+</tr>
+<tr>
+<td>Movimiento en dirección del brazo</td>
+<td class="n">0.00113</td>
+<td class="n">3.47</td>
+<td class="n">0.982</td>
+<td class="n">0.219</td>
+</tr>
+<tr>
+<td>Desfase del eje de giro</td>
+<td class="n">0.00107</td>
+<td class="n">3.28</td>
+<td class="n">0.984</td>
+<td class="n">0.242</td>
+</tr>
+<tr>
+<td>Consistencia del punto de salida</td>
+<td class="n">0.00099</td>
+<td class="n">3.39</td>
+<td class="n">0.986</td>
+<td class="n">0.200</td>
+</tr>
+<tr>
+<td>Las cuatro de física juntas</td>
+<td class="n">0.00110</td>
+<td class="n">3.36</td>
+<td class="n">0.985</td>
+<td class="n">0.195</td>
+</tr>
+</tbody>
+</table>
+<p>Ninguna se separa de la que usamos más allá del ruido. La mejor diferencia del 10 % (dirección del brazo) queda dentro del intervalo de la nuestra y empeora el año siguiente. Stuff+ ya está en el techo de lo que la física del lanzamiento sola predice de un lanzamiento suelto. Lo que falta para un <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span> alto es dónde cayó la pelota, y eso por definición no entra en Stuff+.</p>
 <p><em>Usamos los datos de la LMB sólo para esta competencia. Este documento presenta resultados, no datos.</em></p></body></html>

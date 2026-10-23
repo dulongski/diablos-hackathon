@@ -95,6 +95,25 @@ def anexo_robustez() -> str:
               f"{x(v[otra]['por_tipo'].get(t), 1, True)} |" for t in tipos]
         o += ["", f"El orden de los tipos coincide con correlación de rangos {x(es['orden_igual']['sin_frenado'], 2)} sin frenado y "
                   f"{x(es['orden_igual'][otra], 2)} {'entrenando sólo a nivel del mar' if otra == 'solo_mar' else 'con todos los juegos'}.", ""]
+    mj = R.get("mejoras")
+    if isinstance(mj, dict) and "actual" in mj:
+        nombres = (("actual", "La que usamos"), ("xrv", "Batazo por calidad de contacto"),
+                   ("arsenal", "Arsenal contra la recta dentro de Stuff+"), ("xrv_arsenal", "Contacto y arsenal"),
+                   ("frenado_relativo", "Frenado relativo al aire del juego"), ("brazo", "Movimiento en dirección del brazo"),
+                   ("desfase_eje", "Desfase del eje de giro"), ("consistencia_salida", "Consistencia del punto de salida"),
+                   ("todas", "Las cuatro de física juntas"))
+        o += ["**Mejoras que probamos y no cambian el resultado.** Calificamos cada batazo por lo que se espera de su "
+              "velocidad de salida y su ángulo, no por si fue hit, metimos dentro de Stuff+ las diferencias contra la recta "
+              "del mismo lanzador, dividimos el frenado entre el aire del juego y sumamos variables de física (movimiento en "
+              "dirección del brazo, desfase entre el eje de giro y el movimiento, consistencia del punto de salida). Misma "
+              "validación por lanzador, todo medido contra las carreras reales.", "",
+              "| Versión | $R^2$ | Diferencia 10 % | Mitades | Año siguiente |", "|---|---|---|---|---|"]
+        o += [f"| {nom} | {x(mj[k]['r2_vs_rv'], 5)} | {x(mj[k]['brecha_100'], 2)} | {x(mj[k]['mitades'], 3)} | {x(mj[k]['futuro_stuff'], 3)} |"
+              for k, nom in nombres if k in mj]
+        o += ["", "Ninguna se separa de la que usamos más allá del ruido. La mejor diferencia del 10 % (dirección del brazo) "
+              "queda dentro del intervalo de la nuestra y empeora el año siguiente. Stuff+ ya está en el techo de lo que la física del "
+              "lanzamiento sola predice de un lanzamiento suelto. Lo que falta para un $R^2$ alto es dónde cayó la pelota, y eso "
+              "por definición no entra en Stuff+.", ""]
     return "\n".join(o) + "\n"
 
 

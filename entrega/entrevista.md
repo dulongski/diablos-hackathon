@@ -67,6 +67,14 @@ componentes incluida la probabilidad de out en el turno, y da R² de 0.0013 cont
 es 3.3 en los dos) y el directo es un poco más estable entre mitades (0.988 contra 0.985). Nos quedamos con el directo
 porque no hay que inventar pesos y la ganancia de la combinación es mínima.
 
+**¿No pudieron hacer un mejor modelo, con más variables o calificando el contacto?** Lo probamos. Calificamos cada
+batazo por lo que se espera de su velocidad de salida y su ángulo, y metimos dentro de Stuff+ las diferencias contra la
+recta del mismo lanzador, dividimos el frenado entre el aire del juego y sumamos variables de física (movimiento en
+dirección del brazo, desfase del eje de giro, consistencia de la salida). Son ocho variantes. Con la misma validación, el
+R² queda entre 0.0009 y 0.0011 y la separación entre el 10 % mejor y el peor entre 3.2 y 3.5 carreras, dentro del
+intervalo del modelo actual. Cada una gana en una métrica y pierde en otra. Ninguna se separa del ruido. Stuff+ ya está en el techo de lo que la física sola
+predice, y lo que falta es dónde cayó la pelota, que por definición no entra.
+
 **¿Por qué no meter la altitud como variable?** Porque los lanzadores que lanzan en altura no son una muestra al azar,
 y su efecto se mezclaría con quiénes son. Tampoco podrías calificar a alguien que nunca ha lanzado en altura, que es
 justo el caso de un fichaje.

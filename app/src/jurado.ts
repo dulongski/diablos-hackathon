@@ -148,6 +148,7 @@ export interface Robustez {
     pares: number; lanzadores: number;
     carreras: FuturoObjetivo; whiff: FuturoObjetivo;
   } | Err;
+  mejoras?: Record<string, { variables: number; objetivo: string; r2_vs_rv: number; brecha_100: number; mitades: number; futuro_stuff: number } | { rmse: number; r2: number }>;
   combinacion?: {
     componentes: string[]; pesos: Record<string, number>; corr_entre_ellos: number;
     combinado: Metrica & { brecha_100: number; mitades: number };

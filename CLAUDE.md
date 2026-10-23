@@ -58,6 +58,12 @@ sensibilidad en `11_robustez.py` (especificaciones, variante `solo_mar`) y en L�
   3.2). Se dejó el medido y se dice en Límites y en la entrevista.
 - Dashboard versión 13, documento con Anexo C (14 páginas, cuerpo en 10, los cuatro pasos del método en el Resumen), reporte de 15 láminas con el mismo método en la lámina 4, entrevista llena. La física del lanzamiento explica 39 % del costo de la altura (prueba de parque), no las "tres cuartas partes" de antes. OJO, 04_export arma compresion.json desde deliverables.json de 05, así que después de 05 hay que volver a correr 04.
 
+- **Mejoras probadas (scripts 12 y 12b, guardadas en robustez.json → mejoras).** Ocho variantes con la misma validación
+  (xRV del batazo, arsenal en Stuff+, ambas, frenado relativo al aire, HB en dirección del brazo, desfase del eje de giro,
+  consistencia de salida, todas las de física). R² 0.0009 a 0.0011, diferencia 10 % 3.2 a 3.5 (actual 3.31, IC 3.0 a 3.6),
+  año siguiente 0.19 a 0.24. Ninguna se separa del ruido; no se cambió el modelo. La mejor candidata para el futuro es
+  "brazo" + "desfase_eje"; cambiarla exige tocar la transferencia y el simulador del navegador.
+
 ## Estado (2026-10-22, sesión local)
 
 Pipeline completo corrido en local con el modelo limpio (01 a 10). Documento, reporte y dashboard

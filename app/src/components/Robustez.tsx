@@ -10,10 +10,17 @@ const rango = (i: IC, d = 2, signo = true) =>
   i[0] == null || i[1] == null ? 'sin intervalo' : `${signo ? sg(i[0], d) : nf(i[0], d)} a ${signo ? sg(i[1], d) : nf(i[1], d)}`;
 const CAPA = { stuff: 'Stuff+', location: 'Location+', pitching: 'Pitching+' } as const;
 
+const MEJORAS: [string, string][] = [['actual', 'La que usamos'], ['xrv', 'Batazo por calidad de contacto'],
+  ['arsenal', 'Arsenal contra la recta dentro de Stuff+'], ['xrv_arsenal', 'Contacto y arsenal'],
+  ['frenado_relativo', 'Frenado relativo al aire del juego'], ['brazo', 'Movimiento en dirección del brazo'],
+  ['desfase_eje', 'Desfase del eje de giro'], ['consistencia_salida', 'Consistencia del punto de salida'],
+  ['todas', 'Las cuatro de física juntas']];
+
 export function Robustez({ r }: { r: DatosRobustez }) {
   const pq = sinError(r.parque), di = sinError(r.discriminacion), co = sinError(r.confiabilidad);
   const fu = sinError(r.futuro), cb = sinError(r.combinacion), es = sinError(r.especificaciones);
   const otra = es?.otra ?? 'todos_los_juegos';
+  const mj = r.mejoras && 'actual' in r.mejoras ? r.mejoras : null;
   return (
     <div className="robustez">
       <h3 className="titulo-sec sub">Pruebas de robustez, lo que preguntaría un jurado técnico</h3>
@@ -140,6 +147,27 @@ export function Robustez({ r }: { r: DatosRobustez }) {
               ))}</tbody>
             </table>
           </div>
+        </div>
+      )}
+
+      {mj && (
+        <div className="tarjeta">
+          <h3 className="titulo-tarjeta">¿Se podía hacer un mejor modelo?</h3>
+          <p className="nota-tarjeta">
+            Probamos ocho variantes con las mejoras usuales de los Stuff+ públicos. Calificar cada batazo por lo que se espera de
+            su velocidad de salida y su ángulo, meter el arsenal contra la recta, dividir el frenado entre el aire del juego y sumar
+            variables de física. Misma validación por lanzador, todo medido contra las carreras reales.
+          </p>
+          <div className="tabla-scroll">
+            <table className="tabla-datos compacta">
+              <thead><tr><th>Versión</th><th className="n">R²</th><th className="n">Diferencia 10 %</th><th className="n">Mitades</th><th className="n">Año siguiente</th></tr></thead>
+              <tbody>{MEJORAS.filter(([k]) => mj[k]).map(([k, nom]) => {
+                const m = mj[k] as { r2_vs_rv: number; brecha_100: number; mitades: number; futuro_stuff: number };
+                return <tr key={k}><th scope="row">{nom}</th><td className="num n">{nf(m.r2_vs_rv, 5)}</td><td className="num n">{nf(m.brecha_100, 2)}</td><td className="num n">{nf(m.mitades, 3)}</td><td className="num n">{nf(m.futuro_stuff, 3)}</td></tr>;
+              })}</tbody>
+            </table>
+          </div>
+          <p className="tenue nota-pie">Ninguna se separa de la que usamos más allá del ruido. Cada una gana en una columna y pierde en otra, que es la firma del ruido. Stuff+ ya está en el techo de lo que la física sola predice de un lanzamiento suelto. Lo que falta para un R² alto es dónde cayó la pelota, y eso por definición no entra en Stuff+.</p>
         </div>
       )}
 
