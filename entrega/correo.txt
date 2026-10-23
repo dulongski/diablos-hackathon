@@ -1,3 +1,5 @@
+BORRADOR HISTÓRICO — NO ENVIAR: la entrega se realiza por Google Forms.
+
 Para    itamsportsanalytics@gmail.com
 Copia   [correos de todos los integrantes del equipo]
 Asunto  Entrega Hackathon Diablos Rojos · Diablos Stuff+ · [nombre del equipo]
@@ -15,11 +17,11 @@ Adjuntos
 
 Dashboard y código
 https://claude.ai/artifact/1HXhuyBtkDd6szvLv9M7xo
-https://github.com/dulongski/diablos-hackathon/tree/claude/confident-ptolemy-sz210m
+https://github.com/dulongski/diablos-hackathon/tree/main
 El simulador corre completo en el navegador, sin servidor. Le das un lanzamiento y te devuelve su Stuff+ en el Harp Helú y a nivel del mar, con el mapa de movimiento de los lanzamientos más y menos efectivos.
 
 En una frase
-La altitud apenas toca al lanzamiento malo y borra la ventaja del bueno. De 561 lanzadores, sólo 21 aguantan el Harp Helú (pierden menos de media carrera por cada 100 lanzamientos), y el perfil a buscar es cutter, slider y splitter con lanzadores que provoquen rodados.
+La altitud apenas toca al lanzamiento malo y borra la ventaja del bueno. De 561 lanzadores, sólo 7 aguantan el Harp Helú (pierden menos de media carrera por cada 100 lanzamientos), y el perfil a buscar es cutter, slider y splitter con lanzadores que provoquen rodados.
 
 Usamos los datos de la LMB sólo para esta competencia y no los incluimos en la entrega.
 

@@ -11,7 +11,7 @@ mide cuánto vale cada uno en el Harp Helú y le dice al club qué lanzadores le
 |---|---|
 | **Dashboard alojado anterior, pendiente de actualizar** | https://claude.ai/artifact/1HXhuyBtkDd6szvLv9M7xo |
 | **Dashboard corregido preparado** | [`entrega/actualizar_artifact.md`](entrega/actualizar_artifact.md), paquete de actualización y respaldo autónomo |
-| **Código de esta entrega** | [rama corregida](https://github.com/dulongski/diablos-hackathon/tree/claude/confident-ptolemy-sz210m) |
+| **Código de esta entrega** | [rama corregida](https://github.com/dulongski/diablos-hackathon/tree/main) |
 | **Documento técnico** | [`entrega/documento_tecnico.pdf`](entrega/documento_tecnico.pdf) |
 | **Reporte ejecutivo** | [`entrega/reporte.pdf`](entrega/reporte.pdf) |
 

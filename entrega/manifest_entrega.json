@@ -1,7 +1,7 @@
 {
   "date_local": "2026-10-22",
   "source_commit": "abfbf399a70e42ad1609cd0b9647137037dad397",
-  "working_branch": "codex/submission-consistency",
+  "working_branch": "main",
   "production_models": "SHA256 unchanged; see delivery_checks/model_hashes_before.txt and after.txt",
   "dashboard": {
     "url": "https://claude.ai/artifact/1HXhuyBtkDd6szvLv9M7xo",
@@ -23,8 +23,8 @@
   },
   "files": {
     "documento_tecnico.pdf": {
-      "bytes": 693277,
-      "sha256": "bed662c1c7f03fbc8faa02ee3f1db86e492f23823fb44fb353f35af18c6a0c77"
+      "bytes": 696499,
+      "sha256": "668d441a7409563460435a8d940bf0281e73de50a21518e47729899a2c77b591"
     },
     "reporte.pdf": {
       "bytes": 1709842,
@@ -121,5 +121,8 @@
       "sha256": "6d8e70685b064156369bbf7d3c8c553af4fa3e6e03fe2389ce5112aa13d0b448"
     }
   },
-  "limits": "Current trained model preserved. Revised transfer and narrative. Legacy calibration uses global target tables; strict audit is separate refits. Causal interpretation not identified. Standalone HTML structure checked; direct file execution not browser-tested."
+  "limits": "Current trained model preserved. Revised transfer and narrative. Legacy calibration uses global target tables; strict audit is separate refits. Causal interpretation not identified. Standalone HTML structure checked; direct file execution not browser-tested.",
+  "delivery_branch": "main",
+  "repository_url": "https://github.com/dulongski/diablos-hackathon",
+  "document_link_update": "Technical PDF repository URI updated to main; all 14 page content streams unchanged."
 }

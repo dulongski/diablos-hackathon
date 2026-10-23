@@ -20,7 +20,7 @@ Reemplaza la entrada del Artifact y los recursos con el mismo nombre. Añade tod
 
 Actualiza mi Artifact Diablos Stuff+ existente en https://claude.ai/artifact/1HXhuyBtkDd6szvLv9M7xo usando el contenido de actualizacion_artifact.zip. Conserva exactamente ese enlace. Usa artifact.html como entrada y carga todos los recursos assets, data, logos y favicon con sus rutas relativas. No cambies el modelo ni recalcules análisis. Publica la compilación preparada y comprueba que Inicio muestre 7 de 561 lanzadores y una pérdida promedio de 9.3 puntos, y que Metodología tenga la auditoría con RMSE 0.267997 frente a 0.268111. El simulador a nivel del mar debe dar el mismo Stuff+ en ambos lados. No publiques datos crudos de la LMB.
 
-Si la sesión de publicación está conectada a esta Mac, el ZIP está en `/private/tmp/diablos-entrega-20261022/entrega/actualizacion_artifact.zip`. Si la sesión está en la nube, adjunta el ZIP.
+Si la sesión de publicación está conectada a esta Mac, el ZIP está en `/private/tmp/diablos-entrega-20261022/entrega/actualizacion_artifact.zip`. Si la sesión está en la nube, descarga [el ZIP de main](https://raw.githubusercontent.com/dulongski/diablos-hackathon/refs/heads/main/entrega/actualizacion_artifact.zip), o adjunta ese mismo archivo si no hay acceso al repositorio. Lee primero el `CLAUDE.md` de `main`; la entrega corregida ya está integrada ahí. El envío final es por Google Forms, no por correo.
 
 ## Alternativa local
 

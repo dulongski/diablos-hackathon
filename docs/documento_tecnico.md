@@ -460,7 +460,7 @@ considera probar el slider frente al cambio. Las celdas del bosque son explorato
 ## 9. Reproducción
 
 El código, los modelos entrenados y los pasos para correr todo están en
-[la rama de entrega del repositorio](https://github.com/dulongski/diablos-hackathon/tree/claude/confident-ptolemy-sz210m). El dashboard corre completo en el navegador.
+[la rama de entrega del repositorio](https://github.com/dulongski/diablos-hackathon/tree/main). El dashboard corre completo en el navegador.
 
 ## Referencias
 

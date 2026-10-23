@@ -7,8 +7,8 @@
 ### Dónde está el trabajo terminado
 
 - Copia local fuera de iCloud: `/private/tmp/diablos-entrega-20261022`.
-- Rama corregida: [`claude/confident-ptolemy-sz210m`](https://github.com/dulongski/diablos-hackathon/tree/claude/confident-ptolemy-sz210m). La entrega corregida quedó en `be8d4e07efcfffb734214a9e9cf716dc56000a77`; este handoff se añadió después. **No usar `main`: conserva una versión anterior.**
-- Paquete listo para publicar: `entrega/actualizacion_artifact.zip`. Si esta sesión está en la nube y no ve la Mac, [descargar el ZIP de la rama de entrega](https://raw.githubusercontent.com/dulongski/diablos-hackathon/refs/heads/claude/confident-ptolemy-sz210m/entrega/actualizacion_artifact.zip), o pedir al usuario ese mismo ZIP si el repositorio no es accesible. No hace falta descargar datos crudos ni instalar dependencias.
+- Rama oficial de entrega: [`main`](https://github.com/dulongski/diablos-hackathon/tree/main). El usuario autorizó integrar en `main` toda la entrega corregida y su handoff. La corrección analítica quedó en `be8d4e07efcfffb734214a9e9cf716dc56000a77`; las instrucciones de publicación y la integración se añadieron después. **Usar el `CLAUDE.md` y el paquete de `main` actualizados.** La rama anterior `claude/confident-ptolemy-sz210m` queda como referencia histórica.
+- Paquete listo para publicar: `entrega/actualizacion_artifact.zip`. Si esta sesión está en la nube y no ve la Mac, [descargar el ZIP de la rama de entrega](https://raw.githubusercontent.com/dulongski/diablos-hackathon/refs/heads/main/entrega/actualizacion_artifact.zip), o pedir al usuario ese mismo ZIP si el repositorio no es accesible. No hace falta descargar datos crudos ni instalar dependencias.
 - SHA256 del ZIP preparado: `ae207eba436e9e7ad0dc9c12e9efa8cafedf32d9425d3ae0e49a406214cfe14b`. El manifiesto `entrega/manifest_entrega.json` contiene los hashes de los entregables y recursos.
 - Instrucciones complementarias: [`entrega/actualizar_artifact.md`](entrega/actualizar_artifact.md). Resultados y pruebas ya ejecutadas: `delivery_checks/final_checks.json`, `delivery_checks/pdf_layout.json` y la sección de comprobaciones de este archivo.
 
@@ -29,7 +29,7 @@ Se conserva el calificador LightGBM de producción, sus variables, sus árboles 
 
 Se corrige la referencia de transferencia física. Las variables observadas deben compararse contra su forma observada al construir diferencias y razones, no contra una referencia ya normalizada al nivel del mar. Transferir a la misma densidad debe conservar las variables originales. El arreglo cambia las calificaciones contrafactuales, las pérdidas por tipo, los perfiles y la selección de lanzadores; no cambia los árboles entrenados.
 
-La revisión de entrega vive en una copia aislada fuera de iCloud. No copiar cambios de vuelta al repositorio original. El usuario autorizó el push a la rama de entrega y la actualización del artifact existente descrita al principio de este archivo; cualquier otro envío queda fuera de esa tarea. La entrega vence el 22 de octubre de 2026 a las 23:59, hora de Ciudad de México.
+La revisión de entrega vive en una copia aislada fuera de iCloud. No copiar cambios de vuelta al repositorio original. El usuario autorizó integrar la entrega en `main` y actualizar el artifact existente descrita al principio de este archivo; cualquier otro envío queda fuera de esa tarea. La entrega vence el 22 de octubre de 2026 a las 23:59, hora de Ciudad de México.
 
 ## Fuentes de verdad
 
@@ -104,7 +104,7 @@ La revisión local de entrega y el manifiesto de archivos registran las comproba
 
 ## Estado de entrega local
 
-La copia corregida está aislada fuera de iCloud, en `/private/tmp/diablos-entrega-20261022`. El enlace Claude existente se conserva. `entrega/actualizacion_artifact.zip` prepara su actualización y `entrega/actualizar_artifact.md` contiene las instrucciones. La versión alojada requiere publicación posterior. La rama de entrega de GitHub es `claude/confident-ptolemy-sz210m`; los enlaces del documento y correo apuntan a esa rama, porque `main` es la rama predeterminada y puede conservar una versión anterior. `entrega/dashboard.html` es respaldo autónomo. Ver `delivery_checks/final_checks.json` y `entrega/manifest_entrega.json` para comprobaciones y hashes.
+La copia corregida está aislada fuera de iCloud, en `/private/tmp/diablos-entrega-20261022`. El enlace Claude existente se conserva. `entrega/actualizacion_artifact.zip` prepara su actualización y `entrega/actualizar_artifact.md` contiene las instrucciones. La versión alojada requiere publicación posterior. La rama oficial de entrega de GitHub es `main`; contiene las correcciones, los resultados y el handoff de publicación. El envío se hace mediante Google Forms, no por correo. El borrador `entrega/correo.txt` es histórico y no debe usarse como instrucción de envío. `entrega/dashboard.html` es respaldo autónomo. Ver `delivery_checks/final_checks.json` y `entrega/manifest_entrega.json` para comprobaciones y hashes.
 
 ## Comprobaciones ejecutadas para esta entrega
 
@@ -115,3 +115,7 @@ El Python local usado es `/Users/sdulongsalazar/.venvs/diablos/bin/python`. El r
 `python scripts/14_delivery_check.py` verifica coherencia sin reentrenar ni cargar datos crudos. `node app/scripts/standalone.mjs` prepara el respaldo después del build. El ZIP de actualización contiene el build completo, y el ZIP de repositorio excluye los datos crudos, entornos y dependencias instaladas. La URL Claude sigue pendiente de actualizar con la herramienta de publicación de su cuenta.
 
 La tipografía final del documento técnico usa 9.25 pt, interlineado 1.43, separación de columnas de 8 mm y más espacio entre párrafos, secciones, ecuaciones y pies de figura. La comprobación de paginación está en `delivery_checks/pdf_layout.json`.
+
+## Envío por Google Forms
+
+El usuario confirmó que la entrega se envía por Google Forms. Usar los PDF de esta copia y el repositorio https://github.com/dulongski/diablos-hackathon, cuya rama `main` contiene la entrega corregida. El enlace del dashboard debe seguir siendo el artifact existente, actualizado con el ZIP preparado. No enviar correos. Publicar el dashboard no requiere regenerar ningún resultado ni documento.
