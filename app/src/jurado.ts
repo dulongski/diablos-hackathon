@@ -154,8 +154,9 @@ export interface Robustez {
     directo: Metrica & { brecha_100: number; mitades: number };
   } | Err;
   especificaciones?: {
-    variantes: Record<'produccion' | 'sin_frenado' | 'todos_los_juegos', { variables: number; liga: number; por_tipo: Record<string, number> }>;
-    orden_igual: Record<'sin_frenado' | 'todos_los_juegos', number>;
+    variantes: Record<string, { variables: number; liga: number; por_tipo: Record<string, number> }>;
+    orden_igual: Record<string, number>;
+    otra?: 'todos_los_juegos' | 'solo_mar';
   } | Err;
 }
 export interface FuturoObjetivo {

@@ -101,9 +101,7 @@ export function Metodologia({ physics, models, extras, j, irA }: {
           <p className="eyebrow">Metodología · Qué hicimos, paso a paso</p>
           <h2>Así construimos Diablos Stuff+</h2>
           <p className="entrada ancha">
-            Esta sección está escrita para alguien que conoce lo básico de estadística y ciencia de datos, como qué es una
-            regresión, una muestra de prueba o un intervalo de confianza, pero que no necesariamente sabe de béisbol. En
-            pocas palabras, entrenamos un modelo que predice cuántas carreras vale cada lanzamiento a partir de cómo vuela la
+            Entrenamos un modelo que predice cuántas carreras vale cada lanzamiento a partir de cómo vuela la
             pelota, después usamos física para calcular cómo habría volado esa misma pelota en el aire del Harp Helú, y al
             final le pedimos al mismo modelo que la vuelva a calificar. La diferencia entre las dos calificaciones es lo que
             la altura le quita al lanzamiento. Abajo está cada paso con el detalle de qué hicimos y por qué.

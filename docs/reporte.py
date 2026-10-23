@@ -254,7 +254,7 @@ LAMINAS.append(("portada", None, None, f"""
 lamina("Qué responde este reporte", "Ocho preguntas del club, cada una con su número",
        "En esta lámina están las preguntas del reto y la lámina donde respondemos cada una.", f"""
 <table class="mapa-preguntas">
-<tr><td>¿Cómo calificamos un lanzamiento y por qué la altitud cambia todo?</td><td>Método en lenguaje simple</td><td>3 a 9</td></tr>
+<tr><td>¿Cómo calificamos un lanzamiento y por qué la altitud cambia todo?</td><td>El método, paso a paso</td><td>3 a 9</td></tr>
 <tr><td>¿Se puede confiar en la calificación?</td><td>Ordena carreras con lanzadores nuevos</td><td>{"10 a 12" if not ROB else f"10 a 12 y {L_ROB}"}</td></tr>
 <tr><td>¿Se cumplen las hipótesis del reto?</td><td>H1 y H4 sí, H2 y H3 en parte</td><td>13 a 17</td></tr>
 <tr><td>¿Qué hubiera pasado con otra decisión?</td><td>La altura cuesta {CF['ate']:.1f} carreras por cada 100</td><td>{L_CF if not TACT else f"{L_CF} y {L_CF + 1}"}</td></tr>
@@ -278,7 +278,7 @@ lamina("El problema", "En el Harp Helú la pelota se mueve menos, y los modelos 
 
 # 4 · definiciones ----------------------------------------------------------------------------
 lamina("Definiciones", "Stuff+ dice qué tan difícil de batear es un lanzamiento, con 100 como promedio",
-       "En esta lámina están las tres calificaciones y cómo leerlas, aunque nunca hayas visto un partido.", """
+       "En esta lámina están las tres calificaciones y cómo leerlas.", """
 <div class="tres">
   <div class="def"><h3>Stuff+</h3><p>Califica un lanzamiento <b>sólo por cómo sale de la mano</b>. Velocidad, giro, movimiento y punto de salida. No ve el resultado ni el estadio.</p></div>
   <div class="def"><h3>Location+</h3><p>La misma escala, sumando <b>dónde</b> llegó la pelota y en qué conteo de bolas y strikes.</p></div>

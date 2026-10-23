@@ -94,7 +94,7 @@ export function Inicio({ j, c, irA, escena }: { j: Jurado; c: Causal; irA: (v: V
             </div>
           </div>
           <p className="inicio-anexo">Si tienes cinco minutos, recorre <button type="button" className="enlace" onClick={() => irA('lanzadores')}>Lanzadores</button>, <button type="button" className="enlace" onClick={() => irA('simulador')}>Simulador</button> y <button type="button" className="enlace" onClick={() => irA('metodologia')}>Metodología</button>.
-            ¿Nuevo en el béisbol? <button type="button" className="enlace" onClick={() => irA('anexo')}>Los términos y los siete tipos de lanzamiento, en el anexo →</button></p>
+            <button type="button" className="enlace" onClick={() => irA('anexo')}>Los términos y los siete tipos de lanzamiento, en el anexo →</button></p>
           <div className="para-quien">
             <div>
               <span className="etiqueta">Para el pitching coach</span>

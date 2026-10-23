@@ -41,59 +41,22 @@ método con literatura → validación con baseline al azar → ejemplo completo
 
 **Audiencia: alguien que no sabe nada de béisbol.** Todo término se explica la primera vez que aparece.
 
-## ▶ SIGUIENTE PASO EN LA MAC (desde la nube, 2026-10-22, "tapar todos los huecos")
+## ▶ Estado final (2026-10-22 noche, Mac)
 
-En la nube se preparó todo lo que no necesita datos. Falta correr en la Mac, en este orden. Todo está probado con
-datos sintéticos; si algo truena, arreglarlo contra las columnas reales.
+Cadena completa corrida en la Mac (03 a 11 y consistencia). **Se probó `STUFF_ENTRENA=mar` y se descartó**: con
+lanzadores nuevos ya no le ganaba al modelo nulo (RMSE 0.26816 contra 0.26810, R² −0.0004) y anticipaba peor 2026
+(0.16 contra 0.22). Producción quedó con `STUFF_ENTRENA=todo`; la versión de nivel del mar vive como prueba de
+sensibilidad en `11_robustez.py` (especificaciones, variante `solo_mar`) y en Límites del documento.
 
-```bash
-git pull origin claude/confident-ptolemy-sz210m
-source ~/.venvs/diablos/bin/activate                 # el venv rápido
-python scripts/03_models.py        # Stuff+ ahora entrena SOLO con nivel del mar (STUFF_ENTRENA=mar, default)
-python scripts/04_export.py        # exporta modelo, helpers (con arrastre.log_sd medido) y tablas
-python scripts/05_deliverables.py
-python scripts/07_jurado.py        # el mapa de movimiento ya sale agregado en celdas (regla de datos)
-cd app && npx esbuild scripts/experimentos.ts --bundle --platform=node --outfile=scripts/.exp.mjs --format=esm \
-  && node scripts/.exp.mjs > ../artifacts/experimentos.json && rm scripts/.exp.mjs && cd ..
-python scripts/08_hipotesis.py
-python scripts/09_causal_forest.py
-python scripts/10_local_extras.py
-python scripts/11_robustez.py      # NUEVO, 40 a 90 min. Escribe robustez.json
-cd app && npm run consistencia && cd ..   # simulador contra pipeline por tipo
-```
-
-**Qué hace cada cosa nueva.**
-- `03_models.py` con `STUFF_ENTRENA=mar` (default). Stuff+ aprende sólo de juegos a nivel del mar, porque SpeedDrop
-  (variable 1) delata el aire y el modelo aprendía "altura = más carreras". La escala se recalcula sobre toda la liga
-  (`models.reescalar`). `STUFF_ENTRENA=todo` reproduce el modelo anterior. `models.json` guarda `stuff_entrena`.
-- `11_robustez.py`, seis pruebas, cada una en su try. **parque** (entrena a nivel del mar, predice altura con la forma
-  real y con la pelota volada a nivel del mar; qué fracción del exceso de carreras explica la física, y por tipo),
-  **discriminacion** (10 % mejor contra 10 % peor en carreras, IC), **confiabilidad** (mitades crudo, contra el promedio
-  del tipo, sólo rectas, sólo mezcla), **futuro** (pares de años, carreras y whiff, IC, R² incremental),
-  **especificaciones** (pérdida por tipo con producción, sin frenado y con todos los juegos), **combinacion** (9
-  componentes con variables de Stuff+, incluido out en el turno, pesos por regresión fuera de muestra).
-- El dashboard (Validación), el reporte (lámina "Validación · robustez") y el documento (Anexo C) leen
-  `robustez.json` solos. El documento tiene bloques `<!-- si stuff_entrena=mar -->` que `tecnico.py` activa solo según
-  `models.json`.
-
-**Decidir antes de escribir.** Mirar `robustez.json`. Si con `mar` la calibración sigue monótona y Stuff+ le gana al
-nulo con lanzadores nuevos, quedarse con `mar` (es la versión defendible). Si se cae mucho, volver a `todo` y decirlo
-en límites. En ambos casos la lámina y el anexo de robustez se generan solos.
-
-**Lo que hay que escribir a mano después de correr.**
-1. Casi todas las cifras del cuerpo del documento cambian. Correr `python3 docs/verifica_cifras.py`, que lista cada
-   número de `docs/documento_tecnico.md` que ya no sale de los JSON, y corregirlos uno por uno. El cuerpo debe seguir
-   en 10 páginas (portada + 10 + anexos).
-2. Actualizar "Las cifras que cuentan la historia" aquí abajo, el README ("La respuesta corta") y `entrega/correo.txt`.
-3. Llenar los corchetes de `entrega/entrevista.md` con `robustez.json`.
-4. Si cambió `log_sd`, `experimentos.ts` ya se corrió arriba; revisar que H4 en el documento (5.4) coincida.
-5. Regenerar y revisar (`docs/tecnico.py`, `docs/reporte.py`, `docs/pdf.mjs`, `docs/estilo.py` en 0 problemas,
-   `npx tsc --noEmit && npm test && npm run build`), republicar el dashboard incluyendo `data/robustez.json`,
-   `data/jurado.json`, `data/helpers.json`, `data/model_stuff.json`, `data/models.json` y lo demás que cambió, y push.
-
-**Reglas del reto que pueden descalificar.** Equipos de **2 a 4** integrantes inscritos en licenciatura o maestría, y el
-correo debe llevar los correos de todos. Los datos sólo se presentan como resultados: el mapa del dashboard ya sale en
-celdas de al menos 10 lanzamientos, sin lanzamientos sueltos.
+- **Robustez (todo).** Parque con física: exceso en altura +1.49 carreras por 100, la física del lanzamiento explica
+  +0.57 (39 %, IC 34 a 44). Por tipo el exceso no sigue el orden de la física (rho −0.57), el texto lo dice así.
+  Discriminación 10 % mejor contra peor 3.31 carreras por 100 (IC 2.98 a 3.64). Mitades 0.988, contra el tipo 0.989,
+  sólo rectas 0.990, carreras 0.293. Futuro (336 pares) Stuff+ 0.219 contra carreras pasadas 0.184, R² incremental
+  0.027 (IC 0.004 a 0.071). Combinación ponderada R² 0.0013 contra directo 0.0010, misma brecha. Sin frenado y sólo
+  nivel del mar, el orden de los tipos se mantiene (rho 0.96), la pérdida de la liga baja a −6.2 y −5.1.
+- **Simulador.** Con `log_sd` medido (0.077) exagera la pérdida unos 4.2 puntos contra el pipeline (con 0.15 serían
+  3.2). Se dejó el medido y se dice en Límites y en la entrevista.
+- Dashboard versión 13, documento con Anexo C (14 páginas, cuerpo en 10), reporte de 25 láminas, entrevista llena.
 
 ## Estado (2026-10-22, sesión local)
 
@@ -213,8 +176,8 @@ no cuentan). En la app los tooltips `<Info>` no salen en el texto visible: revis
 - **Lanzadores.** 561, **21 aguantan**, 354 pierden más de una carrera. Más afectado Lanzador 174 (recta ·
   cambio, 111.3 → 92.8). Fichaje Lanzador 1099 (cutter · slider · curva, 110.2 → 109.8, ± 2.6).
 - **Hipótesis.** H1 Nathan 18 → 14.9 (Coors) / 13.8 (HH), rho −0.83 · H2 cambio +4.10 (3.48 a 4.69), cuarto
-  de seis · H3 p = 0.08 una cola · H4 movimiento 30 %, giro 8 % (variable 3 de 16), +0.05 por 100 rpm contra
-  +2.61 por pulgada; las rectas A y B ya NO se invierten (B gana por 18.1 a nivel del mar y por 6.0 en casa).
+  de seis · H3 p = 0.08 una cola · H4 movimiento 30 %, giro 8 % (variable 3 de 16), −0.01 por 100 rpm contra
+  +2.59 por pulgada; las rectas A y B NO se invierten (B gana por 19.2 a nivel del mar y por 6.1 en casa).
 - **Causal Forest.** ATE +1.52 (IC 90 % 1.27 a 1.78). La pérdida de Stuff+ de la liga equivale a 1.12, unas
   tres cuartas partes. GATES plano (pendiente −1.95, IC −4.0 a +0.2). Acuerdo con Stuff+ 0.17 (p = 0.002).
 - **Riesgo.** Elevado +31 pies; jonrón por elevado 12.4 % → 16.3 %; rodados 40.5 % → 44.8 %.

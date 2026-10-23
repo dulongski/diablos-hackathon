@@ -401,9 +401,14 @@ def especificaciones(df: pd.DataFrame) -> dict:
     x_mar = transferir(d, feats, 1.0)
     x_alt = transferir(d, feats, rho)
     tipos = d.pitch_type.astype(str).to_numpy()
-    res = {"variantes": {}}
-    for nombre, f_, filas in (("produccion", feats, mar), ("sin_frenado", [c for c in feats if c not in FRENADO], mar),
-                              ("todos_los_juegos", feats, todos)):
+    # La versión de producción usa los juegos con que se entrenó Stuff+ (models.json). La tercera variante es la otra
+    # muestra de entrenamiento, para ver si la conclusión depende de esa elección.
+    entrena = json.loads((ART / "models.json").read_text()).get("stuff_entrena", "todo")
+    prod = mar if entrena == "mar" else todos
+    otra, filas_otra = ("todos_los_juegos", todos) if entrena == "mar" else ("solo_mar", mar)
+    res = {"variantes": {}, "entrena": entrena, "otra": otra}
+    for nombre, f_, filas in (("produccion", feats, prod), ("sin_frenado", [c for c in feats if c not in FRENADO], prod),
+                              (otra, feats, filas_otra)):
         t0 = time.time()
         bst = entrena_stuff(df, f_, filas)
         s_ = -bst.predict(df.loc[df.rv.notna(), f_])
@@ -419,7 +424,7 @@ def especificaciones(df: pd.DataFrame) -> dict:
     tt = list(v["produccion"]["por_tipo"])
     res["orden_igual"] = {
         k: float(spearmanr([v["produccion"]["por_tipo"][t] for t in tt], [v[k]["por_tipo"][t] for t in tt]).correlation)
-        for k in ("sin_frenado", "todos_los_juegos")}
+        for k in ("sin_frenado", otra)}
     return limpio(res)
 
 

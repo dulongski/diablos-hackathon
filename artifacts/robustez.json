@@ -1,0 +1,379 @@
+{
+ "stuff_entrena": "todo",
+ "parque": {
+  "n": 183267,
+  "lanzadores": 897,
+  "por_100": {
+   "obs": 0.92899,
+   "alt": 0.01307,
+   "mar": -0.56076,
+   "total": 1.48975,
+   "fisica": 0.57383,
+   "resto": 0.91592,
+   "fraccion": 0.38519
+  },
+  "ic95_por_100": {
+   "obs": [
+    0.78291,
+    1.08576
+   ],
+   "alt": [
+    -0.05168,
+    0.07665
+   ],
+   "mar": [
+    -0.61249,
+    -0.50718
+   ],
+   "total": [
+    1.34212,
+    1.66024
+   ],
+   "fisica": [
+    0.53807,
+    0.61137
+   ],
+   "resto": [
+    0.75848,
+    1.09627
+   ],
+   "fraccion": [
+    0.33611,
+    0.4409
+   ]
+  },
+  "r2_forma_altura": -0.00203,
+  "r2_forma_mar": -0.00324,
+  "r2_nivel_corregido": -0.00094,
+  "corr": 0.01741,
+  "corr_ic95": [
+   0.01225,
+   0.02242
+  ],
+  "por_tipo": [
+   {
+    "tipo": "Recta",
+    "lanzadores": 404,
+    "fisica_100": 0.81825,
+    "observado_100": 1.71172
+   },
+   {
+    "tipo": "Slider",
+    "lanzadores": 300,
+    "fisica_100": 0.38373,
+    "observado_100": 0.81814
+   },
+   {
+    "tipo": "Curva",
+    "lanzadores": 100,
+    "fisica_100": 0.48852,
+    "observado_100": 1.56988
+   },
+   {
+    "tipo": "Cambio",
+    "lanzadores": 137,
+    "fisica_100": 0.35363,
+    "observado_100": 2.05831
+   },
+   {
+    "tipo": "Sinker",
+    "lanzadores": 202,
+    "fisica_100": 0.67583,
+    "observado_100": 1.8524
+   },
+   {
+    "tipo": "Cutter",
+    "lanzadores": 41,
+    "fisica_100": 0.0611,
+    "observado_100": 1.93527
+   },
+   {
+    "tipo": "Splitter",
+    "lanzadores": 6,
+    "fisica_100": 0.19453,
+    "observado_100": 2.59349
+   }
+  ],
+  "por_tipo_spearman": {
+   "rho": -0.57143,
+   "p": 0.1802,
+   "tipos": 7
+  }
+ },
+ "discriminacion": {
+  "stuff": {
+   "carreras_100_mejor10": -1.68535,
+   "carreras_100_peor10": 1.62429,
+   "brecha_100": 3.30964,
+   "brecha_ic95": [
+    2.98184,
+    3.64351
+   ],
+   "whiff_mejor10": 0.33382,
+   "whiff_peor10": 0.17513
+  },
+  "location": {
+   "carreras_100_mejor10": -7.32719,
+   "carreras_100_peor10": 11.65758,
+   "brecha_100": 18.98477,
+   "brecha_ic95": [
+    18.70729,
+    19.29532
+   ],
+   "whiff_mejor10": 0.22979,
+   "whiff_peor10": 0.21204
+  },
+  "pitching": {
+   "carreras_100_mejor10": -7.34494,
+   "carreras_100_peor10": 11.7898,
+   "brecha_100": 19.13474,
+   "brecha_ic95": [
+    18.76243,
+    19.54715
+   ],
+   "whiff_mejor10": 0.23121,
+   "whiff_peor10": 0.20822
+  }
+ },
+ "confiabilidad": {
+  "crudo": {
+   "r": 0.98816,
+   "lanzadores": 603,
+   "ic95": [
+    0.98608,
+    0.98998
+   ]
+  },
+  "sin_mezcla": {
+   "r": 0.98879,
+   "lanzadores": 603,
+   "ic95": [
+    0.98696,
+    0.99048
+   ]
+  },
+  "solo_mezcla": {
+   "r": 0.96713,
+   "lanzadores": 603,
+   "ic95": [
+    0.96041,
+    0.97293
+   ]
+  },
+  "solo_rectas": {
+   "r": 0.98973,
+   "lanzadores": 357,
+   "ic95": [
+    0.98732,
+    0.99184
+   ]
+  },
+  "carreras": {
+   "r": 0.29293,
+   "lanzadores": 603,
+   "ic95": [
+    0.21022,
+    0.37337
+   ]
+  }
+ },
+ "futuro": {
+  "pares": 336,
+  "lanzadores": 250,
+  "por_par": {
+   "2024→2025": 181,
+   "2025→2026": 155
+  },
+  "carreras": {
+   "stuff": {
+    "r": 0.21949,
+    "ic95": [
+     0.11072,
+     0.32422
+    ]
+   },
+   "carreras_pasadas": {
+    "r": 0.18375,
+    "ic95": [
+     0.08736,
+     0.27805
+    ]
+   },
+   "whiff_pasado": {
+    "r": 0.21415,
+    "ic95": [
+     0.10654,
+     0.30636
+    ]
+   },
+   "stuff_menos_carreras_pasadas": {
+    "d": 0.03574,
+    "ic95": [
+     -0.07588,
+     0.15085
+    ]
+   },
+   "r2_incremental_stuff": {
+    "d": 0.0271,
+    "ic95": [
+     0.00371,
+     0.07067
+    ]
+   }
+  },
+  "whiff": {
+   "stuff": {
+    "r": 0.1652,
+    "ic95": [
+     0.04996,
+     0.26883
+    ]
+   },
+   "carreras_pasadas": {
+    "r": 0.16406,
+    "ic95": [
+     0.07548,
+     0.24313
+    ]
+   },
+   "whiff_pasado": {
+    "r": 0.5554,
+    "ic95": [
+     0.44846,
+     0.64471
+    ]
+   },
+   "stuff_menos_carreras_pasadas": {
+    "d": 0.00114,
+    "ic95": [
+     -0.11784,
+     0.12007
+    ]
+   },
+   "r2_incremental_stuff": {
+    "d": 0.01301,
+    "ic95": [
+     0.00014,
+     0.05534
+    ]
+   }
+  }
+ },
+ "especificaciones": {
+  "variantes": {
+   "produccion": {
+    "variables": 16,
+    "liga": -8.28448,
+    "por_tipo": {
+     "Recta": -11.60437,
+     "Slider": -5.29153,
+     "Curva": -6.20024,
+     "Cambio": -7.3198,
+     "Sinker": -8.74683,
+     "Cutter": -2.9642,
+     "Splitter": -4.53826
+    },
+    "por_tipo_carreras_100": {
+     "Recta": 1.56965,
+     "Slider": 0.71575,
+     "Curva": 0.83867,
+     "Cambio": 0.9901,
+     "Sinker": 1.18313,
+     "Cutter": 0.40095,
+     "Splitter": 0.61386
+    }
+   },
+   "sin_frenado": {
+    "variables": 13,
+    "liga": -6.18105,
+    "por_tipo": {
+     "Recta": -10.56544,
+     "Slider": -1.42603,
+     "Curva": -4.35742,
+     "Cambio": -4.5042,
+     "Sinker": -7.51688,
+     "Cutter": 0.45858,
+     "Splitter": -1.59626
+    },
+    "por_tipo_carreras_100": {
+     "Recta": 1.37478,
+     "Slider": 0.18556,
+     "Curva": 0.56699,
+     "Cambio": 0.58609,
+     "Sinker": 0.9781,
+     "Cutter": -0.05967,
+     "Splitter": 0.20771
+    }
+   },
+   "solo_mar": {
+    "variables": 16,
+    "liga": -5.14899,
+    "por_tipo": {
+     "Recta": -7.72315,
+     "Slider": -3.33953,
+     "Curva": -4.02262,
+     "Cambio": -3.87362,
+     "Sinker": -5.0198,
+     "Cutter": -0.8351,
+     "Splitter": -2.69139
+    },
+    "por_tipo_carreras_100": {
+     "Recta": 1.08126,
+     "Slider": 0.46754,
+     "Curva": 0.56318,
+     "Cambio": 0.54232,
+     "Sinker": 0.70279,
+     "Cutter": 0.11692,
+     "Splitter": 0.3768
+    }
+   }
+  },
+  "entrena": "todo",
+  "otra": "solo_mar",
+  "orden_igual": {
+   "sin_frenado": 0.96429,
+   "solo_mar": 0.96429
+  }
+ },
+ "combinacion": {
+  "componentes": [
+   "y_swing",
+   "y_whiff",
+   "y_called_strike",
+   "y_chase",
+   "y_groundball",
+   "y_weak_contact",
+   "y_hard_contact",
+   "y_barrel",
+   "y_out_pa"
+  ],
+  "pesos": {
+   "y_swing": -0.03867,
+   "y_whiff": -0.03751,
+   "y_called_strike": -0.06014,
+   "y_chase": -0.04855,
+   "y_groundball": 0.00945,
+   "y_weak_contact": 0.0014,
+   "y_hard_contact": 0.02835,
+   "y_barrel": 0.0838,
+   "y_out_pa": -0.08161
+  },
+  "combinado": {
+   "n": 635002,
+   "rmse": 0.26793,
+   "r2": 0.00131,
+   "corr": 0.03616,
+   "brecha_100": 3.28829,
+   "mitades": 0.98503
+  },
+  "directo": {
+   "n": 635002,
+   "rmse": 0.26797,
+   "r2": 0.00098,
+   "corr": 0.03568,
+   "brecha_100": 3.30964,
+   "mitades": 0.98816
+  },
+  "corr_entre_ellos": 0.74571
+ }
+}

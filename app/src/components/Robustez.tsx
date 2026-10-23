@@ -13,6 +13,7 @@ const CAPA = { stuff: 'Stuff+', location: 'Location+', pitching: 'Pitching+' } a
 export function Robustez({ r }: { r: DatosRobustez }) {
   const pq = sinError(r.parque), di = sinError(r.discriminacion), co = sinError(r.confiabilidad);
   const fu = sinError(r.futuro), cb = sinError(r.combinacion), es = sinError(r.especificaciones);
+  const otra = es?.otra ?? 'todos_los_juegos';
   return (
     <div className="robustez">
       <h3 className="titulo-sec sub">Pruebas de robustez, lo que preguntaría un jurado técnico</h3>
@@ -50,7 +51,7 @@ export function Robustez({ r }: { r: DatosRobustez }) {
                   <tr key={t.tipo}><th scope="row">{t.tipo}</th><td className="num n">{nf(t.lanzadores)}</td><td className="num n">{sg(t.fisica_100, 2)}</td><td className="num n">{sg(t.observado_100, 2)}</td></tr>
                 ))}</tbody>
               </table>
-              <p className="tenue nota-pie">Por cada 100 lanzamientos. El orden de los tipos coincide con una correlación de rangos de {sg(pq.por_tipo_spearman.rho, 2)} ({pq.por_tipo_spearman.tipos} tipos, p = {nf(pq.por_tipo_spearman.p, 3)}).</p>
+              <p className="tenue nota-pie">Por cada 100 lanzamientos. {pq.por_tipo_spearman.rho > 0.3 ? 'El orden de los tipos coincide' : 'El exceso observado no sigue el orden de la pérdida física, porque por tipo lo domina el batazo y hay pocos lanzadores en varios tipos'}, con correlación de rangos de {sg(pq.por_tipo_spearman.rho, 2)} ({pq.por_tipo_spearman.tipos} tipos, p = {nf(pq.por_tipo_spearman.p, 3)}).</p>
             </div>
           )}
         </div>
@@ -148,23 +149,22 @@ export function Robustez({ r }: { r: DatosRobustez }) {
           <p className="nota-tarjeta">
             La variable más pesada de Stuff+ es cuánta velocidad pierde la pelota en el camino, y esa variable también refleja
             el aire. Para ver si nuestras conclusiones dependen de ella, calculamos la pérdida en altura por tipo con tres
-            versiones del modelo, la que usamos, una sin las tres variables de frenado y una entrenada con todos los juegos como
-            el modelo anterior.
+            versiones del modelo, la que usamos, una sin las tres variables de frenado y {otra === 'solo_mar' ? 'una entrenada sólo con juegos a nivel del mar, donde la caída de velocidad no puede delatar el aire' : 'una entrenada con todos los juegos como el modelo anterior'}.
           </p>
           <div className="tabla-scroll">
             <table className="tabla-datos compacta">
-              <thead><tr><th>Tipo</th><th className="n">La que usamos</th><th className="n">Sin frenado</th><th className="n">Con todos los juegos</th></tr></thead>
+              <thead><tr><th>Tipo</th><th className="n">La que usamos</th><th className="n">Sin frenado</th><th className="n">{otra === 'solo_mar' ? 'Sólo nivel del mar' : 'Con todos los juegos'}</th></tr></thead>
               <tbody>{Object.keys(es.variantes.produccion.por_tipo).map(t => (
                 <tr key={t}><th scope="row">{t}</th>
-                  {(['produccion', 'sin_frenado', 'todos_los_juegos'] as const).map(v => <td key={v} className="num n">{sg(es.variantes[v].por_tipo[t] ?? NaN, 1)}</td>)}</tr>
+                  {['produccion', 'sin_frenado', otra].map(v => <td key={v} className="num n">{sg(es.variantes[v].por_tipo[t] ?? NaN, 1)}</td>)}</tr>
               ))}
-                <tr><th scope="row">Liga</th>{(['produccion', 'sin_frenado', 'todos_los_juegos'] as const).map(v => <td key={v} className="num n destacado">{sg(es.variantes[v].liga, 1)}</td>)}</tr>
+                <tr><th scope="row">Liga</th>{['produccion', 'sin_frenado', otra].map(v => <td key={v} className="num n destacado">{sg(es.variantes[v].liga, 1)}</td>)}</tr>
               </tbody>
             </table>
           </div>
           <p className="tenue nota-pie">
             Puntos de Stuff+ al pasar de nivel del mar a altitud extrema. El orden de los tipos se parece al de la versión que
-            usamos con una correlación de rangos de {sg(es.orden_igual.sin_frenado, 2)} sin frenado y {sg(es.orden_igual.todos_los_juegos, 2)} con todos los juegos.
+            usamos con una correlación de rangos de {sg(es.orden_igual.sin_frenado, 2)} sin frenado y {sg(es.orden_igual[otra] ?? NaN, 2)} {otra === 'solo_mar' ? 'entrenando sólo a nivel del mar' : 'con todos los juegos'}.
           </p>
         </div>
       )}

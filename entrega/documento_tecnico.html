@@ -1,6 +1,6 @@
 <!doctype html><html lang="es"><head><meta charset="utf-8"><title>Diablos Stuff+ · Documento técnico</title>
 <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="file:///home/user/diablos-hackathon/app/node_modules/katex/dist/katex.min.css">
+<link rel="stylesheet" href="file:///Users/sdulongsalazar/Desktop/Hackathons/hackathon-diablos/app/node_modules/katex/dist/katex.min.css">
 <style>
 @page { size: Letter; margin: 15mm 16mm 15mm; @bottom-right { content: counter(page); } }
 :root { --rojo:#D7362B; --azul:#2E6FA6; --tinta:#10201A; --texto:#24302A; --ceniza:#6E7A73; --linea:#E3DCCB; --fondo:#FBF9F4; }
@@ -38,7 +38,7 @@ h2.anexo { break-before: page; }
 </style></head><body>
 <section class="portada">
   <div>
-    <div class="logos-portada"><img src="file:///home/user/diablos-hackathon/app/public/logos/isac.svg" alt="ISAC" class="l-isac"><img src="file:///home/user/diablos-hackathon/app/public/logos/diablos.png" alt="Diablos Rojos del México" class="l-diablos"></div>
+    <div class="logos-portada"><img src="file:///Users/sdulongsalazar/Desktop/Hackathons/hackathon-diablos/app/public/logos/isac.svg" alt="ISAC" class="l-isac"><img src="file:///Users/sdulongsalazar/Desktop/Hackathons/hackathon-diablos/app/public/logos/diablos.png" alt="Diablos Rojos del México" class="l-diablos"></div>
     <div class="eyebrow">Hackathon ISAC 2026 · Reto Diablos Rojos del México · Documento técnico</div>
     <h1>Diablos <em>Stuff+</em></h1>
     <p class="sub">Calidad de lanzamiento ajustada por la altitud del Estadio Alfredo Harp Helú. Qué lanzadores
@@ -754,10 +754,10 @@ rodado sube de 40.5 % a 44.8 % en altitud extrema y el jonrón por elevado sube 
 </table>
 <p>El modelo sí usa el giro. Es la tercera de 16 variables, pero sobre todo para distinguir un tipo de
 lanzamiento de otro. En el experimento controlado, 100 revoluciones más <strong>con el mismo movimiento</strong>
-cambian Stuff+ en 0.05 puntos, nada. Una pulgada más de elevación <strong>con el mismo giro</strong> suma 2.61.
+no cambian Stuff+ (0.01 puntos). Una pulgada más de elevación <strong>con el mismo giro</strong> suma 2.59.
 Y la ventaja del movimiento es la que el aire se lleva. Una recta B con 2,150 rpm y 18.0 pulgadas de
-elevación vale 105.7 a nivel del mar, 18.1 puntos más que una recta A que gira más pero a la que ese giro
-casi no mueve (2,650 rpm y 13.5 pulgadas, 87.6). En el Harp Helú B vale 86.0 y A 80.0. La ventaja se reduce a un
+elevación vale 107.7 a nivel del mar, 19.2 puntos más que una recta A que gira más pero a la que ese giro
+casi no mueve (2,650 rpm y 13.5 pulgadas, 88.5). En el Harp Helú B vale 86.1 y A 80.0. La ventaja se reduce a un
 tercio.</p>
 <h2>6. Lo que significa para el club</h2>
 <h3>6.1 La altitud borra la ventaja del bueno</h3>
@@ -917,6 +917,12 @@ pide slider antes que cambio. El Causal Forest táctico encuentra 10 celdas firm
   Causal Forest, que confirma el costo promedio pero no separa a un lanzador de otro.</li>
 <li><strong>El exponente de Reynolds es empírico.</strong> Lo calibramos y verificamos fuera de muestra, pero no sale de
   primeros principios.</li>
+<li><strong>Stuff+ ve la caída de velocidad, que también refleja el aire.</strong> Lo probamos sin las tres variables de
+  frenado y entrenando sólo con juegos a nivel del mar. El orden de los tipos se mantiene en los dos casos
+  (correlación de rangos 0.96), pero la pérdida de la liga baja de 8.3 a 6.2 y 5.1 puntos. La versión de nivel
+  del mar ya no le ganaba al modelo nulo con lanzadores nuevos, y por eso no es la principal (Anexo C).</li>
+<li><strong>El simulador exagera la pérdida.</strong> Califica una forma típica y no la población, y sus pérdidas salen unos
+  4 puntos mayores que las de la tabla por tipo. Sirve para comparar lanzamientos entre sí.</li>
 </ul>
 <h2>9. Reproducción</h2>
 <pre><code class="language-bash">uv venv &amp;&amp; uv pip install -e .
@@ -1052,4 +1058,175 @@ sólo la física a 18.9 % con ubicación y a 19.4 % con arsenal y secuencia.</p>
 </tr>
 </tbody>
 </table>
+<h2>Anexo C · Pruebas de robustez</h2>
+<p>Estas pruebas responden las dudas que un jurado técnico tendría al ver un <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span> bajo o un efecto de la altura grande. Todas usan predicciones fuera de muestra y los intervalos de 95 % salen de un bootstrap por lanzador. </p>
+<p><strong>Holdout de parque con física.</strong> Entrenamos con nivel del mar y predijimos los 183,267 lanzamientos de altitud extrema de 897 lanzadores que el modelo no vio, cada uno con su forma real y con la misma pelota volada a nivel del mar.</p>
+<table>
+<thead>
+<tr>
+<th>Por cada 100 lanzamientos en altura</th>
+<th class="n">Carreras</th>
+<th>IC 95 %</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Exceso observado sobre lo que espera un modelo de nivel del mar</td>
+<td class="n">+1.49</td>
+<td>+1.34 a +1.66</td>
+</tr>
+<tr>
+<td>Parte que explica el vuelo del lanzamiento</td>
+<td class="n">+0.57</td>
+<td>+0.54 a +0.61</td>
+</tr>
+<tr>
+<td>Resto, sobre todo el batazo</td>
+<td class="n">+0.92</td>
+<td>+0.76 a +1.10</td>
+</tr>
+</tbody>
+</table>
+<p>La física del lanzamiento explica 39 % del exceso (IC 34 a 44 %). Dentro de la altura el modelo ordena con correlación +0.017 (IC +0.012 a +0.022), y su <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span> con el nivel corregido es −0.00094. Por tipo de lanzamiento, el exceso observado no sigue el orden de la pérdida física (correlación de rangos −0.57, 7 tipos). El exceso por tipo lo domina el batazo y en varios tipos hay pocos lanzadores, así que la física se lee en el total, no tipo por tipo.</p>
+<p><strong>Discriminación en carreras.</strong> Diferencia en carreras por cada 100 lanzamientos entre el 10 % peor y el 10 % mejor calificado, fuera de muestra.</p>
+<table>
+<thead>
+<tr>
+<th>Capa</th>
+<th class="n">Diferencia</th>
+<th>IC 95 %</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Stuff+</td>
+<td class="n">3.31</td>
+<td>2.98 a 3.64</td>
+</tr>
+<tr>
+<td>Location+</td>
+<td class="n">18.98</td>
+<td>18.71 a 19.30</td>
+</tr>
+<tr>
+<td>Pitching+</td>
+<td class="n">19.13</td>
+<td>18.76 a 19.55</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Calidad contra mezcla de lanzamientos.</strong> Correlación entre dos mitades al azar de los lanzamientos de cada lanzador. Stuff+ tal cual 0.988, contra el promedio de su tipo 0.989 (IC 0.987 a 0.990), sólo rectas 0.990, sólo la mezcla de tipos 0.967 y carreras reales 0.293.</p>
+<p><strong>Año siguiente.</strong> 336 pares de temporadas seguidas de 250 lanzadores.</p>
+<table>
+<thead>
+<tr>
+<th>Lo que mides este año</th>
+<th>Carreras del siguiente</th>
+<th>Swing fallido del siguiente</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Stuff+</td>
+<td>+0.219 (+0.11 a +0.32)</td>
+<td>+0.165 (+0.05 a +0.27)</td>
+</tr>
+<tr>
+<td>Sus carreras</td>
+<td>+0.184 (+0.09 a +0.28)</td>
+<td>+0.164 (+0.08 a +0.24)</td>
+</tr>
+<tr>
+<td>Su swing fallido</td>
+<td>+0.214 (+0.11 a +0.31)</td>
+<td>+0.555 (+0.45 a +0.64)</td>
+</tr>
+</tbody>
+</table>
+<p>Sumar Stuff+ a las carreras pasadas sube el <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span> de las carreras futuras en 2.7 puntos porcentuales (IC 0.4 a 7.1).</p>
+<p><strong>La combinación ponderada que sugiere el reto.</strong> 9 modelos de componente con las variables de Stuff+, incluida la probabilidad de out en el turno, combinados con pesos aprendidos por regresión fuera de muestra.</p>
+<table>
+<thead>
+<tr>
+<th>Versión</th>
+<th class="n"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span></th>
+<th class="n">RMSE</th>
+<th class="n">Diferencia 10 %</th>
+<th class="n">Mitades</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Directo en carreras</td>
+<td class="n">0.00098</td>
+<td class="n">0.26797</td>
+<td class="n">3.31</td>
+<td class="n">0.988</td>
+</tr>
+<tr>
+<td>Combinación ponderada</td>
+<td class="n">0.00131</td>
+<td class="n">0.26793</td>
+<td class="n">3.29</td>
+<td class="n">0.985</td>
+</tr>
+</tbody>
+</table>
+<p>Las dos versiones correlacionan 0.75 entre sí.</p>
+<p><strong>Sensibilidad a la caída de velocidad.</strong> Pérdida de Stuff+ al pasar a altitud extrema con tres versiones del modelo.</p>
+<table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th class="n">La que usamos</th>
+<th class="n">Sin frenado</th>
+<th class="n">Sólo nivel del mar</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Recta</td>
+<td class="n">−11.6</td>
+<td class="n">−10.6</td>
+<td class="n">−7.7</td>
+</tr>
+<tr>
+<td>Slider</td>
+<td class="n">−5.3</td>
+<td class="n">−1.4</td>
+<td class="n">−3.3</td>
+</tr>
+<tr>
+<td>Curva</td>
+<td class="n">−6.2</td>
+<td class="n">−4.4</td>
+<td class="n">−4.0</td>
+</tr>
+<tr>
+<td>Cambio</td>
+<td class="n">−7.3</td>
+<td class="n">−4.5</td>
+<td class="n">−3.9</td>
+</tr>
+<tr>
+<td>Sinker</td>
+<td class="n">−8.7</td>
+<td class="n">−7.5</td>
+<td class="n">−5.0</td>
+</tr>
+<tr>
+<td>Cutter</td>
+<td class="n">−3.0</td>
+<td class="n">+0.5</td>
+<td class="n">−0.8</td>
+</tr>
+<tr>
+<td>Splitter</td>
+<td class="n">−4.5</td>
+<td class="n">−1.6</td>
+<td class="n">−2.7</td>
+</tr>
+</tbody>
+</table>
+<p>El orden de los tipos coincide con correlación de rangos 0.96 sin frenado y 0.96 entrenando sólo a nivel del mar.</p>
 <p><em>Usamos los datos de la LMB sólo para esta competencia. Este documento presenta resultados, no datos.</em></p></body></html>

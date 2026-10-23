@@ -47,9 +47,13 @@ def anexo_robustez() -> str:
               f"La física del lanzamiento explica {x((p['fraccion'] or 0) * 100, 0)} % del exceso (IC {ic(i['fraccion'], 0, k=100)} %). "
               f"Dentro de la altura el modelo ordena con correlación {x(pq['corr'], 3, True)} (IC {ic(pq['corr_ic95'], 3, True)}), "
               f"y su $R^2$ con el nivel corregido es {x(pq['r2_nivel_corregido'], 5)}."
-              + (f" Por tipo de lanzamiento, la pérdida que predice la física y el exceso observado dentro del mismo lanzador "
-                 f"coinciden en orden con correlación de rangos {x(pq['por_tipo_spearman']['rho'], 2, True)} "
-                 f"({pq['por_tipo_spearman']['tipos']} tipos)." if pq.get("por_tipo_spearman") else ""), ""]
+              + ((f" Por tipo de lanzamiento, la pérdida que predice la física y el exceso observado dentro del mismo lanzador "
+                  f"coinciden en orden con correlación de rangos {x(pq['por_tipo_spearman']['rho'], 2, True)} "
+                  f"({pq['por_tipo_spearman']['tipos']} tipos)." if pq['por_tipo_spearman']['rho'] > 0.3 else
+                  f" Por tipo de lanzamiento, el exceso observado no sigue el orden de la pérdida física (correlación de rangos "
+                  f"{x(pq['por_tipo_spearman']['rho'], 2, True)}, {pq['por_tipo_spearman']['tipos']} tipos). El exceso por tipo "
+                  f"lo domina el batazo y en varios tipos hay pocos lanzadores, así que la física se lee en el total, no tipo por tipo.")
+                 if pq.get("por_tipo_spearman") else ""), ""]
     di = ok("discriminacion")
     if di:
         o += ["**Discriminación en carreras.** Diferencia en carreras por cada 100 lanzamientos entre el 10 % peor y el 10 % mejor "
@@ -83,12 +87,14 @@ def anexo_robustez() -> str:
     if es:
         v = es["variantes"]
         tipos = list(v["produccion"]["por_tipo"])
+        otra = es.get("otra", "todos_los_juegos")
+        nom = "sólo nivel del mar" if otra == "solo_mar" else "con todos los juegos"
         o += ["**Sensibilidad a la caída de velocidad.** Pérdida de Stuff+ al pasar a altitud extrema con tres versiones del modelo.", "",
-              "| Tipo | La que usamos | Sin frenado | Con todos los juegos |", "|---|---|---|---|"]
+              f"| Tipo | La que usamos | Sin frenado | {nom.capitalize()} |", "|---|---|---|---|"]
         o += [f"| {t} | {x(v['produccion']['por_tipo'].get(t), 1, True)} | {x(v['sin_frenado']['por_tipo'].get(t), 1, True)} | "
-              f"{x(v['todos_los_juegos']['por_tipo'].get(t), 1, True)} |" for t in tipos]
+              f"{x(v[otra]['por_tipo'].get(t), 1, True)} |" for t in tipos]
         o += ["", f"El orden de los tipos coincide con correlación de rangos {x(es['orden_igual']['sin_frenado'], 2)} sin frenado y "
-                  f"{x(es['orden_igual']['todos_los_juegos'], 2)} con todos los juegos.", ""]
+                  f"{x(es['orden_igual'][otra], 2)} {'entrenando sólo a nivel del mar' if otra == 'solo_mar' else 'con todos los juegos'}.", ""]
     return "\n".join(o) + "\n"
 
 

@@ -112,7 +112,7 @@ export function Anexo({ j }: { j: Jurado }) {
           <h2>Lo necesario para leer todo lo demás</h2>
           <p className="entrada ancha">
             Los términos de béisbol que aparecen en la herramienta, los siete tipos de lanzamiento y los
-            supuestos del análisis. Si nunca has visto un partido, empieza aquí.
+            supuestos del análisis.
           </p>
         </header>
 

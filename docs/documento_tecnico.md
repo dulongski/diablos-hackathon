@@ -436,10 +436,10 @@ rodado sube de 40.5 % a 44.8 % en altitud extrema y el jonrón por elevado sube 
 
 El modelo sí usa el giro. Es la tercera de 16 variables, pero sobre todo para distinguir un tipo de
 lanzamiento de otro. En el experimento controlado, 100 revoluciones más **con el mismo movimiento**
-cambian Stuff+ en 0.05 puntos, nada. Una pulgada más de elevación **con el mismo giro** suma 2.61.
+no cambian Stuff+ (0.01 puntos). Una pulgada más de elevación **con el mismo giro** suma 2.59.
 Y la ventaja del movimiento es la que el aire se lleva. Una recta B con 2,150 rpm y 18.0 pulgadas de
-elevación vale 105.7 a nivel del mar, 18.1 puntos más que una recta A que gira más pero a la que ese giro
-casi no mueve (2,650 rpm y 13.5 pulgadas, 87.6). En el Harp Helú B vale 86.0 y A 80.0. La ventaja se reduce a un
+elevación vale 107.7 a nivel del mar, 19.2 puntos más que una recta A que gira más pero a la que ese giro
+casi no mueve (2,650 rpm y 13.5 pulgadas, 88.5). En el Harp Helú B vale 86.1 y A 80.0. La ventaja se reduce a un
 tercio.
 
 ## 6. Lo que significa para el club
@@ -553,6 +553,12 @@ pide slider antes que cambio. El Causal Forest táctico encuentra 10 celdas firm
   Causal Forest, que confirma el costo promedio pero no separa a un lanzador de otro.
 - **El exponente de Reynolds es empírico.** Lo calibramos y verificamos fuera de muestra, pero no sale de
   primeros principios.
+- **Stuff+ ve la caída de velocidad, que también refleja el aire.** Lo probamos sin las tres variables de
+  frenado y entrenando sólo con juegos a nivel del mar. El orden de los tipos se mantiene en los dos casos
+  (correlación de rangos 0.96), pero la pérdida de la liga baja de 8.3 a 6.2 y 5.1 puntos. La versión de nivel
+  del mar ya no le ganaba al modelo nulo con lanzadores nuevos, y por eso no es la principal (Anexo C).
+- **El simulador exagera la pérdida.** Califica una forma típica y no la población, y sus pérdidas salen unos
+  4 puntos mayores que las de la tabla por tipo. Sirve para comparar lanzamientos entre sí.
 
 ## 9. Reproducción
 

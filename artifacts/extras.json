@@ -241,7 +241,7 @@
     "a": "Slider",
     "b": "Cambio",
     "filas": 150000,
-    "segundos": 124.8,
+    "segundos": 61.3,
     "por_entorno": {
      "mar": {
       "efecto": -0.3064,
@@ -803,7 +803,7 @@
     "a": "Slider",
     "b": "Recta",
     "filas": 150000,
-    "segundos": 114.0,
+    "segundos": 58.8,
     "por_entorno": {
      "mar": {
       "efecto": -0.3761,
@@ -1365,7 +1365,7 @@
     "a": "Cambio",
     "b": "Recta",
     "filas": 150000,
-    "segundos": 97.5,
+    "segundos": 58.6,
     "por_entorno": {
      "mar": {
       "efecto": 0.1954,
@@ -1927,7 +1927,7 @@
     "a": "Curva",
     "b": "Slider",
     "filas": 141639,
-    "segundos": 73.5,
+    "segundos": 56.0,
     "por_entorno": {
      "mar": {
       "efecto": -0.0323,
