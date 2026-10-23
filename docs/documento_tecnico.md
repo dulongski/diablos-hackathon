@@ -12,20 +12,34 @@
 Los modelos Stuff+ califican qué tan difícil de batear es un lanzamiento a partir de su física. El
 problema es que se construyeron en estadios a nivel del mar. El Harp Helú está a 2,240 metros, con
 20 % menos aire, y ahí la pelota se mueve menos. Construimos un Stuff+ para la LMB en el que **la
-altitud no es una variable del modelo sino una transformación física**. Volvemos a volar cada
-lanzamiento con el aire de otro estadio y lo calificamos de nuevo. Encontramos cuatro cosas que
-cambian tus decisiones.
+altitud no es una variable del modelo sino una transformación física**. Lo hicimos en cuatro pasos.
 
-1. **Todo lanzamiento pierde en altura, pero no lo mismo.** La recta pierde 11.7 puntos de Stuff+
+1. **Le damos un valor a cada lanzamiento.** Cada lanzamiento cambia el conteo de bolas y strikes, y cada
+   conteo vale cierto número de carreras para el bateador. La diferencia es cuántas carreras le quitó o le
+   dio ese lanzamiento al rival. Eso es lo que el modelo aprende a predecir.
+2. **Entrenamos un modelo que sólo ve la física.** Es un modelo de árboles de decisión (LightGBM) que recibe
+   16 medidas de Trackman, como la velocidad, el giro, el movimiento y el punto de salida. No ve dónde cayó
+   la pelota, ni el estadio, ni al bateador. Pasamos su predicción a una escala donde 100 es el promedio de
+   la liga y cada 10 puntos es una desviación estándar. Eso es Stuff+.
+3. **Lo probamos con lanzadores que no vio.** Partimos a los lanzadores en cuatro grupos, entrenamos con tres
+   y calificamos al cuarto. Cada calificación sale de un modelo que nunca vio a ese lanzador, y la
+   comparamos contra un modelo nulo que sólo conoce el conteo.
+4. **Volamos el mismo lanzamiento en otro aire.** Medimos qué tan denso estaba el aire en cada juego con el
+   frenado de la pelota, simulamos cómo habría volado cada lanzamiento con el aire del Harp Helú y lo
+   calificamos otra vez. La diferencia entre las dos calificaciones es el efecto de la altitud.
+
+Encontramos cuatro cosas que cambian tus decisiones.
+
+- **Todo lanzamiento pierde en altura, pero no lo mismo.** La recta pierde 11.7 puntos de Stuff+
    (1.6 carreras más por cada 100 lanzamientos) y el cutter 3.0. Las mejores rectas pierden 19.
-2. **De 561 lanzadores, sólo 21 aguantan la altura**, es decir, pierden menos de media carrera por cada
+- **De 561 lanzadores, sólo 21 aguantan la altura**, es decir, pierden menos de media carrera por cada
    100 lanzamientos. Todos tiran slider, más de la mitad tira cutter (contra 18 % de la liga) y
    provocan más rodados.
-3. **Probamos las cuatro hipótesis del reto.** H1 y H4 se confirman. H2 y H3 se confirman en parte.
-4. **Un Causal Forest sobre carreras reales confirma el costo de la altura**, 1.52 carreras más por cada
-   100 lanzamientos, sin usar Stuff+. La pérdida de Stuff+ explica unas tres cuartas partes. También
-   muestra por qué necesitas la física para separar a un lanzador de otro, porque las carreras solas no
-   alcanzan.
+- **Probamos las cuatro hipótesis del reto.** H1 y H4 se confirman. H2 y H3 se confirman en parte.
+- **Un Causal Forest sobre carreras reales confirma el costo de la altura**, 1.52 carreras más por cada
+   100 lanzamientos, sin usar Stuff+. La física del lanzamiento explica cerca del 40 % y el resto es el
+   batazo, que en altura vuela más. Las carreras solas no alcanzan para separar a un lanzador de otro, y
+   por eso necesitas la física.
 
 ## 1. Planteamiento
 
@@ -83,13 +97,8 @@ promedio en carreras según el conteo.
 La decisión central es que **la altitud nunca entra como variable del modelo de calidad**. Si entrara,
 su efecto se mezclaría con quién lanza dónde, porque los lanzadores de los equipos de altura no son una
 muestra al azar. Y no podrías responder la pregunta que importa. ¿Cuánto valdría en el Harp Helú un
-lanzamiento que nunca se ha tirado ahí?
-
-1. **Medimos el aire** de cada juego con el frenado de la pelota.
-2. **Transferimos la forma.** La forma de un lanzamiento es cómo se mueve en el camino, cuánto sube o cae y
-   hacia qué lado se va. Volvemos a volar cada lanzamiento con el aire de otro estadio y medimos su forma nueva.
-3. **Calificamos la forma** con un modelo que sólo ve física (Stuff+) y con dos capas que suman contexto.
-4. **Comparamos** el mismo lanzamiento en los dos aires. La diferencia es el efecto de la altitud.
+lanzamiento que nunca se ha tirado ahí? Los cuatro pasos del Resumen resuelven eso. Esta sección los
+detalla. La forma de un lanzamiento es cómo se mueve en el camino, cuánto sube o cae y hacia qué lado se va.
 
 ### 3.2 La densidad del aire, medida en la trayectoria
 
@@ -338,10 +347,11 @@ mitades al azar (602 lanzadores con al menos 150 por mitad). Su Stuff+ en una mi
 con el de la otra. Sus carreras, sólo 0.293. Las carreras de unos cientos de lanzamientos son casi
 ruido, y la forma no.
 
-**Anticipa el futuro sin necesitar historial.** Con 114 lanzadores que tiraron al menos 300 veces en
-2024 y 2025 y otras 300 en 2026, el Stuff+ del pasado correlaciona 0.218 con las carreras de 2026. Las
-carreras del pasado, 0.196. La diferencia no es concluyente con esa muestra, pero Stuff+ lo logra con
-la sola física, y a un prospecto lo puedes calificar desde su primera sesión de Trackman.
+**Anticipa el año siguiente sin necesitar historial.** En 336 pares de temporadas seguidas (2024 a 2025
+y 2025 a 2026, 250 lanzadores), el Stuff+ de un año correlaciona 0.22 con las carreras del siguiente. Las
+carreras del año anterior, 0.18. Esa diferencia no es concluyente, pero sumar Stuff+ a las carreras pasadas
+sí mejora la predicción (0.027 de $R^2$, IC 0.004 a 0.071). Stuff+ lo logra con la sola física, así que a un
+prospecto lo puedes calificar desde su primera sesión de Trackman (Anexo C).
 
 **Calibración.** La escala ordena carreras cuando agregas lanzamientos, que es donde importa.
 
@@ -494,10 +504,11 @@ constantes entre juegos ($\pm 2.6$ contra $\pm 4.5$ de la mediana).
 ### 6.4 Lo que dice el Causal Forest
 
 **El costo promedio es firme.** Lanzar en altura cuesta **1.52 carreras más por cada 100 lanzamientos** (IC 90 %
-de 1.27 a 1.78), medido en el marcador y sin usar Stuff+. Es la misma dirección que predice la física, y
-casi el mismo tamaño. La liga pierde 8.3 puntos de Stuff+ al pasar de nivel del mar a altitud extrema, y
-cada punto vale 0.135 carreras por cada 100 lanzamientos. Son 1.12 carreras, unas tres cuartas partes del
-costo observado. El resto lo pone el bateador, porque en altura el batazo también viaja más.
+de 1.27 a 1.78), medido en el marcador y sin usar Stuff+. Es la misma dirección que predice la física. ¿Cuánto de ese
+costo es el lanzamiento? Un modelo entrenado sólo a nivel del mar atribuye al vuelo del lanzamiento 0.57 de
+las 1.49 carreras de más que hay en altura, el 39 % (IC 34 a 44 %, Anexo C). El resto lo pone sobre todo el
+batazo, que en altura viaja 31 pies más. La pérdida de Stuff+ de la liga (8.3 puntos, 1.12 carreras) sale
+mayor, porque la caída de velocidad también recoge parte del entorno (sección 8).
 
 **Las diferencias entre lanzadores no se sostienen.** El bosque estima efectos entre 1.27 y 1.76, y para 331
 de 333 lanzadores el intervalo incluye el promedio. En la prueba fuera de muestra, el castigo observado no
@@ -562,19 +573,8 @@ pide slider antes que cambio. El Causal Forest táctico encuentra 10 celdas firm
 
 ## 9. Reproducción
 
-```bash
-uv venv && uv pip install -e .
-python scripts/01_physics.py       # densidad del aire y transferencia de forma
-python scripts/02_features.py      # secuencia, arsenal, objetivos
-python scripts/03_models.py        # las tres capas y sus holdouts
-python scripts/04_export.py        # modelo y tablas al simulador
-python scripts/05_deliverables.py  # entregables 1, 2 y 3
-python scripts/07_jurado.py        # tabla por lanzador, calibración y mapa
-python scripts/08_hipotesis.py     # H1 a H4
-python scripts/09_causal_forest.py # Causal Forest de entorno
-python scripts/10_local_extras.py  # Causal Forest táctico, SHAP y tres entornos
-cd app && npm install && npm test && npm run dev
-```
+El código, los modelos entrenados y los pasos para correr todo están en
+`github.com/dulongski/diablos-hackathon`. El dashboard corre completo en el navegador.
 
 ## Referencias
 

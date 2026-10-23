@@ -209,8 +209,13 @@ def logos_html(clase="logos"):
 LAMINAS = []
 
 
-def lamina(eyebrow, titular, en_esta, cuerpo, clase=""):
+CLAVES: dict[str, int] = {}
+
+
+def lamina(eyebrow, titular, en_esta, cuerpo, clase="", clave=None):
     LAMINAS.append((eyebrow, titular, en_esta, cuerpo, clase))
+    if clave:
+        CLAVES[clave] = len(LAMINAS)
 
 
 def cifra(v, et, c=TINTA):
@@ -227,11 +232,6 @@ RB = json.loads(_rb.read_text()) if _rb.exists() else {}
 ok = lambda x: x if isinstance(x, dict) and "error" not in x else None
 RB_PQ, RB_DI, RB_CO, RB_FU, RB_CB, RB_ES = (ok(RB.get(k)) for k in ("parque", "discriminacion", "confiabilidad", "futuro", "combinacion", "especificaciones"))
 ROB = bool(RB_PQ or RB_DI or RB_CO or RB_FU)
-# La lámina táctica y la de robustez son opcionales, así que las que siguen se numeran a partir de ellas.
-L_CF = 21
-L_ROB = L_CF + (2 if TACT else 1)
-L_HACER = L_ROB + (1 if ROB else 0)
-L_REFS = L_HACER + 1
 nat = h1["nathan"]
 cam = next(r for r in h2["pares"] if r["tipo"] == "Cambio")
 A, B = h4["experimento"]["parejas"]["A"], h4["experimento"]["parejas"]["B"]
@@ -250,190 +250,117 @@ LAMINAS.append(("portada", None, None, f"""
   <div class="cifras">{cifra('635,002', 'lanzamientos, 2024 a 2026')}{cifra(str(J['pitchers_n']), 'lanzadores comparados', AZUL)}{cifra(s(PROM), 'puntos de Stuff+ que pierde el lanzamiento promedio en altura', ROJO)}</div>
 """, ""))
 
-# 2 · qué responde ----------------------------------------------------------------------------
-lamina("Qué responde este reporte", "Ocho preguntas del club, cada una con su número",
+# 2 · qué responde (los números de lámina se resuelven al final) -----------------------------
+lamina("Qué responde este reporte", "Nueve preguntas del club, cada una con su lámina",
        "En esta lámina están las preguntas del reto y la lámina donde respondemos cada una.", f"""
 <table class="mapa-preguntas">
-<tr><td>¿Cómo calificamos un lanzamiento y por qué la altitud cambia todo?</td><td>El método, paso a paso</td><td>3 a 9</td></tr>
-<tr><td>¿Se puede confiar en la calificación?</td><td>Ordena carreras con lanzadores nuevos</td><td>{"10 a 12" if not ROB else f"10 a 12 y {L_ROB}"}</td></tr>
-<tr><td>¿Se cumplen las hipótesis del reto?</td><td>H1 y H4 sí, H2 y H3 en parte</td><td>13 a 17</td></tr>
-<tr><td>¿Qué hubiera pasado con otra decisión?</td><td>La altura cuesta {CF['ate']:.1f} carreras por cada 100</td><td>{L_CF if not TACT else f"{L_CF} y {L_CF + 1}"}</td></tr>
-<tr><td>¿Qué perfil físico rinde en el Harp Helú?</td><td>Menos movimiento, menos dependencia del giro</td><td>18</td></tr>
-<tr><td>¿Qué lanzadores sufren más la altitud y cuáles aguantan?</td><td>{aguantan} aguantan y {mucho} pierden mucho</td><td>19 a 21</td></tr>
-<tr><td>¿Cuánto riesgo extra de jonrón hay en casa?</td><td>{s(hh['dist_fb'] - mar['dist_fb'], 0)} pies por elevado</td><td>16</td></tr>
-<tr><td>¿Qué hacemos el lunes?</td><td>Fichar, abrir en casa, perfilar prospectos</td><td>{L_HACER}</td></tr>
+<tr><td>¿Cómo construimos el modelo?</td><td>Cuatro pasos, de Trackman a la calificación</td><td>@@metodo@@</td></tr>
+<tr><td>¿Funcionan la física y el modelo?</td><td>Reproduce a Nathan y ordena carreras con lanzadores nuevos</td><td>@@fisica@@ y @@confianza@@</td></tr>
+<tr><td>¿Qué lanzamientos pierden más en altura?</td><td>Todos pierden, la recta casi cuatro veces lo del cutter</td><td>@@h1@@ y @@compresion@@</td></tr>
+<tr><td>¿Se cumplen las hipótesis del reto?</td><td>H1 y H4 sí, H2 y H3 en parte</td><td>@@hip@@</td></tr>
+<tr><td>¿Cuánto riesgo extra de jonrón hay en casa?</td><td>{s(hh['dist_fb'] - mar['dist_fb'], 0)} pies por elevado</td><td>@@hip@@</td></tr>
+<tr><td>¿Qué perfil físico rinde en el Harp Helú?</td><td>Rompientes que no dependen del empuje del aire</td><td>@@perfil@@</td></tr>
+<tr><td>¿Qué lanzadores sufren más la altitud y cuáles aguantan?</td><td>{aguantan} aguantan y {mucho} pierden mucho</td><td>@@lanzadores@@ y @@ejemplo@@</td></tr>
+<tr><td>¿Qué hubiera pasado con otra decisión?</td><td>La altura cuesta {CF['ate']:.1f} carreras por cada 100</td><td>@@cf@@</td></tr>
+<tr><td>¿Qué hacemos el lunes?</td><td>Fichar, abrir en casa, perfilar prospectos</td><td>@@hacer@@</td></tr>
 </table>""")
 
-# 3 · el problema -----------------------------------------------------------------------------
-lamina("El problema", "En el Harp Helú la pelota se mueve menos, y los modelos públicos no lo saben",
-       "En esta lámina está por qué un Stuff+ de Grandes Ligas no te sirve tal cual en la Ciudad de México.", f"""
+# 3 · el problema y cómo leer Stuff+ ---------------------------------------------------------
+lamina("El problema", "En el Harp Helú la pelota se mueve menos, y los Stuff+ públicos no lo saben",
+       "En esta lámina está el problema y cómo leer la calificación.", f"""
 <div class="dos">
   <div><p class="grande">Una pelota que gira empuja el aire hacia un lado y el aire la empuja hacia el otro. Ese empuje,
-  el efecto Magnus, es el movimiento que engaña al bateador. A 2,240 metros hay <b>20 % menos aire</b> que a nivel del
-  mar. Más que en Coors Field (1,609 m), el estadio más extremo de Grandes Ligas.</p>
-  <p>Los modelos Stuff+ públicos se entrenaron con parques a nivel del mar. Suponen que la misma forma vale lo mismo en
-  cualquier estadio. Aquí eso no es cierto.</p></div>
+  el efecto Magnus, es el movimiento que engaña al bateador. A 2,240 metros hay <b>20 % menos aire</b>, más que en
+  Coors Field (1,609 m). Los Stuff+ públicos se entrenaron a nivel del mar y suponen que la misma forma vale lo mismo en
+  cualquier estadio.</p>
+  <p><b>Stuff+</b> califica un lanzamiento sólo por cómo sale de la mano. <b>Location+</b> suma dónde llegó y el conteo, y
+  <b>Pitching+</b> suma el resto del repertorio. Las tres usan la misma escala.</p>
+  <div class="escala"><span>90 · malo</span><span class="cien">100 · promedio</span><span>110 · muy bueno</span><span>120 · élite</span></div>
+  <p class="nota">Cada 10 puntos son una desviación estándar.</p></div>
   <div class="cifras col">{cifra('2,240 m', 'Harp Helú, contra 1,609 m de Coors Field', ROJO)}{cifra('0.80', 'densidad del aire, contra 1.00 a nivel del mar', AZUL)}{cifra('−3.7 in', 'de elevación pierde la recta del mismo lanzador en altura, medido con Trackman', ROJO)}</div>
 </div>""")
 
-# 4 · definiciones ----------------------------------------------------------------------------
-lamina("Definiciones", "Stuff+ dice qué tan difícil de batear es un lanzamiento, con 100 como promedio",
-       "En esta lámina están las tres calificaciones y cómo leerlas.", """
-<div class="tres">
-  <div class="def"><h3>Stuff+</h3><p>Califica un lanzamiento <b>sólo por cómo sale de la mano</b>. Velocidad, giro, movimiento y punto de salida. No ve el resultado ni el estadio.</p></div>
-  <div class="def"><h3>Location+</h3><p>La misma escala, sumando <b>dónde</b> llegó la pelota y en qué conteo de bolas y strikes.</p></div>
-  <div class="def"><h3>Pitching+</h3><p>Suma además el <b>resto del repertorio</b>, la diferencia de velocidades y la secuencia con el lanzamiento anterior.</p></div>
+# 4 · cómo construimos el modelo (mismo texto que el Resumen del documento) -------------------
+lamina("Método", "Un modelo que sólo ve física, probado con lanzadores que no vio, y la misma pelota volada en otro aire",
+       "En esta lámina está cómo construimos el modelo, de los datos de Trackman a la calificación.", """
+<div class="cuatro">
+  <div class="paso"><span>1</span><h3>Un valor para cada lanzamiento</h3><p>Cada lanzamiento cambia el conteo de bolas y strikes, y cada conteo vale cierto número de carreras. La diferencia es cuántas carreras le quitó o le dio al rival. Eso es lo que el modelo aprende a predecir.</p></div>
+  <div class="paso"><span>2</span><h3>Un modelo que sólo ve física</h3><p>Un modelo de árboles de decisión (LightGBM) con 16 medidas de Trackman, como la velocidad, el giro, el movimiento y el punto de salida. No ve dónde cayó la pelota ni el estadio. Su predicción, en escala de 100, es Stuff+.</p></div>
+  <div class="paso"><span>3</span><h3>Probado con lanzadores que no vio</h3><p>Partimos a los lanzadores en cuatro grupos, entrenamos con tres y calificamos al cuarto. Cada calificación sale de un modelo que nunca vio a ese lanzador, y la comparamos contra un modelo nulo que sólo conoce el conteo.</p></div>
+  <div class="paso"><span>4</span><h3>La misma pelota en otro aire</h3><p>Medimos el aire de cada juego con el frenado de la pelota, simulamos su vuelo con el aire del Harp Helú y la calificamos otra vez. La diferencia es el efecto de la altitud.</p></div>
 </div>
-<div class="escala"><span>90 · malo</span><span class="cien">100 · promedio de la liga</span><span>110 · muy bueno</span><span>120 · élite</span></div>
-<p class="nota centro">Cada 10 puntos son una desviación estándar. El anexo del dashboard explica los siete tipos de lanzamiento con dibujos de su vuelo, de la mano al plato.</p>""")
+<p class="nota centro">La altitud no entra como variable. Si entrara, se mezclaría con quién lanza en altura, y no podrías calificar a alguien que nunca ha lanzado ahí. El supuesto clave es que el lanzador suelta igual en cualquier estadio, y lo comprobamos. Comparado consigo mismo, sus vueltas cambian 0.5 % y su velocidad 0.1 %.</p>""", clave="metodo")
 
-# 5 · supuestos --------------------------------------------------------------------------------
-lamina("Supuestos", "Cuatro supuestos sostienen todo, y los probamos",
-       "En esta lámina están las condiciones que damos por ciertas y cómo las verificamos.", """
+# 5 · la física funciona ----------------------------------------------------------------------
+lamina("Validación · física", f"El simulador reproduce a Nathan y corrige {red * 100:.0f} % del error de forma",
+       "En esta lámina comprobamos la física con datos que no usamos para calibrarla.", f"""
 <div class="dos">
-  <ol class="hacer">
-    <li><b>Un lanzador suelta la pelota igual en cualquier estadio.</b> La velocidad y las vueltas que le da no dependen de la altura. Comparamos a cada lanzador consigo mismo y sus vueltas cambian 0.5 % y su velocidad 0.1 %.</li>
-    <li><b>Lo que cambia es el camino de la pelota, y eso lo decide el aire.</b> Por eso volamos la misma pelota en otro aire y la calificamos otra vez.</li>
-    <li><b>Calificamos lo que se espera del lanzamiento, no lo que pasó esa vez.</b> El mismo lanzamiento puede acabar en ponche o en hit por el bateador o la suerte. Por eso vale las carreras que quita en promedio según el conteo.</li>
-    <li><b>La referencia es la liga tal como lanzó.</b> El 100 es el promedio de todos sus lanzamientos, en sus tres tipos de estadio. A nivel del mar el lanzamiento típico queda arriba de 100 y en altura abajo, y esa diferencia es la respuesta.</li>
-  </ol>
-  <div class="aviso-dato"><b>El conjunto no dice en qué estadio se lanzó.</b> Sólo trae tres categorías de altitud. La densidad del aire la sacamos del frenado que Trackman mide en cada pelota.</div>
-</div>""")
-
-# 6 · hipótesis --------------------------------------------------------------------------------
-lamina("Hipótesis", "El reto propone cuatro hipótesis, y probamos las cuatro",
-       "En esta lámina está cada hipótesis, cómo la probamos y el veredicto, que detallamos en las láminas 13 a 17.", """
-<table class="mapa-preguntas hip">
-<tr><td><b>H1</b> La baja densidad reduce el movimiento que produce el giro</td><td>Física contra la cifra de Nathan, pérdida por tipo con intervalos</td><td class="v-si">Se confirma</td></tr>
-<tr><td><b>H2</b> El cambio de velocidad gana valor relativo</td><td>Su cambio contra su propia recta, lanzador por lanzador</td><td class="v-parcial">En parte</td></tr>
-<tr><td><b>H3</b> Los lanzadores de rodados valen más en altura</td><td>Carreras contra rodados en cada entorno, mismos lanzadores</td><td class="v-parcial">En parte</td></tr>
-<tr><td><b>H4</b> El giro solo no predice Stuff+, importa el movimiento</td><td>Peso en el modelo y experimento controlado</td><td class="v-si">Se confirma</td></tr>
-<tr><td><b>CF</b> Modelo secundario, Causal Forest</td><td>Qué lanzamiento conviene por conteo y entorno, y el costo de la altura en carreras</td><td class="v-parcial">Promedio sí</td></tr>
-</table>
-<p class="nota">Toda la incertidumbre sale de remuestrear lanzadores completos 2,000 veces (bootstrap por lanzador). Un intervalo que no cruza el cero no es casualidad.</p>""")
-
-# 7 · método 1, medir el aire -----------------------------------------------------------------
-lamina("Método · paso 1", "La pelota nos dice cuánto aire había",
-       "En esta lámina está cómo medimos la densidad del aire sin saber el estadio.", f"""
-<div class="dos">
-  <div><p class="grande">Trackman mide cuánto frena cada pelota. Ese frenado depende del aire. Su mediana por juego es un
-  <b>índice del aire</b>, donde 1.00 es el nivel del mar.</p>
-  <p>El frenado baja menos que el aire. En aire delgado la pelota corta el aire un poco peor (sube su coeficiente de
-  arrastre), y eso compensa una parte. Un solo exponente ({PH['altitud_a_indice_arrastre']['exponente']:.2f}), ajustado al Harp Helú, predice <b>{PH['altitud_a_indice_arrastre']['verificacion_cubeta_intermedia']['predicho']:.3f}</b> para la altitud media.
-  Medimos <b>{PH['altitud_a_indice_arrastre']['verificacion_cubeta_intermedia']['medido']:.3f}</b>, sin haberla usado en el ajuste.</p></div>
-  <div>{barras_h([('Nivel del mar', PH['rho_por_cubeta']['No Altitude']), ('Altitud media', PH['rho_por_cubeta']['Medium Altitude']), ('Altitud extrema', PH['rho_por_cubeta']['Extreme Altitude'])], maxv=1.05, fmt=lambda v: f'{v:.3f}', etiqueta_w=150, colores={'Nivel del mar': AZUL, 'Altitud media': AMBAR, 'Altitud extrema': ROJO})}
-  <p class="nota">Índice del aire por categoría, 1.00 es el nivel del mar.</p></div>
-</div>""")
-
-# 8 · método 2, volar la pelota ---------------------------------------------------------------
-lamina("Método · paso 2", f"Volamos la misma pelota en otro aire, y reproducimos a Nathan",
-       "En esta lámina está el simulador de vuelo y la prueba contra la cifra más citada de la física del béisbol.", f"""
-<div class="dos">
-  <div><p class="grande">Con el mismo punto de salida, la misma velocidad y el mismo giro, volvemos a volar la pelota con el aire
-  del otro estadio. Menos aire frena menos y empuja menos.</p>
-  <p>Alan Nathan estima que en Coors Field una pelota con 18 pulgadas de quiebre se mueve 14 o 15. Nuestro simulador, calibrado
-  sólo con la LMB, da <b>{nat['recta']['coors']:.1f}</b>. En el Harp Helú da <b>{nat['recta']['hh']:.1f}</b>.</p></div>
   <div>{barras_h([('Nivel del mar', nat['recta']['mar']), ('Coors Field', nat['recta']['coors']), ('Harp Helú', nat['recta']['hh'])], maxv=19, fmt=lambda v: f'{v:.1f} in', etiqueta_w=150, colores={'Nivel del mar': AZUL, 'Coors Field': AMBAR, 'Harp Helú': ROJO})}
   <p class="nota">Quiebre total de la misma recta en tres aires. Escalar sólo por la densidad daría {nat['recta']['solo_densidad_coors']:.1f} en Coors y se quedaría corto.</p></div>
-</div>""")
+  <div><p class="grande">Alan Nathan estima que en Coors Field una recta con 18 pulgadas de quiebre se mueve 14 o 15. Nuestro
+  simulador, calibrado sólo con la LMB, da <b>{nat['recta']['coors']:.1f}</b>. En el Harp Helú da <b>{nat['recta']['hh']:.1f}</b>.</p>
+  <p>Con {PH['pitchers_cruce']} lanzadores que tiraron en los dos entornos, predecimos su movimiento en altura a partir de lo que
+  tiraron a nivel del mar. El error en elevación baja de {mae['sin_transferir']['ivb']:.2f} a <b>{mae['calibrado']['ivb']:.2f} pulgadas</b>.
+  Y el índice del aire que predecimos para la altitud media ({PH['altitud_a_indice_arrastre']['verificacion_cubeta_intermedia']['predicho']:.3f})
+  coincide con el medido ({PH['altitud_a_indice_arrastre']['verificacion_cubeta_intermedia']['medido']:.3f}), sin haberlo usado en el ajuste.</p></div>
+</div>""", clave="fisica")
 
-# 9 · método 3, calificar y comparar ----------------------------------------------------------
-lamina("Método · paso 3", "Calificamos la forma y comparamos los dos aires",
-       "En esta lámina están las tres piezas del modelo y por qué la altitud no entra como variable.", f"""
-<div class="flujo">
-  <div class="paso"><span>1</span><h3>Medir el aire</h3><p>El frenado de cada pelota da el índice del aire de cada juego. Lámina 7.</p></div>
-  <div class="flecha">→</div>
-  <div class="paso"><span>2</span><h3>Volar en otro aire</h3><p>El lanzador suelta igual y el aire cambia. El simulador da cómo se movería ese lanzamiento en el otro estadio. Lámina 8.</p></div>
-  <div class="flecha">→</div>
-  <div class="paso"><span>3</span><h3>Calificar y comparar</h3><p>Un modelo de árboles (LightGBM) que sólo ve física califica las dos formas. La diferencia es el efecto del aire. Location+ suma ubicación y conteo, y Pitching+ suma el arsenal (diferencias contra la recta, túnel, uso y secuencia).</p></div>
-</div>
-<p class="nota">Si la altitud fuera una variable del modelo, su efecto se mezclaría con <i>quién</i> lanza en altura, y no podrías calificar en el Harp Helú a alguien que nunca ha lanzado ahí. Literatura en la lámina {L_REFS}.</p>""")
-
-# 10 · validación física ----------------------------------------------------------------------
-lamina("Validación · física", f"El vuelo simulado acierta, con {red * 100:.0f} % menos error que no corregir",
-       f"En esta lámina predecimos lo que {PH['pitchers_cruce']} lanzadores tiraron en altura a partir de lo que tiraron a nivel del mar.", f"""
-<div class="dos">
-  <div>{transferencia_svg()}<p class="nota">Error medio en elevación, en pulgadas, en {PH['celdas_holdout']} combinaciones de lanzador y tipo que nunca usamos para calibrar.</p></div>
-  <div><p class="grande">Escalar todo por la densidad del aire (ámbar) deja un tercio del efecto sin explicar. Con nuestra corrección el error baja a <b>{mae['calibrado']['ivb']:.2f} pulgadas</b> en elevación y <b>{mae['calibrado']['hb']:.2f}</b> en movimiento lateral.</p>
-  <p>Mismo lanzador, mismo tipo de lanzamiento. Sólo cambia el aire.</p></div>
-</div>""")
-
-# 11 · validación de Stuff+ ------------------------------------------------------------------------
-E = J["estabilidad"]
-lamina("Validación · criterio 1", "Stuff+ es un rasgo del lanzador y anticipa su futuro sin necesitar historial",
-       "En esta lámina probamos Stuff+ como se prueba en Grandes Ligas, con lanzadores que el modelo nunca vio.", f"""
+# 6 · se puede confiar ------------------------------------------------------------------------
+_d = (RB_DI or {}).get("stuff")
+_co = (RB_CO or {}).get("crudo", {}).get("r") or J["estabilidad"]["mitades"]["stuff"]
+_ca = (RB_CO or {}).get("carreras", {}).get("r") or J["estabilidad"]["mitades"]["rv"]
+_fu = (RB_FU or {}).get("carreras")
+cif_conf = ""
+if _d:
+    cif_conf += cifra(f"{abs(_d['brecha_100']):.1f}", f"carreras por cada 100 lanzamientos separan al 10 % mejor del 10 % peor (IC {_d['brecha_ic95'][0]:.1f} a {_d['brecha_ic95'][1]:.1f})", VERDE)
+cif_conf += cifra(f"{_co:.2f}", f"correlación del Stuff+ de un lanzador entre dos mitades de sus lanzamientos. Sus carreras, {_ca:.2f}", AZUL)
+if _fu:
+    cif_conf += cifra(s(_fu['stuff']['r'], 2), f"correlación con las carreras del año siguiente, contra {s(_fu['carreras_pasadas']['r'], 2)} de sus carreras pasadas ({n(RB_FU['pares'])} pares)", ROJO)
+nul_ = J["modelo_nulo"]; hp_ = hold["pitcher"]["stuff"]
+lamina("Validación · criterios 1 y 2", "Stuff+ ordena carreras con lanzadores que nunca vio y es un rasgo estable del lanzador",
+       "En esta lámina están las pruebas de calidad que pide el reto, todas con lanzadores que el modelo no vio.", f"""
 <div class="dos ancho-izq">
   <div>{calibracion_svg()}
-  <p class="nota">Carreras por cada 100 lanzamientos según su Stuff+ fuera de muestra. Baja escalón por escalón. La diferencia es
-  chica porque Stuff+ no ve dónde cayó la pelota, y en un lanzamiento suelto eso pesa más que el brazo.</p></div>
-  <div class="cifras col">{cifra(f"{E['mitades']['stuff']:.2f}", f"correlación del Stuff+ de un lanzador entre dos mitades de sus lanzamientos. Sus carreras, {E['mitades']['rv']:.2f}", AZUL)}{cifra(f"{E['futuro']['stuff']:+.2f}", f"correlación de su Stuff+ de 2024 y 2025 con sus carreras de 2026. Sus carreras pasadas, {E['futuro']['carreras_pasadas']:+.2f}", ROJO)}</div>
-</div>""")
+  <p class="nota">Carreras por cada 100 lanzamientos según su Stuff+ fuera de muestra. Bajan escalón por escalón. Le gana al modelo
+  nulo por conteo (error {hp_['rmse']:.5f} contra {nul_['rmse']:.5f}). La diferencia es chica porque un lanzamiento suelto es casi azar y
+  Stuff+ no ve dónde cayó la pelota.</p></div>
+  <div class="cifras col">{cif_conf}</div>
+</div>""", clave="confianza")
 
-# 12 · holdouts --------------------------------------------------------------------------------
-nul = J["modelo_nulo"]["r2"]
-hp_, ht_, hq_ = hold["pitcher"]["stuff"], hold["temporada"]["stuff"], hold["parque"]["stuff"]
-lamina("Validación · criterio 2", "Ordena bien en los tres holdouts, y el de parque muestra por qué hace falta la física",
-       "En esta lámina están los tres holdouts que pide el reto, contra el modelo nulo, que es el promedio por conteo.", f"""
-<div class="tres">
-  <div class="def"><span class="tag">Lanzadores nuevos</span><b class="big">{hp_['corr']:+.3f}</b><p>correlación con sus carreras. R² {hp_['r2']:.5f} contra {nul:.5f} del nulo. Pitching+ llega a {hold['pitcher']['pitching']['corr']:+.3f}.</p></div>
-  <div class="def"><span class="tag">Temporada nueva</span><b class="big">{ht_['corr']:+.3f}</b><p>entrenando con 2024 y 2025 y probando con 2026. R² {ht_['r2']:.5f}. No se gasta con el tiempo.</p></div>
-  <div class="def"><span class="tag">Estadio nuevo</span><b class="big">{hq_['corr']:+.3f}</b><p>entrenando sin altitud extrema y probando sólo en altura. Sigue ordenando, pero el R² cae a {hq_['r2']:.5f}. Un modelo de nivel del mar espera menos carreras de las que pasan en altura.</p></div>
-</div>
-<p class="grande centro">Ese desfase de nivel es el efecto de la altitud. Es justo lo que medimos y corregimos con la física.</p>""")
-
-# 13 · H1 ----------------------------------------------------------------------------------------
+# 7 · H1 ---------------------------------------------------------------------------------------
 lamina("H1 · se confirma", "Todos los tipos pierden en altura, y la recta pierde casi cuatro veces lo que el cutter",
        "En esta lámina está cuánto Stuff+ pierde cada tipo de lanzamiento al pasar al Harp Helú, con su intervalo de 95 %.", f"""
 <div class="dos ancho-izq">
   <div>{bosque_svg([(t['tipo'], t['delta'], t['ic']) for t in h1['por_tipo']], -14, 0)}</div>
   <div><p class="grande">El aire delgado le cobra al movimiento. Cada lanzamiento paga según cuánto de su valor viene de moverse.</p>
-  <p><b>Cutter, slider y splitter</b> engañan porque salen igual que la recta y rompen tarde. Pagan poco. <b>La recta</b> vive de su elevación y paga {s(h1['por_tipo'][-1]['delta'], 2)}. Los siete intervalos quedan bajo cero.</p></div>
-</div>""")
+  <p><b>Cutter, splitter y slider</b> engañan porque salen igual que la recta y rompen tarde. Pagan poco. <b>La recta</b> vive de su elevación y paga {s(h1['por_tipo'][-1]['delta'], 2)}. Los siete intervalos quedan bajo cero.</p></div>
+</div>""", clave="h1")
 
-# 14 · compresión ------------------------------------------------------------------------------
+# 8 · compresión --------------------------------------------------------------------------------
 lamina("H1 · el hallazgo", "La altitud apenas toca a la recta mala y borra la ventaja de la buena",
        "En esta lámina partimos las rectas en cinco grupos según su Stuff+ a nivel del mar.", f"""
 <div class="dos ancho-izq">
   <div>{quintiles_svg()}</div>
   <div><p class="grande">La mejor recta baja de <b>{q['q5']['plus_mar']:.1f}</b>, élite, a <b>{q['q5']['plus_alt']:.1f}</b>. Pierde {s(q['q5']['delta'])}. La peor {'<b>gana ' + s(q['q1']['delta']) + '</b>' if q['q1']['delta'] > 0 else 'pierde sólo <b>' + s(q['q1']['delta']) + '</b>'}.</p>
-  <p>Lo que separa a una recta de élite de una mediocre es el movimiento, y el movimiento es lo que el aire se lleva. Para ti eso significa una cosa. <b>No pagues de más por una recta de élite</b> para lanzar en casa.</p>
+  <p>Lo que separa a una recta de élite de una mediocre es el movimiento, y el movimiento es lo que el aire se lleva. <b>No pagues de más por una recta de élite</b> para lanzar en casa.</p>
   <p class="nota">Azul, nivel del mar. Punto de color, el mismo lanzamiento en el Harp Helú.</p></div>
-</div>""")
+</div>""", clave="compresion")
 
-# 15 · H2 ----------------------------------------------------------------------------------------
-lamina("H2 · se confirma en parte", "El cambio sí gana contra la recta, pero splitter, cutter y slider ganan más",
-       "En esta lámina comparamos cada tipo contra la recta del mismo lanzador, con su intervalo de 95 %.", f"""
-<div class="dos ancho-izq">
-  <div>{bosque_svg([(t['tipo'], t['ventaja_vs_recta'], t['ic']) for t in h2['pares']], 0, 10, fuerte='Cambio')}</div>
-  <div><p class="grande">El cambio pierde <b>{s(cam['ventaja_vs_recta'], 2)} puntos menos</b> que la recta del mismo lanzador, y gana en el {cam['pct_pitchers_gana'] * 100:.0f} % de los {n(cam['pitchers'])} lanzadores que tiran los dos.</p>
-  <p>Pero queda cuarto. Un cambio de derecho se mueve unas 12 pulgadas hacia el brazo, y ese movimiento también lo paga. En altura no gana el que engaña por velocidad. Gana <b>el que nunca dependió del movimiento</b>.</p></div>
-</div>""")
+# 9 · las cuatro hipótesis ----------------------------------------------------------------------
+rank_cam = [p['tipo'] for p in h2['pares']].index('Cambio') + 1
+delante = ", ".join(p['tipo'].lower() for p in h2['pares'][:rank_cam - 1])
+recta_, cutter_ = h1['por_tipo'][-1]['delta'], h1['por_tipo'][0]['delta']
+lamina("Hipótesis del reto", "H1 y H4 se confirman, H2 y H3 se confirman en parte",
+       "En esta lámina están las cuatro hipótesis del reto, cada una con su cifra clave.", f"""
+<table class="mapa-preguntas hip">
+<tr><td><b>H1</b> El aire delgado le quita movimiento al lanzamiento</td><td>Los siete tipos pierden Stuff+, la recta {s(recta_)} y el cutter {s(cutter_)}. La física reproduce a Nathan, 18 pulgadas se vuelven {nat['recta']['coors']:.1f} en Coors.</td><td class="v-si">Se confirma</td></tr>
+<tr><td><b>H2</b> El cambio de velocidad gana valor relativo</td><td>El cambio pierde {s(cam['ventaja_vs_recta'], 1)} puntos menos que la recta del mismo lanzador, en el {cam['pct_pitchers_gana'] * 100:.0f} % de los casos. Pero queda {rank_cam}.º de seis, detrás de {delante}.</td><td class="v-parcial">En parte</td></tr>
+<tr><td><b>H3</b> Los lanzadores de rodados valen más en altura</td><td>En altura, 10 puntos más de rodados previenen {abs(h3['pendiente_alt']):.2f} carreras por cada 100. A nivel del mar no se distingue de cero (p = {h3['p_una_cola']:.2f}). Un elevado viaja {s(hh['dist_fb'] - mar['dist_fb'], 0)} pies más y sale del parque {hh['hr_fb'] * 100:.1f} % de las veces contra {mar['hr_fb'] * 100:.1f} %.</td><td class="v-parcial">En parte</td></tr>
+<tr><td><b>H4</b> Importa cuánto se mueve, no cuánto gira</td><td>100 rpm más con el mismo movimiento cambian {s(h4['experimento']['stuff_por_100rpm'], 2)} puntos. Una pulgada más de movimiento suma {s(h4['experimento']['stuff_por_pulgada'], 2)}. La recta que vive del movimiento le saca {B['mar'] - A['mar']:.1f} puntos a la de giro a nivel del mar y sólo {B['hh'] - A['hh']:.1f} en casa.</td><td class="v-si">Se confirma</td></tr>
+</table>
+<p class="nota">Intervalos de 95 % por bootstrap de lanzadores, 2,000 remuestreos. El detalle de cada prueba está en el documento técnico y en la pestaña Hipótesis del dashboard.</p>""", clave="hip")
 
-# 16 · H3 + riesgo -----------------------------------------------------------------------------
-t3 = h3["terciles"]
-lamina("H3 · se confirma en parte", f"En altura, cada rodado cuenta más, y un elevado viaja {hh['dist_fb'] - mar['dist_fb']:.0f} pies más",
-       "En esta lámina comparamos cuántas carreras extra cuesta la altura según la tasa de rodados del lanzador.", f"""
-<div class="dos">
-  <div>{barras_h([(f"{x['grupo']} ({x['gb'] * 100:.0f} %)", x['castigo']) for x in t3], maxv=max(x['castigo'] for x in t3) * 1.1, fmt=lambda v: f'+{v:.2f}', etiqueta_w=260, colores={f"{x['grupo']} ({x['gb'] * 100:.0f} %)": ROJO for x in t3})}
-  <p class="nota">Carreras extra por cada 100 lanzamientos al pasar a la altura, {h3['pitchers']} lanzadores con 120 o más en cada entorno.</p></div>
-  <div><p class="grande">En altura, 10 puntos más de rodados previenen <b>{abs(h3['pendiente_alt']):.2f} carreras</b> por cada 100 lanzamientos. A nivel del mar el efecto no se distingue de cero.</p>
-  <p>La diferencia va en la dirección de la hipótesis con 90 % de confianza, sin llegar al 95 %. En la liga, el elevado sale del parque {hh['hr_fb'] * 100:.1f} % de las veces en altura contra {mar['hr_fb'] * 100:.1f} %. El rodado es el único batazo que el aire no ayuda.</p></div>
-</div>""")
-
-# 17 · H4 ----------------------------------------------------------------------------------------
-lamina("H4 · se confirma", "Importa cuánto se mueve la pelota, no cuánto gira",
-       "En esta lámina está el peso del giro dentro del modelo y un experimento que mueve una sola perilla.", f"""
-<div class="dos">
-  <div>{barras_h([(i['grupo'].replace(' (eficiencia)', '').replace('Giro que se vuelve movimiento', 'Eficiencia de giro'), i['peso'] * 100) for i in h4['importancia'] if i['peso'] > 0.01], maxv=max(i['peso'] for i in h4['importancia']) * 100, fmt=lambda v: f'{v:.0f} %', etiqueta_w=230, colores={**{i['grupo'].replace(' (eficiencia)', '').replace('Giro que se vuelve movimiento', 'Eficiencia de giro'): CENIZA for i in h4['importancia']}, 'Giro (rpm)': ROJO, 'Movimiento (quiebres)': VERDE})}
-  <p class="nota">Peso de cada grupo de variables dentro de Stuff+. El giro es la variable {h4['rango_spinrate']} de {h4['n_features']}.</p></div>
-  <div><p class="grande">100 revoluciones más <b>con el mismo movimiento</b> cambian Stuff+ en {s(h4['experimento']['stuff_por_100rpm'], 2)}. Una pulgada más de elevación <b>con el mismo giro</b> suma {s(h4['experimento']['stuff_por_pulgada'], 2)}.</p>
-  <table class="perfil"><tr><th>Dos rectas</th><th>Giro</th><th>Elevación</th><th>Mar</th><th>Harp Helú</th></tr>
-  <tr><td>A, gira mucho, poco de ese giro la mueve</td><td>{n(A['rpm'])}</td><td>{A['ivb']:.1f} in</td><td>{A['mar']:.1f}</td><td><b>{A['hh']:.1f}</b></td></tr>
-  <tr><td>B, gira menos, casi todo su giro la mueve</td><td>{n(B['rpm'])}</td><td>{B['ivb']:.1f} in</td><td>{B['mar']:.1f}</td><td><b>{B['hh']:.1f}</b></td></tr></table>
-  <p>B le saca {B['mar'] - A['mar']:.1f} puntos a A a nivel del mar y sólo {B['hh'] - A['hh']:.1f} en casa. El aire se lleva justo la ventaja del movimiento.</p></div>
-</div>""")
-
-# 18 · perfil ideal ----------------------------------------------------------------------------
+# 10 · perfil ideal ------------------------------------------------------------------------------
 pf = CO["perfil_ideal"]
 lamina("Perfil ideal · entregable 2", "En altura la élite es slider, no recta",
        "En esta lámina están los tipos que forman el 1 % mejor calificado en cada aire, y su perfil físico.", f"""
@@ -444,20 +371,20 @@ lamina("Perfil ideal · entregable 2", "En altura la élite es slider, no recta"
   <tr><td>Movimiento total</td><td>{pf['movement_total']['optimo_nivel_mar']:.1f} in</td><td><b>{pf['movement_total']['optimo_altitud']:.1f} in</b></td></tr>
   <tr><td>Giro que se vuelve movimiento</td><td>{pf['spin_efficiency']['optimo_nivel_mar'] * 100:.0f} %</td><td><b>{pf['spin_efficiency']['optimo_altitud'] * 100:.0f} %</b></td></tr>
   <tr><td>Velocidad</td><td>{pf['RelSpeed']['optimo_nivel_mar']:.1f} mph</td><td><b>{pf['RelSpeed']['optimo_altitud']:.1f} mph</b></td></tr></table>
-  <p>El perfil a buscar no depende del empuje del aire. Lanzamientos que giran mucho pero casi no se desvían por ese giro, movimiento moderado y que salen de la mano igual que la recta, lo que se llama túnel.</p></div>
-</div>""")
+  <p>El perfil a buscar no depende del empuje del aire. Giro de bala, movimiento moderado y engaño por túnel.</p></div>
+</div>""", clave="perfil")
 
-# 19 · por lanzador ----------------------------------------------------------------------------
+# 11 · por lanzador ------------------------------------------------------------------------------
 lamina("La pregunta del club · entregable 1", f"{aguantan} de {J['pitchers_n']} lanzadores aguantan la altura",
        "En esta lámina cada punto es un lanzador. Qué tan bueno es a nivel del mar contra cuánto cambia en el Harp Helú.", f"""
 <div class="dos ancho-izq">
   <div>{mapa_svg()}</div>
   <div><p class="grande"><span style="color:{VERDE}">●</span> {aguantan} aguantan, pierden menos de media carrera cada 100 lanzamientos. <span style="color:{AMBAR}">●</span> {J['pitchers_n'] - aguantan - mucho} pierden. <span style="color:{ROJO}">●</span> {mucho} pierden más de una carrera.</p>
   <p>Los que más pierden suelen ser buenos a nivel del mar. Su calidad era movimiento.</p>
-  <p>En {J['pitchers_con_ambos']} lanzadores con 120 o más lanzamientos en cada entorno, la pérdida del modelo y las carreras extra que de verdad permitieron van en la misma dirección (correlación de {J['corr_modelo_vs_observado']:.2f}).</p></div>
-</div>""")
+  <p>La constancia entre juegos está en la ficha de cada lanzador en el dashboard.</p></div>
+</div>""", clave="lanzadores")
 
-# 20 · ejemplo completo -------------------------------------------------------------------------
+# 12 · ejemplo completo --------------------------------------------------------------------------
 def ficha(x, veredicto, c):
     return f"""<div class="ficha" style="border-color:{c}"><span class="tag" style="color:{c}">{veredicto}</span>
   <h3>{x['nombre']}</h3><p class="nota">{x['arsenal']} · {'zurdo' if x['mano'] == 'Left' else 'derecho'} · {n(x['n'])} lanzamientos</p>
@@ -468,36 +395,14 @@ def ficha(x, veredicto, c):
 lamina("Ejemplo completo", f"{fichaje['nombre']} llega intacto y {peor['nombre']} pierde {abs(peor['delta_hh']):.1f} puntos",
        "En esta lámina hay dos lanzadores con calidad parecida a nivel del mar y destinos opuestos en casa.", f"""
 <div class="dos">{ficha(fichaje, 'Fichar', VERDE)}{ficha(peor, 'Mejor de visitante', ROJO)}</div>
-<p class="grande centro">A nivel del mar valen casi lo mismo ({fichaje['stuff_mar']:.1f} contra {peor['stuff_mar']:.1f}). En el Harp Helú los separan {fichaje['stuff_hh'] - peor['stuff_hh']:.1f} puntos, unas {(fichaje['stuff_hh'] - peor['stuff_hh']) * CPP:.1f} carreras por cada 100 lanzamientos.</p>""")
+<p class="grande centro">A nivel del mar valen casi lo mismo ({fichaje['stuff_mar']:.1f} contra {peor['stuff_mar']:.1f}). En el Harp Helú los separan {fichaje['stuff_hh'] - peor['stuff_hh']:.1f} puntos, unas {(fichaje['stuff_hh'] - peor['stuff_hh']) * CPP:.1f} carreras por cada 100 lanzamientos.</p>""", clave="ejemplo")
 
-# 21 · causal forest ----------------------------------------------------------------------------
-def gates_svg(g):
-    W, H, PL, PB, PT = 620, 300, 50, 56, 16
-    y1 = max(x["ic"][1] for x in g) + 0.3
-    bw = (W - PL) / len(g)
-    sx = lambda i: PL + bw * i + bw / 2
-    sy = lambda v: PT + (y1 - v) / y1 * (H - PT - PB)
-    o = [f'<svg viewBox="0 0 {W} {H}" class="g">']
-    for v in (0, 1, 2):
-        o.append(f'<line x1="{PL}" x2="{W}" y1="{sy(v):.1f}" y2="{sy(v):.1f}" stroke="{CENIZA if v == 0 else LINEA}"/>')
-        o.append(f'<text x="{PL - 8}" y="{sy(v) + 5:.1f}" text-anchor="end" class="eje">{s(v, 0)}</text>')
-    for i, x in enumerate(g):
-        o.append(f'<rect x="{sx(i) - bw * .28:.1f}" y="{sy(x["observado"]):.1f}" width="{bw * .56:.1f}" height="{sy(0) - sy(x["observado"]):.1f}" rx="4" fill="{ROJO}" opacity=".8"/>')
-        o.append(f'<line x1="{sx(i):.1f}" x2="{sx(i):.1f}" y1="{sy(x["ic"][0]):.1f}" y2="{sy(x["ic"][1]):.1f}" stroke="{TINTA}" stroke-width="2.5"/>')
-        o.append(f'<circle cx="{sx(i):.1f}" cy="{sy(x["predicho"]):.1f}" r="7" fill="{TINTA}" stroke="#fff" stroke-width="2"/>')
-        o.append(f'<text x="{sx(i):.1f}" y="{H - PB + 22}" text-anchor="middle" class="et">{x["etiqueta"]}</text>')
-    o.append("</svg>")
-    return "".join(o)
-
-
-lamina("Modelo secundario · Causal Forest", f"En carreras reales, la altura cuesta {CF['ate']:.1f} por cada 100 lanzamientos",
-       "En esta lámina el Causal Forest mide el costo de la altura comparando a cada lanzador consigo mismo, sin usar Stuff+.", f"""
-<div class="dos ancho-izq">
-  <div>{gates_svg(CF['gates'])}<p class="nota">Lanzadores agrupados por el efecto que predice un bosque que no los vio. Barras, castigo observado con su intervalo. Puntos, castigo predicho.</p></div>
-  <div><p class="grande">El costo promedio es firme, <b>{s(CF['ate'], 2)} carreras</b> por cada 100 lanzamientos (IC 90 % de {CF['ate_ic90'][0]:.2f} a {CF['ate_ic90'][1]:.2f}). La pérdida de Stuff+ de la liga equivale a {abs(PROM) * CPP:.2f} carreras, el {abs(PROM) * CPP / CF['ate'] * 100:.0f} % de ese costo.</p>
-  <p>Pero las barras no suben. Las carreras de unos cientos de lanzamientos tienen demasiado azar para separar a un lanzador de otro. Por eso decides con Stuff+, que mide algo estable, la forma. El bosque sí apunta en la misma dirección que Stuff+ (correlación de {CF['acuerdo_stuff']['pearson']:.2f} fuera de muestra).</p></div>
-</div>""")
-
+# 13 · Causal Forest ------------------------------------------------------------------------------
+cf_izq = cifra(s(CF['ate'], 2), f"carreras más por cada 100 lanzamientos cuesta la altura, medido en el marcador sin usar Stuff+ (IC 90 % de {CF['ate_ic90'][0]:.2f} a {CF['ate_ic90'][1]:.2f})", ROJO)
+if RB_PQ and RB_PQ["por_100"].get("fraccion") is not None:
+    cf_izq += cifra(f"{RB_PQ['por_100']['fraccion'] * 100:.0f} %", "de ese exceso es física del lanzamiento. El resto es sobre todo el batazo, que vuela más", AZUL)
+cf_izq += cifra("No", "se sostienen las diferencias entre lanzadores fuera de muestra. Para separarlos usamos Stuff+, que es estable")
+cf_der = ""
 if TACT:
     c0 = TACT.get("Slider en vez de Cambio") or next(iter(TACT.values()))
     def rejilla(c, alt):
@@ -512,52 +417,14 @@ if TACT:
                 celdas += f'<td style="background:{col}22;color:{col}"><b>{s(x["efecto"], 1)}</b></td>'
             filas += f"<tr><th>{b}</th>{celdas}</tr>"
         return f'<table class="conteo"><tr><th>Bolas \\ Strikes</th><th>0</th><th>1</th><th>2</th></tr>{filas}</table>'
-    m, a = c0["por_entorno"]["mar"], c0["por_entorno"]["altura"]
-    lamina("Causal Forest · la pregunta táctica", f"{c0['a']} o {c0['b']}, la respuesta depende del conteo y del estadio",
-           f"En esta lámina cada celda dice cuántas carreras por cada 100 lanzamientos cambian si el pitcher tira {c0['a'].lower()} en vez de {c0['b'].lower()}, contra un bateador del lado contrario.", f"""
-<div class="dos">
-  <div><p class="tag" style="color:{AZUL}">Nivel del mar · promedio {s(m['efecto'], 2)}</p>{rejilla(c0, 0)}</div>
-  <div><p class="tag" style="color:{ROJO}">Altitud extrema · promedio {s(a['efecto'], 2)}</p>{rejilla(c0, 1)}</div>
-</div>
-<p class="nota centro">Verde quiere decir que {c0['a'].lower()} es mejor para el pitcher y rojo que {c0['b'].lower()} es mejor. {n(c0['filas'])} lanzamientos, controlando por la calidad del lanzador, su uso de cada tipo, la vuelta al orden y las manos. Más parejas en la pestaña Causal Forest del dashboard.</p>""")
+    m_, a_ = c0["por_entorno"]["mar"], c0["por_entorno"]["altura"]
+    cf_der = (f'<p class="tag" style="color:{ROJO}">{c0["a"]} en vez de {c0["b"].lower()} en altitud extrema · promedio {s(a_["efecto"], 2)} (mar {s(m_["efecto"], 2)})</p>'
+              f'{rejilla(c0, 1)}<p class="nota">Carreras por cada 100 lanzamientos contra un bateador del lado contrario. Verde quiere decir que el {c0["a"].lower()} es mejor para el pitcher.</p>')
+lamina("Modelo secundario · Causal Forest", f"La altura cuesta {CF['ate']:.1f} carreras por cada 100 lanzamientos, y en casa conviene el slider",
+       "En esta lámina el Causal Forest responde dos preguntas de qué hubiera pasado, con carreras reales.", f"""
+<div class="dos"><div class="cifras col">{cf_izq}</div><div>{cf_der}</div></div>""", clave="cf")
 
-# robustez (opcional, sale de scripts/11_robustez.py) -----------------------------------------
-if ROB:
-    def fx(v, d=2, signo=False):
-        """Cifra de robustez, o "sin dato" si la prueba no tuvo suficientes lanzadores."""
-        return "sin dato" if v is None else (s(v, d) if signo else f"{v:.{d}f}")
-    filas_rb = ""
-    if RB_DI:
-        d_ = RB_DI["stuff"]
-        filas_rb += f"<tr><td>¿Cuánto separa?</td><td>El 10 % mejor de Stuff+ permite {fx(abs(d_['brecha_100']), 1)} carreras menos por cada 100 lanzamientos que el 10 % peor (IC {fx(d_['brecha_ic95'][0], 1)} a {fx(d_['brecha_ic95'][1], 1)}).</td></tr>"
-    if RB_CO:
-        filas_rb += f"<tr><td>¿Es calidad o mezcla?</td><td>Comparado contra el promedio de su tipo, Stuff+ correlaciona {fx(RB_CO['sin_mezcla']['r'])} entre mitades. Sólo con rectas, {fx(RB_CO['solo_rectas']['r'])}. Las carreras, {fx(RB_CO['carreras']['r'])}.</td></tr>"
-    if RB_FU:
-        f_ = RB_FU["carreras"]
-        filas_rb += f"<tr><td>¿Anticipa el año siguiente?</td><td>Stuff+ {fx(f_['stuff']['r'], 2, True)} contra {fx(f_['carreras_pasadas']['r'], 2, True)} de las carreras pasadas, en {n(RB_FU['pares'])} pares de temporadas.</td></tr>"
-    if RB_CB:
-        filas_rb += f"<tr><td>¿Y la combinación del reto?</td><td>La combinación ponderada de {len(RB_CB['componentes'])} componentes da R² {fx(RB_CB['combinado']['r2'], 4)} contra {fx(RB_CB['directo']['r2'], 4)} del modelo directo.</td></tr>"
-    if RB_ES:
-        filas_rb += f"<tr><td>¿Depende de la caída de velocidad?</td><td>Sin las tres variables de frenado, el orden de los tipos coincide con correlación de rangos {fx(RB_ES['orden_igual']['sin_frenado'])}.</td></tr>"
-    izq = ""
-    if RB_PQ:
-        p_ = RB_PQ["por_100"]
-        frac = "sin dato" if p_["fraccion"] is None else f"{p_['fraccion'] * 100:.0f} %"
-        izq = (f'<div class="cifras col">{cifra(fx(p_["total"], 2, True), "carreras más por cada 100 lanzamientos en altura de las que espera un modelo de nivel del mar", ROJO)}'
-               f'{cifra(fx(p_["fisica"], 2, True), "las explica el cambio en el vuelo del lanzamiento", AZUL)}'
-               f'{cifra(frac, "del exceso es física del lanzamiento, el resto sobre todo el batazo")}</div>')
-    fr = (RB_PQ or {}).get("por_100", {}).get("fraccion")
-    titular = (f"Entrenado sólo a nivel del mar, el modelo explica con física el {fr * 100:.0f} % de las carreras de más en altura"
-               if fr is not None and fr > 0.05 else "Las pruebas que pediría un jurado técnico, con lanzadores que el modelo no vio")
-    lamina("Validación · robustez", titular,
-           "En esta lámina están las pruebas que un jurado técnico pediría, todas con lanzadores que el modelo no vio.", f"""
-<div class="dos">
-  <div>{izq}</div>
-  <div><table class="perfil">{filas_rb}</table></div>
-</div>
-<p class="nota centro">Intervalos de 95 % por bootstrap de lanzadores. El detalle completo está en la pestaña Validación del dashboard.</p>""")
-
-# 22 · qué hacer -------------------------------------------------------------------------------
+# 14 · qué hacer -------------------------------------------------------------------------------
 aguantan_top = sorted([x for x in P if x["stuff_hh"] >= 100], key=lambda x: -x["delta_hh"])[:5]
 filas = "".join(f"<tr><td>{x['nombre']}</td><td>{x['arsenal']}</td><td>{x['stuff_hh']:.1f}</td><td style='color:{VERDE}'>{s(x['delta_hh'])}</td></tr>" for x in aguantan_top)
 lamina("Qué hacer", "Ficha arsenales de cutter, slider y splitter, y no pagues por movimiento",
@@ -565,17 +432,17 @@ lamina("Qué hacer", "Ficha arsenales de cutter, slider y splitter, y no pagues 
 <div class="dos">
   <ol class="hacer">
     <li><b>Fichajes.</b> Descuenta el valor que viene del movimiento. Una recta de élite pierde {abs(q['q5']['delta']):.1f} puntos en casa.</li>
-    <li><b>Perfil.</b> Busca cutter, slider y splitter, y lanzadores que provoquen rodados.</li>
+    <li><b>Perfil.</b> Busca cutter, slider y splitter, y lanzadores que provoquen rodados, porque en casa un elevado viaja {hh['dist_fb'] - mar['dist_fb']:.0f} pies más.</li>
     <li><b>Rotación.</b> Abre en casa con los que aguantan. Los que pierden mucho rinden más de visitante.</li>
     <li><b>En el juego.</b> En casa, contra el bateador del lado contrario y con el conteo en contra, pide slider antes que cambio.</li>
-    <li><b>Prospectos.</b> Pasa sus números de Trackman por el simulador y mira su Stuff+ en los dos estadios.</li>
+    <li><b>Prospectos.</b> Pasa sus números de Trackman por el simulador y compara su Stuff+ en los dos estadios.</li>
   </ol>
   <div><p class="tag">Buenos que aguantan, Stuff+ en casa de 100 o más</p>
   <table class="perfil"><tr><th>Lanzador</th><th>Arsenal</th><th>Harp Helú</th><th>Cambio</th></tr>{filas}</table>
   <p class="nota">La lista completa, ordenable y con ficha por lanzador, está en la pestaña Lanzadores del dashboard.</p></div>
-</div>""")
+</div>""", clave="hacer")
 
-# 23 · cierre -----------------------------------------------------------------------------------
+# 15 · cierre -----------------------------------------------------------------------------------
 lamina("Límites y referencias", "Esto es lo que el modelo no hace",
        "En esta lámina están los límites del trabajo y la literatura en la que nos apoyamos.", """
 <div class="dos">
@@ -583,8 +450,8 @@ lamina("Límites y referencias", "Esto es lo que el modelo no hace",
     <li><b>No identifica estadios.</b> La altitud extrema agrupa varios parques, y el Harp Helú es el más alto.</li>
     <li><b>No separa aire de clima.</b> El índice junta densidad, temperatura y humedad.</li>
     <li><b>No modela al bateador.</b> El contacto perfecto (barril) casi no se predice desde la física.</li>
-    <li><b>Stuff+ no es causal.</b> Valora lanzamientos. El Causal Forest es exploratorio.</li>
-    <li><b>El exponente del aire es empírico.</b> Lo calibramos y lo verificamos fuera de muestra.</li>
+    <li><b>Stuff+ no es causal.</b> Valora lanzamientos. El Causal Forest confirma el costo promedio, no las diferencias entre lanzadores.</li>
+    <li><b>El simulador exagera la pérdida</b> unos 4 puntos frente a la tabla por tipo. Sirve para comparar lanzamientos entre sí.</li>
   </ul>
   <ul class="refs">
     <li>Nathan, A. <i>The effect of altitude on baseball trajectories.</i> Physics of Baseball.</li>
@@ -597,6 +464,13 @@ lamina("Límites y referencias", "Esto es lo que el modelo no hace",
   </ul>
 </div>
 <p class="nota centro">Usamos los datos de la LMB sólo para esta competencia y presentamos resultados, nunca datos. La liga anonimizó a los lanzadores. Trabajo independiente, no es un producto oficial de ISAC ni del club.</p>""")
+
+# Números de lámina en la tabla "Qué responde".
+for _k, (_eb, _t, _en, _c, _cl) in enumerate(LAMINAS):
+    for _clave, _num in CLAVES.items():
+        _c = _c.replace(f"@@{_clave}@@", str(_num))
+    LAMINAS[_k] = (_eb, _t, _en, _c, _cl)
+
 
 CSS = f"""
 @page {{ size: 1280px 720px; margin: 0; }}

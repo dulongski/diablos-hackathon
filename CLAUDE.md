@@ -56,7 +56,7 @@ sensibilidad en `11_robustez.py` (especificaciones, variante `solo_mar`) y en L�
   nivel del mar, el orden de los tipos se mantiene (rho 0.96), la pérdida de la liga baja a −6.2 y −5.1.
 - **Simulador.** Con `log_sd` medido (0.077) exagera la pérdida unos 4.2 puntos contra el pipeline (con 0.15 serían
   3.2). Se dejó el medido y se dice en Límites y en la entrevista.
-- Dashboard versión 13, documento con Anexo C (14 páginas, cuerpo en 10), reporte de 25 láminas, entrevista llena.
+- Dashboard versión 13, documento con Anexo C (14 páginas, cuerpo en 10, los cuatro pasos del método en el Resumen), reporte de 15 láminas con el mismo método en la lámina 4, entrevista llena. La física del lanzamiento explica 39 % del costo de la altura (prueba de parque), no las "tres cuartas partes" de antes. OJO, 04_export arma compresion.json desde deliverables.json de 05, así que después de 05 hay que volver a correr 04.
 
 ## Estado (2026-10-22, sesión local)
 

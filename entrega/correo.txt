@@ -11,7 +11,7 @@ Integrantes
 
 Adjuntos
 1. documento_tecnico.pdf. El documento técnico tiene 10 páginas de cuerpo con referencias, más portada y tres anexos, uno de ellos con las pruebas de robustez. Trae la metodología completa, la validación fuera de muestra (lanzador, temporada y parque), la prueba de las hipótesis H1 a H4, el Causal Forest como modelo secundario y nuestras recomendaciones.
-2. reporte.pdf. Es el reporte ejecutivo de 25 láminas para el cuerpo técnico y la dirección deportiva.
+2. reporte.pdf. Es el reporte ejecutivo de 15 láminas para el cuerpo técnico y la dirección deportiva.
 
 Dashboard y código
 https://claude.ai/artifact/1HXhuyBtkDd6szvLv9M7xo

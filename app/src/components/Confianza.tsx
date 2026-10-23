@@ -80,6 +80,7 @@ const COMP: Record<string, string> = {
 };
 
 export function Confianza({ j, r }: { j: Jurado; r: DatosRobustez | null }) {
+  const fu = r?.futuro && !('error' in r.futuro) ? r.futuro : null;
   const c = j.calibracion;
   const bajo = c[0], alto = c[c.length - 1];
   const hp = j.holdout.pitcher, nul = j.modelo_nulo;
@@ -119,19 +120,31 @@ export function Confianza({ j, r }: { j: Jurado; r: DatosRobustez | null }) {
               </div>
             </div>
             <div className="tarjeta">
-              <h3 className="titulo-tarjeta">Anticipa el futuro sin necesitar historial</h3>
-              <p className="nota-tarjeta">
-                Para {nf(e.lanzadores_futuro)} lanzadores con al menos 300 lanzamientos antes y después, medimos qué
-                anticipa mejor sus carreras de 2026. Su Stuff+ de 2024 y 2025 lo hace con correlación <b>{sg(e.futuro.stuff, 2)}</b>.
-                Sus propias carreras de esos años, con <b>{sg(e.futuro.carreras_pasadas, 2)}</b>. Con {nf(e.lanzadores_futuro)} lanzadores la
-                diferencia no es concluyente, pero el punto es otro. Stuff+ anticipa igual de bien sin necesitar años de
-                resultados, así que sirve para un prospecto que todavía no los tiene.
-              </p>
-              <div className="habilidades">
-                {([['Stuff+', e.futuro.stuff], ['Location+', e.futuro.location], ['Pitching+', e.futuro.pitching], ['Sus carreras pasadas', e.futuro.carreras_pasadas]] as const).map(([k, v]) => (
-                  <div key={k} className="habilidad"><span>{k}</span><div className="hab-barra"><i style={{ width: `${Math.max(0, v) / Math.max(0.01, ...Object.values(e.futuro)) * 100}%` }} /></div><b className="num">{sg(v, 2)}</b></div>
-                ))}
-              </div>
+              <h3 className="titulo-tarjeta">Anticipa el año siguiente sin necesitar historial</h3>
+              {fu ? (
+                <>
+                  <p className="nota-tarjeta">
+                    En {nf(fu.pares)} pares de temporadas seguidas ({nf(fu.lanzadores)} lanzadores), medimos qué anticipa mejor las
+                    carreras del año siguiente. Stuff+ lo hace con correlación <b>{sg(fu.carreras.stuff.r, 2)}</b> y las carreras del año
+                    anterior con <b>{sg(fu.carreras.carreras_pasadas.r, 2)}</b>. Esa diferencia no es concluyente, pero sumar Stuff+ a las
+                    carreras pasadas sí mejora la predicción. Y Stuff+ lo logra sin años de resultados, así que sirve para un prospecto
+                    que todavía no los tiene.
+                  </p>
+                  <div className="habilidades">
+                    {([['Stuff+', fu.carreras.stuff.r], ['Sus carreras pasadas', fu.carreras.carreras_pasadas.r], ['Su swing fallido pasado', fu.carreras.whiff_pasado.r]] as const).map(([k, v]) => (
+                      <div key={k} className="habilidad"><span>{k}</span><div className="hab-barra"><i style={{ width: `${Math.max(0, v) / Math.max(0.01, fu.carreras.stuff.r, fu.carreras.carreras_pasadas.r, fu.carreras.whiff_pasado.r) * 100}%` }} /></div><b className="num">{sg(v, 2)}</b></div>
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <>
+                  <p className="nota-tarjeta">
+                    Para {nf(e.lanzadores_futuro)} lanzadores con al menos 300 lanzamientos antes y después, su Stuff+ de 2024 y 2025
+                    anticipa sus carreras de 2026 con correlación <b>{sg(e.futuro.stuff, 2)}</b>, y sus propias carreras con
+                    <b> {sg(e.futuro.carreras_pasadas, 2)}</b>.
+                  </p>
+                </>
+              )}
             </div>
           </div>
         )}
